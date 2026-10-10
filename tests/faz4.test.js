@@ -294,6 +294,7 @@ test('Canli Tema (theme.xml) ve Onizleme (preview.html) Ayrimi: Gelistirici arac
   assert.equal(themeXml.includes('id="view-generator"'), false);
   assert.equal(themeXml.includes('id="debug-log-panel"'), false);
   assert.equal(themeXml.includes('id="input-disqus-shortname"'), false);
+  assert.equal(themeXml.includes('id="input-blog-origin"'), false);
   assert.equal(themeXml.includes('MODULE: scripts/post-generator.js'), false);
 
   // Canli theme.xml icinde kisisel sabit degerler OLMAMALI, Blogger degiskeni OLMALI
@@ -305,12 +306,31 @@ test('Canli Tema (theme.xml) ve Onizleme (preview.html) Ayrimi: Gelistirici arac
   assert.equal(themeXml.includes('id="btn-scroll-top"'), true);
   assert.equal(themeXml.includes('name="disqus.shortname"'), true);
 
-  // Yerel preview.html icinde gelistirici araclari KORUNMALI
+  // Yerel preview.html icinde gelistirici araclari ve Blog URL kutusu KORUNMALI
   assert.equal(previewHtml.includes('id="nav-generator"'), true);
   assert.equal(previewHtml.includes('id="view-generator"'), true);
   assert.equal(previewHtml.includes('id="debug-log-panel"'), true);
   assert.equal(previewHtml.includes('id="input-disqus-shortname"'), true);
+  assert.equal(previewHtml.includes('id="input-blog-origin"'), true);
+  assert.equal(previewHtml.includes('id="btn-connect-blog"'), true);
   assert.equal(previewHtml.includes('MODULE: scripts/post-generator.js'), true);
+
+  // Blog URL normalizasyon ve kaydetme testi
+  const memStore = {};
+  const loaderWithStore = new BloggerFeedLoader({
+    storage: {
+      getItem: (k) => memStore[k] || null,
+      setItem: (k, v) => {
+        memStore[k] = v;
+      },
+      removeItem: (k) => {
+        delete memStore[k];
+      }
+    }
+  });
+  const savedOrigin = loaderWithStore.setSavedBlogOrigin('ornek-blog.blogspot.com/');
+  assert.equal(savedOrigin, 'https://ornek-blog.blogspot.com');
+  assert.equal(loaderWithStore.getSavedBlogOrigin(), 'https://ornek-blog.blogspot.com');
 
   // Yorum alani (#disqus-section) varsayilan olarak gizli (hidden) baslamali
   assert.equal(themeXml.includes('<section class="disqus-container hidden" id="disqus-section">'), true);

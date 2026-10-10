@@ -75,7 +75,63 @@
     constructor(options = {}) {
       this.logger = options.logger || globalScope.ManowaLogger || null;
       this.fetchFn = options.fetchFn || (typeof fetch === 'function' ? fetch.bind(globalScope) : null);
+      this.storage =
+        options.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
+      this.originKey = 'manowa_blog_origin';
       this._log('debug', 'BloggerFeedLoader baslatildi.');
+    }
+    /**
+     * Girilen blog URL dizgesini (orn: "ornek.blogspot.com") gecerli origin formatina ("https://ornek.blogspot.com") donusturur.
+     * @param {string} rawUrl - Ham blog adresi.
+     * @returns {string} Normalize edilmis blog origin adresi veya bos dizge.
+     */
+    normalizeBlogOrigin(rawUrl) {
+      const trimmed = String(rawUrl || '').trim();
+      if (!trimmed) return '';
+      const withProto = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+      try {
+        const parsed = new URL(withProto);
+        return parsed.origin;
+      } catch (_err) {
+        return trimmed.replace(/\/+$/, '');
+      }
+    }
+    /**
+     * Kaydedilmis veya global tanimlanmis blog origin adresini dondurur.
+     * @returns {string} Blog origin adresi.
+     */
+    getSavedBlogOrigin() {
+      if (this.storage) {
+        try {
+          const saved = this.storage.getItem(this.originKey);
+          if (saved) return this.normalizeBlogOrigin(saved);
+        } catch (_err) {
+          // Depolama hatasini yoksay
+        }
+      }
+      return this.normalizeBlogOrigin(globalScope.MANOWA_BLOG_ORIGIN || '');
+    }
+    /**
+     * Blog origin adresini normalize ederek localStorage uzerine kaydeder.
+     * @param {string} rawUrl - Kaydedilecek blog adresi.
+     * @returns {string} Kaydedilen normalize origin adresi.
+     */
+    setSavedBlogOrigin(rawUrl) {
+      const normalized = this.normalizeBlogOrigin(rawUrl);
+      globalScope.MANOWA_BLOG_ORIGIN = normalized;
+      if (this.storage) {
+        try {
+          if (normalized) {
+            this.storage.setItem(this.originKey, normalized);
+          } else {
+            this.storage.removeItem(this.originKey);
+          }
+        } catch (_err) {
+          // Depolama hatasini yoksay
+        }
+      }
+      this._log('info', 'Blog origin adresi guncellendi.', { origin: normalized });
+      return normalized;
     }
     /**
      * Ic loglama yardimcisi.
@@ -499,8 +555,8 @@
     fetchViaJsonp(blogOrigin = '') {
       return new Promise((resolve) => {
         const resolvedOrigin =
-          blogOrigin ||
-          globalScope.MANOWA_BLOG_ORIGIN ||
+          this.normalizeBlogOrigin(blogOrigin) ||
+          this.getSavedBlogOrigin() ||
           (typeof location !== 'undefined' && location.origin && location.origin.startsWith('http')
             ? location.origin
             : '');
@@ -546,9 +602,10 @@
      * @returns {Promise<Array<Object>>} Dinamik seri listesi.
      */
     async fetchDynamicCatalog(feedUrl = '/feeds/posts/default?alt=json&max-results=500') {
+      const savedOrigin = this.getSavedBlogOrigin();
       const isFileProtocol =
         typeof location !== 'undefined' && location.protocol === 'file:' && feedUrl.startsWith('/');
-      if (this.fetchFn && !isFileProtocol) {
+      if (this.fetchFn && !isFileProtocol && !savedOrigin) {
         try {
           this._log('debug', 'Blogger JSON Feed istegi gonderiliyor.', { feedUrl });
           const response = await this.fetchFn(feedUrl);
@@ -569,9 +626,10 @@
       }
       if (typeof document !== 'undefined') {
         const origin =
-          typeof location !== 'undefined' && location.origin && location.origin.startsWith('http')
+          savedOrigin ||
+          (typeof location !== 'undefined' && location.origin && location.origin.startsWith('http')
             ? location.origin
-            : globalScope.MANOWA_BLOG_ORIGIN || '';
+            : '');
         if (origin) {
           const jsonpSeries = await this.fetchViaJsonp(origin);
           if (jsonpSeries.length > 0) {

@@ -66,6 +66,10 @@
       } else if (document.title) {
         this.siteBaseTitle = document.title.split(' - ')[0].trim() || 'Manowa';
       }
+      const originInput = document.getElementById('input-blog-origin');
+      if (originInput && this.feedLoader && typeof this.feedLoader.getSavedBlogOrigin === 'function') {
+        originInput.value = this.feedLoader.getSavedBlogOrigin();
+      }
       this.integrateHeaderBar();
       this.bindEvents();
       await this.loadDynamicData();
@@ -870,6 +874,18 @@
           this.syncReaderControls();
           this.renderReaderViewport();
         }
+      });
+      const connectBlog = async () => {
+        const inp = document.getElementById('input-blog-origin');
+        if (inp && this.feedLoader && typeof this.feedLoader.setSavedBlogOrigin === 'function') {
+          inp.value = this.feedLoader.setSavedBlogOrigin(inp.value);
+          await this.loadDynamicData();
+          this.openCatalog();
+        }
+      };
+      on('btn-connect-blog', 'click', connectBlog);
+      on('input-blog-origin', 'keydown', (e) => {
+        if (e.key === 'Enter') connectBlog();
       });
       on('btn-apply-disqus', 'click', () => {
         const input = document.getElementById('input-disqus-shortname');
