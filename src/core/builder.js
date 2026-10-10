@@ -52,20 +52,38 @@ class ThemeBuilder {
   }
 
   /**
+   * Canli Blogger temasi (theme.xml) icin <!-- DEV_ONLY_START --> ve <!-- DEV_ONLY_END -->
+   * arasindaki gelistirici araci bloklarini temizler.
+   * @param {string} htmlContent - Ham HTML icerigi.
+   * @returns {string} Gelistirici bloklarindan arindirilmis HTML icerigi.
+   */
+  stripDevOnlyBlocks(htmlContent) {
+    if (!htmlContent) {
+      return '';
+    }
+    return String(htmlContent)
+      .replace(/<!--\s*DEV_ONLY_START\s*-->[\s\S]*?<!--\s*DEV_ONLY_END\s*-->/g, '')
+      .trim();
+  }
+
+  /**
    * Belirtilen dizindeki belirli uzantili dosyalari alfabetik veya verilen siraya gore okur.
    * @param {string} subDir - src altindaki klasor adi (orn. 'styles', 'scripts').
    * @param {string} extension - Dosya uzantisi (orn. '.css', '.js').
    * @param {Array<string>} [priorityFiles=[]] - Ilk sirada yuklenmesi gereken dosya adlari.
+   * @param {Array<string>} [excludedFiles=[]] - Haric tutulacak dosya adlari.
    * @returns {string} Birlestirilmis dosya icerikleri.
    */
-  bundleDirectory(subDir, extension, priorityFiles = []) {
+  bundleDirectory(subDir, extension, priorityFiles = [], excludedFiles = []) {
     const targetDir = path.join(this.srcDir, subDir);
     if (!fs.existsSync(targetDir)) {
       this.logger.warn(`Dizin bulunamadi, atlaniyor: ${targetDir}`);
       return '';
     }
 
-    const allFiles = fs.readdirSync(targetDir).filter((file) => file.endsWith(extension));
+    const allFiles = fs
+      .readdirSync(targetDir)
+      .filter((file) => file.endsWith(extension) && !excludedFiles.includes(file));
     const orderedFiles = [
       ...priorityFiles.filter((file) => allFiles.includes(file)),
       ...allFiles.filter((file) => !priorityFiles.includes(file)).sort()
@@ -85,7 +103,7 @@ class ThemeBuilder {
 
   /**
    * Blogger XML ve yerel onizleme HTML dosyalarini derler ve dist/ klasorune yazar.
-   * @param {string} [bodyContent=''] - Ana govdeye eklenecek ek HTML/XML parcalari.
+   * @param {string} [bodyContent=null] - Ana govdeye eklenecek ek HTML/XML parcalari.
    * @returns {{ themeXmlPath: string, previewHtmlPath: string }} Uretilen dosya yollari.
    */
   build(bodyContent = null) {
@@ -116,35 +134,47 @@ class ThemeBuilder {
       }
     }
 
-    const stylesBundle = this.bundleDirectory('styles', '.css', [
+    const styleOrder = [
       'variables.css',
       'cards.css',
       'generator.css',
       'layout.css',
       'reader.css'
-    ]);
-    const scriptsBundle = this.bundleDirectory('scripts', '.js', [
+    ];
+    const scriptOrder = [
       'client-logger.js',
       'disqus-loader.js',
       'blogger-feed-loader.js',
       'catalog-controller.js',
+      'user-library.js',
       'reading-engine.js',
       'post-generator.js',
       'router-controller.js',
       'app-init.js'
+    ];
+
+    // Canli Tema (theme.xml) icin gelistirici modullerini ve DEV_ONLY bloklarini temizle
+    const themeStylesBundle = this.bundleDirectory('styles', '.css', styleOrder, ['generator.css']);
+    const themeScriptsBundle = this.bundleDirectory('scripts', '.js', scriptOrder, [
+      'post-generator.js'
     ]);
+    const themeBody = this.stripDevOnlyBlocks(resolvedBody);
+
+    // Yerel Onizleme (preview.html) icin tum gelistirici araclarini koru
+    const previewStylesBundle = this.bundleDirectory('styles', '.css', styleOrder);
+    const previewScriptsBundle = this.bundleDirectory('scripts', '.js', scriptOrder);
 
     // Blogger XML ciktisini olustur
     const finalXml = baseXml
-      .replace('/* {{STYLES}} */', stylesBundle)
-      .replace('<!-- {{BODY_CONTENT}} -->', resolvedBody)
-      .replace('// {{SCRIPTS}}', scriptsBundle);
+      .replace('/* {{STYLES}} */', themeStylesBundle)
+      .replace('<!-- {{BODY_CONTENT}} -->', themeBody)
+      .replace('// {{SCRIPTS}}', themeScriptsBundle);
 
     // Yerel onizleme HTML ciktisini olustur
     const finalPreview = previewShell
-      .replace('/* {{STYLES}} */', stylesBundle)
+      .replace('/* {{STYLES}} */', previewStylesBundle)
       .replace('<!-- {{BODY_CONTENT}} -->', resolvedBody)
-      .replace('// {{SCRIPTS}}', scriptsBundle);
+      .replace('// {{SCRIPTS}}', previewScriptsBundle);
 
     const themeXmlPath = path.join(this.distDir, 'theme.xml');
     const previewHtmlPath = path.join(this.distDir, 'preview.html');

@@ -26,6 +26,8 @@
       this.direction = VALID_DIRECTIONS.includes(options.direction) ? options.direction : 'ltr';
       this.zoom = this._clamp(options.zoom || 100, 50, 150);
       this.gap = typeof options.gap === 'number' ? Math.max(0, options.gap) : 0;
+      this.novelFontSize = this._clamp(options.novelFontSize || 105, 85, 160);
+      this.novelFontFamily = options.novelFontFamily === 'serif' ? 'serif' : 'sans';
       this.protectImages =
         options.protectImages !== undefined ? Boolean(options.protectImages) : true;
       this.pages = [];
@@ -160,6 +162,27 @@
       this.gap = Math.max(0, Number(gapPx) || 0);
       this._log('debug', 'Sayfa arasi bosluk guncellendi.', { gap: this.gap });
       return this.gap;
+    }
+
+    /**
+     * Novel modu yazi boyutunu yuzde olarak ayarlar (85 - 160).
+     * @param {number} sizePercent - Yazi boyutu yuzdesi.
+     * @returns {number} Guncel yazi boyutu yuzdesi.
+     */
+    setNovelFontSize(sizePercent) {
+      this.novelFontSize = this._clamp(sizePercent, 85, 160);
+      this._log('debug', 'Novel yazi boyutu guncellendi.', { novelFontSize: this.novelFontSize });
+      return this.novelFontSize;
+    }
+
+    /**
+     * Novel modu yazi tipini ('sans' ve 'serif') arasinda degistirir.
+     * @returns {string} Guncel yazi tipi ('sans' veya 'serif').
+     */
+    toggleNovelFontFamily() {
+      this.novelFontFamily = this.novelFontFamily === 'serif' ? 'sans' : 'serif';
+      this._log('info', 'Novel yazi tipi degistirildi.', { novelFontFamily: this.novelFontFamily });
+      return this.novelFontFamily;
     }
 
     /**
@@ -324,8 +347,8 @@
 
     /**
      * Klavye kisayol komutunu isler (RTL yonunde sag/sol tuslarini ters cevirir).
-     * @param {string} key - Klavye tus kodu (orn: 'ArrowRight', 'KeyM').
-     * @returns {string} Yapilan islem ('next', 'prev', 'mode:*', 'none').
+     * @param {string} key - Klavye tus kodu (orn: 'ArrowRight', 'KeyM', 'KeyF').
+     * @returns {string} Yapilan islem ('next', 'prev', 'mode:*', 'fullscreen', 'none').
      */
     handleKeyCommand(key) {
       if (key === 'ArrowRight' || key === 'KeyD') {
@@ -350,6 +373,9 @@
         const nextIdx = (currentIdx + 1) % imageModes.length;
         this.setMode(imageModes[nextIdx]);
         return 'mode:' + this.mode;
+      }
+      if (key === 'KeyF') {
+        return 'fullscreen';
       }
       return 'none';
     }
@@ -412,6 +438,8 @@
         direction: this.direction,
         zoom: this.zoom,
         gap: this.gap,
+        novelFontSize: this.novelFontSize,
+        novelFontFamily: this.novelFontFamily,
         protectImages: this.protectImages,
         currentIndex: this.currentIndex,
         totalPages: this.pages.length,

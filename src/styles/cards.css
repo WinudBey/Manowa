@@ -330,6 +330,119 @@
   border: 1px dashed var(--border-color);
 }
 
+.fav-card-btn {
+  position: absolute;
+  bottom: 0.6rem;
+  right: 0.6rem;
+  z-index: 3;
+  background: rgba(15, 17, 23, 0.85);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.fav-card-btn:hover,
+.fav-card-btn.is-fav {
+  transform: scale(1.1);
+  border-color: #ec4899;
+}
+
+.continue-reading-box,
+.latest-chapters-box {
+  margin-bottom: 1.75rem;
+}
+
+.continue-reading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.85rem;
+}
+
+.continue-card,
+.latest-chapter-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.85rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.continue-card:hover,
+.latest-chapter-card:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.continue-thumb,
+.latest-chapter-thumb {
+  width: 48px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: var(--bg-card);
+}
+
+.continue-info,
+.latest-chapter-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.continue-title,
+.latest-series-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.continue-meta,
+.latest-chapter-date {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+
+.latest-chapter-badge {
+  display: inline-block;
+  align-self: flex-start;
+  background: rgba(99, 102, 241, 0.16);
+  color: var(--accent-hover);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.12rem 0.5rem;
+  border-radius: 4px;
+}
+
+.continue-play {
+  color: var(--accent-primary);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.latest-chapters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.85rem;
+}
+
 @media (max-width: 768px) {
   .series-detail-header {
     grid-template-columns: 1fr;

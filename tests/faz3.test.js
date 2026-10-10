@@ -53,7 +53,7 @@ test('ReadingEngine: Webtoon, Tek Sayfa ve Cift Sayfa (LTR/RTL) gecisleri dogru 
   assert.equal(engine.currentIndex, 2);
 });
 
-test('ReadingEngine: Novel (Metin) bolumlerinde otomatik novel moduna gecmeli', () => {
+test('ReadingEngine: Novel (Metin) bolumlerinde otomatik novel moduna gecmeli ve yazi ayarlari calismali', () => {
   const engine = new ReadingEngine({ storage: createMockStorage() });
   const state = engine.loadChapter({
     seriesId: 'orv-novel',
@@ -65,6 +65,9 @@ test('ReadingEngine: Novel (Metin) bolumlerinde otomatik novel moduna gecmeli', 
   assert.equal(state.mode, 'novel');
   assert.equal(state.hasNovelContent, true);
   assert.equal(state.progressPercent, 100);
+  assert.equal(engine.setNovelFontSize(125), 125);
+  assert.equal(engine.toggleNovelFontFamily(), 'serif');
+  assert.equal(engine.handleKeyCommand('KeyF'), 'fullscreen');
 });
 
 test('ReadingEngine: Kaldigi sayfayi localStorage uzerinden hatirlamali', () => {

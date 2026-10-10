@@ -117,6 +117,7 @@
           : getDefaultCatalog();
       this.activeLang = 'ALL';
       this.searchQuery = '';
+      this.sortBy = 'updated';
       this._log('debug', 'CatalogController baslatildi.', { count: this.seriesList.length });
     }
 
@@ -171,11 +172,23 @@
     }
 
     /**
-     * Aktif filtre ve arama sorgusuna uyan serileri dondurur.
-     * @returns {Array<Object>} Filtrelenmis seriler.
+     * Katalog siralama olcutunu degistirir ('updated', 'title_asc', 'chapters_desc').
+     * @param {string} sortOrder - Siralama tipi.
+     * @returns {Array<Object>} Siralanmis ve filtrelenmis seri listesi.
+     */
+    setSortOrder(sortOrder) {
+      const valid = ['updated', 'title_asc', 'chapters_desc'];
+      this.sortBy = valid.includes(sortOrder) ? sortOrder : 'updated';
+      this._log('info', 'Katalog siralamasi degistirildi.', { sortBy: this.sortBy });
+      return this.getFilteredSeries();
+    }
+
+    /**
+     * Aktif filtre, arama sorgusu ve siralama olcutune uyan serileri dondurur.
+     * @returns {Array<Object>} Filtrelenmis ve siralanmis seriler.
      */
     getFilteredSeries() {
-      return this.seriesList.filter((item) => {
+      const filtered = this.seriesList.filter((item) => {
         const itemLang = String(item.sourceLang || '').toUpperCase();
         const itemType = String(item.type || '').toUpperCase();
         const matchesLang =
@@ -201,6 +214,18 @@
 
         return haystack.includes(this.searchQuery);
       });
+
+      if (this.sortBy === 'title_asc') {
+        return filtered
+          .slice()
+          .sort((a, b) => String(a.title || '').localeCompare(String(b.title || ''), 'tr'));
+      }
+      if (this.sortBy === 'chapters_desc') {
+        return filtered
+          .slice()
+          .sort((a, b) => (b.chapters || []).length - (a.chapters || []).length);
+      }
+      return filtered;
     }
 
     /**

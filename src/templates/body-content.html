@@ -2,8 +2,12 @@
 <div class="filter-toolbar" id="top-app-bar">
   <div class="nav-links">
     <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog">📚 Katalog &amp; Vitrin</a>
+    <button class="nav-btn" id="nav-bookmarks" type="button">❤️ Kitaplığım <span id="bookmarks-count-badge"></span></button>
+    <button class="nav-btn" id="nav-history" type="button">🕒 Geçmiş</button>
     <button class="nav-btn" id="nav-random" type="button">🎲 Rastgele Seri</button>
+    <!-- DEV_ONLY_START -->
     <button class="nav-btn" id="nav-generator" type="button">🛠️ Gönderi Oluşturucu</button>
+    <!-- DEV_ONLY_END -->
   </div>
   <div class="header-controls">
     <div class="search-box">
@@ -32,6 +36,23 @@
     </div>
   </div>
 
+  <!-- KALDIGIN YERDEN DEVAM ET SERIDI -->
+  <div class="continue-reading-box hidden" id="continue-reading-section">
+    <div class="section-header">
+      <h2 class="section-title">⏳ Kaldığın Yerden Devam Et</h2>
+      <button class="icon-btn" id="btn-view-all-history" type="button">Tüm Geçmiş →</button>
+    </div>
+    <div class="continue-reading-grid" id="continue-reading-grid"></div>
+  </div>
+
+  <!-- SON EKLENEN BOLUMLER AKISI -->
+  <div class="latest-chapters-box hidden" id="latest-chapters-section">
+    <div class="section-header">
+      <h2 class="section-title">🆕 Son Eklenen Bölümler</h2>
+    </div>
+    <div class="latest-chapters-grid" id="latest-chapters-grid"></div>
+  </div>
+
   <div class="filter-toolbar">
     <div class="lang-filters" id="lang-filter-group">
       <button class="filter-pill active" data-lang="ALL" type="button">🌍 Tümü</button>
@@ -40,7 +61,14 @@
       <button class="filter-pill" data-lang="Manhua" type="button">🇨🇳 Manhua (Çince)</button>
       <button class="filter-pill" data-lang="Novel" type="button">📖 Novel (Roman)</button>
     </div>
-    <span class="meta-tag" id="catalog-count-label">Yükleniyor...</span>
+    <div class="catalog-toolbar-right">
+      <select class="reader-select" id="select-catalog-sort" title="Katalog Sıralaması">
+        <option value="updated">🔥 Son Güncellenen</option>
+        <option value="title_asc">🔤 İsim (A - Z)</option>
+        <option value="chapters_desc">📚 Bölüm Sayısı</option>
+      </select>
+      <span class="meta-tag" id="catalog-count-label">Yükleniyor...</span>
+    </div>
   </div>
 
   <div class="section-header">
@@ -111,10 +139,23 @@
         <span class="page-counter-pill" id="zoom-label">100%</span>
         <button class="reader-btn" id="btn-zoom-in" type="button" title="Büyüt">🔍+</button>
 
+        <button class="reader-btn" id="btn-font-decrease" type="button" title="Novel Yazı Boyutunu Küçült">A-</button>
+        <button class="reader-btn" id="btn-font-increase" type="button" title="Novel Yazı Boyutunu Büyüt">A+</button>
+        <button class="reader-btn" id="btn-font-family" type="button" title="Novel Yazı Tipini Değiştir">🔤 Yazı Tipi</button>
+
         <button class="reader-btn" id="btn-autoscroll" type="button" title="Otomatik Kaydırma">▶️ Oto-Kaydır</button>
         <button class="reader-btn active" id="btn-protect" type="button" title="Sağ Tık Görüntü Koruması">🛡️ Koruma</button>
+        <button class="reader-btn" id="btn-shortcuts-help" type="button" title="Klavye Kısayolları">⌨️ Kısayollar</button>
         <button class="reader-btn" id="btn-fullscreen" type="button" title="Tam Ekran">⛶ Tam Ekran</button>
       </div>
+    </div>
+
+    <div class="shortcuts-help-box hidden" id="reader-shortcuts-box">
+      <span><strong>⌨️ Klavye Kısayolları:</strong></span>
+      <span><kbd>←</kbd> / <kbd>A</kbd> Önceki Sayfa</span>
+      <span><kbd>→</kbd> / <kbd>D</kbd> Sonraki Sayfa</span>
+      <span><kbd>M</kbd> Okuma Modu Değiştir</span>
+      <span><kbd>F</kbd> Tam Ekran</span>
     </div>
 
     <div class="translator-note-box hidden" id="translator-note-box"></div>
@@ -136,7 +177,29 @@
   </div>
 </section>
 
-<!-- GORUNUM 4: BLOGGER GONDERI KODU OLUSTURUCU (POST GENERATOR) -->
+<!-- GORUNUM 4: KULLANICI KITAPLIGI / FAVORILERIM -->
+<section class="hidden" id="view-bookmarks">
+  <div class="section-header">
+    <h2 class="section-title">❤️ Kitaplığım (Favori Serilerim)</h2>
+    <a class="icon-btn" data-action="catalog" href="/" id="btn-bookmarks-back">← Kataloğa Dön</a>
+  </div>
+  <div class="catalog-grid" id="bookmarks-grid"></div>
+</section>
+
+<!-- GORUNUM 5: OKUMA GECMISIM -->
+<section class="hidden" id="view-history">
+  <div class="section-header">
+    <h2 class="section-title">🕒 Okuma Geçmişim</h2>
+    <div class="detail-actions">
+      <button class="icon-btn" id="btn-clear-history" type="button">🗑️ Geçmişi Temizle</button>
+      <a class="icon-btn" data-action="catalog" href="/" id="btn-history-back">← Kataloğa Dön</a>
+    </div>
+  </div>
+  <div class="chapter-grid" id="history-list-grid"></div>
+</section>
+
+<!-- DEV_ONLY_START -->
+<!-- GORUNUM 6: BLOGGER GONDERI KODU OLUSTURUCU (YALNIZCA PREVIEW ICIN) -->
 <section class="hidden" id="view-generator">
   <div class="generator-box">
     <div class="section-header">
@@ -177,7 +240,7 @@
 
     <div class="form-group" style="margin-bottom: 1rem;">
       <label for="gen-translator-note">Çevirmen Notu (İsteğe Bağlı)</label>
-      <input class="form-control" id="gen-translator-note" type="text" value="" placeholder="Bölüm başı çevirmen notu..." />
+      <input class="form-control" id="gen-translator-note" placeholder="Bölüm başı çevirmen notu..." type="text" value="" />
     </div>
 
     <div class="form-group" style="margin-bottom: 1rem;">
@@ -201,21 +264,30 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
     </div>
   </div>
 </section>
+<!-- DEV_ONLY_END -->
 
-<!-- ORTAK DISQUS YORUM ENTGRASYONU ALANI -->
-<section class="disqus-container" id="disqus-section">
+<!-- ORTAK DISQUS YORUM ENTEGRASYONU ALANI -->
+<section class="disqus-container hidden" id="disqus-section">
   <div class="disqus-header">
-    <h3 class="section-title">💬 Disqus Okuyucu Yorumları</h3>
-    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-      <input class="search-input" id="input-disqus-shortname" placeholder="Disqus shortname (örn: manhwaarsiv)" style="max-width: 220px;" type="text" />
+    <h3 class="section-title">💬 Okuyucu Yorumları</h3>
+    <!-- DEV_ONLY_START -->
+    <div id="disqus-dev-controls" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+      <input class="search-input" id="input-disqus-shortname" placeholder="Disqus shortname (örn: manhawon)" style="max-width: 220px;" type="text" />
       <button class="icon-btn" id="btn-apply-disqus" type="button">Yorumları Bağla</button>
     </div>
+    <!-- DEV_ONLY_END -->
   </div>
+  <!-- DEV_ONLY_START -->
   <div class="disqus-status-note" id="disqus-status"></div>
+  <!-- DEV_ONLY_END -->
   <div id="disqus_thread" style="margin-top: 1rem;"></div>
 </section>
 
-<!-- GELISTIRICI DEBUG LOG PANELI -->
+<!-- YUKARI CIK YUZEN DUGMESI -->
+<button aria-label="Sayfa Başına Dön" class="scroll-top-btn hidden" id="btn-scroll-top" title="Sayfa Başına Dön" type="button">↑</button>
+
+<!-- DEV_ONLY_START -->
+<!-- GELISTIRICI DEBUG LOG PANELI (YALNIZCA PREVIEW ICIN) -->
 <section class="debug-panel" id="debug-log-panel">
   <div class="code-output-header">
     <span>🛠️ Sistem DEBUG Kayıtları (Oturum Başında Otomatik Temizlenir)</span>
@@ -223,3 +295,4 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
   </div>
   <div class="debug-log-list" id="debug-log-list"></div>
 </section>
+<!-- DEV_ONLY_END -->

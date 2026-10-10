@@ -268,3 +268,79 @@ Onayınız doğrultusunda 3 fazlı GitHub yayın hazırlığı planını tamamla
 * Her `push` ve `pull_request` işleminde birim testlerini ve tema derlemesini otomatik çalıştıran [ci.yml](file:///e:/Winud/Desktop/manowa/.github/workflows/ci.yml) iş akışını oluşturdum.
 * [faz4.test.js](file:///e:/Winud/Desktop/manowa/tests/faz4.test.js) içine GitHub yayın dosyalarının varlığını denetleyen birim testi ekledim. Toplam 14 birim testin tamamı başarıyla geçti.
 * Tüm proje dosyalarını Git sahnesine ekledim ve ilk commit (`Initial commit`) kaydını oluşturdum.
+
+---
+## [OTURUM BAŞLANGICI] - 2026-10-10T16:36:53+03:00
+
+### [KULLANICI] - 2026-10-10T16:36:53+03:00
+/plan Sistem çok güzel olmuş ama sitede yayına almaya uygun değil her yerde geliştirici araçları var preview dosyaysında yine kalsın ama theme dosyasında kaldır ve farklı şeylerde ekle
+
+### [ASİSTAN] - 2026-10-10T16:38:00+03:00
+Canlı temadan (`dist/theme.xml`) geliştirici araçları kaldırıldığında yerine hangi kullanıcı özelliklerinin eklenmesini istediğinizi ve Disqus yorum alanının nasıl çalışmasını tercih ettiğinizi sordum.
+
+### [KULLANICI] - 2026-10-10T16:39:15+03:00
+* Seçilen Özellikler:
+  1. Kitaplığım / Favorilerim: Serileri favorilere ekleme ve üst menüde Favorilerim sayfası
+  2. Okuma Geçmişim: Kaldığın yerden devam et şeridi ve son okunan bölümler sayfası
+  3. Son Eklenen Bölümler: Ana sayfada en yeni bölümlerin hızlı listesi ve katalog sıralama (A-Z, Bölüm Sayısı, Yeni)
+  4. Okuyucu İyileştirmeleri: Novel yazı boyutu/font ayarı, klavye kısayol rehberi ve yukarı çık butonu
+* Disqus Tercihi: `shortname manhawon yap`
+
+### [ASİSTAN] - 2026-10-10T16:40:15+03:00
+4 fazlı uygulama planını hazırladım ve onayınıza sundum.
+
+### [KULLANICI] - 2026-10-10T16:41:22+03:00
+[Uygulama planını onayladı]
+
+### [ASİSTAN] - 2026-10-10T16:51:15+03:00
+Onayınız doğrultusunda 4 fazlı geliştirme planını tamamladım:
+
+1. **Faz 1: Canlı Tema (`dist/theme.xml`) ve Önizleme (`dist/preview.html`) Ayrımı & Disqus `manhawon` Yapılandırması**
+   * [builder.js](file:///e:/Winud/Desktop/manowa/src/core/builder.js) içine [`ThemeBuilder.stripDevOnlyBlocks`](file:///e:/Winud/Desktop/manowa/src/core/builder.js#L60-L67) metodunu ve modül hariç tutma desteğini ekledim.
+   * Canlı [theme.xml](file:///e:/Winud/Desktop/manowa/dist/theme.xml) dosyasından `🛠️ Gönderi Oluşturucu` sekmesini, Disqus shortname ayar kutusunu ve alt kısımdaki `🛠️ Sistem DEBUG Kayıtları` panelini tamamen kaldırdım; bu geliştirici araçlarını yalnızca [preview.html](file:///e:/Winud/Desktop/manowa/dist/preview.html) içinde korudum.
+   * [disqus-loader.js](file:///e:/Winud/Desktop/manowa/src/scripts/disqus-loader.js) içinde varsayılan Disqus shortname değerini `'manhawon'` olarak ayarladım.
+
+2. **Faz 2: Kullanıcı Kitaplığı (`user-library.js`), Okuma Geçmişi, Son Bölümler ve Katalog Sıralama**
+   * [user-library.js](file:///e:/Winud/Desktop/manowa/src/scripts/user-library.js) modülünü ([`UserLibrary`](file:///e:/Winud/Desktop/manowa/src/scripts/user-library.js#L12-L426) sınıfı) oluşturdum: Favori serileri (`manowa_favorites`), zenginleştirilmiş okuma geçmişini ve son eklenen bölümler akışını yönetir.
+   * [catalog-controller.js](file:///e:/Winud/Desktop/manowa/src/scripts/catalog-controller.js) içine [`CatalogController.setSortOrder`](file:///e:/Winud/Desktop/manowa/src/scripts/catalog-controller.js#L177-L182) metodunu (`updated`, `title_asc`, `chapters_desc`) ekledim.
+
+3. **Faz 3: Okuyucu İyileştirmeleri ve Arayüz Entegrasyonu**
+   * [reading-engine.js](file:///e:/Winud/Desktop/manowa/src/scripts/reading-engine.js) içine [`ReadingEngine.setNovelFontSize`](file:///e:/Winud/Desktop/manowa/src/scripts/reading-engine.js#L169-L173), [`ReadingEngine.toggleNovelFontFamily`](file:///e:/Winud/Desktop/manowa/src/scripts/reading-engine.js#L179-L183) ve `KeyF` (Tam Ekran) kısayolunu ekledim.
+   * [body-content.html](file:///e:/Winud/Desktop/manowa/src/templates/body-content.html), [app-init.js](file:///e:/Winud/Desktop/manowa/src/scripts/app-init.js) ve [router-controller.js](file:///e:/Winud/Desktop/manowa/src/scripts/router-controller.js) içine **❤️ Kitaplığım**, **🕒 Geçmiş**, **⏳ Kaldığın Yerden Devam Et**, **🆕 Son Eklenen Bölümler**, **⌨️ Kısayollar** rehberi ve **↑ Yukarı Çık** yüzen düğmesini entegre ettim.
+
+4. **Faz 4: Birim Testleri ve Doğrulama**
+   * [faz1.test.js](file:///e:/Winud/Desktop/manowa/tests/faz1.test.js), [faz2.test.js](file:///e:/Winud/Desktop/manowa/tests/faz2.test.js), [faz3.test.js](file:///e:/Winud/Desktop/manowa/tests/faz3.test.js) ve [faz4.test.js](file:///e:/Winud/Desktop/manowa/tests/faz4.test.js) içindeki toplam **16 birim testin tamamı** başarıyla geçti.
+   * Tüm kaynak dosyalar 1000 satır sınırının altındadır (`app-init.js`: 997 satır altında, `user-library.js`: 434 satır).
+---
+## [OTURUM BAŞLANGICI] - 2026-10-10T16:58:09+03:00
+
+### [KULLANICI] - 2026-10-10T16:58:09+03:00
+yorumları sadece seri ayrıntılarında ve bölümlerde göster
+
+### [ASİSTAN] - 2026-10-10T16:59:15+03:00
+Yorum alanını (`#disqus-section`) yalnızca seri tanıtım (`series`) ve bölüm okuma (`reader`) sayfalarında göstermek için 2 fazlı geliştirme planını hazırladım ve onayınıza sundum.
+
+### [KULLANICI] - 2026-10-10T17:00:07+03:00
+/goal devam
+
+### [ASİSTAN] - 2026-10-10T17:04:15+03:00
+Onayınız doğrultusunda 2 fazlı planı tamamladım:
+
+1. **Faz 1: Yorum Görünürlüğü Kontrolü (`body-content.html`, `app-init.js`)**
+   * [body-content.html](file:///e:/Winud/Desktop/manowa/src/templates/body-content.html#L270) içindeki `#disqus-section` alanına varsayılan olarak `hidden` sınıfını ekledim.
+   * [`AppController.switchView`](file:///e:/Winud/Desktop/manowa/src/scripts/app-init.js#L329-L363) metodunu güncelleyerek `#disqus-section` alanını yalnızca `series` (Seri Ayrıntıları) ve `reader` (Bölümler) görünümlerinde açtım; `catalog`, `bookmarks`, `history` ve `generator` görünümlerinde gizledim.
+   * [`AppController.loadDynamicData`](file:///e:/Winud/Desktop/manowa/src/scripts/app-init.js#L114-L144) ve [`AppController.openCatalog`](file:///e:/Winud/Desktop/manowa/src/scripts/app-init.js#L369-L379) içindeki ana sayfa (`manowa-home`) Disqus yükleme çağrılarını kaldırdım.
+   * [app-init.js](file:///e:/Winud/Desktop/manowa/src/scripts/app-init.js) dosyasını 962 satıra düşürerek 1000 satır sınırının güvenli şekilde altında tuttum.
+
+2. **Faz 2: Birim Testleri ve Tema Derlemesi (`tests/faz4.test.js`, `dist/theme.xml`, `dist/preview.html`)**
+   * [faz4.test.js](file:///e:/Winud/Desktop/manowa/tests/faz4.test.js#L308-L348) içine yorum alanının yalnızca `series` ve `reader` görünümlerinde gösterildiğini doğrulayan birim testi ekledim.
+   * Toplam **17 birim testin tamamı** başarıyla geçti.
+   * Güncel [theme.xml](file:///e:/Winud/Desktop/manowa/dist/theme.xml) ve [preview.html](file:///e:/Winud/Desktop/manowa/dist/preview.html) dosyalarını derledim.
+
+---
+
+### [KULLANICI] - 2026-10-10T17:05:39+03:00
+pushla
+
+### [ASİSTAN] - 2026-10-10T17:06:00+03:00
+Tüm değişiklikleri Git sahnesine ekledim, commit kaydını oluşturdum ve `origin/main` (`https://github.com/WinudBey/Manowa.git`) dalına gönderdim (push).

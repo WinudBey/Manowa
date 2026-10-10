@@ -45,6 +45,10 @@
       </b:section>
     </main>
 
+    <footer class='site-footer'>
+      <p>📚 <strong><data:blog.title/></strong> — Manga, Manhwa &amp; Novel Okuma Platformu</p>
+    </footer>
+
     <script type='text/javascript'>
 //<![CDATA[
 // {{SCRIPTS}}

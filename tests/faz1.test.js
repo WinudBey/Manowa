@@ -61,16 +61,34 @@ test('ThemeBuilder: 1000 satir sinirini asan dosyada hata firlatmali', () => {
   }, /Satir siniri ihlali/);
 });
 
-test('ThemeBuilder: theme.xml ve preview.html dosyalarini basariyla derlemeli', () => {
+test('ThemeBuilder: theme.xml icinden DEV_ONLY bloklarini temizlemeli, preview.html icinde korumali', () => {
   const logger = new Logger(TEST_LOG_PATH, true);
   const builder = new ThemeBuilder({ logger });
-  const { themeXmlPath, previewHtmlPath } = builder.build('<div id="test-marker">Manowa Test</div>');
+  const sampleBody =
+    '<div id="test-marker">Manowa Test</div>' +
+    '<!-- DEV_ONLY_START --><div id="dev-only-tool">Gelistirici Araci</div><!-- DEV_ONLY_END -->';
+  const { themeXmlPath, previewHtmlPath } = builder.build(sampleBody);
 
   assert.equal(fs.existsSync(themeXmlPath), true);
   assert.equal(fs.existsSync(previewHtmlPath), true);
 
   const xmlContent = fs.readFileSync(themeXmlPath, 'utf8');
+  const previewContent = fs.readFileSync(previewHtmlPath, 'utf8');
+
   assert.equal(xmlContent.includes('--bg-primary'), true, 'CSS degiskenleri XML icine gomulmeli');
   assert.equal(xmlContent.includes('ClientLogger'), true, 'JS modulleri XML icine gomulmeli');
   assert.equal(xmlContent.includes('id="test-marker"'), true, 'Govde icerigi gomulmeli');
+  assert.equal(
+    xmlContent.includes('id="dev-only-tool"'),
+    false,
+    'DEV_ONLY araclari canli theme.xml dosyasinda yer almamali'
+  );
+  assert.equal(
+    previewContent.includes('id="dev-only-tool"'),
+    true,
+    'DEV_ONLY araclari preview.html dosyasinda korunmali'
+  );
+
+  // Test sonrasi gercek sablon ciktilarini geri yukle
+  builder.build();
 });

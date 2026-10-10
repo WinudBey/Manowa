@@ -386,6 +386,119 @@ body {
   border: 1px dashed var(--border-color);
 }
 
+.fav-card-btn {
+  position: absolute;
+  bottom: 0.6rem;
+  right: 0.6rem;
+  z-index: 3;
+  background: rgba(15, 17, 23, 0.85);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.fav-card-btn:hover,
+.fav-card-btn.is-fav {
+  transform: scale(1.1);
+  border-color: #ec4899;
+}
+
+.continue-reading-box,
+.latest-chapters-box {
+  margin-bottom: 1.75rem;
+}
+
+.continue-reading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.85rem;
+}
+
+.continue-card,
+.latest-chapter-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.85rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.continue-card:hover,
+.latest-chapter-card:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.continue-thumb,
+.latest-chapter-thumb {
+  width: 48px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: var(--bg-card);
+}
+
+.continue-info,
+.latest-chapter-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.continue-title,
+.latest-series-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.continue-meta,
+.latest-chapter-date {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+
+.latest-chapter-badge {
+  display: inline-block;
+  align-self: flex-start;
+  background: rgba(99, 102, 241, 0.16);
+  color: var(--accent-hover);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.12rem 0.5rem;
+  border-radius: 4px;
+}
+
+.continue-play {
+  color: var(--accent-primary);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.latest-chapters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.85rem;
+}
+
 @media (max-width: 768px) {
   .series-detail-header {
     grid-template-columns: 1fr;
@@ -767,6 +880,36 @@ textarea.form-control {
   font-size: 0.88rem;
 }
 
+.catalog-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.scroll-top-btn {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 120;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--accent-primary);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 1.2rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.scroll-top-btn:hover {
+  transform: translateY(-3px);
+  background: var(--accent-hover);
+}
+
 .hidden,
 #main-blog-section,
 .posts-wrapper {
@@ -1029,6 +1172,32 @@ textarea.form-control {
   border: 1px solid #2e3446;
 }
 
+.shortcuts-help-box {
+  background: #131620;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+
+.shortcuts-help-box kbd {
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #f8fafc;
+}
+
+.novel-content-box.font-serif {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
 @media (max-width: 768px) {
   .reader-viewport.mode-double .double-page-grid {
     grid-template-columns: 1fr;
@@ -1051,8 +1220,12 @@ textarea.form-control {
 <div class="filter-toolbar" id="top-app-bar">
   <div class="nav-links">
     <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog">📚 Katalog &amp; Vitrin</a>
+    <button class="nav-btn" id="nav-bookmarks" type="button">❤️ Kitaplığım <span id="bookmarks-count-badge"></span></button>
+    <button class="nav-btn" id="nav-history" type="button">🕒 Geçmiş</button>
     <button class="nav-btn" id="nav-random" type="button">🎲 Rastgele Seri</button>
+    <!-- DEV_ONLY_START -->
     <button class="nav-btn" id="nav-generator" type="button">🛠️ Gönderi Oluşturucu</button>
+    <!-- DEV_ONLY_END -->
   </div>
   <div class="header-controls">
     <div class="search-box">
@@ -1081,6 +1254,23 @@ textarea.form-control {
     </div>
   </div>
 
+  <!-- KALDIGIN YERDEN DEVAM ET SERIDI -->
+  <div class="continue-reading-box hidden" id="continue-reading-section">
+    <div class="section-header">
+      <h2 class="section-title">⏳ Kaldığın Yerden Devam Et</h2>
+      <button class="icon-btn" id="btn-view-all-history" type="button">Tüm Geçmiş →</button>
+    </div>
+    <div class="continue-reading-grid" id="continue-reading-grid"></div>
+  </div>
+
+  <!-- SON EKLENEN BOLUMLER AKISI -->
+  <div class="latest-chapters-box hidden" id="latest-chapters-section">
+    <div class="section-header">
+      <h2 class="section-title">🆕 Son Eklenen Bölümler</h2>
+    </div>
+    <div class="latest-chapters-grid" id="latest-chapters-grid"></div>
+  </div>
+
   <div class="filter-toolbar">
     <div class="lang-filters" id="lang-filter-group">
       <button class="filter-pill active" data-lang="ALL" type="button">🌍 Tümü</button>
@@ -1089,7 +1279,14 @@ textarea.form-control {
       <button class="filter-pill" data-lang="Manhua" type="button">🇨🇳 Manhua (Çince)</button>
       <button class="filter-pill" data-lang="Novel" type="button">📖 Novel (Roman)</button>
     </div>
-    <span class="meta-tag" id="catalog-count-label">Yükleniyor...</span>
+    <div class="catalog-toolbar-right">
+      <select class="reader-select" id="select-catalog-sort" title="Katalog Sıralaması">
+        <option value="updated">🔥 Son Güncellenen</option>
+        <option value="title_asc">🔤 İsim (A - Z)</option>
+        <option value="chapters_desc">📚 Bölüm Sayısı</option>
+      </select>
+      <span class="meta-tag" id="catalog-count-label">Yükleniyor...</span>
+    </div>
   </div>
 
   <div class="section-header">
@@ -1160,10 +1357,23 @@ textarea.form-control {
         <span class="page-counter-pill" id="zoom-label">100%</span>
         <button class="reader-btn" id="btn-zoom-in" type="button" title="Büyüt">🔍+</button>
 
+        <button class="reader-btn" id="btn-font-decrease" type="button" title="Novel Yazı Boyutunu Küçült">A-</button>
+        <button class="reader-btn" id="btn-font-increase" type="button" title="Novel Yazı Boyutunu Büyüt">A+</button>
+        <button class="reader-btn" id="btn-font-family" type="button" title="Novel Yazı Tipini Değiştir">🔤 Yazı Tipi</button>
+
         <button class="reader-btn" id="btn-autoscroll" type="button" title="Otomatik Kaydırma">▶️ Oto-Kaydır</button>
         <button class="reader-btn active" id="btn-protect" type="button" title="Sağ Tık Görüntü Koruması">🛡️ Koruma</button>
+        <button class="reader-btn" id="btn-shortcuts-help" type="button" title="Klavye Kısayolları">⌨️ Kısayollar</button>
         <button class="reader-btn" id="btn-fullscreen" type="button" title="Tam Ekran">⛶ Tam Ekran</button>
       </div>
+    </div>
+
+    <div class="shortcuts-help-box hidden" id="reader-shortcuts-box">
+      <span><strong>⌨️ Klavye Kısayolları:</strong></span>
+      <span><kbd>←</kbd> / <kbd>A</kbd> Önceki Sayfa</span>
+      <span><kbd>→</kbd> / <kbd>D</kbd> Sonraki Sayfa</span>
+      <span><kbd>M</kbd> Okuma Modu Değiştir</span>
+      <span><kbd>F</kbd> Tam Ekran</span>
     </div>
 
     <div class="translator-note-box hidden" id="translator-note-box"></div>
@@ -1185,7 +1395,29 @@ textarea.form-control {
   </div>
 </section>
 
-<!-- GORUNUM 4: BLOGGER GONDERI KODU OLUSTURUCU (POST GENERATOR) -->
+<!-- GORUNUM 4: KULLANICI KITAPLIGI / FAVORILERIM -->
+<section class="hidden" id="view-bookmarks">
+  <div class="section-header">
+    <h2 class="section-title">❤️ Kitaplığım (Favori Serilerim)</h2>
+    <a class="icon-btn" data-action="catalog" href="/" id="btn-bookmarks-back">← Kataloğa Dön</a>
+  </div>
+  <div class="catalog-grid" id="bookmarks-grid"></div>
+</section>
+
+<!-- GORUNUM 5: OKUMA GECMISIM -->
+<section class="hidden" id="view-history">
+  <div class="section-header">
+    <h2 class="section-title">🕒 Okuma Geçmişim</h2>
+    <div class="detail-actions">
+      <button class="icon-btn" id="btn-clear-history" type="button">🗑️ Geçmişi Temizle</button>
+      <a class="icon-btn" data-action="catalog" href="/" id="btn-history-back">← Kataloğa Dön</a>
+    </div>
+  </div>
+  <div class="chapter-grid" id="history-list-grid"></div>
+</section>
+
+<!-- DEV_ONLY_START -->
+<!-- GORUNUM 6: BLOGGER GONDERI KODU OLUSTURUCU (YALNIZCA PREVIEW ICIN) -->
 <section class="hidden" id="view-generator">
   <div class="generator-box">
     <div class="section-header">
@@ -1226,7 +1458,7 @@ textarea.form-control {
 
     <div class="form-group" style="margin-bottom: 1rem;">
       <label for="gen-translator-note">Çevirmen Notu (İsteğe Bağlı)</label>
-      <input class="form-control" id="gen-translator-note" type="text" value="" placeholder="Bölüm başı çevirmen notu..." />
+      <input class="form-control" id="gen-translator-note" placeholder="Bölüm başı çevirmen notu..." type="text" value="" />
     </div>
 
     <div class="form-group" style="margin-bottom: 1rem;">
@@ -1250,21 +1482,30 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
     </div>
   </div>
 </section>
+<!-- DEV_ONLY_END -->
 
-<!-- ORTAK DISQUS YORUM ENTGRASYONU ALANI -->
-<section class="disqus-container" id="disqus-section">
+<!-- ORTAK DISQUS YORUM ENTEGRASYONU ALANI -->
+<section class="disqus-container hidden" id="disqus-section">
   <div class="disqus-header">
-    <h3 class="section-title">💬 Disqus Okuyucu Yorumları</h3>
-    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-      <input class="search-input" id="input-disqus-shortname" placeholder="Disqus shortname (örn: manhwaarsiv)" style="max-width: 220px;" type="text" />
+    <h3 class="section-title">💬 Okuyucu Yorumları</h3>
+    <!-- DEV_ONLY_START -->
+    <div id="disqus-dev-controls" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+      <input class="search-input" id="input-disqus-shortname" placeholder="Disqus shortname (örn: manhawon)" style="max-width: 220px;" type="text" />
       <button class="icon-btn" id="btn-apply-disqus" type="button">Yorumları Bağla</button>
     </div>
+    <!-- DEV_ONLY_END -->
   </div>
+  <!-- DEV_ONLY_START -->
   <div class="disqus-status-note" id="disqus-status"></div>
+  <!-- DEV_ONLY_END -->
   <div id="disqus_thread" style="margin-top: 1rem;"></div>
 </section>
 
-<!-- GELISTIRICI DEBUG LOG PANELI -->
+<!-- YUKARI CIK YUZEN DUGMESI -->
+<button aria-label="Sayfa Başına Dön" class="scroll-top-btn hidden" id="btn-scroll-top" title="Sayfa Başına Dön" type="button">↑</button>
+
+<!-- DEV_ONLY_START -->
+<!-- GELISTIRICI DEBUG LOG PANELI (YALNIZCA PREVIEW ICIN) -->
 <section class="debug-panel" id="debug-log-panel">
   <div class="code-output-header">
     <span>🛠️ Sistem DEBUG Kayıtları (Oturum Başında Otomatik Temizlenir)</span>
@@ -1272,8 +1513,13 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
   </div>
   <div class="debug-log-list" id="debug-log-list"></div>
 </section>
+<!-- DEV_ONLY_END -->
 
   </main>
+
+  <footer class="site-footer">
+    <p>📚 <strong>Manhwa Arşiv</strong> — Manga, Manhwa &amp; Novel Okuma Platformu (Yerel Önizleme Modu)</p>
+  </footer>
 
   <script>
 /* === MODULE: scripts/client-logger.js === */
@@ -1426,11 +1672,13 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
     /**
      * DisqusLoader nesnesini yapilandirir.
      * @param {Object} [options={}] - Yapilandirma secenekleri.
-     * @param {string} [options.shortname=''] - Disqus forum kisa adi.
+     * @param {string} [options.shortname='manhawon'] - Disqus forum kisa adi.
      * @param {Object} [options.logger=null] - Loglama nesnesi.
      */
     constructor(options = {}) {
-      this.shortname = (options.shortname || '').trim();
+      const defaultShortname =
+        options.shortname !== undefined ? String(options.shortname) : 'manhawon';
+      this.shortname = defaultShortname.trim().toLowerCase();
       this.logger = options.logger || globalScope.ManowaLogger || null;
       this.isScriptInjected = false;
       this.currentIdentifier = null;
@@ -2264,6 +2512,7 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
           : getDefaultCatalog();
       this.activeLang = 'ALL';
       this.searchQuery = '';
+      this.sortBy = 'updated';
       this._log('debug', 'CatalogController baslatildi.', { count: this.seriesList.length });
     }
 
@@ -2318,11 +2567,23 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
     }
 
     /**
-     * Aktif filtre ve arama sorgusuna uyan serileri dondurur.
-     * @returns {Array<Object>} Filtrelenmis seriler.
+     * Katalog siralama olcutunu degistirir ('updated', 'title_asc', 'chapters_desc').
+     * @param {string} sortOrder - Siralama tipi.
+     * @returns {Array<Object>} Siralanmis ve filtrelenmis seri listesi.
+     */
+    setSortOrder(sortOrder) {
+      const valid = ['updated', 'title_asc', 'chapters_desc'];
+      this.sortBy = valid.includes(sortOrder) ? sortOrder : 'updated';
+      this._log('info', 'Katalog siralamasi degistirildi.', { sortBy: this.sortBy });
+      return this.getFilteredSeries();
+    }
+
+    /**
+     * Aktif filtre, arama sorgusu ve siralama olcutune uyan serileri dondurur.
+     * @returns {Array<Object>} Filtrelenmis ve siralanmis seriler.
      */
     getFilteredSeries() {
-      return this.seriesList.filter((item) => {
+      const filtered = this.seriesList.filter((item) => {
         const itemLang = String(item.sourceLang || '').toUpperCase();
         const itemType = String(item.type || '').toUpperCase();
         const matchesLang =
@@ -2348,6 +2609,18 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
 
         return haystack.includes(this.searchQuery);
       });
+
+      if (this.sortBy === 'title_asc') {
+        return filtered
+          .slice()
+          .sort((a, b) => String(a.title || '').localeCompare(String(b.title || ''), 'tr'));
+      }
+      if (this.sortBy === 'chapters_desc') {
+        return filtered
+          .slice()
+          .sort((a, b) => (b.chapters || []).length - (a.chapters || []).length);
+      }
+      return filtered;
     }
 
     /**
@@ -2407,6 +2680,444 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
   }
 })(typeof window !== 'undefined' ? window : globalThis);
 
+/* === MODULE: scripts/user-library.js === */
+/**
+ * @fileoverview Kullanici kitapligi (Favoriler / Bookmarks), okuma gecmisi listesi ve
+ * son eklenen bolumler akisini yoneten modul.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  /**
+   * Favori serileri, okuma gecmisini ve son eklenen bolumleri yoneten sinif.
+   */
+  class UserLibrary {
+    /**
+     * UserLibrary nesnesini baslatir.
+     * @param {Object} [options={}] - Yapilandirma secenekleri.
+     */
+    constructor(options = {}) {
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.storage =
+        options.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
+      this.favoritesKey = options.favoritesKey || 'manowa_favorites';
+      this.historyKey = options.historyKey || 'manowa_reading_history';
+      this._log('debug', 'UserLibrary baslatildi.');
+    }
+
+    /**
+     * Ic loglama yardimcisi.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Log mesaji.
+     * @param {Object|null} [meta=null] - Ek veri.
+     * @returns {void}
+     */
+    _log(level, msg, meta = null) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+
+    /**
+     * Kayitli favori seri kimliklerini (ID) dondurur.
+     * @returns {Array<string>} Favori seri ID listesi.
+     */
+    getFavoriteIds() {
+      if (!this.storage) {
+        return [];
+      }
+      try {
+        const raw = this.storage.getItem(this.favoritesKey);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (_err) {
+        return [];
+      }
+    }
+
+    /**
+     * Belirtilen serinin favorilerde olup olmadigini kontrol eder.
+     * @param {string} seriesId - Seri kimligi.
+     * @returns {boolean} Favoride ise true.
+     */
+    isFavorite(seriesId) {
+      if (!seriesId) {
+        return false;
+      }
+      return this.getFavoriteIds().includes(seriesId);
+    }
+
+    /**
+     * Seriyi favorilere ekler veya favorilerden cikarir.
+     * @param {string} seriesId - Seri kimligi.
+     * @returns {boolean} Islem sonrasi favori durumu (eklendiyse true, cikarildiysa false).
+     */
+    toggleFavorite(seriesId) {
+      if (!seriesId) {
+        return false;
+      }
+      const list = this.getFavoriteIds();
+      const idx = list.indexOf(seriesId);
+      let added = false;
+      if (idx >= 0) {
+        list.splice(idx, 1);
+      } else {
+        list.unshift(seriesId);
+        added = true;
+      }
+
+      if (this.storage) {
+        try {
+          this.storage.setItem(this.favoritesKey, JSON.stringify(list));
+        } catch (_err) {
+          // Depolama hatasini yoksay
+        }
+      }
+      this._log('info', added ? 'Seri kitapliga eklendi.' : 'Seri kitapliktan cikarildi.', {
+        seriesId,
+        totalFavorites: list.length
+      });
+      return added;
+    }
+
+    /**
+     * Katalog icindeki favori serilerin tam nesne listesini dondurur.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @returns {Array<Object>} Favori seri nesneleri.
+     */
+    getFavoriteSeries(catalog) {
+      if (!catalog || !Array.isArray(catalog.seriesList)) {
+        return [];
+      }
+      const favIds = this.getFavoriteIds();
+      return favIds
+        .map((id) => catalog.getSeriesById(id))
+        .filter((series) => Boolean(series));
+    }
+
+    /**
+     * Tum serilerdeki bolumleri tarayarak en son yayinlanan bolumleri dondurur.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {number} [limit=8] - Maksimum bolum sayisi.
+     * @returns {Array<Object>} Son eklenen bolum listesi.
+     */
+    getLatestChapters(catalog, limit = 8) {
+      if (!catalog || !Array.isArray(catalog.seriesList)) {
+        return [];
+      }
+      const items = [];
+      catalog.seriesList.forEach((series) => {
+        if (!Array.isArray(series.chapters)) {
+          return;
+        }
+        series.chapters.forEach((ch) => {
+          items.push({
+            seriesId: series.id,
+            seriesTitle: series.title,
+            seriesCover: series.cover || '',
+            seriesType: series.type || 'Seri',
+            sourceLang: series.sourceLang || 'KR',
+            chapterId: ch.id,
+            number: Number(ch.number) || 0,
+            title: ch.title || `Bölüm ${ch.number}`,
+            date: ch.date || '',
+            isNovel: Boolean(ch.isNovel)
+          });
+        });
+      });
+
+      items.sort((a, b) => {
+        const dateCompare = String(b.date).localeCompare(String(a.date));
+        if (dateCompare !== 0) {
+          return dateCompare;
+        }
+        return b.number - a.number;
+      });
+
+      return items.slice(0, Math.max(1, limit));
+    }
+
+    /**
+     * Kullanicinin okuma gecmisini katalog verileriyle zenginlestirerek en yeniden eskiye dondurur.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object} [readingEngine=null] - ReadingEngine nesnesi.
+     * @returns {Array<Object>} Zenginlestirilmis gecmis listesi.
+     */
+    getRecentHistoryList(catalog, readingEngine = null) {
+      if (!catalog) {
+        return [];
+      }
+      let rawHistory = {};
+      if (readingEngine && typeof readingEngine.getAllHistory === 'function') {
+        rawHistory = readingEngine.getAllHistory();
+      } else if (this.storage) {
+        try {
+          const raw = this.storage.getItem(this.historyKey);
+          rawHistory = raw ? JSON.parse(raw) : {};
+        } catch (_err) {
+          rawHistory = {};
+        }
+      }
+
+      const entries = Object.values(rawHistory || {});
+      const enriched = entries
+        .map((entry) => {
+          const series = catalog.getSeriesById(entry.seriesId);
+          if (!series || !Array.isArray(series.chapters)) {
+            return null;
+          }
+          const chapter = series.chapters.find((c) => c.id === entry.chapterId);
+          if (!chapter) {
+            return null;
+          }
+          return {
+            seriesId: series.id,
+            seriesTitle: series.title,
+            seriesCover: series.cover || '',
+            seriesType: series.type || 'Seri',
+            chapterId: chapter.id,
+            chapterNumber: chapter.number,
+            chapterTitle: chapter.title || `Bölüm ${chapter.number}`,
+            pageIndex: Number(entry.pageIndex) || 0,
+            updatedAt: entry.updatedAt || ''
+          };
+        })
+        .filter(Boolean);
+
+      enriched.sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
+      return enriched;
+    }
+
+    /**
+     * Tum okuma gecmisini temizler.
+     * @returns {void}
+     */
+    clearHistory() {
+      if (this.storage) {
+        try {
+          this.storage.removeItem(this.historyKey);
+        } catch (_err) {
+          // Depolama hatasini yoksay
+        }
+      }
+      this._log('info', 'Okuma gecmisi temizlendi.');
+    }
+
+    /**
+     * Ana sayfadaki Son Eklenen Bolumler izgarasi icin HTML uretir.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Function} computeUrlFn - URL hesaplama fonksiyonu.
+     * @param {number} [limit=6] - Gosterilecek bolum sayisi.
+     * @returns {string} HTML icerigi.
+     */
+    renderLatestChaptersHtml(catalog, computeUrlFn, limit = 6) {
+      const latest = this.getLatestChapters(catalog, limit);
+      if (latest.length === 0) {
+        return '';
+      }
+      return latest
+        .map((item) => {
+          const chHref = computeUrlFn('reader', item.seriesId, item.chapterId);
+          return `<a class="latest-chapter-card" href="${chHref}" data-action="read" data-series="${item.seriesId}" data-chapter="${item.chapterId}">
+            <img class="latest-chapter-thumb" src="${item.seriesCover}" alt="${item.seriesTitle}" loading="lazy" />
+            <div class="latest-chapter-info">
+              <span class="latest-series-name">${item.seriesTitle}</span>
+              <span class="latest-chapter-badge">Bölüm ${item.number}</span>
+              <span class="latest-chapter-date">${item.date || 'Yeni'} • ${item.seriesType}</span>
+            </div>
+          </a>`;
+        })
+        .join('');
+    }
+
+    /**
+     * Ana sayfadaki Kaldigin Yerden Devam Et seridi icin HTML uretir.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object} readingEngine - ReadingEngine nesnesi.
+     * @param {Function} computeUrlFn - URL hesaplama fonksiyonu.
+     * @returns {string} HTML icerigi.
+     */
+    renderContinueReadingHtml(catalog, readingEngine, computeUrlFn) {
+      const historyList = this.getRecentHistoryList(catalog, readingEngine).slice(0, 4);
+      if (historyList.length === 0) {
+        return '';
+      }
+      return historyList
+        .map((item) => {
+          const readHref = computeUrlFn('reader', item.seriesId, item.chapterId);
+          return `<a class="continue-card" href="${readHref}" data-action="read" data-series="${item.seriesId}" data-chapter="${item.chapterId}">
+            <img class="continue-thumb" src="${item.seriesCover}" alt="${item.seriesTitle}" loading="lazy" />
+            <div class="continue-info">
+              <strong class="continue-title">${item.seriesTitle}</strong>
+              <span class="continue-meta">Bölüm ${item.chapterNumber} • Sayfa ${item.pageIndex + 1}</span>
+            </div>
+            <span class="continue-play">▶</span>
+          </a>`;
+        })
+        .join('');
+    }
+
+    /**
+     * Katalog veya Kitapligim gorunumu icin seri kartlari HTML dizgesini uretir.
+     * @param {Array<Object>} seriesList - Gosterilecek seri dizisi.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Function} computeUrlFn - URL hesaplama fonksiyonu.
+     * @returns {string} Seri kartlari HTML icerigi.
+     */
+    renderSeriesCardListHtml(seriesList, catalog, computeUrlFn) {
+      if (!Array.isArray(seriesList) || seriesList.length === 0) {
+        return '';
+      }
+      return seriesList
+        .map((series) => {
+          const seriesHref = computeUrlFn('series', series.id);
+          const isFav = this.isFavorite(series.id);
+          const latestChapters = catalog
+            ? catalog.getSortedChapters(series.id, 'desc').slice(0, 2)
+            : [];
+          const chaptersHtml =
+            latestChapters.length > 0
+              ? latestChapters
+                  .map((ch) => {
+                    const chHref = computeUrlFn('reader', series.id, ch.id);
+                    return (
+                      `<a class="chapter-mini-btn" href="${chHref}" data-action="read" data-series="${series.id}" data-chapter="${ch.id}">` +
+                      `<span>Bölüm ${ch.number}</span><span>${ch.date}</span></a>`
+                    );
+                  })
+                  .join('')
+              : `<a class="chapter-mini-btn" href="${seriesHref}" data-action="detail" data-series="${series.id}"><span>Seri Sayfası</span><span>Detay</span></a>`;
+
+          return `<article class="series-card">
+            <div class="card-cover-wrap">
+              <a href="${seriesHref}" data-action="detail" data-series="${series.id}" style="display:block;width:100%;height:100%;">
+                <img class="card-cover" src="${series.cover}" alt="${series.title}" loading="lazy" />
+              </a>
+              <span class="lang-badge lang-${series.sourceLang}">${series.sourceLang}</span>
+              <span class="type-badge">${series.type}</span>
+              <button class="fav-card-btn ${isFav ? 'is-fav' : ''}" type="button" data-action="toggle-fav" data-series="${series.id}" title="${isFav ? 'Kitaplıktan Çıkar' : 'Kitaplığa Ekle'}">${isFav ? '❤️' : '🤍'}</button>
+            </div>
+            <div class="card-body">
+              <a class="card-title" href="${seriesHref}" data-action="detail" data-series="${series.id}">${series.title}</a>
+              <div class="card-meta">
+                <span>📚 ${(series.chapters || []).length} Bölüm</span>
+                <span>${series.status}</span>
+              </div>
+              <div class="card-chapters">${chaptersHtml}</div>
+            </div>
+          </article>`;
+        })
+        .join('');
+    }
+
+    /**
+     * Okuma Gecmisim sayfasi (#view-history) icin liste HTML icerigini uretir.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object} readingEngine - ReadingEngine nesnesi.
+     * @param {Function} computeUrlFn - URL hesaplama fonksiyonu.
+     * @returns {string} Gecmis listesi HTML icerigi.
+     */
+    renderHistoryListHtml(catalog, readingEngine, computeUrlFn) {
+      const list = this.getRecentHistoryList(catalog, readingEngine);
+      if (list.length === 0) {
+        return `<div class="disqus-status-note">Henüz okuma geçmişiniz bulunmuyor. Bir bölüm okuduğunuzda otomatik olarak burada listelenir.</div>`;
+      }
+      return list
+        .map((item) => {
+          const readHref = computeUrlFn('reader', item.seriesId, item.chapterId);
+          return `<a class="continue-card" href="${readHref}" data-action="read" data-series="${item.seriesId}" data-chapter="${item.chapterId}">
+            <img class="continue-thumb" src="${item.seriesCover}" alt="${item.seriesTitle}" loading="lazy" />
+            <div class="continue-info">
+              <strong class="continue-title">${item.seriesTitle}</strong>
+              <span class="continue-meta">Bölüm ${item.chapterNumber}: ${item.chapterTitle} • Kaldığın Sayfa: ${item.pageIndex + 1}</span>
+            </div>
+            <span class="continue-play">▶ Devam Et</span>
+          </a>`;
+        })
+        .join('');
+    }
+
+    /**
+     * Seri detay kutusu (#series-detail-box) icin HTML icerigini uretir.
+     * @param {Object} series - Seri nesnesi.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object|null} savedProgress - Kayitli ilerleme.
+     * @param {Function} computeUrlFn - URL hesaplama fonksiyonu.
+     * @returns {string} Seri detay HTML icerigi.
+     */
+    renderSeriesDetailHtml(series, catalog, savedProgress, computeUrlFn) {
+      const isFav = this.isFavorite(series.id);
+      const sortedAsc = catalog ? catalog.getSortedChapters(series.id, 'asc') : [];
+      const firstChapter = sortedAsc[0];
+      const latestChapter = sortedAsc[sortedAsc.length - 1];
+      const resumeChapterId = savedProgress
+        ? savedProgress.chapterId
+        : firstChapter
+          ? firstChapter.id
+          : '';
+      const genresHtml = (series.genres || [])
+        .map((g) => `<span class="meta-tag">${g}</span>`)
+        .join('');
+      const firstHref = firstChapter ? computeUrlFn('reader', series.id, firstChapter.id) : '#';
+      const latestHref = latestChapter ? computeUrlFn('reader', series.id, latestChapter.id) : '#';
+      const resumeHref = resumeChapterId ? computeUrlFn('reader', series.id, resumeChapterId) : '#';
+
+      return `<div class="series-detail-header">
+        <img class="detail-cover" src="${series.cover}" alt="${series.title}" />
+        <div class="detail-info">
+          <h1>${series.title}</h1>
+          <div class="detail-alt-title">${series.altTitle || ''}</div>
+          <div class="detail-badges">
+            <span class="meta-tag">Tür: ${series.type}</span>
+            <span class="meta-tag">Durum: ${series.status}</span>
+            <span class="meta-tag">Motor: ${(series.defaultReaderMode || 'webtoon').toUpperCase()}</span>
+            ${series.year ? `<span class="meta-tag">Yıl: ${series.year}</span>` : ''}
+            ${genresHtml}
+          </div>
+          <p class="detail-synopsis">${series.synopsis}</p>
+          <div class="detail-actions">
+            ${firstChapter ? `<a class="primary-btn" href="${firstHref}" data-action="read" data-series="${series.id}" data-chapter="${firstChapter.id}">📖 İlk Bölümü Oku (Bölüm ${firstChapter.number})</a>` : ''}
+            ${latestChapter && latestChapter.id !== (firstChapter && firstChapter.id) ? `<a class="icon-btn" href="${latestHref}" data-action="read" data-series="${series.id}" data-chapter="${latestChapter.id}">🔥 Son Bölüm (Bölüm ${latestChapter.number})</a>` : ''}
+            ${savedProgress && resumeChapterId ? `<a class="icon-btn" href="${resumeHref}" data-action="read" data-series="${series.id}" data-chapter="${resumeChapterId}">⏳ Kaldığım Yerden Devam Et (Sayfa ${savedProgress.pageIndex + 1})</a>` : ''}
+            <button class="icon-btn" type="button" data-action="toggle-fav" data-series="${series.id}">${isFav ? '❤️ Kitaplığımda' : '🤍 Kitaplığa Ekle'}</button>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    /**
+     * Seri sayfasindaki bolum listesi (#chapter-list-grid) icin HTML uretir.
+     * @param {string} seriesId - Seri kimligi.
+     * @param {Array<Object>} chapters - Siralanmis bolumler.
+     * @param {Object|null} savedProgress - Kayitli ilerleme.
+     * @param {Function} computeUrlFn - URL hesaplama fonksiyonu.
+     * @returns {string} Bolum listesi HTML icerigi.
+     */
+    renderChapterListHtml(seriesId, chapters, savedProgress, computeUrlFn) {
+      if (!Array.isArray(chapters) || chapters.length === 0) {
+        return `<div class="disqus-status-note">Bu seri için henüz bölüm eklenmemiş.</div>`;
+      }
+      return chapters
+        .map((ch) => {
+          const isRead = savedProgress && savedProgress.chapterId === ch.id;
+          const chHref = computeUrlFn('reader', seriesId, ch.id);
+          return `<a class="chapter-item-btn ${isRead ? 'is-read' : ''}" href="${chHref}" data-action="read" data-series="${seriesId}" data-chapter="${ch.id}">
+            <span><strong>Bölüm ${ch.number}</strong> - ${ch.title}</span>
+            <span style="font-size: 0.78rem; color: var(--text-secondary);">${isRead ? '✓ Okundu' : ch.date}</span>
+          </a>`;
+        })
+        .join('');
+    }
+  }
+
+  globalScope.UserLibrary = UserLibrary;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { UserLibrary };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
 /* === MODULE: scripts/reading-engine.js === */
 /**
  * @fileoverview Cok modlu okuma motoru (Webtoon, Tek Sayfa, Cift Sayfa ve Novel) sinifi.
@@ -2436,6 +3147,8 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       this.direction = VALID_DIRECTIONS.includes(options.direction) ? options.direction : 'ltr';
       this.zoom = this._clamp(options.zoom || 100, 50, 150);
       this.gap = typeof options.gap === 'number' ? Math.max(0, options.gap) : 0;
+      this.novelFontSize = this._clamp(options.novelFontSize || 105, 85, 160);
+      this.novelFontFamily = options.novelFontFamily === 'serif' ? 'serif' : 'sans';
       this.protectImages =
         options.protectImages !== undefined ? Boolean(options.protectImages) : true;
       this.pages = [];
@@ -2570,6 +3283,27 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       this.gap = Math.max(0, Number(gapPx) || 0);
       this._log('debug', 'Sayfa arasi bosluk guncellendi.', { gap: this.gap });
       return this.gap;
+    }
+
+    /**
+     * Novel modu yazi boyutunu yuzde olarak ayarlar (85 - 160).
+     * @param {number} sizePercent - Yazi boyutu yuzdesi.
+     * @returns {number} Guncel yazi boyutu yuzdesi.
+     */
+    setNovelFontSize(sizePercent) {
+      this.novelFontSize = this._clamp(sizePercent, 85, 160);
+      this._log('debug', 'Novel yazi boyutu guncellendi.', { novelFontSize: this.novelFontSize });
+      return this.novelFontSize;
+    }
+
+    /**
+     * Novel modu yazi tipini ('sans' ve 'serif') arasinda degistirir.
+     * @returns {string} Guncel yazi tipi ('sans' veya 'serif').
+     */
+    toggleNovelFontFamily() {
+      this.novelFontFamily = this.novelFontFamily === 'serif' ? 'sans' : 'serif';
+      this._log('info', 'Novel yazi tipi degistirildi.', { novelFontFamily: this.novelFontFamily });
+      return this.novelFontFamily;
     }
 
     /**
@@ -2734,8 +3468,8 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
 
     /**
      * Klavye kisayol komutunu isler (RTL yonunde sag/sol tuslarini ters cevirir).
-     * @param {string} key - Klavye tus kodu (orn: 'ArrowRight', 'KeyM').
-     * @returns {string} Yapilan islem ('next', 'prev', 'mode:*', 'none').
+     * @param {string} key - Klavye tus kodu (orn: 'ArrowRight', 'KeyM', 'KeyF').
+     * @returns {string} Yapilan islem ('next', 'prev', 'mode:*', 'fullscreen', 'none').
      */
     handleKeyCommand(key) {
       if (key === 'ArrowRight' || key === 'KeyD') {
@@ -2760,6 +3494,9 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         const nextIdx = (currentIdx + 1) % imageModes.length;
         this.setMode(imageModes[nextIdx]);
         return 'mode:' + this.mode;
+      }
+      if (key === 'KeyF') {
+        return 'fullscreen';
       }
       return 'none';
     }
@@ -2822,6 +3559,8 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         direction: this.direction,
         zoom: this.zoom,
         gap: this.gap,
+        novelFontSize: this.novelFontSize,
+        novelFontFamily: this.novelFontFamily,
         protectImages: this.protectImages,
         currentIndex: this.currentIndex,
         totalPages: this.pages.length,
@@ -3122,6 +3861,12 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       if (viewName === 'catalog') {
         return isPreview ? '#catalog' : '/';
       }
+      if (viewName === 'bookmarks') {
+        return isPreview ? '#kitaplik' : '/?gorunum=kitaplik';
+      }
+      if (viewName === 'history') {
+        return isPreview ? '#gecmis' : '/?gorunum=gecmis';
+      }
       if (viewName === 'generator') {
         return isPreview ? '#olusturucu' : '/?gorunum=olusturucu';
       }
@@ -3233,6 +3978,10 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
           if (sId) {
             return { matched: true, view: 'series', seriesId: sId, chapterId: '' };
           }
+        } else if (hashVal === 'kitaplik') {
+          return { matched: true, view: 'bookmarks', seriesId: '', chapterId: '' };
+        } else if (hashVal === 'gecmis') {
+          return { matched: true, view: 'history', seriesId: '', chapterId: '' };
         } else if (hashVal === 'olusturucu') {
           return { matched: true, view: 'generator', seriesId: '', chapterId: '' };
         }
@@ -3242,6 +3991,12 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         const qSeri = parsedUrl.searchParams.get('seri');
         const qBolum = parsedUrl.searchParams.get('bolum');
         const qGorunum = parsedUrl.searchParams.get('gorunum');
+        if (qGorunum === 'kitaplik') {
+          return { matched: true, view: 'bookmarks', seriesId: '', chapterId: '' };
+        }
+        if (qGorunum === 'gecmis') {
+          return { matched: true, view: 'history', seriesId: '', chapterId: '' };
+        }
         if (qGorunum === 'olusturucu') {
           return { matched: true, view: 'generator', seriesId: '', chapterId: '' };
         }
@@ -3304,6 +4059,9 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
   const RouterClass =
     globalScope.RouterController ||
     (typeof require === 'function' ? require('./router-controller').RouterController : null);
+  const UserLibraryClass =
+    globalScope.UserLibrary ||
+    (typeof require === 'function' ? require('./user-library').UserLibrary : null);
   /**
    * Tum tema gorunumlerini, Blogger URL entegrasyonunu ve dinamik veri akisini yoneten sinif.
    */
@@ -3323,6 +4081,8 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         deps.disqus || (globalScope.DisqusLoader ? new globalScope.DisqusLoader() : null);
       this.generator =
         deps.generator || (globalScope.PostGenerator ? new globalScope.PostGenerator() : null);
+      this.library =
+        deps.library || (UserLibraryClass ? new UserLibraryClass({ logger: this.logger }) : null);
       this.feedLoader =
         deps.feedLoader ||
         (globalScope.BloggerFeedLoader
@@ -3339,6 +4099,7 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
           : null);
       this.siteBaseTitle = 'Manhwa Arşiv';
       this.currentView = 'catalog';
+      this.commentsVisible = false;
       this.activeSeriesId = '';
       this.activeChapterId = '';
       this.chapterSortOrder = 'desc';
@@ -3374,14 +4135,13 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
     }
     /**
      * Hedef gorunum icin Blogger URL'sini uretir.
-     * @param {'catalog'|'series'|'reader'|'generator'} viewName - Hedef gorunum.
+     * @param {'catalog'|'series'|'reader'|'bookmarks'|'history'|'generator'} viewName - Hedef gorunum.
      * @param {string} [seriesId=''] - Seri kimligi.
      * @param {string} [chapterId=''] - Bolum kimligi.
      * @returns {string} Hedef URL.
      */
     computeTargetUrl(viewName, seriesId = '', chapterId = '') {
-      if (!this.router) return '/';
-      return this.router.computeTargetUrl(this.catalog, viewName, seriesId, chapterId);
+      return this.router ? this.router.computeTargetUrl(this.catalog, viewName, seriesId, chapterId) : '/';
     }
     /**
      * Tarayici URL'sini ve History API durumunu gunceller.
@@ -3392,9 +4152,7 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
      * @returns {void}
      */
     syncBrowserHistory(stateObj, pageTitle, targetUrl, options = {}) {
-      if (this.router) {
-        this.router.syncBrowserHistory(stateObj, pageTitle, targetUrl, options);
-      }
+      if (this.router) this.router.syncBrowserHistory(stateObj, pageTitle, targetUrl, options);
     }
     /**
      * Blogger JSON Feed API'sinden veya DOM'dan dinamik serileri yukler ve arayuzu gunceller.
@@ -3409,9 +4167,7 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
           loadedCount = dynamicSeries.length;
         }
       }
-      if (loadedCount === 0) {
-        loadedCount = this.ingestBloggerPostsFromDom();
-      }
+      if (loadedCount === 0) loadedCount = this.ingestBloggerPostsFromDom();
       const firstSeries =
         this.catalog && this.catalog.seriesList.length > 0 ? this.catalog.seriesList[0] : null;
       if (firstSeries) {
@@ -3420,20 +4176,20 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         this.activeChapterId = firstCh ? firstCh.id : '';
       }
       this.updateHeroShowcase();
+      this.renderHomeSections();
       this.renderCatalogView();
       const routed = this.handleUrlRouting(undefined, {
         updateHistory: false,
         replaceInitialState: true
       });
       if (!routed) {
-        const homeUrl = this.computeTargetUrl('catalog');
+        this.switchView('catalog');
         this.syncBrowserHistory(
           { view: 'catalog', seriesId: '', chapterId: '' },
           this.siteBaseTitle,
-          homeUrl,
+          this.computeTargetUrl('catalog'),
           { updateHistory: true, replace: true }
         );
-        this.updateDisqus('manowa-home', this.siteBaseTitle);
       }
       return loadedCount;
     }
@@ -3523,6 +4279,33 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       }
     }
     /**
+     * Ana sayfadaki Kaldigin Yerden Devam Et, Son Eklenen Bolumler ve Kitaplik sayacini gunceller.
+     * @returns {void}
+     */
+    renderHomeSections() {
+      if (typeof document === 'undefined' || !this.library || !this.catalog) return;
+      const urlFn = (v, s, c) => this.computeTargetUrl(v, s, c);
+      const badgeEl = document.getElementById('bookmarks-count-badge');
+      if (badgeEl) {
+        const favCount = this.library.getFavoriteIds().length;
+        badgeEl.textContent = favCount > 0 ? `(${favCount})` : '';
+      }
+      const continueSec = document.getElementById('continue-reading-section');
+      const continueGrid = document.getElementById('continue-reading-grid');
+      if (continueSec && continueGrid) {
+        const html = this.library.renderContinueReadingHtml(this.catalog, this.reader, urlFn);
+        continueGrid.innerHTML = html;
+        continueSec.classList.toggle('hidden', !html);
+      }
+      const latestSec = document.getElementById('latest-chapters-section');
+      const latestGrid = document.getElementById('latest-chapters-grid');
+      if (latestSec && latestGrid) {
+        const html = this.library.renderLatestChaptersHtml(this.catalog, urlFn, 6);
+        latestGrid.innerHTML = html;
+        latestSec.classList.toggle('hidden', !html);
+      }
+    }
+    /**
      * Ziyaretci dogrudan bir Blogger seri veya bolum URL'sine girdiyse ilgili ekrani acar.
      * @param {string} [currentUrl] - Kontrol edilecek URL.
      * @param {Object} [options={}] - Yonlendirme secenekleri.
@@ -3536,22 +4319,15 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         replace: Boolean(options.replaceInitialState)
       };
       if (resolved.matched) {
-        if (resolved.view === 'reader') {
-          this.openReader(resolved.seriesId, resolved.chapterId, routeOpts);
-          return true;
-        }
-        if (resolved.view === 'series') {
-          this.openSeriesDetail(resolved.seriesId, routeOpts);
-          return true;
-        }
-        if (resolved.view === 'generator') {
-          this.openGenerator(routeOpts);
-          return true;
-        }
+        if (resolved.view === 'reader') this.openReader(resolved.seriesId, resolved.chapterId, routeOpts);
+        else if (resolved.view === 'series') this.openSeriesDetail(resolved.seriesId, routeOpts);
+        else if (resolved.view === 'bookmarks') this.openBookmarks(routeOpts);
+        else if (resolved.view === 'history') this.openHistory(routeOpts);
+        else if (resolved.view === 'generator') this.openGenerator(routeOpts);
+        else return false;
+        return true;
       }
-      if (options.openCatalogOnRoot) {
-        this.openCatalog({ updateHistory: false });
-      }
+      if (options.openCatalogOnRoot) this.openCatalog({ updateHistory: false });
       return false;
     }
     /**
@@ -3561,56 +4337,54 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
      */
     handlePopState(event) {
       const state = event && event.state ? event.state : null;
-      if (this.logger) {
-        this.logger.info('Tarayici Geri/Ileri (popstate) olayi isleniyor.', { state });
-      }
+      if (this.logger) this.logger.info('Tarayici Geri/Ileri (popstate) olayi isleniyor.', { state });
+      const noHist = { updateHistory: false };
       if (state && state.view) {
         if (state.view === 'reader' && state.seriesId && state.chapterId) {
-          this.openReader(state.seriesId, state.chapterId, { updateHistory: false });
-          return;
+          return this.openReader(state.seriesId, state.chapterId, noHist);
         }
-        if (state.view === 'series' && state.seriesId) {
-          this.openSeriesDetail(state.seriesId, { updateHistory: false });
-          return;
-        }
-        if (state.view === 'generator') {
-          this.openGenerator({ updateHistory: false });
-          return;
-        }
-        if (state.view === 'catalog') {
-          this.openCatalog({ updateHistory: false });
-          return;
-        }
+        if (state.view === 'series' && state.seriesId) return this.openSeriesDetail(state.seriesId, noHist);
+        if (state.view === 'bookmarks') return this.openBookmarks(noHist);
+        if (state.view === 'history') return this.openHistory(noHist);
+        if (state.view === 'generator') return this.openGenerator(noHist);
+        if (state.view === 'catalog') return this.openCatalog(noHist);
       }
-      const routed = this.handleUrlRouting(undefined, {
-        updateHistory: false,
-        openCatalogOnRoot: true
-      });
-      if (!routed) {
-        this.openCatalog({ updateHistory: false });
+      if (!this.handleUrlRouting(undefined, { updateHistory: false, openCatalogOnRoot: true })) {
+        this.openCatalog(noHist);
       }
     }
     /**
-     * Aktif gorunumu degistirir ('catalog', 'series', 'reader', 'generator').
+     * Aktif gorunumu degistirir ('catalog', 'series', 'reader', 'bookmarks', 'history', 'generator').
+     * Yorum alanini (#disqus-section) yalnizca 'series' ve 'reader' gorunumlerinde gosterir.
      * @param {string} viewName - Hedef gorunum.
      * @returns {void}
      */
     switchView(viewName) {
       this.currentView = viewName;
+      this.commentsVisible = viewName === 'series' || viewName === 'reader';
       if (typeof document === 'undefined') return;
       const views = {
         catalog: document.getElementById('view-catalog'),
         series: document.getElementById('view-series'),
         reader: document.getElementById('view-reader'),
+        bookmarks: document.getElementById('view-bookmarks'),
+        history: document.getElementById('view-history'),
         generator: document.getElementById('view-generator')
       };
       Object.keys(views).forEach((key) => {
         if (views[key]) views[key].classList.toggle('hidden', key !== viewName);
       });
-      const navCatalog = document.getElementById('nav-catalog');
-      const navGen = document.getElementById('nav-generator');
-      if (navCatalog) navCatalog.classList.toggle('active', viewName === 'catalog');
-      if (navGen) navGen.classList.toggle('active', viewName === 'generator');
+      const disqusSec = document.getElementById('disqus-section');
+      if (disqusSec) disqusSec.classList.toggle('hidden', !this.commentsVisible);
+      const navMap = {
+        catalog: document.getElementById('nav-catalog'),
+        bookmarks: document.getElementById('nav-bookmarks'),
+        history: document.getElementById('nav-history'),
+        generator: document.getElementById('nav-generator')
+      };
+      Object.keys(navMap).forEach((key) => {
+        if (navMap[key]) navMap[key].classList.toggle('active', key === viewName);
+      });
       if (viewName !== 'reader' && this.reader) this.reader.stopAutoScroll();
       if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3624,6 +4398,7 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
      */
     openCatalog(options = {}) {
       this.switchView('catalog');
+      this.renderHomeSections();
       const targetUrl = this.computeTargetUrl('catalog');
       this.syncBrowserHistory(
         { view: 'catalog', seriesId: '', chapterId: '' },
@@ -3631,7 +4406,66 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         targetUrl,
         options
       );
-      this.updateDisqus('manowa-home', this.siteBaseTitle);
+    }
+    /**
+     * Kullanici Kitapligim (Favorilerim) gorunumunu acar.
+     * @param {Object} [options={}] - Gecmis secenekleri.
+     * @returns {void}
+     */
+    openBookmarks(options = {}) {
+      this.switchView('bookmarks');
+      this.renderBookmarksView();
+      const targetUrl = this.computeTargetUrl('bookmarks');
+      this.syncBrowserHistory(
+        { view: 'bookmarks', seriesId: '', chapterId: '' },
+        `Kitaplığım - ${this.siteBaseTitle}`,
+        targetUrl,
+        options
+      );
+    }
+    /**
+     * Kitapligim izgarasini favori serilerle doldurur.
+     * @returns {void}
+     */
+    renderBookmarksView() {
+      if (typeof document === 'undefined' || !this.library || !this.catalog) return;
+      const grid = document.getElementById('bookmarks-grid');
+      if (!grid) return;
+      const favSeries = this.library.getFavoriteSeries(this.catalog);
+      if (favSeries.length === 0) {
+        grid.innerHTML = `<div class="disqus-status-note">Kitaplığınızda henüz favori seri bulunmuyor. Katalogdaki serilerin üzerindeki 🤍 düğmesine tıklayarak kitaplığınıza ekleyebilirsiniz.</div>`;
+        return;
+      }
+      grid.innerHTML = this.library.renderSeriesCardListHtml(
+        favSeries,
+        this.catalog,
+        (v, s, c) => this.computeTargetUrl(v, s, c)
+      );
+    }
+    /**
+     * Okuma Gecmisim gorunumunu acar.
+     * @param {Object} [options={}] - Gecmis secenekleri.
+     * @returns {void}
+     */
+    openHistory(options = {}) {
+      this.switchView('history');
+      if (typeof document !== 'undefined' && this.library && this.catalog) {
+        const grid = document.getElementById('history-list-grid');
+        if (grid) {
+          grid.innerHTML = this.library.renderHistoryListHtml(
+            this.catalog,
+            this.reader,
+            (v, s, c) => this.computeTargetUrl(v, s, c)
+          );
+        }
+      }
+      const targetUrl = this.computeTargetUrl('history');
+      this.syncBrowserHistory(
+        { view: 'history', seriesId: '', chapterId: '' },
+        `Okuma Geçmişim - ${this.siteBaseTitle}`,
+        targetUrl,
+        options
+      );
     }
     /**
      * Gonderi Olusturucu gorunumunu acar ve URL'yi gunceller.
@@ -3664,39 +4498,13 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         grid.innerHTML = `<div class="disqus-status-note">Aramanızla eşleşen seri bulunamadı.</div>`;
         return;
       }
-      grid.innerHTML = list
-        .map((series) => {
-          const seriesHref = this.computeTargetUrl('series', series.id);
-          const latestChapters = this.catalog.getSortedChapters(series.id, 'desc').slice(0, 2);
-          const chaptersHtml =
-            latestChapters.length > 0
-              ? latestChapters
-                  .map((ch) => {
-                    const chHref = this.computeTargetUrl('reader', series.id, ch.id);
-                    return (
-                      `<a class="chapter-mini-btn" href="${chHref}" data-action="read" data-series="${series.id}" data-chapter="${ch.id}">` +
-                      `<span>Bölüm ${ch.number}</span><span>${ch.date}</span></a>`
-                    );
-                  })
-                  .join('')
-              : `<a class="chapter-mini-btn" href="${seriesHref}" data-action="detail" data-series="${series.id}"><span>Seri Sayfası</span><span>Detay</span></a>`;
-          return `<article class="series-card">
-            <a class="card-cover-wrap" href="${seriesHref}" data-action="detail" data-series="${series.id}">
-              <img class="card-cover" src="${series.cover}" alt="${series.title}" loading="lazy" />
-              <span class="lang-badge lang-${series.sourceLang}">${series.sourceLang}</span>
-              <span class="type-badge">${series.type}</span>
-            </a>
-            <div class="card-body">
-              <a class="card-title" href="${seriesHref}" data-action="detail" data-series="${series.id}">${series.title}</a>
-              <div class="card-meta">
-                <span>📚 ${(series.chapters || []).length} Bölüm</span>
-                <span>${series.status}</span>
-              </div>
-              <div class="card-chapters">${chaptersHtml}</div>
-            </div>
-          </article>`;
-        })
-        .join('');
+      if (this.library) {
+        grid.innerHTML = this.library.renderSeriesCardListHtml(
+          list,
+          this.catalog,
+          (v, s, c) => this.computeTargetUrl(v, s, c)
+        );
+      }
     }
     /**
      * Secilen serinin tanitim ve bolum listesi sayfasini acar, tarayici URL'sini serinin Blogger adresine gunceller.
@@ -3717,55 +4525,21 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         targetUrl,
         options
       );
+      this.updateDisqus(`series-${series.id}`, `${series.title} - Seri Yorumları`);
       if (typeof document === 'undefined') return;
       const breadcrumbTitle = document.getElementById('series-breadcrumb-title');
       if (breadcrumbTitle) breadcrumbTitle.textContent = series.title;
       const detailBox = document.getElementById('series-detail-box');
       const savedProgress = this.reader ? this.reader.getProgress(series.id) : null;
-      const sortedAsc = this.catalog.getSortedChapters(series.id, 'asc');
-      const firstChapter = sortedAsc[0];
-      const latestChapter = sortedAsc[sortedAsc.length - 1];
-      const resumeChapterId = savedProgress
-        ? savedProgress.chapterId
-        : firstChapter
-          ? firstChapter.id
-          : '';
-      if (detailBox) {
-        const genresHtml = (series.genres || [])
-          .map((g) => `<span class="meta-tag">${g}</span>`)
-          .join('');
-        const firstHref = firstChapter
-          ? this.computeTargetUrl('reader', series.id, firstChapter.id)
-          : '#';
-        const latestHref = latestChapter
-          ? this.computeTargetUrl('reader', series.id, latestChapter.id)
-          : '#';
-        const resumeHref = resumeChapterId
-          ? this.computeTargetUrl('reader', series.id, resumeChapterId)
-          : '#';
-        detailBox.innerHTML = `<div class="series-detail-header">
-          <img class="detail-cover" src="${series.cover}" alt="${series.title}" />
-          <div class="detail-info">
-            <h1>${series.title}</h1>
-            <div class="detail-alt-title">${series.altTitle || ''}</div>
-            <div class="detail-badges">
-              <span class="meta-tag">Tür: ${series.type}</span>
-              <span class="meta-tag">Durum: ${series.status}</span>
-              <span class="meta-tag">Motor: ${(series.defaultReaderMode || 'webtoon').toUpperCase()}</span>
-              ${series.year ? `<span class="meta-tag">Yıl: ${series.year}</span>` : ''}
-              ${genresHtml}
-            </div>
-            <p class="detail-synopsis">${series.synopsis}</p>
-            <div class="detail-actions">
-              ${firstChapter ? `<a class="primary-btn" href="${firstHref}" data-action="read" data-series="${series.id}" data-chapter="${firstChapter.id}">📖 İlk Bölümü Oku (Bölüm ${firstChapter.number})</a>` : ''}
-              ${latestChapter && latestChapter.id !== (firstChapter && firstChapter.id) ? `<a class="icon-btn" href="${latestHref}" data-action="read" data-series="${series.id}" data-chapter="${latestChapter.id}">🔥 Son Bölüm (Bölüm ${latestChapter.number})</a>` : ''}
-              ${savedProgress && resumeChapterId ? `<a class="icon-btn" href="${resumeHref}" data-action="read" data-series="${series.id}" data-chapter="${resumeChapterId}">⏳ Kaldığım Yerden Devam Et (Sayfa ${savedProgress.pageIndex + 1})</a>` : ''}
-            </div>
-          </div>
-        </div>`;
+      if (detailBox && this.library) {
+        detailBox.innerHTML = this.library.renderSeriesDetailHtml(
+          series,
+          this.catalog,
+          savedProgress,
+          (v, s, c) => this.computeTargetUrl(v, s, c)
+        );
       }
       this.renderChapterList();
-      this.updateDisqus(`series-${series.id}`, `${series.title} - Seri Yorumları`);
     }
     /**
      * Aktif serinin bolum listesini gercek Blogger URL baglantilariyla olusturur.
@@ -3774,23 +4548,15 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
     renderChapterList() {
       if (typeof document === 'undefined') return;
       const listGrid = document.getElementById('chapter-list-grid');
-      if (!listGrid || !this.catalog) return;
+      if (!listGrid || !this.catalog || !this.library) return;
       const chapters = this.catalog.getSortedChapters(this.activeSeriesId, this.chapterSortOrder);
       const saved = this.reader ? this.reader.getProgress(this.activeSeriesId) : null;
-      if (chapters.length === 0) {
-        listGrid.innerHTML = `<div class="disqus-status-note">Bu seri için henüz bölüm eklenmemiş.</div>`;
-        return;
-      }
-      listGrid.innerHTML = chapters
-        .map((ch) => {
-          const isRead = saved && saved.chapterId === ch.id;
-          const chHref = this.computeTargetUrl('reader', this.activeSeriesId, ch.id);
-          return `<a class="chapter-item-btn ${isRead ? 'is-read' : ''}" href="${chHref}" data-action="read" data-series="${this.activeSeriesId}" data-chapter="${ch.id}">
-            <span><strong>Bölüm ${ch.number}</strong> - ${ch.title}</span>
-            <span style="font-size: 0.78rem; color: var(--text-secondary);">${isRead ? '✓ Okundu' : ch.date}</span>
-          </a>`;
-        })
-        .join('');
+      listGrid.innerHTML = this.library.renderChapterListHtml(
+        this.activeSeriesId,
+        chapters,
+        saved,
+        (v, s, c) => this.computeTargetUrl(v, s, c)
+      );
     }
     /**
      * Secilen bolumu okuma motorunda acar ve tarayici URL'sini bolumun Blogger adresine gunceller.
@@ -3827,6 +4593,7 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
           defaultMode: chapter.isNovel ? 'novel' : (series.defaultReaderMode || 'webtoon')
         });
       }
+      this.updateDisqus(`chapter-${chapter.id}`, `${series.title} - ${chapter.title}`);
       if (typeof document === 'undefined') return;
       const seriesHref = this.computeTargetUrl('series', series.id);
       const seriesTitleEl = document.getElementById('reader-series-title');
@@ -3865,7 +4632,7 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       }
       this.syncReaderControls();
       this.renderReaderViewport();
-      this.updateDisqus(`chapter-${chapter.id}`, `${series.title} - ${chapter.title}`);
+      this.renderHomeSections();
     }
     /**
      * Okuyucu kontrol cubugunu motor durumuyla esitler.
@@ -3898,7 +4665,9 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       viewport.style.setProperty('--reader-zoom', `${Math.round((state.zoom / 100) * 800)}px`);
       viewport.style.setProperty('--page-gap', `${state.gap}px`);
       if (state.mode === 'novel' || (state.totalPages === 0 && this.reader.htmlContent)) {
-        viewport.innerHTML = `<article class="novel-content-box">${this.reader.htmlContent}</article>`;
+        const fontClass = state.novelFontFamily === 'serif' ? 'font-serif' : '';
+        const fontSizePct = state.novelFontSize || 105;
+        viewport.innerHTML = `<article class="novel-content-box ${fontClass}" style="font-size: ${fontSizePct}%;">${this.reader.htmlContent}</article>`;
       } else if (state.mode === 'double') {
         const imgs = state.visibleIndices
           .map(
@@ -3918,7 +4687,7 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       if (progressBar) progressBar.style.width = `${state.progressPercent}%`;
       if (pageCounter) {
         if (state.mode === 'novel') {
-          pageCounter.textContent = 'Novel Metin Modu';
+          pageCounter.textContent = `Novel Metin (${state.novelFontSize || 105}%)`;
         } else if (state.mode === 'webtoon') {
           pageCounter.textContent = `Webtoon Şerit (${state.totalPages} Sayfa)`;
         } else {
@@ -3940,14 +4709,15 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       }
     }
     /**
-     * Disqus yorum basligini gunceller.
+     * Disqus yorum basligini yalnizca seri ve bolum gorunumlerinde gunceller.
      * @param {string} identifier - Konu kimligi.
      * @param {string} title - Konu basligi.
      * @returns {void}
      */
     updateDisqus(identifier, title) {
-      if (typeof document === 'undefined' || !this.disqus) return;
-      const statusEl = document.getElementById('disqus-status');
+      if (!this.commentsVisible || !this.disqus) return;
+      const statusEl =
+        typeof document !== 'undefined' ? document.getElementById('disqus-status') : null;
       this.disqus.loadThread({ identifier, title }, statusEl);
     }
     /**
@@ -3970,6 +4740,12 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
     bindEvents() {
       if (typeof globalScope.addEventListener === 'function') {
         globalScope.addEventListener('popstate', (ev) => this.handlePopState(ev));
+        globalScope.addEventListener('scroll', () => {
+          const scrollBtn = document.getElementById('btn-scroll-top');
+          if (scrollBtn) {
+            scrollBtn.classList.toggle('hidden', (globalScope.scrollY || 0) < 350);
+          }
+        });
       }
       document.addEventListener('click', (ev) => {
         const target = ev.target.closest('[data-action]');
@@ -3993,6 +4769,14 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
           this.openSeriesDetail(seriesId);
         } else if (action === 'read' && seriesId && chapterId) {
           this.openReader(seriesId, chapterId);
+        } else if (action === 'toggle-fav' && seriesId && this.library) {
+          this.library.toggleFavorite(seriesId);
+          this.renderHomeSections();
+          if (this.currentView === 'catalog') this.renderCatalogView();
+          else if (this.currentView === 'bookmarks') this.renderBookmarksView();
+          else if (this.currentView === 'series') {
+            this.openSeriesDetail(seriesId, { updateHistory: false });
+          }
         }
       });
       const on = (id, event, fn) => {
@@ -4001,6 +4785,14 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       };
       on('btn-gen-close', 'click', () => this.openCatalog());
       on('nav-generator', 'click', () => this.openGenerator());
+      on('nav-bookmarks', 'click', () => this.openBookmarks());
+      on('nav-history', 'click', () => this.openHistory());
+      on('btn-view-all-history', 'click', () => this.openHistory());
+      on('btn-clear-history', 'click', () => {
+        if (this.library) this.library.clearHistory();
+        this.openHistory({ updateHistory: false });
+        this.renderHomeSections();
+      });
       on('nav-random', 'click', () => {
         const all = this.catalog.seriesList;
         const pick = all[Math.floor(Math.random() * all.length)];
@@ -4009,6 +4801,10 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       on('input-search', 'input', (e) => {
         this.catalog.setSearchQuery(e.target.value);
         this.SwitchToCatalogIfNeeded();
+        this.renderCatalogView();
+      });
+      on('select-catalog-sort', 'change', (e) => {
+        this.catalog.setSortOrder(e.target.value);
         this.renderCatalogView();
       });
       const langGroup = document.getElementById('lang-filter-group');
@@ -4060,6 +4856,22 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         this.syncReaderControls();
         this.renderReaderViewport();
       });
+      on('btn-font-increase', 'click', () => {
+        this.reader.setNovelFontSize((this.reader.novelFontSize || 105) + 10);
+        this.renderReaderViewport();
+      });
+      on('btn-font-decrease', 'click', () => {
+        this.reader.setNovelFontSize((this.reader.novelFontSize || 105) - 10);
+        this.renderReaderViewport();
+      });
+      on('btn-font-family', 'click', () => {
+        this.reader.toggleNovelFontFamily();
+        this.renderReaderViewport();
+      });
+      on('btn-shortcuts-help', 'click', () => {
+        const box = document.getElementById('reader-shortcuts-box');
+        if (box) box.classList.toggle('hidden');
+      });
       on('btn-autoscroll', 'click', (e) => {
         const active = this.reader.toggleAutoScroll();
         e.target.classList.toggle('active', active);
@@ -4085,6 +4897,11 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       });
       on('btn-next-chapter', 'click', () => this.navigateChapter(1));
       on('btn-prev-chapter', 'click', () => this.navigateChapter(-1));
+      on('btn-scroll-top', 'click', () => {
+        if (typeof globalScope.scrollTo === 'function') {
+          globalScope.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
       document.addEventListener('keydown', (e) => {
         if (
           this.currentView !== 'reader' ||
@@ -4093,7 +4910,10 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
           return;
         }
         const result = this.reader.handleKeyCommand(e.code);
-        if (result !== 'none') {
+        if (result === 'fullscreen') {
+          const fsBtn = document.getElementById('btn-fullscreen');
+          if (fsBtn) fsBtn.click();
+        } else if (result !== 'none') {
           this.syncReaderControls();
           this.renderReaderViewport();
         }
@@ -4102,7 +4922,10 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         const input = document.getElementById('input-disqus-shortname');
         if (input && this.disqus) {
           this.disqus.setShortname(input.value);
-          this.updateDisqus(this.disqus.currentIdentifier || 'manowa-home', document.title);
+          this.updateDisqus(
+            this.disqus.currentIdentifier || `series-${this.activeSeriesId}`,
+            document.title
+          );
           this.renderDebugLogs();
         }
       });

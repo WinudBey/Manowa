@@ -224,3 +224,126 @@ test('GitHub Yayin Hazirligi: .gitignore, README.md, LICENSE ve CI is akisi dosy
   assert.equal(gitignoreContent.includes('logs/'), true);
   assert.equal(gitignoreContent.includes('node_modules/'), true);
 });
+
+test('UserLibrary: Favoriler (Kitapligim), Okuma Gecmisi ve Son Eklenen Bolumler dogru calismali', () => {
+  const { UserLibrary } = require('../src/scripts/user-library');
+  const store = {};
+  const mockStorage = {
+    getItem: (k) => (Object.prototype.hasOwnProperty.call(store, k) ? store[k] : null),
+    setItem: (k, v) => {
+      store[k] = String(v);
+    },
+    removeItem: (k) => {
+      delete store[k];
+    }
+  };
+
+  const catalog = new CatalogController();
+  const reader = new ReadingEngine({ storage: mockStorage });
+  const library = new UserLibrary({ storage: mockStorage });
+
+  assert.equal(library.isFavorite('wistoria-asa-ve-kilic'), false);
+  assert.equal(library.toggleFavorite('wistoria-asa-ve-kilic'), true);
+  assert.equal(library.isFavorite('wistoria-asa-ve-kilic'), true);
+  assert.equal(library.getFavoriteSeries(catalog).length, 1);
+
+  // Son eklenen bolumler
+  const latest = library.getLatestChapters(catalog, 5);
+  assert.equal(latest.length >= 2, true);
+  assert.equal(latest[0].seriesId, 'wistoria-asa-ve-kilic');
+
+  // Okuma gecmisi
+  reader.loadChapter({
+    seriesId: 'wistoria-asa-ve-kilic',
+    chapterId: 'wistoria-asa-ve-kilic-bolum-1',
+    pages: ['p1.jpg', 'p2.jpg'],
+    defaultMode: 'single'
+  });
+  reader.goToPage(1);
+
+  const historyList = library.getRecentHistoryList(catalog, reader);
+  assert.equal(historyList.length, 1);
+  assert.equal(historyList[0].seriesId, 'wistoria-asa-ve-kilic');
+  assert.equal(historyList[0].pageIndex, 1);
+
+  library.clearHistory();
+  assert.equal(library.getRecentHistoryList(catalog, reader).length, 0);
+});
+
+test('Canli Tema (theme.xml) ve Onizleme (preview.html) Ayrimi: Gelistirici araclari theme.xml icinde olmamali', () => {
+  const fs = require('node:fs');
+  const { ThemeBuilder } = require('../src/core/builder');
+  const builder = new ThemeBuilder();
+  const { themeXmlPath, previewHtmlPath } = builder.build();
+
+  const themeXml = fs.readFileSync(themeXmlPath, 'utf8');
+  const previewHtml = fs.readFileSync(previewHtmlPath, 'utf8');
+
+  // Canli theme.xml icinde gelistirici araclari OLMAMALI
+  assert.equal(themeXml.includes('id="nav-generator"'), false);
+  assert.equal(themeXml.includes('id="view-generator"'), false);
+  assert.equal(themeXml.includes('id="debug-log-panel"'), false);
+  assert.equal(themeXml.includes('id="input-disqus-shortname"'), false);
+  assert.equal(themeXml.includes('MODULE: scripts/post-generator.js'), false);
+
+  // Canli theme.xml icinde yeni kullanici ozellikleri ve manhawon Disqus OLMALI
+  assert.equal(themeXml.includes('id="view-bookmarks"'), true);
+  assert.equal(themeXml.includes('id="view-history"'), true);
+  assert.equal(themeXml.includes('id="latest-chapters-section"'), true);
+  assert.equal(themeXml.includes('id="btn-scroll-top"'), true);
+  assert.equal(themeXml.includes('manhawon'), true);
+
+  // Yerel preview.html icinde gelistirici araclari KORUNMALI
+  assert.equal(previewHtml.includes('id="nav-generator"'), true);
+  assert.equal(previewHtml.includes('id="view-generator"'), true);
+  assert.equal(previewHtml.includes('id="debug-log-panel"'), true);
+  assert.equal(previewHtml.includes('id="input-disqus-shortname"'), true);
+  assert.equal(previewHtml.includes('MODULE: scripts/post-generator.js'), true);
+
+  // Yorum alani (#disqus-section) varsayilan olarak gizli (hidden) baslamali
+  assert.equal(themeXml.includes('<section class="disqus-container hidden" id="disqus-section">'), true);
+  assert.equal(previewHtml.includes('<section class="disqus-container hidden" id="disqus-section">'), true);
+});
+
+test('AppController: Yorumlar yalnizca seri ayrintilarinda ve bolumlerde gosterilmeli', () => {
+  const { DisqusLoader } = require('../src/scripts/disqus-loader');
+  const catalog = new CatalogController();
+  const reader = new ReadingEngine();
+  const disqus = new DisqusLoader();
+  const app = new AppController({ catalog, reader, disqus });
+
+  // Baslangic katalog gorunumunde yorumlar gizli olmali ve Disqus yuklenmemeli
+  app.openCatalog();
+  assert.equal(app.currentView, 'catalog');
+  assert.equal(app.commentsVisible, false);
+  assert.equal(disqus.currentIdentifier, null);
+
+  // Kitapligim ve Gecmis gorunumlerinde yorumlar gizli kalmali
+  app.openBookmarks();
+  assert.equal(app.commentsVisible, false);
+  assert.equal(disqus.currentIdentifier, null);
+
+  app.openHistory();
+  assert.equal(app.commentsVisible, false);
+  assert.equal(disqus.currentIdentifier, null);
+
+  // Seri ayrintilarina girildiginde yorumlar gosterilmeli ve seri konusu yuklenmeli
+  const sampleSeries = catalog.seriesList[0];
+  app.openSeriesDetail(sampleSeries.id);
+  assert.equal(app.currentView, 'series');
+  assert.equal(app.commentsVisible, true);
+  assert.equal(disqus.currentIdentifier, `series-${sampleSeries.id}`);
+
+  // Bolum okuyucuya girildiginde yorumlar gosterilmeli ve bolum konusu yuklenmeli
+  const sampleChapter = sampleSeries.chapters[0];
+  app.openReader(sampleSeries.id, sampleChapter.id);
+  assert.equal(app.currentView, 'reader');
+  assert.equal(app.commentsVisible, true);
+  assert.equal(disqus.currentIdentifier, `chapter-${sampleChapter.id}`);
+
+  // Kataloga donuldugunde yorumlar tekrar gizlenmeli
+  app.openCatalog();
+  assert.equal(app.currentView, 'catalog');
+  assert.equal(app.commentsVisible, false);
+});
+

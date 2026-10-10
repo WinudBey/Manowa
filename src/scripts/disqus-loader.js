@@ -13,11 +13,13 @@
     /**
      * DisqusLoader nesnesini yapilandirir.
      * @param {Object} [options={}] - Yapilandirma secenekleri.
-     * @param {string} [options.shortname=''] - Disqus forum kisa adi.
+     * @param {string} [options.shortname='manhawon'] - Disqus forum kisa adi.
      * @param {Object} [options.logger=null] - Loglama nesnesi.
      */
     constructor(options = {}) {
-      this.shortname = (options.shortname || '').trim();
+      const defaultShortname =
+        options.shortname !== undefined ? String(options.shortname) : 'manhawon';
+      this.shortname = defaultShortname.trim().toLowerCase();
       this.logger = options.logger || globalScope.ManowaLogger || null;
       this.isScriptInjected = false;
       this.currentIdentifier = null;

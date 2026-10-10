@@ -236,6 +236,32 @@
   border: 1px solid #2e3446;
 }
 
+.shortcuts-help-box {
+  background: #131620;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.65rem 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+
+.shortcuts-help-box kbd {
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #f8fafc;
+}
+
+.novel-content-box.font-serif {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
 @media (max-width: 768px) {
   .reader-viewport.mode-double .double-page-grid {
     grid-template-columns: 1fr;

@@ -134,20 +134,31 @@ test('CatalogController: Dinamik seri listesini filtrelemeli ve aramali', () => 
   const searched = catalog.setSearchQuery('orta çağ');
   assert.equal(searched.length, 1);
   assert.equal(searched[0].id, 'wistoria-asa-ve-kilic');
+
+  // Siralama kontrolu (A-Z ve Bolum Sayisi)
+  catalog.setSearchQuery('');
+  const sortedTitle = catalog.setSortOrder('title_asc');
+  assert.equal(sortedTitle[0].id, 'omniscient-reader-s-viewpoint-novel');
+
+  const sortedChapters = catalog.setSortOrder('chapters_desc');
+  assert.equal(sortedChapters[0].id, 'omniscient-reader-s-viewpoint-novel');
+  assert.equal(sortedChapters[0].chapters.length, 2);
 });
 
-test('DisqusLoader: Shortname dogrulamasi ve konu basligi yuklemesi calismali', () => {
-  const disqus = new DisqusLoader();
-  assert.equal(disqus.isValidShortname(), false);
+test('DisqusLoader: Varsayilan shortname manhawon olmali ve konu basligi yuklemesi calismali', () => {
+  const defaultDisqus = new DisqusLoader();
+  assert.equal(defaultDisqus.shortname, 'manhawon');
+  assert.equal(defaultDisqus.isValidShortname(), true);
+  assert.equal(defaultDisqus.getEmbedScriptUrl(), 'https://manhawon.disqus.com/embed.js');
+
+  const emptyDisqus = new DisqusLoader({ shortname: '' });
+  assert.equal(emptyDisqus.isValidShortname(), false);
 
   const statusMock = { innerHTML: '', textContent: '' };
-  const loadedWithoutShortname = disqus.loadThread(
+  const loadedWithoutShortname = emptyDisqus.loadThread(
     { identifier: 'series-wistoria', title: 'Wistoria' },
     statusMock
   );
   assert.equal(loadedWithoutShortname, false);
   assert.equal(statusMock.innerHTML.includes('series-wistoria'), true);
-
-  assert.equal(disqus.setShortname('manhwa-arsiv'), true);
-  assert.equal(disqus.getEmbedScriptUrl(), 'https://manhwa-arsiv.disqus.com/embed.js');
 });

@@ -61,6 +61,12 @@
       if (viewName === 'catalog') {
         return isPreview ? '#catalog' : '/';
       }
+      if (viewName === 'bookmarks') {
+        return isPreview ? '#kitaplik' : '/?gorunum=kitaplik';
+      }
+      if (viewName === 'history') {
+        return isPreview ? '#gecmis' : '/?gorunum=gecmis';
+      }
       if (viewName === 'generator') {
         return isPreview ? '#olusturucu' : '/?gorunum=olusturucu';
       }
@@ -172,6 +178,10 @@
           if (sId) {
             return { matched: true, view: 'series', seriesId: sId, chapterId: '' };
           }
+        } else if (hashVal === 'kitaplik') {
+          return { matched: true, view: 'bookmarks', seriesId: '', chapterId: '' };
+        } else if (hashVal === 'gecmis') {
+          return { matched: true, view: 'history', seriesId: '', chapterId: '' };
         } else if (hashVal === 'olusturucu') {
           return { matched: true, view: 'generator', seriesId: '', chapterId: '' };
         }
@@ -181,6 +191,12 @@
         const qSeri = parsedUrl.searchParams.get('seri');
         const qBolum = parsedUrl.searchParams.get('bolum');
         const qGorunum = parsedUrl.searchParams.get('gorunum');
+        if (qGorunum === 'kitaplik') {
+          return { matched: true, view: 'bookmarks', seriesId: '', chapterId: '' };
+        }
+        if (qGorunum === 'gecmis') {
+          return { matched: true, view: 'history', seriesId: '', chapterId: '' };
+        }
         if (qGorunum === 'olusturucu') {
           return { matched: true, view: 'generator', seriesId: '', chapterId: '' };
         }
