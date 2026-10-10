@@ -92,7 +92,7 @@
       const defaultReaderMode =
         data.defaultReaderMode || (sourceLang === 'JP' ? 'single' : 'webtoon');
       const status = data.status || 'Devam Ediyor';
-      const translator = data.translator || 'Manhwa Arşiv';
+      const translator = data.translator || 'Manowa Çeviri';
       const cover = data.cover || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak';
       const genreList = Array.isArray(data.genres)
         ? data.genres

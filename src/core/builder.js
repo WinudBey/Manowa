@@ -164,7 +164,7 @@ class ThemeBuilder {
     const previewStylesBundle = this.bundleDirectory('styles', '.css', styleOrder);
     const previewScriptsBundle = this.bundleDirectory('scripts', '.js', scriptOrder);
 
-    // Blogger XML ciktisini olustur
+    // Blogger XML ciktisini olustur (Genel / Anonim Surum)
     const finalXml = baseXml
       .replace('/* {{STYLES}} */', themeStylesBundle)
       .replace('<!-- {{BODY_CONTENT}} -->', themeBody)
@@ -182,12 +182,41 @@ class ThemeBuilder {
     fs.writeFileSync(themeXmlPath, finalXml, 'utf8');
     fs.writeFileSync(previewHtmlPath, finalPreview, 'utf8');
 
+    // Yerel kisisel yapilandirma (manowa.config.local.json) varsa theme.personal.xml uret
+    const localConfigPath = path.join(this.rootDir, 'manowa.config.local.json');
+    let personalThemeXmlPath = null;
+    if (fs.existsSync(localConfigPath)) {
+      try {
+        const localCfg = JSON.parse(fs.readFileSync(localConfigPath, 'utf8'));
+        const configBanner = [
+          `/* === LOCAL PERSONAL CONFIG === */`,
+          `window.MANOWA_DISQUS_SHORTNAME = ${JSON.stringify(localCfg.disqusShortname || '')};`,
+          `window.MANOWA_BLOG_ORIGIN = ${JSON.stringify(localCfg.blogOrigin || '')};`,
+          `window.MANOWA_SITE_TITLE = ${JSON.stringify(localCfg.siteTitle || '')};`
+        ].join('\n');
+        const personalXml = baseXml
+          .replace(
+            'name="disqus.shortname" description="Disqus Forum Shortname" type="string" default="" value=""',
+            `name="disqus.shortname" description="Disqus Forum Shortname" type="string" default="${localCfg.disqusShortname || ''}" value="${localCfg.disqusShortname || ''}"`
+          )
+          .replace('/* {{STYLES}} */', themeStylesBundle)
+          .replace('<!-- {{BODY_CONTENT}} -->', themeBody)
+          .replace('// {{SCRIPTS}}', `${configBanner}\n\n${themeScriptsBundle}`);
+        personalThemeXmlPath = path.join(this.distDir, 'theme.personal.xml');
+        fs.writeFileSync(personalThemeXmlPath, personalXml, 'utf8');
+        this.logger.info('Kisisel tema dosyasi uretildi.', { personalThemeXmlPath });
+      } catch (err) {
+        this.logger.warn('Kisisel yapilandirma dosyasi okunamadi.', { error: err.message });
+      }
+    }
+
     this.logger.info('Derleme basariyla tamamlandi.', {
       themeXmlPath,
-      previewHtmlPath
+      previewHtmlPath,
+      personalThemeXmlPath
     });
 
-    return { themeXmlPath, previewHtmlPath };
+    return { themeXmlPath, previewHtmlPath, personalThemeXmlPath };
   }
 }
 

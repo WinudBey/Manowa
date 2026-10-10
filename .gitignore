@@ -16,10 +16,12 @@ playwright-report/
 test-results/
 coverage/
 
-# Ortam Değişkenleri
+# Ortam Değişkenleri ve Kişisel Tema Yapılandırması
 .env
 .env.local
 .env.*.local
+manowa.config.local.json
+dist/theme.personal.xml
 
 # İşletim Sistemi ve IDE Dosyaları
 .DS_Store

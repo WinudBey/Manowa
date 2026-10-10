@@ -6,6 +6,9 @@
     <meta content='width=device-width, initial-scale=1' name='viewport'/>
     <title><data:view.title.escaped/></title>
     <b:skin><![CDATA[
+/*
+<Variable name="disqus.shortname" description="Disqus Forum Shortname" type="string" default="" value=""/>
+*/
 /* === MODULE: styles/variables.css === */
 /**
  * @fileoverview Manowa Blogger Temasi - Temel CSS degiskenleri ve sifirlama kurallari.
@@ -1098,12 +1101,13 @@ body {
   }
 }
     ]]></b:skin>
+    <meta expr:content='data:skin.vars.disqus_shortname' id='manowa-disqus-meta' name='disqus-shortname'/>
   </head>
   <body>
     <header class='site-header'>
       <div class='header-inner' id='site-header-inner'>
         <b:section id='header-section' maxwidgets='1' showaddelement='no'>
-          <b:widget id='Header1' locked='true' title='Manowa Çeviri' type='Header' version='2'>
+          <b:widget id='Header1' locked='true' title='Manowa' type='Header' version='2'>
             <b:includable id='main'>
               <a class='brand-logo' data-action='catalog' expr:href='data:blog.homepageUrl' id='brand-home-link'><data:title/></a>
             </b:includable>
@@ -1502,17 +1506,36 @@ body {
     /**
      * DisqusLoader nesnesini yapilandirir.
      * @param {Object} [options={}] - Yapilandirma secenekleri.
-     * @param {string} [options.shortname='manhawon'] - Disqus forum kisa adi.
+     * @param {string} [options.shortname] - Disqus forum kisa adi.
      * @param {Object} [options.logger=null] - Loglama nesnesi.
      */
     constructor(options = {}) {
-      const defaultShortname =
-        options.shortname !== undefined ? String(options.shortname) : 'manhawon';
-      this.shortname = defaultShortname.trim().toLowerCase();
+      const detectedShortname =
+        options.shortname !== undefined
+          ? String(options.shortname)
+          : this._detectDefaultShortname();
+      this.shortname = detectedShortname.trim().toLowerCase();
       this.logger = options.logger || globalScope.ManowaLogger || null;
       this.isScriptInjected = false;
       this.currentIdentifier = null;
       this._log('debug', 'DisqusLoader baslatildi.', { shortname: this.shortname });
+    }
+
+    /**
+     * Global yapilandirma veya HTML meta etiketinden varsayilan Disqus shortname degerini tespit eder.
+     * @returns {string} Tespit edilen shortname veya bos dizge.
+     */
+    _detectDefaultShortname() {
+      if (globalScope.MANOWA_DISQUS_SHORTNAME) {
+        return String(globalScope.MANOWA_DISQUS_SHORTNAME);
+      }
+      if (typeof document !== 'undefined' && typeof document.querySelector === 'function') {
+        const meta = document.querySelector('meta[name="disqus-shortname"]');
+        if (meta && typeof meta.getAttribute === 'function') {
+          return String(meta.getAttribute('content') || '');
+        }
+      }
+      return '';
     }
 
     /**
@@ -1573,8 +1596,8 @@ body {
         pageInfo.url ||
         (typeof location !== 'undefined' && location.href.startsWith('http')
           ? location.href
-          : `https://manhwaarsiv.blogspot.com/#!/${identifier}`);
-      const pageTitle = pageInfo.title || 'Manhwa Arşiv';
+          : `https://example.blogspot.com/#!/${identifier}`);
+      const pageTitle = pageInfo.title || 'Manowa';
 
       this.currentIdentifier = identifier;
       this._log('debug', 'Disqus loadThread cagrildi.', { identifier, pageUrl, pageTitle });
@@ -1810,7 +1833,7 @@ body {
       return meta;
     }
     /**
-     * Basliktan bolum numarasini cikarir (orn: "Tomb Raider King Bölüm 279" -> 279).
+     * Basliktan bolum numarasini cikarir (orn: "Gölge Hükümdarı Bölüm 279" -> 279).
      * @param {string} title - Gonderi basligi.
      * @param {string} [html=''] - Gonderi HTML icerigi.
      * @returns {number} Bolum numarasi.
@@ -1835,7 +1858,7 @@ body {
       return 1;
     }
     /**
-     * Bolum basligindan seri adini tahmin eder (orn: "Wistoria: Asa ve Kılıç Bölüm 1" -> "Wistoria: Asa ve Kılıç").
+     * Bolum basligindan seri adini tahmin eder (orn: "Kuzeyin Kılıcı Bölüm 1" -> "Kuzeyin Kılıcı").
      * @param {string} title - Bolum gonderisi basligi.
      * @returns {string} Tahmin edilen seri adi.
      */
@@ -1945,7 +1968,7 @@ body {
             type: labelInfo.type,
             defaultReaderMode: labelInfo.defaultReaderMode,
             status: labelInfo.status,
-            translator: meta.author || 'Manhwa Arşiv',
+            translator: meta.author || 'Manowa Çeviri',
             rating: '9.6',
             genres: labelInfo.genres,
             cover: images[0] || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak',
@@ -1995,7 +2018,7 @@ body {
             type: isNovelChapter ? 'Novel' : 'Manhwa',
             defaultReaderMode: isNovelChapter ? 'novel' : 'webtoon',
             status: 'Devam Ediyor',
-            translator: 'Manhwa Arşiv',
+            translator: 'Manowa Çeviri',
             rating: '9.5',
             genres: ['Genel'],
             cover: imgs[0] || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak',
@@ -2129,12 +2152,18 @@ body {
     }
     /**
      * JSONP (alt=json-in-script) kullanarak Blogger beslemesini ceker (CORS ve yerel onizleme yedegi).
-     * @param {string} [blogOrigin='https://manhwaarsiv.blogspot.com'] - Blog kök adresi.
+     * @param {string} [blogOrigin=''] - Blog kök adresi.
      * @returns {Promise<Array<Object>>} Dinamik seri listesi.
      */
-    fetchViaJsonp(blogOrigin = 'https://manhwaarsiv.blogspot.com') {
+    fetchViaJsonp(blogOrigin = '') {
       return new Promise((resolve) => {
-        if (typeof document === 'undefined') {
+        const resolvedOrigin =
+          blogOrigin ||
+          globalScope.MANOWA_BLOG_ORIGIN ||
+          (typeof location !== 'undefined' && location.origin && location.origin.startsWith('http')
+            ? location.origin
+            : '');
+        if (typeof document === 'undefined' || !resolvedOrigin) {
           resolve([]);
           return;
         }
@@ -2166,7 +2195,7 @@ body {
           cleanup();
           resolve([]);
         };
-        script.src = `${blogOrigin}/feeds/posts/default?alt=json-in-script&max-results=500&callback=${cbName}`;
+        script.src = `${resolvedOrigin}/feeds/posts/default?alt=json-in-script&max-results=500&callback=${cbName}`;
         (document.head || document.body).appendChild(script);
       });
     }
@@ -2201,10 +2230,12 @@ body {
         const origin =
           typeof location !== 'undefined' && location.origin && location.origin.startsWith('http')
             ? location.origin
-            : 'https://manhwaarsiv.blogspot.com';
-        const jsonpSeries = await this.fetchViaJsonp(origin);
-        if (jsonpSeries.length > 0) {
-          return jsonpSeries;
+            : globalScope.MANOWA_BLOG_ORIGIN || '';
+        if (origin) {
+          const jsonpSeries = await this.fetchViaJsonp(origin);
+          if (jsonpSeries.length > 0) {
+            return jsonpSeries;
+          }
         }
       }
       return this.parseDomEntries();
@@ -2269,55 +2300,55 @@ body {
   function getDefaultCatalog() {
     return [
       {
-        id: 'wistoria-asa-ve-kilic',
-        title: 'Wistoria: Asa ve Kılıç',
-        altTitle: 'Tsue to Tsurugi no Wistoria',
+        id: 'kuzeyin-kilici',
+        title: 'Kuzeyin Kılıcı',
+        altTitle: 'Legend of the Northern Blade',
         sourceLang: 'JP',
         type: 'Manga',
         defaultReaderMode: 'single',
         status: 'Tamamlandı',
-        translator: 'Manhwa Arşiv',
+        translator: 'Manowa Çeviri',
         rating: '9.7',
         genres: ['Manga', 'Orta Çağ', 'Fantastik'],
-        cover: createSamplePageSvg('Wistoria: Asa ve Kılıç', 1, '#be185d'),
-        synopsis: 'Büyü yapamayan ancak kılıç ustalığıyla büyü akademisinde zirveyi hedefleyen Will Serfort\'un hikayesi.',
+        cover: createSamplePageSvg('Kuzeyin Kılıcı', 1, '#be185d'),
+        synopsis: 'Kuzey Göksel Tarikatı yıkıldıktan sonra sessizlik içinde ustalaşan Jin Mu-Won\'un destansı mücadelesi.',
         chapters: [
           {
-            id: 'wistoria-asa-ve-kilic-bolum-1',
+            id: 'kuzeyin-kilici-bolum-1',
             number: 1,
-            title: 'Wistoria: Asa ve Kılıç Bölüm 1',
+            title: 'Kuzeyin Kılıcı Bölüm 1',
             date: '2026-09-29',
             translatorNote: '',
             pages: [
-              createSamplePageSvg('Wistoria - Bölüm 1', 1, '#be185d'),
-              createSamplePageSvg('Wistoria - Bölüm 1', 2, '#9d174d')
+              createSamplePageSvg('Kuzeyin Kılıcı - Bölüm 1', 1, '#be185d'),
+              createSamplePageSvg('Kuzeyin Kılıcı - Bölüm 1', 2, '#9d174d')
             ]
           }
         ]
       },
       {
-        id: 'tomb-raider-king',
-        title: 'Tomb Raider King',
-        altTitle: '도굴왕',
+        id: 'golge-hukumdari',
+        title: 'Gölge Hükümdarı',
+        altTitle: 'Shadow Monarch',
         sourceLang: 'KR',
         type: 'Manhwa',
         defaultReaderMode: 'webtoon',
-        status: 'İptal Edildi',
-        translator: 'Manhwa Arşiv',
+        status: 'Devam Ediyor',
+        translator: 'Manowa Çeviri',
         rating: '9.6',
         genres: ['Aksiyon', 'Sistem'],
-        cover: createSamplePageSvg('Tomb Raider King', 1, '#4f46e5'),
-        synopsis: 'Tanrıların mezarları dünyada belirdiğinde kutsal emanetleri ele geçirmek için geçmişe dönen Jooheon Suh\'un macerası.',
+        cover: createSamplePageSvg('Gölge Hükümdarı', 1, '#4f46e5'),
+        synopsis: 'Gizemli zindanların kapıları açıldığında en zayıf avcının adım adım zirveye yükselişi.',
         chapters: [
           {
-            id: 'tomb-raider-king-bolum-279',
-            number: 279,
-            title: 'Tomb Raider King Bölüm 279',
+            id: 'golge-hukumdari-bolum-1',
+            number: 1,
+            title: 'Gölge Hükümdarı Bölüm 1',
             date: '2026-09-26',
             translatorNote: '',
             pages: [
-              createSamplePageSvg('Tomb Raider King - 279', 1, '#4f46e5'),
-              createSamplePageSvg('Tomb Raider King - 279', 2, '#4338ca')
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 1, '#4f46e5'),
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 2, '#4338ca')
             ]
           }
         ]
@@ -3603,7 +3634,11 @@ body {
         }
       }
       try {
-        const parsedUrl = new URL(href, 'https://manhwaarsiv.blogspot.com');
+        const baseOrigin =
+          this.locationObj && this.locationObj.origin && this.locationObj.origin.startsWith('http')
+            ? this.locationObj.origin
+            : 'https://example.blogspot.com';
+        const parsedUrl = new URL(href, baseOrigin);
         const qSeri = parsedUrl.searchParams.get('seri');
         const qBolum = parsedUrl.searchParams.get('bolum');
         const qGorunum = parsedUrl.searchParams.get('gorunum');
@@ -3713,7 +3748,7 @@ body {
               locationObj: deps.locationObj
             })
           : null);
-      this.siteBaseTitle = 'Manhwa Arşiv';
+      this.siteBaseTitle = globalScope.MANOWA_SITE_TITLE || 'Manowa';
       this.currentView = 'catalog';
       this.commentsVisible = false;
       this.activeSeriesId = '';
@@ -3726,8 +3761,12 @@ body {
      */
     async initDom() {
       if (typeof document === 'undefined') return;
-      if (document.title) {
-        this.siteBaseTitle = document.title.split(' - ')[0].trim() || 'Manhwa Arşiv';
+      const brandEl = document.getElementById('brand-home-link');
+      const brandText = brandEl && brandEl.textContent ? brandEl.textContent.trim() : '';
+      if (brandText) {
+        this.siteBaseTitle = brandText;
+      } else if (document.title) {
+        this.siteBaseTitle = document.title.split(' - ')[0].trim() || 'Manowa';
       }
       this.integrateHeaderBar();
       this.bindEvents();
@@ -3836,7 +3875,7 @@ body {
           type: node.getAttribute('data-type') || 'Manhwa',
           defaultReaderMode: node.getAttribute('data-reader-mode') || 'webtoon',
           status: node.getAttribute('data-status') || 'Devam Ediyor',
-          translator: node.getAttribute('data-translator') || 'Manhwa Arşiv',
+          translator: node.getAttribute('data-translator') || this.siteBaseTitle,
           rating: '9.6',
           genres: (node.getAttribute('data-genres') || 'Aksiyon').split(',').map((s) => s.trim()),
           cover: node.getAttribute('data-cover') || '',

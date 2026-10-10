@@ -174,7 +174,7 @@
       return meta;
     }
     /**
-     * Basliktan bolum numarasini cikarir (orn: "Tomb Raider King Bölüm 279" -> 279).
+     * Basliktan bolum numarasini cikarir (orn: "Gölge Hükümdarı Bölüm 279" -> 279).
      * @param {string} title - Gonderi basligi.
      * @param {string} [html=''] - Gonderi HTML icerigi.
      * @returns {number} Bolum numarasi.
@@ -199,7 +199,7 @@
       return 1;
     }
     /**
-     * Bolum basligindan seri adini tahmin eder (orn: "Wistoria: Asa ve Kılıç Bölüm 1" -> "Wistoria: Asa ve Kılıç").
+     * Bolum basligindan seri adini tahmin eder (orn: "Kuzeyin Kılıcı Bölüm 1" -> "Kuzeyin Kılıcı").
      * @param {string} title - Bolum gonderisi basligi.
      * @returns {string} Tahmin edilen seri adi.
      */
@@ -309,7 +309,7 @@
             type: labelInfo.type,
             defaultReaderMode: labelInfo.defaultReaderMode,
             status: labelInfo.status,
-            translator: meta.author || 'Manhwa Arşiv',
+            translator: meta.author || 'Manowa Çeviri',
             rating: '9.6',
             genres: labelInfo.genres,
             cover: images[0] || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak',
@@ -359,7 +359,7 @@
             type: isNovelChapter ? 'Novel' : 'Manhwa',
             defaultReaderMode: isNovelChapter ? 'novel' : 'webtoon',
             status: 'Devam Ediyor',
-            translator: 'Manhwa Arşiv',
+            translator: 'Manowa Çeviri',
             rating: '9.5',
             genres: ['Genel'],
             cover: imgs[0] || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak',
@@ -493,12 +493,18 @@
     }
     /**
      * JSONP (alt=json-in-script) kullanarak Blogger beslemesini ceker (CORS ve yerel onizleme yedegi).
-     * @param {string} [blogOrigin='https://manhwaarsiv.blogspot.com'] - Blog kök adresi.
+     * @param {string} [blogOrigin=''] - Blog kök adresi.
      * @returns {Promise<Array<Object>>} Dinamik seri listesi.
      */
-    fetchViaJsonp(blogOrigin = 'https://manhwaarsiv.blogspot.com') {
+    fetchViaJsonp(blogOrigin = '') {
       return new Promise((resolve) => {
-        if (typeof document === 'undefined') {
+        const resolvedOrigin =
+          blogOrigin ||
+          globalScope.MANOWA_BLOG_ORIGIN ||
+          (typeof location !== 'undefined' && location.origin && location.origin.startsWith('http')
+            ? location.origin
+            : '');
+        if (typeof document === 'undefined' || !resolvedOrigin) {
           resolve([]);
           return;
         }
@@ -530,7 +536,7 @@
           cleanup();
           resolve([]);
         };
-        script.src = `${blogOrigin}/feeds/posts/default?alt=json-in-script&max-results=500&callback=${cbName}`;
+        script.src = `${resolvedOrigin}/feeds/posts/default?alt=json-in-script&max-results=500&callback=${cbName}`;
         (document.head || document.body).appendChild(script);
       });
     }
@@ -565,10 +571,12 @@
         const origin =
           typeof location !== 'undefined' && location.origin && location.origin.startsWith('http')
             ? location.origin
-            : 'https://manhwaarsiv.blogspot.com';
-        const jsonpSeries = await this.fetchViaJsonp(origin);
-        if (jsonpSeries.length > 0) {
-          return jsonpSeries;
+            : globalScope.MANOWA_BLOG_ORIGIN || '';
+        if (origin) {
+          const jsonpSeries = await this.fetchViaJsonp(origin);
+          if (jsonpSeries.length > 0) {
+            return jsonpSeries;
+          }
         }
       }
       return this.parseDomEntries();

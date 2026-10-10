@@ -13,17 +13,36 @@
     /**
      * DisqusLoader nesnesini yapilandirir.
      * @param {Object} [options={}] - Yapilandirma secenekleri.
-     * @param {string} [options.shortname='manhawon'] - Disqus forum kisa adi.
+     * @param {string} [options.shortname] - Disqus forum kisa adi.
      * @param {Object} [options.logger=null] - Loglama nesnesi.
      */
     constructor(options = {}) {
-      const defaultShortname =
-        options.shortname !== undefined ? String(options.shortname) : 'manhawon';
-      this.shortname = defaultShortname.trim().toLowerCase();
+      const detectedShortname =
+        options.shortname !== undefined
+          ? String(options.shortname)
+          : this._detectDefaultShortname();
+      this.shortname = detectedShortname.trim().toLowerCase();
       this.logger = options.logger || globalScope.ManowaLogger || null;
       this.isScriptInjected = false;
       this.currentIdentifier = null;
       this._log('debug', 'DisqusLoader baslatildi.', { shortname: this.shortname });
+    }
+
+    /**
+     * Global yapilandirma veya HTML meta etiketinden varsayilan Disqus shortname degerini tespit eder.
+     * @returns {string} Tespit edilen shortname veya bos dizge.
+     */
+    _detectDefaultShortname() {
+      if (globalScope.MANOWA_DISQUS_SHORTNAME) {
+        return String(globalScope.MANOWA_DISQUS_SHORTNAME);
+      }
+      if (typeof document !== 'undefined' && typeof document.querySelector === 'function') {
+        const meta = document.querySelector('meta[name="disqus-shortname"]');
+        if (meta && typeof meta.getAttribute === 'function') {
+          return String(meta.getAttribute('content') || '');
+        }
+      }
+      return '';
     }
 
     /**
@@ -84,8 +103,8 @@
         pageInfo.url ||
         (typeof location !== 'undefined' && location.href.startsWith('http')
           ? location.href
-          : `https://manhwaarsiv.blogspot.com/#!/${identifier}`);
-      const pageTitle = pageInfo.title || 'Manhwa Arşiv';
+          : `https://example.blogspot.com/#!/${identifier}`);
+      const pageTitle = pageInfo.title || 'Manowa';
 
       this.currentIdentifier = identifier;
       this._log('debug', 'Disqus loadThread cagrildi.', { identifier, pageUrl, pageTitle });

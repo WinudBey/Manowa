@@ -187,7 +187,11 @@
         }
       }
       try {
-        const parsedUrl = new URL(href, 'https://manhwaarsiv.blogspot.com');
+        const baseOrigin =
+          this.locationObj && this.locationObj.origin && this.locationObj.origin.startsWith('http')
+            ? this.locationObj.origin
+            : 'https://example.blogspot.com';
+        const parsedUrl = new URL(href, baseOrigin);
         const qSeri = parsedUrl.searchParams.get('seri');
         const qBolum = parsedUrl.searchParams.get('bolum');
         const qGorunum = parsedUrl.searchParams.get('gorunum');

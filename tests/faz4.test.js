@@ -55,18 +55,18 @@ test('AppController: Dinamik Blogger beslemesini yuklemeli ve dogrudan URL yonle
       entry: [
         {
           id: { $t: 'p1' },
-          title: { $t: 'Tomb Raider King' },
+          title: { $t: 'Gölge Hükümdarı' },
           published: { $t: '2026-09-26T08:33:27.685-07:00' },
-          category: [{ term: 'Manhwa' }, { term: 'Seri' }, { term: 'Tomb Raider King' }],
-          link: [{ rel: 'alternate', href: 'https://manhwaarsiv.blogspot.com/2026/09/tomb-raider-king.html' }],
-          content: { $t: '<div id="actual-series-tag">Tomb Raider King</div><img src="https://example.com/trk.jpg" />' }
+          category: [{ term: 'Manhwa' }, { term: 'Seri' }, { term: 'Gölge Hükümdarı' }],
+          link: [{ rel: 'alternate', href: 'https://example.blogspot.com/2026/09/golge-hukumdari.html' }],
+          content: { $t: '<div id="actual-series-tag">Gölge Hükümdarı</div><img src="https://example.com/gh.jpg" />' }
         },
         {
           id: { $t: 'p2' },
-          title: { $t: 'Tomb Raider King Bölüm 279' },
+          title: { $t: 'Gölge Hükümdarı Bölüm 279' },
           published: { $t: '2026-09-26T08:58:42.651-07:00' },
-          category: [{ term: 'Bölüm' }, { term: 'Tomb Raider King' }],
-          link: [{ rel: 'alternate', href: 'https://manhwaarsiv.blogspot.com/2026/09/tomb-raider-king-bolum-279.html' }],
+          category: [{ term: 'Bölüm' }, { term: 'Gölge Hükümdarı' }],
+          link: [{ rel: 'alternate', href: 'https://example.blogspot.com/2026/09/golge-hukumdari-bolum-279.html' }],
           content: { $t: '<div class="separator"><img src="https://example.com/279-1.webp" /></div>' }
         }
       ]
@@ -87,15 +87,15 @@ test('AppController: Dinamik Blogger beslemesini yuklemeli ve dogrudan URL yonle
   const count = await app.loadDynamicData();
   assert.equal(count, 1);
   assert.equal(catalog.seriesList.length, 1);
-  assert.equal(catalog.seriesList[0].id, 'tomb-raider-king');
+  assert.equal(catalog.seriesList[0].id, 'golge-hukumdari');
 
   // Dogrudan bolum URL'sine girildiginde okuyucu acilmali
   const routedToReader = app.handleUrlRouting(
-    'https://manhwaarsiv.blogspot.com/2026/09/tomb-raider-king-bolum-279.html'
+    'https://example.blogspot.com/2026/09/golge-hukumdari-bolum-279.html'
   );
   assert.equal(routedToReader, true);
   assert.equal(app.currentView, 'reader');
-  assert.equal(app.activeChapterId, 'tomb-raider-king-bolum-279');
+  assert.equal(app.activeChapterId, 'golge-hukumdari-bolum-279');
 });
 
 test('AppController: Seri ve Bolume girildiginde URL degismeli (pushState) ve Geri tusu (popstate) calismali', async () => {
@@ -107,7 +107,7 @@ test('AppController: Seri ve Bolume girildiginde URL degismeli (pushState) ve Ge
           title: { $t: "Omniscient Reader's Viewpoint Novel" },
           published: { $t: '2026-09-26T08:31:43.871-07:00' },
           category: [{ term: 'Novel' }, { term: 'Seri' }, { term: "Omniscient Reader's Viewpoint Novel" }],
-          link: [{ rel: 'alternate', href: 'https://manhwaarsiv.blogspot.com/2026/09/omniscient-readers-viewpoint-novel.html' }],
+          link: [{ rel: 'alternate', href: 'https://example.blogspot.com/2026/09/omniscient-readers-viewpoint-novel.html' }],
           content: { $t: '<div id="actual-series-tag">Omniscient Reader\'s Viewpoint Novel</div><img src="https://example.com/orv.jpg" />' }
         },
         {
@@ -115,7 +115,7 @@ test('AppController: Seri ve Bolume girildiginde URL degismeli (pushState) ve Ge
           title: { $t: "Omniscient Reader's Viewpoint Novel Bölüm 3" },
           published: { $t: '2026-09-26T09:05:51.646-07:00' },
           category: [{ term: 'Bölüm' }, { term: "Omniscient Reader's Viewpoint Novel" }],
-          link: [{ rel: 'alternate', href: 'https://manhwaarsiv.blogspot.com/2026/09/omniscient-readers-viewpoint-novel-bolum-3.html' }],
+          link: [{ rel: 'alternate', href: 'https://example.blogspot.com/2026/09/omniscient-readers-viewpoint-novel-bolum-3.html' }],
           content: { $t: '<div class="orv_title"><h1>Ch 3</h1></div><p class="orv_line">Metin</p>' }
         }
       ]
@@ -127,9 +127,9 @@ test('AppController: Seri ve Bolume girildiginde URL degismeli (pushState) ve Ge
   let stackIndex = -1;
   const mockLocation = {
     protocol: 'https:',
-    origin: 'https://manhwaarsiv.blogspot.com',
+    origin: 'https://example.blogspot.com',
     pathname: '/',
-    href: 'https://manhwaarsiv.blogspot.com/'
+    href: 'https://example.blogspot.com/'
   };
 
   const mockHistory = {
@@ -140,13 +140,13 @@ test('AppController: Seri ve Bolume girildiginde URL degismeli (pushState) ve Ge
       stackIndex++;
       historyStack.splice(stackIndex, historyStack.length - stackIndex, { state, title, url });
       mockLocation.pathname = url;
-      mockLocation.href = 'https://manhwaarsiv.blogspot.com' + url;
+      mockLocation.href = 'https://example.blogspot.com' + url;
     },
     replaceState(state, title, url) {
       if (stackIndex < 0) stackIndex = 0;
       historyStack[stackIndex] = { state, title, url };
       mockLocation.pathname = url;
-      mockLocation.href = 'https://manhwaarsiv.blogspot.com' + url;
+      mockLocation.href = 'https://example.blogspot.com' + url;
     }
   };
 
@@ -187,7 +187,7 @@ test('AppController: Seri ve Bolume girildiginde URL degismeli (pushState) ve Ge
   // 3. Kullanici tarayicida GERI (Back) tusuna basar -> Seri sayfasina donmeli
   stackIndex--;
   mockLocation.pathname = historyStack[stackIndex].url;
-  mockLocation.href = 'https://manhwaarsiv.blogspot.com' + mockLocation.pathname;
+  mockLocation.href = 'https://example.blogspot.com' + mockLocation.pathname;
   app.handlePopState({ state: historyStack[stackIndex].state });
   assert.equal(app.currentView, 'series');
   assert.equal(mockLocation.pathname, '/2026/09/omniscient-readers-viewpoint-novel.html');
@@ -195,7 +195,7 @@ test('AppController: Seri ve Bolume girildiginde URL degismeli (pushState) ve Ge
   // 4. Kullanici tekrar GERI (Back) tusuna basar -> Katalog ana sayfasina donmeli
   stackIndex--;
   mockLocation.pathname = historyStack[stackIndex].url;
-  mockLocation.href = 'https://manhwaarsiv.blogspot.com' + mockLocation.pathname;
+  mockLocation.href = 'https://example.blogspot.com' + mockLocation.pathname;
   app.handlePopState({ state: historyStack[stackIndex].state });
   assert.equal(app.currentView, 'catalog');
   assert.equal(mockLocation.pathname, '/');
@@ -225,6 +225,8 @@ test('GitHub Yayin Hazirligi: .gitignore, README.md, LICENSE, CI ve Release is a
   assert.equal(gitignoreContent.includes('logs/'), true);
   assert.equal(gitignoreContent.includes('node_modules/'), true);
   assert.equal(gitignoreContent.includes('ai.md'), true);
+  assert.equal(gitignoreContent.includes('manowa.config.local.json'), true);
+  assert.equal(gitignoreContent.includes('dist/theme.personal.xml'), true);
 
   const releaseWorkflowContent = fs.readFileSync(path.join(rootDir, '.github/workflows/release.yml'), 'utf8');
   assert.equal(releaseWorkflowContent.includes('npm run build'), true);
@@ -250,20 +252,20 @@ test('UserLibrary: Favoriler (Kitapligim), Okuma Gecmisi ve Son Eklenen Bolumler
   const reader = new ReadingEngine({ storage: mockStorage });
   const library = new UserLibrary({ storage: mockStorage });
 
-  assert.equal(library.isFavorite('wistoria-asa-ve-kilic'), false);
-  assert.equal(library.toggleFavorite('wistoria-asa-ve-kilic'), true);
-  assert.equal(library.isFavorite('wistoria-asa-ve-kilic'), true);
+  assert.equal(library.isFavorite('kuzeyin-kilici'), false);
+  assert.equal(library.toggleFavorite('kuzeyin-kilici'), true);
+  assert.equal(library.isFavorite('kuzeyin-kilici'), true);
   assert.equal(library.getFavoriteSeries(catalog).length, 1);
 
   // Son eklenen bolumler
   const latest = library.getLatestChapters(catalog, 5);
   assert.equal(latest.length >= 2, true);
-  assert.equal(latest[0].seriesId, 'wistoria-asa-ve-kilic');
+  assert.equal(latest[0].seriesId, 'kuzeyin-kilici');
 
   // Okuma gecmisi
   reader.loadChapter({
-    seriesId: 'wistoria-asa-ve-kilic',
-    chapterId: 'wistoria-asa-ve-kilic-bolum-1',
+    seriesId: 'kuzeyin-kilici',
+    chapterId: 'kuzeyin-kilici-bolum-1',
     pages: ['p1.jpg', 'p2.jpg'],
     defaultMode: 'single'
   });
@@ -271,14 +273,14 @@ test('UserLibrary: Favoriler (Kitapligim), Okuma Gecmisi ve Son Eklenen Bolumler
 
   const historyList = library.getRecentHistoryList(catalog, reader);
   assert.equal(historyList.length, 1);
-  assert.equal(historyList[0].seriesId, 'wistoria-asa-ve-kilic');
+  assert.equal(historyList[0].seriesId, 'kuzeyin-kilici');
   assert.equal(historyList[0].pageIndex, 1);
 
   library.clearHistory();
   assert.equal(library.getRecentHistoryList(catalog, reader).length, 0);
 });
 
-test('Canli Tema (theme.xml) ve Onizleme (preview.html) Ayrimi: Gelistirici araclari theme.xml icinde olmamali', () => {
+test('Canli Tema (theme.xml) ve Onizleme (preview.html) Ayrimi: Gelistirici araclari ve kisisel degerler theme.xml icinde olmamali', () => {
   const fs = require('node:fs');
   const { ThemeBuilder } = require('../src/core/builder');
   const builder = new ThemeBuilder();
@@ -294,12 +296,14 @@ test('Canli Tema (theme.xml) ve Onizleme (preview.html) Ayrimi: Gelistirici arac
   assert.equal(themeXml.includes('id="input-disqus-shortname"'), false);
   assert.equal(themeXml.includes('MODULE: scripts/post-generator.js'), false);
 
-  // Canli theme.xml icinde yeni kullanici ozellikleri ve manhawon Disqus OLMALI
+  // Canli theme.xml icinde kisisel sabit degerler OLMAMALI, Blogger degiskeni OLMALI
+  assert.equal(themeXml.includes('manhwaarsiv.blogspot.com'), false);
+  assert.equal(themeXml.includes('manhawon'), false);
   assert.equal(themeXml.includes('id="view-bookmarks"'), true);
   assert.equal(themeXml.includes('id="view-history"'), true);
   assert.equal(themeXml.includes('id="latest-chapters-section"'), true);
   assert.equal(themeXml.includes('id="btn-scroll-top"'), true);
-  assert.equal(themeXml.includes('manhawon'), true);
+  assert.equal(themeXml.includes('name="disqus.shortname"'), true);
 
   // Yerel preview.html icinde gelistirici araclari KORUNMALI
   assert.equal(previewHtml.includes('id="nav-generator"'), true);

@@ -6,14 +6,18 @@
     <meta content='width=device-width, initial-scale=1' name='viewport'/>
     <title><data:view.title.escaped/></title>
     <b:skin><![CDATA[
+/*
+<Variable name="disqus.shortname" description="Disqus Forum Shortname" type="string" default="" value=""/>
+*/
 /* {{STYLES}} */
     ]]></b:skin>
+    <meta expr:content='data:skin.vars.disqus_shortname' id='manowa-disqus-meta' name='disqus-shortname'/>
   </head>
   <body>
     <header class='site-header'>
       <div class='header-inner' id='site-header-inner'>
         <b:section id='header-section' maxwidgets='1' showaddelement='no'>
-          <b:widget id='Header1' locked='true' title='Manowa Çeviri' type='Header' version='2'>
+          <b:widget id='Header1' locked='true' title='Manowa' type='Header' version='2'>
             <b:includable id='main'>
               <a class='brand-logo' data-action='catalog' expr:href='data:blog.homepageUrl' id='brand-home-link'><data:title/></a>
             </b:includable>

@@ -44,55 +44,55 @@
   function getDefaultCatalog() {
     return [
       {
-        id: 'wistoria-asa-ve-kilic',
-        title: 'Wistoria: Asa ve Kılıç',
-        altTitle: 'Tsue to Tsurugi no Wistoria',
+        id: 'kuzeyin-kilici',
+        title: 'Kuzeyin Kılıcı',
+        altTitle: 'Legend of the Northern Blade',
         sourceLang: 'JP',
         type: 'Manga',
         defaultReaderMode: 'single',
         status: 'Tamamlandı',
-        translator: 'Manhwa Arşiv',
+        translator: 'Manowa Çeviri',
         rating: '9.7',
         genres: ['Manga', 'Orta Çağ', 'Fantastik'],
-        cover: createSamplePageSvg('Wistoria: Asa ve Kılıç', 1, '#be185d'),
-        synopsis: 'Büyü yapamayan ancak kılıç ustalığıyla büyü akademisinde zirveyi hedefleyen Will Serfort\'un hikayesi.',
+        cover: createSamplePageSvg('Kuzeyin Kılıcı', 1, '#be185d'),
+        synopsis: 'Kuzey Göksel Tarikatı yıkıldıktan sonra sessizlik içinde ustalaşan Jin Mu-Won\'un destansı mücadelesi.',
         chapters: [
           {
-            id: 'wistoria-asa-ve-kilic-bolum-1',
+            id: 'kuzeyin-kilici-bolum-1',
             number: 1,
-            title: 'Wistoria: Asa ve Kılıç Bölüm 1',
+            title: 'Kuzeyin Kılıcı Bölüm 1',
             date: '2026-09-29',
             translatorNote: '',
             pages: [
-              createSamplePageSvg('Wistoria - Bölüm 1', 1, '#be185d'),
-              createSamplePageSvg('Wistoria - Bölüm 1', 2, '#9d174d')
+              createSamplePageSvg('Kuzeyin Kılıcı - Bölüm 1', 1, '#be185d'),
+              createSamplePageSvg('Kuzeyin Kılıcı - Bölüm 1', 2, '#9d174d')
             ]
           }
         ]
       },
       {
-        id: 'tomb-raider-king',
-        title: 'Tomb Raider King',
-        altTitle: '도굴왕',
+        id: 'golge-hukumdari',
+        title: 'Gölge Hükümdarı',
+        altTitle: 'Shadow Monarch',
         sourceLang: 'KR',
         type: 'Manhwa',
         defaultReaderMode: 'webtoon',
-        status: 'İptal Edildi',
-        translator: 'Manhwa Arşiv',
+        status: 'Devam Ediyor',
+        translator: 'Manowa Çeviri',
         rating: '9.6',
         genres: ['Aksiyon', 'Sistem'],
-        cover: createSamplePageSvg('Tomb Raider King', 1, '#4f46e5'),
-        synopsis: 'Tanrıların mezarları dünyada belirdiğinde kutsal emanetleri ele geçirmek için geçmişe dönen Jooheon Suh\'un macerası.',
+        cover: createSamplePageSvg('Gölge Hükümdarı', 1, '#4f46e5'),
+        synopsis: 'Gizemli zindanların kapıları açıldığında en zayıf avcının adım adım zirveye yükselişi.',
         chapters: [
           {
-            id: 'tomb-raider-king-bolum-279',
-            number: 279,
-            title: 'Tomb Raider King Bölüm 279',
+            id: 'golge-hukumdari-bolum-1',
+            number: 1,
+            title: 'Gölge Hükümdarı Bölüm 1',
             date: '2026-09-26',
             translatorNote: '',
             pages: [
-              createSamplePageSvg('Tomb Raider King - 279', 1, '#4f46e5'),
-              createSamplePageSvg('Tomb Raider King - 279', 2, '#4338ca')
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 1, '#4f46e5'),
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 2, '#4338ca')
             ]
           }
         ]

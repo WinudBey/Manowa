@@ -46,7 +46,7 @@
               locationObj: deps.locationObj
             })
           : null);
-      this.siteBaseTitle = 'Manhwa Arşiv';
+      this.siteBaseTitle = globalScope.MANOWA_SITE_TITLE || 'Manowa';
       this.currentView = 'catalog';
       this.commentsVisible = false;
       this.activeSeriesId = '';
@@ -59,8 +59,12 @@
      */
     async initDom() {
       if (typeof document === 'undefined') return;
-      if (document.title) {
-        this.siteBaseTitle = document.title.split(' - ')[0].trim() || 'Manhwa Arşiv';
+      const brandEl = document.getElementById('brand-home-link');
+      const brandText = brandEl && brandEl.textContent ? brandEl.textContent.trim() : '';
+      if (brandText) {
+        this.siteBaseTitle = brandText;
+      } else if (document.title) {
+        this.siteBaseTitle = document.title.split(' - ')[0].trim() || 'Manowa';
       }
       this.integrateHeaderBar();
       this.bindEvents();
@@ -169,7 +173,7 @@
           type: node.getAttribute('data-type') || 'Manhwa',
           defaultReaderMode: node.getAttribute('data-reader-mode') || 'webtoon',
           status: node.getAttribute('data-status') || 'Devam Ediyor',
-          translator: node.getAttribute('data-translator') || 'Manhwa Arşiv',
+          translator: node.getAttribute('data-translator') || this.siteBaseTitle,
           rating: '9.6',
           genres: (node.getAttribute('data-genres') || 'Aksiyon').split(',').map((s) => s.trim()),
           cover: node.getAttribute('data-cover') || '',
