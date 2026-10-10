@@ -1,0 +1,27 @@
+name: CI — Build & Test
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  verify:
+    name: Birim Testleri ve Tema Derleme
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Depoyu İndir (Checkout)
+        uses: actions/checkout@v4
+
+      - name: Node.js Ortamını Kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Birim Testlerini Çalıştır
+        run: npm test
+
+      - name: Temayı Derle ve 1000 Satır Sınırını Denetle
+        run: npm run build

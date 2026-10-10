@@ -1,0 +1,108 @@
+/**
+ * @fileoverview Blogger gonderi kodu olusturucu (Post Generator) ve debug paneli stilleri.
+ */
+
+.generator-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.generator-tabs {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.85rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.form-control {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: var(--accent-primary);
+}
+
+textarea.form-control {
+  min-height: 110px;
+  resize: vertical;
+  font-family: monospace;
+}
+
+.code-output-wrap {
+  margin-top: 1.25rem;
+  background: #090b10;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.code-output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.code-textarea {
+  width: 100%;
+  min-height: 140px;
+  background: transparent;
+  color: #a5b4fc;
+  border: none;
+  font-family: monospace;
+  font-size: 0.82rem;
+  resize: vertical;
+  outline: none;
+}
+
+.debug-panel {
+  margin-top: 2.5rem;
+  background: #090b10;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.debug-log-list {
+  max-height: 180px;
+  overflow-y: auto;
+  font-family: monospace;
+  font-size: 0.76rem;
+  color: #94a3b8;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.6rem;
+}

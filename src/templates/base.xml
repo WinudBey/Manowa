@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' expr:dir='data:blog.languageDirection' lang='tr' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+  <head>
+    <meta charset='utf-8'/>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <title><data:view.title.escaped/></title>
+    <b:skin><![CDATA[
+/* {{STYLES}} */
+    ]]></b:skin>
+  </head>
+  <body>
+    <header class='site-header'>
+      <div class='header-inner' id='site-header-inner'>
+        <b:section id='header-section' maxwidgets='1' showaddelement='no'>
+          <b:widget id='Header1' locked='true' title='Manowa Çeviri' type='Header' version='2'>
+            <b:includable id='main'>
+              <a class='brand-logo' data-action='catalog' expr:href='data:blog.homepageUrl' id='brand-home-link'><data:title/></a>
+            </b:includable>
+          </b:widget>
+        </b:section>
+      </div>
+    </header>
+
+    <main class='site-main' id='main-content'>
+      <!-- {{BODY_CONTENT}} -->
+      <b:section class='hidden' id='main-blog-section' showaddelement='yes'>
+        <b:widget id='Blog1' locked='true' title='Blog Kayıtları' type='Blog' version='2'>
+          <b:includable id='main'>
+            <div class='posts-wrapper hidden'>
+              <b:loop values='data:posts' var='post'>
+                <article class='post-entry' expr:data-post-id='data:post.id' expr:data-post-url='data:post.url'>
+                  <h2 class='post-title'><data:post.title/></h2>
+                  <div class='post-labels'>
+                    <b:loop values='data:post.labels' var='label'>
+                      <span class='post-label-item'><data:label.name/></span>
+                    </b:loop>
+                  </div>
+                  <div class='post-body'><data:post.body/></div>
+                </article>
+              </b:loop>
+            </div>
+          </b:includable>
+        </b:widget>
+      </b:section>
+    </main>
+
+    <script type='text/javascript'>
+//<![CDATA[
+// {{SCRIPTS}}
+//]]>
+    </script>
+  </body>
+</html>

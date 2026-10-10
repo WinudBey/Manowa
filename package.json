@@ -1,0 +1,37 @@
+{
+  "name": "manowa-blogger-theme",
+  "version": "1.0.0",
+  "description": "Coklu okuma motoruna ve Disqus entegrasyonuna sahip modern Manga/Manhwa Blogger temasi",
+  "main": "src/core/builder.js",
+  "scripts": {
+    "build": "node src/core/build-cli.js",
+    "test": "node --test tests/*.test.js",
+    "verify": "npm test && npm run build"
+  },
+  "files": [
+    "dist/",
+    "src/",
+    "tests/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "blogger",
+    "blogger-theme",
+    "manga",
+    "manhwa",
+    "manhua",
+    "webtoon",
+    "novel",
+    "reader",
+    "disqus"
+  ],
+  "author": "Manowa Team",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
+

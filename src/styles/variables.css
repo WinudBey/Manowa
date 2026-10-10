@@ -1,0 +1,46 @@
+/**
+ * @fileoverview Manowa Blogger Temasi - Temel CSS degiskenleri ve sifirlama kurallari.
+ * Koyu (Dark) ve Acik (Light) tema renk paletlerini tanimlar.
+ */
+
+:root {
+  --bg-primary: #0f1117;
+  --bg-secondary: #181b24;
+  --bg-card: #1f2330;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --accent-primary: #6366f1;
+  --accent-hover: #818cf8;
+  --badge-kr: #ef4444;
+  --badge-jp: #ec4899;
+  --badge-cn: #f59e0b;
+  --badge-en: #3b82f6;
+  --border-color: #2e3446;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --accent-primary: #4f46e5;
+  --accent-hover: #4338ca;
+  --border-color: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  line-height: 1.6;
+}

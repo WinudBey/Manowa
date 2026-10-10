@@ -1,0 +1,225 @@
+<!-- UST KONTROL VE NAVIGASYON CUBUGU -->
+<div class="filter-toolbar" id="top-app-bar">
+  <div class="nav-links">
+    <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog">📚 Katalog &amp; Vitrin</a>
+    <button class="nav-btn" id="nav-random" type="button">🎲 Rastgele Seri</button>
+    <button class="nav-btn" id="nav-generator" type="button">🛠️ Gönderi Oluşturucu</button>
+  </div>
+  <div class="header-controls">
+    <div class="search-box">
+      <input class="search-input" id="input-search" placeholder="Seri, tür veya durum ara..." type="search" />
+    </div>
+    <button class="icon-btn" id="btn-theme-toggle" type="button" title="Koyu / Açık Tema Değiştir">🌗 Tema</button>
+  </div>
+</div>
+
+<!-- GORUNUM 1: ANA SAYFA VITRIN VE KATALOG -->
+<section id="view-catalog">
+  <div class="hero-banner" id="hero-showcase">
+    <div class="hero-content">
+      <span class="hero-badge" id="hero-badge">⏳ Veriler Yükleniyor...</span>
+      <h1 class="hero-title" id="hero-title">Manhwa &amp; Manga Arşivi</h1>
+      <p class="hero-desc" id="hero-desc">
+        Blogger gönderileriniz dinamik olarak taranıyor. Lütfen bekleyin...
+      </p>
+      <div class="detail-actions">
+        <a class="primary-btn" href="#" id="btn-hero-read">⚡ Hemen Oku</a>
+        <a class="icon-btn" href="#" id="btn-hero-detail">📖 Seri Detayı</a>
+      </div>
+    </div>
+    <div class="hero-cover-wrap">
+      <img alt="Vitrin Kapak" class="hero-cover-img hidden" id="hero-cover-img" src="" />
+    </div>
+  </div>
+
+  <div class="filter-toolbar">
+    <div class="lang-filters" id="lang-filter-group">
+      <button class="filter-pill active" data-lang="ALL" type="button">🌍 Tümü</button>
+      <button class="filter-pill" data-lang="Manhwa" type="button">🇰🇷 Manhwa (Korece)</button>
+      <button class="filter-pill" data-lang="Manga" type="button">🇯🇵 Manga (Japonca)</button>
+      <button class="filter-pill" data-lang="Manhua" type="button">🇨🇳 Manhua (Çince)</button>
+      <button class="filter-pill" data-lang="Novel" type="button">📖 Novel (Roman)</button>
+    </div>
+    <span class="meta-tag" id="catalog-count-label">Yükleniyor...</span>
+  </div>
+
+  <div class="section-header">
+    <h2 class="section-title">🔥 Güncel Çeviri Serileri</h2>
+  </div>
+  <div class="catalog-grid" id="catalog-grid"></div>
+</section>
+
+<!-- GORUNUM 2: SERI TANITIM VE BOLUM LISTESI SAYFASI -->
+<section class="hidden" id="view-series">
+  <div class="series-nav-bar">
+    <a class="icon-btn" data-action="catalog" href="/" id="btn-series-back">← Kataloğa Dön</a>
+    <nav aria-label="Sayfa Konumu" class="breadcrumb-trail">
+      <a class="breadcrumb-link" data-action="catalog" href="/">🏠 Ana Sayfa</a>
+      <span>›</span>
+      <span id="series-breadcrumb-title">Seri Detayı</span>
+    </nav>
+  </div>
+  <div class="series-detail-box" id="series-detail-box"></div>
+
+  <div class="chapter-list-box">
+    <div class="section-header">
+      <h3 class="section-title">📑 Bölüm Listesi</h3>
+      <button class="icon-btn" id="btn-sort-chapters" type="button">⇅ Sıralama: Yeni → Eski</button>
+    </div>
+    <div class="chapter-grid" id="chapter-list-grid"></div>
+  </div>
+</section>
+
+<!-- GORUNUM 3: COK MODLU OKUMA MOTORU (READING ENGINE) -->
+<section class="hidden" id="view-reader">
+  <div class="reader-wrapper" id="reader-wrapper">
+    <div class="reader-progress-track">
+      <div class="reader-progress-bar" id="reader-progress-bar"></div>
+    </div>
+
+    <div class="reader-toolbar">
+      <div class="reader-title-group">
+        <div class="reader-nav-links">
+          <a class="reader-btn" data-action="catalog" href="/" id="btn-reader-home" title="Ana Sayfa Kataloğa Dön">🏠 Katalog</a>
+          <a class="reader-btn" href="#" id="reader-series-title" title="Seri Sayfasına Dön">← Seri Sayfasına Dön</a>
+        </div>
+        <span class="reader-chapter-name" id="reader-chapter-title">Bölüm</span>
+      </div>
+
+      <div class="reader-controls">
+        <select class="reader-select" id="select-chapter" title="Bölüm Seç"></select>
+
+        <select class="reader-select" id="select-mode" title="Okuma Motoru Modu">
+          <option value="webtoon">📜 Webtoon (Dikey Şerit)</option>
+          <option value="single">📄 Tek Sayfa (Manga)</option>
+          <option value="double">📖 Çift Sayfa (Kitap)</option>
+          <option value="novel">📝 Novel (Metin Modu)</option>
+        </select>
+
+        <select class="reader-select" id="select-direction" title="Okuma Yönü">
+          <option value="ltr">➡️ Soldan Sağa (LTR)</option>
+          <option value="rtl">⬅️ Sağdan Sola (Japon Manga RTL)</option>
+        </select>
+
+        <select class="reader-select" id="select-gap" title="Webtoon Görsel Boşluğu">
+          <option value="0">Boşluk: 0px</option>
+          <option value="8">Boşluk: 8px</option>
+          <option value="16">Boşluk: 16px</option>
+        </select>
+
+        <button class="reader-btn" id="btn-zoom-out" type="button" title="Küçült">🔍-</button>
+        <span class="page-counter-pill" id="zoom-label">100%</span>
+        <button class="reader-btn" id="btn-zoom-in" type="button" title="Büyüt">🔍+</button>
+
+        <button class="reader-btn" id="btn-autoscroll" type="button" title="Otomatik Kaydırma">▶️ Oto-Kaydır</button>
+        <button class="reader-btn active" id="btn-protect" type="button" title="Sağ Tık Görüntü Koruması">🛡️ Koruma</button>
+        <button class="reader-btn" id="btn-fullscreen" type="button" title="Tam Ekran">⛶ Tam Ekran</button>
+      </div>
+    </div>
+
+    <div class="translator-note-box hidden" id="translator-note-box"></div>
+
+    <div class="reader-viewport mode-webtoon protect-images" id="reader-viewport"></div>
+
+    <div class="reader-footer-bar">
+      <div class="reader-controls">
+        <a class="reader-btn" href="#" id="btn-footer-series">← Seri Sayfası</a>
+        <button class="reader-btn" id="btn-prev-chapter" type="button">⏮ Önceki Bölüm</button>
+        <button class="reader-btn" id="btn-prev-page" type="button">◀ Önceki Sayfa</button>
+      </div>
+      <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
+      <div class="reader-controls">
+        <button class="reader-btn" id="btn-next-page" type="button">Sonraki Sayfa ▶</button>
+        <button class="reader-btn" id="btn-next-chapter" type="button">Sonraki Bölüm ⏭</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GORUNUM 4: BLOGGER GONDERI KODU OLUSTURUCU (POST GENERATOR) -->
+<section class="hidden" id="view-generator">
+  <div class="generator-box">
+    <div class="section-header">
+      <h2 class="section-title">🛠️ Blogger Seri &amp; Bölüm Gönderi Kodu Oluşturucu</h2>
+      <button class="icon-btn" id="btn-gen-close" type="button">← Kataloğa Dön</button>
+    </div>
+    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+      Blogger'da yeni bir çeviri serisi veya yeni bir bölüm yayınlarken HTML görünümüne yapıştıracağınız hazır kodu ve etiketleri buradan üretebilirsiniz.
+    </p>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="gen-series-title">Seri Adı</label>
+        <input class="form-control" id="gen-series-title" type="text" value="Wistoria: Asa ve Kılıç" />
+      </div>
+      <div class="form-group">
+        <label for="gen-source-lang">Tür / Kaynak Dil</label>
+        <select class="form-control" id="gen-source-lang">
+          <option value="KR">Manhwa (Korece)</option>
+          <option value="JP">Manga (Japonca)</option>
+          <option value="CN">Manhua (Çince)</option>
+          <option value="EN">Novel / Webcomic</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="gen-chapter-num">Bölüm Numarası</label>
+        <input class="form-control" id="gen-chapter-num" type="number" value="1" />
+      </div>
+      <div class="form-group">
+        <label for="gen-reader-mode">Varsayılan Okuma Motoru</label>
+        <select class="form-control" id="gen-reader-mode">
+          <option value="webtoon">Webtoon (Dikey Şerit)</option>
+          <option value="single">Tek Sayfa (Manga)</option>
+          <option value="double">Çift Sayfa (Kitap)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 1rem;">
+      <label for="gen-translator-note">Çevirmen Notu (İsteğe Bağlı)</label>
+      <input class="form-control" id="gen-translator-note" type="text" value="" placeholder="Bölüm başı çevirmen notu..." />
+    </div>
+
+    <div class="form-group" style="margin-bottom: 1rem;">
+      <label for="gen-pages-input">Bölüm Sayfa Görsel URL'leri (Her satıra 1 resim URL'si)</label>
+      <textarea class="form-control" id="gen-pages-input">https://placehold.co/800x1200/1e1b4b/ffffff?text=Sayfa+1
+https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
+    </div>
+
+    <div class="detail-actions">
+      <button class="primary-btn" id="btn-generate-series" type="button">📘 Seri Tanıtım HTML Üret</button>
+      <button class="primary-btn" id="btn-generate-chapter" type="button">📄 Bölüm Okuma HTML Üret</button>
+      <button class="icon-btn" id="btn-test-generated" type="button">🚀 Üretilen Bölümü Şimdi Okuyucuda Test Et</button>
+    </div>
+
+    <div class="code-output-wrap">
+      <div class="code-output-header">
+        <span id="gen-labels-info">Önerilen Blogger Etiketleri: Bölüm, Wistoria: Asa ve Kılıç</span>
+        <button class="icon-btn" id="btn-copy-code" type="button">📋 Kodu Kopyala</button>
+      </div>
+      <textarea class="code-textarea" id="gen-code-output" readonly="readonly"></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ORTAK DISQUS YORUM ENTGRASYONU ALANI -->
+<section class="disqus-container" id="disqus-section">
+  <div class="disqus-header">
+    <h3 class="section-title">💬 Disqus Okuyucu Yorumları</h3>
+    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+      <input class="search-input" id="input-disqus-shortname" placeholder="Disqus shortname (örn: manhwaarsiv)" style="max-width: 220px;" type="text" />
+      <button class="icon-btn" id="btn-apply-disqus" type="button">Yorumları Bağla</button>
+    </div>
+  </div>
+  <div class="disqus-status-note" id="disqus-status"></div>
+  <div id="disqus_thread" style="margin-top: 1rem;"></div>
+</section>
+
+<!-- GELISTIRICI DEBUG LOG PANELI -->
+<section class="debug-panel" id="debug-log-panel">
+  <div class="code-output-header">
+    <span>🛠️ Sistem DEBUG Kayıtları (Oturum Başında Otomatik Temizlenir)</span>
+    <button class="icon-btn" id="btn-refresh-logs" type="button">🔄 Kayıtları Yenile</button>
+  </div>
+  <div class="debug-log-list" id="debug-log-list"></div>
+</section>

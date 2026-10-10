@@ -1,0 +1,31 @@
+# Bağımlılıklar
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Çalışma Zamanı ve Derleme Logları (Otomatik oluşturulur ve temizlenir)
+logs/
+*.log
+npm-debug.log*
+
+# Test ve Tarayıcı Otomasyon Geçici Dosyaları
+.playwright-mcp/
+playwright-report/
+test-results/
+coverage/
+
+# Ortam Değişkenleri
+.env
+.env.local
+.env.*.local
+
+# İşletim Sistemi ve IDE Dosyaları
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

@@ -1,0 +1,4193 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manowa Çeviri - Yerel Tema Önizlemesi</title>
+  <style>
+/* === MODULE: styles/variables.css === */
+/**
+ * @fileoverview Manowa Blogger Temasi - Temel CSS degiskenleri ve sifirlama kurallari.
+ * Koyu (Dark) ve Acik (Light) tema renk paletlerini tanimlar.
+ */
+
+:root {
+  --bg-primary: #0f1117;
+  --bg-secondary: #181b24;
+  --bg-card: #1f2330;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --accent-primary: #6366f1;
+  --accent-hover: #818cf8;
+  --badge-kr: #ef4444;
+  --badge-jp: #ec4899;
+  --badge-cn: #f59e0b;
+  --badge-en: #3b82f6;
+  --border-color: #2e3446;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --accent-primary: #4f46e5;
+  --accent-hover: #4338ca;
+  --border-color: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  line-height: 1.6;
+}
+
+/* === MODULE: styles/cards.css === */
+/**
+ * @fileoverview Katalog izgara kartlari, seri detay sayfasi, bolum listesi ve Disqus stilleri.
+ */
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.series-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.series-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+.card-cover-wrap {
+  display: block;
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: var(--bg-card);
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.card-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.series-card:hover .card-cover {
+  transform: scale(1.05);
+}
+
+.lang-badge {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.lang-badge.lang-KR {
+  background: var(--badge-kr);
+}
+
+.lang-badge.lang-JP {
+  background: var(--badge-jp);
+}
+
+.lang-badge.lang-CN {
+  background: var(--badge-cn);
+}
+
+.lang-badge.lang-EN {
+  background: var(--badge-en);
+}
+
+.type-badge {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: rgba(15, 17, 23, 0.82);
+  color: #f8fafc;
+  backdrop-filter: blur(4px);
+}
+
+.card-body {
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.5rem;
+}
+
+.card-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-title:hover {
+  color: var(--accent-primary);
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.card-chapters {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.chapter-mini-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid transparent;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+
+.chapter-mini-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.series-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.breadcrumb-trail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.breadcrumb-link {
+  color: var(--accent-hover);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.series-detail-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.series-detail-header {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.detail-cover {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.detail-info h1 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.detail-alt-title {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 0.85rem;
+}
+
+.detail-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.meta-tag {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.28rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.detail-synopsis {
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.65;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.primary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--accent-primary);
+  color: #ffffff;
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.primary-btn:hover {
+  background: var(--accent-hover);
+}
+
+.chapter-list-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.65rem;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.chapter-item-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.chapter-item-btn:hover {
+  border-color: var(--accent-primary);
+}
+
+.chapter-item-btn.is-read {
+  opacity: 0.65;
+  border-left: 3px solid var(--accent-primary);
+}
+
+.disqus-container {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.disqus-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.disqus-status-note {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  padding: 1rem;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border-color);
+}
+
+@media (max-width: 768px) {
+  .series-detail-header {
+    grid-template-columns: 1fr;
+  }
+  .detail-cover {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+}
+
+/* === MODULE: styles/generator.css === */
+/**
+ * @fileoverview Blogger gonderi kodu olusturucu (Post Generator) ve debug paneli stilleri.
+ */
+
+.generator-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.generator-tabs {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.85rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.form-control {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: var(--accent-primary);
+}
+
+textarea.form-control {
+  min-height: 110px;
+  resize: vertical;
+  font-family: monospace;
+}
+
+.code-output-wrap {
+  margin-top: 1.25rem;
+  background: #090b10;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.code-output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.code-textarea {
+  width: 100%;
+  min-height: 140px;
+  background: transparent;
+  color: #a5b4fc;
+  border: none;
+  font-family: monospace;
+  font-size: 0.82rem;
+  resize: vertical;
+  outline: none;
+}
+
+.debug-panel {
+  margin-top: 2.5rem;
+  background: #090b10;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.debug-log-list {
+  max-height: 180px;
+  overflow-y: auto;
+  font-family: monospace;
+  font-size: 0.76rem;
+  color: #94a3b8;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.6rem;
+}
+
+/* === MODULE: styles/layout.css === */
+/**
+ * @fileoverview Ana yerlesim (layout), ust baslik, vitrin (hero) ve filtre cubugu stilleri.
+ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 17, 23, 0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.25s ease;
+}
+
+[data-theme="light"] .site-header {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-logo {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-logo span.accent {
+  color: var(--accent-primary);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border-color: var(--border-color);
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex: 1;
+  justify-content: flex-end;
+  min-width: 240px;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  max-width: 300px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.icon-btn {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  border-color: var(--accent-primary);
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+.site-main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+.hero-banner {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(236, 72, 153, 0.12));
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  margin-bottom: 1.75rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.hero-cover-img {
+  width: 130px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.hero-badge {
+  display: inline-block;
+  background: var(--accent-primary);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.hero-desc {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 680px;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.filter-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  background: var(--bg-secondary);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.filter-toolbar.in-header {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.lang-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-pill:hover,
+.filter-pill.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.site-footer {
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  padding: 2rem 1.25rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+}
+
+.hidden,
+#main-blog-section,
+.posts-wrapper {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .hero-banner {
+    grid-template-columns: 1fr;
+    padding: 1.25rem;
+  }
+  .hero-cover-img {
+    display: none;
+  }
+  .header-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .search-box {
+    max-width: none;
+  }
+}
+
+/* === MODULE: styles/reader.css === */
+/**
+ * @fileoverview Cok modlu okuma motoru (Webtoon, Tek Sayfa, Cift Sayfa ve Novel) stilleri.
+ */
+
+.reader-wrapper {
+  position: relative;
+  background: #090b10;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.reader-progress-track {
+  position: sticky;
+  top: 0;
+  z-index: 95;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.reader-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-primary), #ec4899);
+  transition: width 0.2s ease;
+}
+
+.reader-toolbar {
+  background: rgba(15, 17, 23, 0.95);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.85rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.reader-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.reader-series-name {
+  font-size: 0.8rem;
+  color: var(--accent-hover);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.reader-chapter-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.reader-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.reader-select,
+.reader-btn {
+  background: #181b24;
+  color: #f1f5f9;
+  border: 1px solid #2e3446;
+  padding: 0.42rem 0.7rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.reader-select:hover,
+.reader-btn:hover,
+.reader-btn.active {
+  border-color: var(--accent-primary);
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+.translator-note-box {
+  max-width: 820px;
+  margin: 1rem auto;
+  padding: 0.85rem 1.15rem;
+  background: rgba(99, 102, 241, 0.12);
+  border-left: 4px solid var(--accent-primary);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 0.88rem;
+}
+
+.reader-viewport {
+  --reader-zoom: 800px;
+  --page-gap: 0px;
+  min-height: 520px;
+  padding: 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.reader-viewport.mode-webtoon {
+  gap: var(--page-gap);
+}
+
+.reader-viewport.mode-webtoon .reader-page-item {
+  width: 100%;
+  max-width: var(--reader-zoom);
+  display: block;
+  margin: 0 auto;
+}
+
+.reader-viewport.mode-single .reader-page-item {
+  width: 100%;
+  max-width: var(--reader-zoom);
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+}
+
+.reader-viewport.mode-double .double-page-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+  max-width: calc(var(--reader-zoom) * 1.6);
+  align-items: center;
+}
+
+.reader-viewport.mode-double .reader-page-item {
+  width: 100%;
+  max-height: 86vh;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.reader-viewport.mode-novel {
+  user-select: text;
+  padding: 2rem 1.5rem;
+}
+
+.novel-content-box {
+  width: 100%;
+  max-width: var(--reader-zoom);
+  background: #131620;
+  border: 1px solid #2e3446;
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  color: #e2e8f0;
+  font-size: 1.05rem;
+  line-height: 1.85;
+}
+
+.novel-content-box p,
+.novel-content-box .orv_line {
+  margin-bottom: 1.15rem;
+}
+
+.novel-content-box .orv_title h1 {
+  font-size: 1.45rem;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.novel-content-box .orv_wordcount {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.25rem;
+}
+
+.novel-content-box .orv_quote,
+.novel-content-box .orv_notice {
+  background: rgba(99, 102, 241, 0.12);
+  border-left: 4px solid var(--accent-primary);
+  padding: 0.85rem 1.1rem;
+  border-radius: 8px;
+  margin-bottom: 1.15rem;
+}
+
+.novel-content-box img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1rem auto;
+  border-radius: 8px;
+}
+
+.reader-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.reader-btn {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.reader-viewport.protect-images img {
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.reader-footer-bar {
+  background: rgba(15, 17, 23, 0.95);
+  border-top: 1px solid var(--border-color);
+  padding: 0.85rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-counter-pill {
+  background: #1f2330;
+  color: #f8fafc;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border: 1px solid #2e3446;
+}
+
+@media (max-width: 768px) {
+  .reader-viewport.mode-double .double-page-grid {
+    grid-template-columns: 1fr;
+  }
+  .novel-content-box {
+    padding: 1.25rem;
+  }
+}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner" id="site-header-inner">
+      <a class="brand-logo" data-action="catalog" href="#catalog" id="brand-home-link">Manhwa Arşiv</a>
+    </div>
+  </header>
+
+  <main class="site-main" id="main-content">
+    <!-- UST KONTROL VE NAVIGASYON CUBUGU -->
+<div class="filter-toolbar" id="top-app-bar">
+  <div class="nav-links">
+    <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog">📚 Katalog &amp; Vitrin</a>
+    <button class="nav-btn" id="nav-random" type="button">🎲 Rastgele Seri</button>
+    <button class="nav-btn" id="nav-generator" type="button">🛠️ Gönderi Oluşturucu</button>
+  </div>
+  <div class="header-controls">
+    <div class="search-box">
+      <input class="search-input" id="input-search" placeholder="Seri, tür veya durum ara..." type="search" />
+    </div>
+    <button class="icon-btn" id="btn-theme-toggle" type="button" title="Koyu / Açık Tema Değiştir">🌗 Tema</button>
+  </div>
+</div>
+
+<!-- GORUNUM 1: ANA SAYFA VITRIN VE KATALOG -->
+<section id="view-catalog">
+  <div class="hero-banner" id="hero-showcase">
+    <div class="hero-content">
+      <span class="hero-badge" id="hero-badge">⏳ Veriler Yükleniyor...</span>
+      <h1 class="hero-title" id="hero-title">Manhwa &amp; Manga Arşivi</h1>
+      <p class="hero-desc" id="hero-desc">
+        Blogger gönderileriniz dinamik olarak taranıyor. Lütfen bekleyin...
+      </p>
+      <div class="detail-actions">
+        <a class="primary-btn" href="#" id="btn-hero-read">⚡ Hemen Oku</a>
+        <a class="icon-btn" href="#" id="btn-hero-detail">📖 Seri Detayı</a>
+      </div>
+    </div>
+    <div class="hero-cover-wrap">
+      <img alt="Vitrin Kapak" class="hero-cover-img hidden" id="hero-cover-img" src="" />
+    </div>
+  </div>
+
+  <div class="filter-toolbar">
+    <div class="lang-filters" id="lang-filter-group">
+      <button class="filter-pill active" data-lang="ALL" type="button">🌍 Tümü</button>
+      <button class="filter-pill" data-lang="Manhwa" type="button">🇰🇷 Manhwa (Korece)</button>
+      <button class="filter-pill" data-lang="Manga" type="button">🇯🇵 Manga (Japonca)</button>
+      <button class="filter-pill" data-lang="Manhua" type="button">🇨🇳 Manhua (Çince)</button>
+      <button class="filter-pill" data-lang="Novel" type="button">📖 Novel (Roman)</button>
+    </div>
+    <span class="meta-tag" id="catalog-count-label">Yükleniyor...</span>
+  </div>
+
+  <div class="section-header">
+    <h2 class="section-title">🔥 Güncel Çeviri Serileri</h2>
+  </div>
+  <div class="catalog-grid" id="catalog-grid"></div>
+</section>
+
+<!-- GORUNUM 2: SERI TANITIM VE BOLUM LISTESI SAYFASI -->
+<section class="hidden" id="view-series">
+  <div class="series-nav-bar">
+    <a class="icon-btn" data-action="catalog" href="/" id="btn-series-back">← Kataloğa Dön</a>
+    <nav aria-label="Sayfa Konumu" class="breadcrumb-trail">
+      <a class="breadcrumb-link" data-action="catalog" href="/">🏠 Ana Sayfa</a>
+      <span>›</span>
+      <span id="series-breadcrumb-title">Seri Detayı</span>
+    </nav>
+  </div>
+  <div class="series-detail-box" id="series-detail-box"></div>
+
+  <div class="chapter-list-box">
+    <div class="section-header">
+      <h3 class="section-title">📑 Bölüm Listesi</h3>
+      <button class="icon-btn" id="btn-sort-chapters" type="button">⇅ Sıralama: Yeni → Eski</button>
+    </div>
+    <div class="chapter-grid" id="chapter-list-grid"></div>
+  </div>
+</section>
+
+<!-- GORUNUM 3: COK MODLU OKUMA MOTORU (READING ENGINE) -->
+<section class="hidden" id="view-reader">
+  <div class="reader-wrapper" id="reader-wrapper">
+    <div class="reader-progress-track">
+      <div class="reader-progress-bar" id="reader-progress-bar"></div>
+    </div>
+
+    <div class="reader-toolbar">
+      <div class="reader-title-group">
+        <div class="reader-nav-links">
+          <a class="reader-btn" data-action="catalog" href="/" id="btn-reader-home" title="Ana Sayfa Kataloğa Dön">🏠 Katalog</a>
+          <a class="reader-btn" href="#" id="reader-series-title" title="Seri Sayfasına Dön">← Seri Sayfasına Dön</a>
+        </div>
+        <span class="reader-chapter-name" id="reader-chapter-title">Bölüm</span>
+      </div>
+
+      <div class="reader-controls">
+        <select class="reader-select" id="select-chapter" title="Bölüm Seç"></select>
+
+        <select class="reader-select" id="select-mode" title="Okuma Motoru Modu">
+          <option value="webtoon">📜 Webtoon (Dikey Şerit)</option>
+          <option value="single">📄 Tek Sayfa (Manga)</option>
+          <option value="double">📖 Çift Sayfa (Kitap)</option>
+          <option value="novel">📝 Novel (Metin Modu)</option>
+        </select>
+
+        <select class="reader-select" id="select-direction" title="Okuma Yönü">
+          <option value="ltr">➡️ Soldan Sağa (LTR)</option>
+          <option value="rtl">⬅️ Sağdan Sola (Japon Manga RTL)</option>
+        </select>
+
+        <select class="reader-select" id="select-gap" title="Webtoon Görsel Boşluğu">
+          <option value="0">Boşluk: 0px</option>
+          <option value="8">Boşluk: 8px</option>
+          <option value="16">Boşluk: 16px</option>
+        </select>
+
+        <button class="reader-btn" id="btn-zoom-out" type="button" title="Küçült">🔍-</button>
+        <span class="page-counter-pill" id="zoom-label">100%</span>
+        <button class="reader-btn" id="btn-zoom-in" type="button" title="Büyüt">🔍+</button>
+
+        <button class="reader-btn" id="btn-autoscroll" type="button" title="Otomatik Kaydırma">▶️ Oto-Kaydır</button>
+        <button class="reader-btn active" id="btn-protect" type="button" title="Sağ Tık Görüntü Koruması">🛡️ Koruma</button>
+        <button class="reader-btn" id="btn-fullscreen" type="button" title="Tam Ekran">⛶ Tam Ekran</button>
+      </div>
+    </div>
+
+    <div class="translator-note-box hidden" id="translator-note-box"></div>
+
+    <div class="reader-viewport mode-webtoon protect-images" id="reader-viewport"></div>
+
+    <div class="reader-footer-bar">
+      <div class="reader-controls">
+        <a class="reader-btn" href="#" id="btn-footer-series">← Seri Sayfası</a>
+        <button class="reader-btn" id="btn-prev-chapter" type="button">⏮ Önceki Bölüm</button>
+        <button class="reader-btn" id="btn-prev-page" type="button">◀ Önceki Sayfa</button>
+      </div>
+      <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
+      <div class="reader-controls">
+        <button class="reader-btn" id="btn-next-page" type="button">Sonraki Sayfa ▶</button>
+        <button class="reader-btn" id="btn-next-chapter" type="button">Sonraki Bölüm ⏭</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GORUNUM 4: BLOGGER GONDERI KODU OLUSTURUCU (POST GENERATOR) -->
+<section class="hidden" id="view-generator">
+  <div class="generator-box">
+    <div class="section-header">
+      <h2 class="section-title">🛠️ Blogger Seri &amp; Bölüm Gönderi Kodu Oluşturucu</h2>
+      <button class="icon-btn" id="btn-gen-close" type="button">← Kataloğa Dön</button>
+    </div>
+    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+      Blogger'da yeni bir çeviri serisi veya yeni bir bölüm yayınlarken HTML görünümüne yapıştıracağınız hazır kodu ve etiketleri buradan üretebilirsiniz.
+    </p>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="gen-series-title">Seri Adı</label>
+        <input class="form-control" id="gen-series-title" type="text" value="Wistoria: Asa ve Kılıç" />
+      </div>
+      <div class="form-group">
+        <label for="gen-source-lang">Tür / Kaynak Dil</label>
+        <select class="form-control" id="gen-source-lang">
+          <option value="KR">Manhwa (Korece)</option>
+          <option value="JP">Manga (Japonca)</option>
+          <option value="CN">Manhua (Çince)</option>
+          <option value="EN">Novel / Webcomic</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="gen-chapter-num">Bölüm Numarası</label>
+        <input class="form-control" id="gen-chapter-num" type="number" value="1" />
+      </div>
+      <div class="form-group">
+        <label for="gen-reader-mode">Varsayılan Okuma Motoru</label>
+        <select class="form-control" id="gen-reader-mode">
+          <option value="webtoon">Webtoon (Dikey Şerit)</option>
+          <option value="single">Tek Sayfa (Manga)</option>
+          <option value="double">Çift Sayfa (Kitap)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 1rem;">
+      <label for="gen-translator-note">Çevirmen Notu (İsteğe Bağlı)</label>
+      <input class="form-control" id="gen-translator-note" type="text" value="" placeholder="Bölüm başı çevirmen notu..." />
+    </div>
+
+    <div class="form-group" style="margin-bottom: 1rem;">
+      <label for="gen-pages-input">Bölüm Sayfa Görsel URL'leri (Her satıra 1 resim URL'si)</label>
+      <textarea class="form-control" id="gen-pages-input">https://placehold.co/800x1200/1e1b4b/ffffff?text=Sayfa+1
+https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
+    </div>
+
+    <div class="detail-actions">
+      <button class="primary-btn" id="btn-generate-series" type="button">📘 Seri Tanıtım HTML Üret</button>
+      <button class="primary-btn" id="btn-generate-chapter" type="button">📄 Bölüm Okuma HTML Üret</button>
+      <button class="icon-btn" id="btn-test-generated" type="button">🚀 Üretilen Bölümü Şimdi Okuyucuda Test Et</button>
+    </div>
+
+    <div class="code-output-wrap">
+      <div class="code-output-header">
+        <span id="gen-labels-info">Önerilen Blogger Etiketleri: Bölüm, Wistoria: Asa ve Kılıç</span>
+        <button class="icon-btn" id="btn-copy-code" type="button">📋 Kodu Kopyala</button>
+      </div>
+      <textarea class="code-textarea" id="gen-code-output" readonly="readonly"></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ORTAK DISQUS YORUM ENTGRASYONU ALANI -->
+<section class="disqus-container" id="disqus-section">
+  <div class="disqus-header">
+    <h3 class="section-title">💬 Disqus Okuyucu Yorumları</h3>
+    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+      <input class="search-input" id="input-disqus-shortname" placeholder="Disqus shortname (örn: manhwaarsiv)" style="max-width: 220px;" type="text" />
+      <button class="icon-btn" id="btn-apply-disqus" type="button">Yorumları Bağla</button>
+    </div>
+  </div>
+  <div class="disqus-status-note" id="disqus-status"></div>
+  <div id="disqus_thread" style="margin-top: 1rem;"></div>
+</section>
+
+<!-- GELISTIRICI DEBUG LOG PANELI -->
+<section class="debug-panel" id="debug-log-panel">
+  <div class="code-output-header">
+    <span>🛠️ Sistem DEBUG Kayıtları (Oturum Başında Otomatik Temizlenir)</span>
+    <button class="icon-btn" id="btn-refresh-logs" type="button">🔄 Kayıtları Yenile</button>
+  </div>
+  <div class="debug-log-list" id="debug-log-list"></div>
+</section>
+
+  </main>
+
+  <script>
+/* === MODULE: scripts/client-logger.js === */
+/**
+ * @fileoverview Tarayici (Client-Side) ortaminda DEBUG seviyesine kadar kayit tutan modul.
+ * Sayfa her baslatildiginda eski oturum loglarini temizler ve yeni kayit acar.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  /**
+   * Tarayici ici log kayitlarini yoneten nesne.
+   */
+  class ClientLogger {
+    /**
+     * ClientLogger nesnesini baslatir ve eski kayitlari sifirlar.
+     * @param {string} [storageKey='manowa_debug_logs'] - Oturum kayit anahtari.
+     */
+    constructor(storageKey = 'manowa_debug_logs') {
+      this.storageKey = storageKey;
+      this.entries = [];
+      this.clearLogs();
+      this.debug('ClientLogger baslatildi. Eski oturum loglari temizlendi.');
+    }
+
+    /**
+     * Mevcut log dizisini ve sessionStorage kaydini temizler.
+     * @returns {void}
+     */
+    clearLogs() {
+      this.entries = [];
+      try {
+        if (typeof sessionStorage !== 'undefined') {
+          sessionStorage.removeItem(this.storageKey);
+        }
+      } catch (_err) {
+        // Gizli sekme veya erisim kisitlamalarinda sessizce devam et
+      }
+    }
+
+    /**
+     * Belirtilen seviyede log kaydi ekler.
+     * @param {'DEBUG'|'INFO'|'WARN'|'ERROR'} level - Log seviyesi.
+     * @param {string} message - Aciklama mesaji.
+     * @param {Object|null} [data=null] - Ek veri nesnesi.
+     * @returns {Object} Olusturulan log kaydi.
+     */
+    write(level, message, data = null) {
+      const entry = {
+        timestamp: new Date().toISOString(),
+        level: level,
+        message: message,
+        data: data
+      };
+      this.entries.push(entry);
+
+      try {
+        if (typeof sessionStorage !== 'undefined') {
+          sessionStorage.setItem(this.storageKey, JSON.stringify(this.entries));
+        }
+      } catch (_err) {
+        // Depolama siniri asilirsa bellekte tutmaya devam et
+      }
+
+      if (typeof console !== 'undefined') {
+        const prefix = `[Manowa][${entry.timestamp}][${level}]`;
+        if (level === 'ERROR' && console.error) {
+          console.error(prefix, message, data || '');
+        } else if (level === 'WARN' && console.warn) {
+          console.warn(prefix, message, data || '');
+        } else if (console.log) {
+          console.log(prefix, message, data || '');
+        }
+      }
+
+      return entry;
+    }
+
+    /**
+     * DEBUG seviyesinde kayit yazar.
+     * @param {string} message - Log mesaji.
+     * @param {Object|null} [data=null] - Ek veri.
+     * @returns {Object} Log kaydi.
+     */
+    debug(message, data = null) {
+      return this.write('DEBUG', message, data);
+    }
+
+    /**
+     * INFO seviyesinde kayit yazar.
+     * @param {string} message - Log mesaji.
+     * @param {Object|null} [data=null] - Ek veri.
+     * @returns {Object} Log kaydi.
+     */
+    info(message, data = null) {
+      return this.write('INFO', message, data);
+    }
+
+    /**
+     * WARN seviyesinde kayit yazar.
+     * @param {string} message - Log mesaji.
+     * @param {Object|null} [data=null] - Ek veri.
+     * @returns {Object} Log kaydi.
+     */
+    warn(message, data = null) {
+      return this.write('WARN', message, data);
+    }
+
+    /**
+     * ERROR seviyesinde kayit yazar.
+     * @param {string} message - Log mesaji.
+     * @param {Object|null} [data=null] - Ek veri.
+     * @returns {Object} Log kaydi.
+     */
+    error(message, data = null) {
+      return this.write('ERROR', message, data);
+    }
+
+    /**
+     * Tum aktif oturum loglarini dondurur.
+     * @returns {Array<Object>} Log listesi.
+     */
+    getEntries() {
+      return this.entries.slice();
+    }
+  }
+
+  const instance = new ClientLogger();
+  globalScope.ManowaLogger = instance;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { ClientLogger, ManowaLogger: instance };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/disqus-loader.js === */
+/**
+ * @fileoverview Disqus yorum sistemini seri ve bolum sayfalarina dinamik yukleyen modul.
+ * Sayfa gecislerinde DISQUS.reset() kullanarak yorum basligini gunceller.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  /**
+   * Disqus yorum entegrasyonunu yoneten sinif.
+   */
+  class DisqusLoader {
+    /**
+     * DisqusLoader nesnesini yapilandirir.
+     * @param {Object} [options={}] - Yapilandirma secenekleri.
+     * @param {string} [options.shortname=''] - Disqus forum kisa adi.
+     * @param {Object} [options.logger=null] - Loglama nesnesi.
+     */
+    constructor(options = {}) {
+      this.shortname = (options.shortname || '').trim();
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.isScriptInjected = false;
+      this.currentIdentifier = null;
+      this._log('debug', 'DisqusLoader baslatildi.', { shortname: this.shortname });
+    }
+
+    /**
+     * Ic loglama yardimcisi.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Log mesaji.
+     * @param {Object|null} [meta=null] - Ek veri.
+     * @returns {void}
+     */
+    _log(level, msg, meta = null) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+
+    /**
+     * Disqus shortname degerini gunceller.
+     * @param {string} shortname - Yeni Disqus kisa adi.
+     * @returns {boolean} Gecerli ise true doner.
+     */
+    setShortname(shortname) {
+      this.shortname = String(shortname || '').trim().toLowerCase();
+      this._log('info', 'Disqus shortname guncellendi.', { shortname: this.shortname });
+      return this.isValidShortname();
+    }
+
+    /**
+     * Shortname formatinin gecerliligini kontrol eder.
+     * @returns {boolean} Gecerli ise true.
+     */
+    isValidShortname() {
+      return /^[a-z0-9-]{2,64}$/.test(this.shortname) && this.shortname !== 'your-disqus-shortname';
+    }
+
+    /**
+     * Disqus embed.js betik URL'sini uretir.
+     * @returns {string} Betik URL'si veya bos dizge.
+     */
+    getEmbedScriptUrl() {
+      if (!this.isValidShortname()) {
+        return '';
+      }
+      return `https://${this.shortname}.disqus.com/embed.js`;
+    }
+
+    /**
+     * Belirtilen sayfa kimligi icin Disqus yorumlarini yukler veya sifirlar.
+     * @param {Object} [pageInfo={}] - Sayfa bilgileri.
+     * @param {string} [pageInfo.identifier] - Benzersiz konu kimligi.
+     * @param {string} [pageInfo.url] - Sayfa tam URL'si.
+     * @param {string} [pageInfo.title] - Sayfa basligi.
+     * @param {HTMLElement|null} [statusElement=null] - Durum bilgisinin yazilacagi DOM elemani.
+     * @returns {boolean} Yukleme baslatildiysa true.
+     */
+    loadThread(pageInfo = {}, statusElement = null) {
+      const identifier = pageInfo.identifier || 'manowa-default';
+      const pageUrl =
+        pageInfo.url ||
+        (typeof location !== 'undefined' && location.href.startsWith('http')
+          ? location.href
+          : `https://manhwaarsiv.blogspot.com/#!/${identifier}`);
+      const pageTitle = pageInfo.title || 'Manhwa Arşiv';
+
+      this.currentIdentifier = identifier;
+      this._log('debug', 'Disqus loadThread cagrildi.', { identifier, pageUrl, pageTitle });
+
+      if (!this.isValidShortname()) {
+        this._log('warn', 'Disqus shortname ayarlanmamis veya gecersiz. Onizleme bilgisi gosteriliyor.');
+        if (statusElement) {
+          statusElement.innerHTML =
+            `<strong>Disqus Yorum Sistemi Hazır:</strong> Konu Kimliği: <code>${identifier}</code>. ` +
+            `Canlı yorumları başlatmak için üst kısımdan Disqus Shortname girin.`;
+        }
+        return false;
+      }
+
+      if (statusElement) {
+        statusElement.textContent = `${this.shortname}.disqus.com üzerinden "${pageTitle}" yorumları yükleniyor...`;
+      }
+
+      if (globalScope.DISQUS && typeof globalScope.DISQUS.reset === 'function') {
+        globalScope.DISQUS.reset({
+          reload: true,
+          config: function () {
+            this.page.identifier = identifier;
+            this.page.url = pageUrl;
+            this.page.title = pageTitle;
+          }
+        });
+        this._log('info', 'Mevcut Disqus oturumu yeni sayfa icin sifirlandi.', { identifier });
+        return true;
+      }
+
+      globalScope.disqus_config = function () {
+        this.page.url = pageUrl;
+        this.page.identifier = identifier;
+        this.page.title = pageTitle;
+      };
+
+      if (typeof document !== 'undefined' && !this.isScriptInjected) {
+        const script = document.createElement('script');
+        script.src = this.getEmbedScriptUrl();
+        script.setAttribute('data-timestamp', String(+new Date()));
+        script.async = true;
+        (document.head || document.body).appendChild(script);
+        this.isScriptInjected = true;
+        this._log('info', 'Disqus embed.js DOM icine eklendi.', { src: script.src });
+      }
+
+      return true;
+    }
+  }
+
+  globalScope.DisqusLoader = DisqusLoader;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { DisqusLoader };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/blogger-feed-loader.js === */
+/**
+ * @fileoverview Blogger JSON Feed API (/feeds/posts/default?alt=json) ve DOM uzerinden
+ * Seri ve Bolum gonderilerini dinamik olarak ayristiran veri katmani modulu.
+ */
+(function (globalScope) {
+  'use strict';
+  const KNOWN_STATUSES = ['Devam Ediyor', 'Tamamlandı', 'Güncel', 'Askıda', 'İptal Edildi', 'Yakında'];
+  const KNOWN_TYPES = ['Manhwa', 'Manga', 'Manhua', 'Novel', 'Webcomic'];
+  /**
+   * Metni URL ve kimlik dostu slug formatina donusturur.
+   * @param {string} text - Giris metni.
+   * @returns {string} Slug dizgesi.
+   */
+  function toSlug(text) {
+    const trMap = {
+      ç: 'c', ğ: 'g', ı: 'i', ö: 'o', ş: 's', ü: 'u',
+      Ç: 'c', Ğ: 'g', İ: 'i', Ö: 'o', Ş: 's', Ü: 'u'
+    };
+    const replaced = String(text || '')
+      .replace(/[çğıöşüÇĞİÖŞÜ]/g, (ch) => trMap[ch] || ch)
+      .toLowerCase();
+    return replaced.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'seri';
+  }
+  /**
+   * HTML etiketlerini temizleyip duz metin dondurur.
+   * @param {string} html - HTML dizgesi.
+   * @returns {string} Temizlenmis metin.
+   */
+  function stripTags(html) {
+    return String(html || '')
+      .replace(/<!--[\s\S]*?-->/g, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&amp;/gi, '&')
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;/gi, "'")
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+  /**
+   * Verilen gonderi HTML'inin bir Novel (metin) bolumu olup olmadigini tespit eder.
+   * Icinde 1-2 kapak/illustrasyon resmi olsa bile metin agirlikli ise true doner.
+   * @param {string} html - Bolum HTML icerigi.
+   * @param {Array<string>} pages - Cikarilan gorsel URL listesi.
+   * @param {string} [seriesType=''] - Bagli oldugu serinin turu ('Novel' vb.).
+   * @returns {boolean} Novel bolumu ise true.
+   */
+  function detectNovelChapter(html, pages = [], seriesType = '') {
+    const rawHtml = String(html || '');
+    const plainText = stripTags(rawHtml);
+    if (String(seriesType).toLowerCase() === 'novel' && plainText.length > 20) {
+      return true;
+    }
+    if (/class=["'][^"']*orv_(?:title|line|quote|notice|wordcount)/i.test(rawHtml)) {
+      return true;
+    }
+    if (pages.length === 0 && plainText.length > 20) {
+      return true;
+    }
+    if (pages.length <= 2 && plainText.length > 250) {
+      return true;
+    }
+    return false;
+  }
+  /**
+   * Blogger JSON Feed ve DOM verilerini okuyan ve seri/bolum nesnelerine donusturen sinif.
+   */
+  class BloggerFeedLoader {
+    /**
+     * BloggerFeedLoader nesnesini yapilandirir.
+     * @param {Object} [options={}] - Ayarlar.
+     * @param {Object} [options.logger=null] - Logger nesnesi.
+     * @param {Function} [options.fetchFn=null] - Ozel fetch fonksiyonu (testler icin).
+     */
+    constructor(options = {}) {
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.fetchFn = options.fetchFn || (typeof fetch === 'function' ? fetch.bind(globalScope) : null);
+      this._log('debug', 'BloggerFeedLoader baslatildi.');
+    }
+    /**
+     * Ic loglama yardimcisi.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Mesaj.
+     * @param {Object|null} [meta=null] - Ek veri.
+     * @returns {void}
+     */
+    _log(level, msg, meta = null) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+    /**
+     * HTML icerigindeki tum img src URL'lerini cikarir.
+     * @param {string} html - Gonderi HTML icerigi.
+     * @returns {Array<string>} Resim URL listesi.
+     */
+    extractImages(html) {
+      const urls = [];
+      const regex = /<img\b[^>]*?\bsrc=["']([^"']+)["'][^>]*>/gi;
+      let match;
+      while ((match = regex.exec(String(html || ''))) !== null) {
+        const src = match[1].trim();
+        if (src) {
+          urls.push(src);
+        }
+      }
+      return urls;
+    }
+    /**
+     * Gonderi HTML'inden [Slug: ...] veya #actual-series-tag bilgisini cikarir.
+     * @param {string} html - Gonderi HTML icerigi.
+     * @returns {string} Seri etiketi veya bos dizge.
+     */
+    extractSeriesTagFromHtml(html) {
+      const str = String(html || '');
+      const divMatch = str.match(/<div[^>]*id=["']actual-series-tag["'][^>]*>([\s\S]*?)<\/div>/i);
+      if (divMatch && divMatch[1].trim()) {
+        return stripTags(divMatch[1]);
+      }
+      const slugMatch = str.match(/\[Slug:\s*([^\]]+)\]/i);
+      if (slugMatch && slugMatch[1].trim()) {
+        return slugMatch[1].trim();
+      }
+      const dataAttrMatch = str.match(/data-series-id=["']([^"']+)["']/i);
+      if (dataAttrMatch && dataAttrMatch[1].trim()) {
+        return dataAttrMatch[1].trim();
+      }
+      return '';
+    }
+    /**
+     * Seri tanitim HTML'inden Yazar, Cizer, Diger Isimler ve Ozet bilgilerini cikarir.
+     * @param {string} html - Seri gonderisi HTML icerigi.
+     * @returns {{ altTitle: string, author: string, artist: string, year: string, synopsis: string }}
+     */
+    extractSeriesMetadata(html) {
+      const str = String(html || '');
+      const meta = {
+        altTitle: '',
+        author: '',
+        artist: '',
+        year: '',
+        synopsis: ''
+      };
+      const infoRegex = /<strong>\s*([^<]+?)\s*<\/strong>\s*<span>\s*([\s\S]*?)\s*<\/span>/gi;
+      let match;
+      while ((match = infoRegex.exec(str)) !== null) {
+        const key = stripTags(match[1]).toLowerCase();
+        const val = stripTags(match[2]);
+        if (!val) continue;
+        if (key.includes('diğer') || key.includes('alternatif')) {
+          if (!/isteğe bağlı|alternatif isimler/i.test(val)) {
+            meta.altTitle = val;
+          }
+        } else if (key.includes('yazar')) {
+          if (!/yazar adı/i.test(val)) {
+            meta.author = val;
+          }
+        } else if (key.includes('çizer')) {
+          if (!/çizer adı/i.test(val)) {
+            meta.artist = val;
+          }
+        } else if (key.includes('yıl') || key.includes('stüdyo')) {
+          meta.year = val;
+        }
+      }
+      const synMatch =
+        str.match(/<div[^>]*class=["'][^"']*synopsis-content[^"']*["'][^>]*>([\s\S]*?)<\/div>/i) ||
+        str.match(/<div[^>]*class=["'][^"']*synopsis-box[^"']*["'][^>]*>([\s\S]*?)<\/div>/i) ||
+        str.match(/<p[^>]*class=["'][^"']*manowa-synopsis[^"']*["'][^>]*>([\s\S]*?)<\/p>/i);
+      if (synMatch && synMatch[1]) {
+        const cleaned = stripTags(synMatch[1].replace(/<h3[^>]*>[\s\S]*?<\/h3>/gi, ''));
+        meta.synopsis = cleaned;
+      }
+      return meta;
+    }
+    /**
+     * Basliktan bolum numarasini cikarir (orn: "Tomb Raider King Bölüm 279" -> 279).
+     * @param {string} title - Gonderi basligi.
+     * @param {string} [html=''] - Gonderi HTML icerigi.
+     * @returns {number} Bolum numarasi.
+     */
+    extractChapterNumber(title, html = '') {
+      const dataMatch = String(html || '').match(/data-chapter-number=["'](\d+(?:\.\d+)?)["']/i);
+      if (dataMatch) {
+        return Number(dataMatch[1]);
+      }
+      const trMatch = String(title || '').match(/b[öo]l[üu]m\s*(\d+(?:[.,]\d+)?)/i);
+      if (trMatch) {
+        return Number(trMatch[1].replace(',', '.'));
+      }
+      const chMatch = String(title || '').match(/\bch(?:apter)?\.?\s*(\d+(?:[.,]\d+)?)/i);
+      if (chMatch) {
+        return Number(chMatch[1].replace(',', '.'));
+      }
+      const trailingNum = String(title || '').match(/(\d+)\s*$/);
+      if (trailingNum) {
+        return Number(trailingNum[1]);
+      }
+      return 1;
+    }
+    /**
+     * Bolum basligindan seri adini tahmin eder (orn: "Wistoria: Asa ve Kılıç Bölüm 1" -> "Wistoria: Asa ve Kılıç").
+     * @param {string} title - Bolum gonderisi basligi.
+     * @returns {string} Tahmin edilen seri adi.
+     */
+    inferSeriesNameFromChapterTitle(title) {
+      return String(title || '')
+        .replace(/\s*[-–—:]?\s*b[öo]l[üu]m\s*\d+[\s\S]*$/i, '')
+        .replace(/\s*[-–—:]?\s*ch(?:apter)?\.?\s*\d+[\s\S]*$/i, '')
+        .trim();
+    }
+    /**
+     * Etiket listesine gore seri turunu, kaynak dili, okuma modunu, durumu ve turleri belirler.
+     * @param {Array<string>} categories - Gonderi etiketleri.
+     * @param {string} seriesTitle - Seri basligi.
+     * @returns {{ type: string, sourceLang: string, defaultReaderMode: string, status: string, genres: Array<string> }}
+     */
+    classifyLabels(categories = [], seriesTitle = '') {
+      let type = 'Manhwa';
+      let sourceLang = 'KR';
+      let defaultReaderMode = 'webtoon';
+      let status = 'Devam Ediyor';
+      const genres = [];
+      const titleLower = String(seriesTitle || '').trim().toLowerCase();
+      categories.forEach((rawCat) => {
+        const cat = String(rawCat || '').trim();
+        if (!cat) return;
+        const lower = cat.toLowerCase();
+        if (lower === 'seri' || lower === 'bölüm' || lower === 'bolum' || lower === titleLower) {
+          return;
+        }
+        if (lower.startsWith('dil:')) {
+          sourceLang = cat.slice(4).trim().toUpperCase() || sourceLang;
+          return;
+        }
+        const matchedType = KNOWN_TYPES.find((t) => t.toLowerCase() === lower);
+        if (matchedType) {
+          type = matchedType;
+          if (matchedType === 'Manga') {
+            sourceLang = 'JP';
+            defaultReaderMode = 'single';
+          } else if (matchedType === 'Manhua') {
+            sourceLang = 'CN';
+            defaultReaderMode = 'webtoon';
+          } else if (matchedType === 'Novel') {
+            sourceLang = 'KR';
+            defaultReaderMode = 'novel';
+          } else if (matchedType === 'Webcomic') {
+            sourceLang = 'EN';
+            defaultReaderMode = 'single';
+          }
+          return;
+        }
+        const matchedStatus = KNOWN_STATUSES.find((s) => s.toLowerCase() === lower);
+        if (matchedStatus) {
+          status = matchedStatus;
+          return;
+        }
+        genres.push(cat);
+      });
+      return {
+        type,
+        sourceLang,
+        defaultReaderMode,
+        status,
+        genres: genres.length > 0 ? genres : ['Genel']
+      };
+    }
+    /**
+     * Normalize edilmis gonderi kayitlarini (entries) Seri ve Bolum agacina donusturur.
+     * @param {Array<Object>} rawPosts - Normalize edilmis gonderi dizisi.
+     * @returns {Array<Object>} Katalog seri listesi.
+     */
+    buildCatalogFromPosts(rawPosts = []) {
+      const seriesMap = new Map();
+      const chapterItems = [];
+      rawPosts.forEach((post) => {
+        const title = String(post.title || '').trim();
+        const html = String(post.content || '');
+        const categories = Array.isArray(post.categories) ? post.categories : [];
+        const catsLower = categories.map((c) => String(c).toLowerCase());
+        const publishedDate = String(post.published || '').slice(0, 10) || new Date().toISOString().slice(0, 10);
+        const postUrl = post.url || '';
+        const isSeriesPost =
+          catsLower.includes('seri') ||
+          html.includes('manowa-series-post') ||
+          html.includes('actual-series-tag') ||
+          /\[Slug:/i.test(html);
+        const isChapterPost =
+          catsLower.includes('bölüm') ||
+          catsLower.includes('bolum') ||
+          html.includes('manowa-chapter-post') ||
+          (!isSeriesPost && /b[öo]l[üu]m\s*\d+/i.test(title));
+        if (isSeriesPost && !catsLower.includes('bölüm')) {
+          const tagFromHtml = this.extractSeriesTagFromHtml(html);
+          const seriesTag = tagFromHtml || title;
+          const seriesId = toSlug(seriesTag);
+          const images = this.extractImages(html);
+          const meta = this.extractSeriesMetadata(html);
+          const labelInfo = this.classifyLabels(categories, seriesTag);
+          seriesMap.set(seriesId, {
+            id: seriesId,
+            title: title || seriesTag,
+            altTitle: meta.altTitle,
+            author: meta.author,
+            artist: meta.artist,
+            year: meta.year,
+            sourceLang: labelInfo.sourceLang,
+            type: labelInfo.type,
+            defaultReaderMode: labelInfo.defaultReaderMode,
+            status: labelInfo.status,
+            translator: meta.author || 'Manhwa Arşiv',
+            rating: '9.6',
+            genres: labelInfo.genres,
+            cover: images[0] || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak',
+            synopsis: meta.synopsis || `${title} serisi tüm bölümleriyle arşivimizde.`,
+            url: postUrl,
+            publishedDate,
+            chapters: []
+          });
+        } else if (isChapterPost) {
+          chapterItems.push({
+            title,
+            html,
+            categories,
+            publishedDate,
+            url: postUrl
+          });
+        }
+      });
+      chapterItems.forEach((chPost) => {
+        const htmlSeriesTag = this.extractSeriesTagFromHtml(chPost.html);
+        const matchingExistingCat = chPost.categories.find((c) => seriesMap.has(toSlug(c)));
+        const nonGenericLabel = chPost.categories.find((c) => {
+          const lower = String(c).toLowerCase();
+          if (['bölüm', 'bolum', 'seri'].includes(lower)) return false;
+          if (KNOWN_TYPES.some((t) => t.toLowerCase() === lower)) return false;
+          if (KNOWN_STATUSES.some((s) => s.toLowerCase() === lower)) return false;
+          return true;
+        });
+        const inferredSeriesTitle =
+          htmlSeriesTag ||
+          matchingExistingCat ||
+          nonGenericLabel ||
+          this.inferSeriesNameFromChapterTitle(chPost.title) ||
+          'Genel Seri';
+        const seriesId = toSlug(inferredSeriesTitle);
+        if (!seriesMap.has(seriesId)) {
+          const imgs = this.extractImages(chPost.html);
+          const isNovelChapter = detectNovelChapter(chPost.html, imgs, '');
+          seriesMap.set(seriesId, {
+            id: seriesId,
+            title: inferredSeriesTitle,
+            altTitle: '',
+            author: '',
+            artist: '',
+            year: '',
+            sourceLang: 'KR',
+            type: isNovelChapter ? 'Novel' : 'Manhwa',
+            defaultReaderMode: isNovelChapter ? 'novel' : 'webtoon',
+            status: 'Devam Ediyor',
+            translator: 'Manhwa Arşiv',
+            rating: '9.5',
+            genres: ['Genel'],
+            cover: imgs[0] || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak',
+            synopsis: `${inferredSeriesTitle} çeviri bölümleri.`,
+            url: '',
+            publishedDate: chPost.publishedDate,
+            chapters: []
+          });
+        }
+        const series = seriesMap.get(seriesId);
+        const number = this.extractChapterNumber(chPost.title, chPost.html);
+        const chapterId = `${seriesId}-bolum-${number}`;
+        const pages = this.extractImages(chPost.html);
+        const isNovel = detectNovelChapter(chPost.html, pages, series.type);
+        const noteMatch = chPost.html.match(/data-translator-note=["']([^"']*)["']/i);
+        const translatorNote = noteMatch ? noteMatch[1] : '';
+        if (!series.chapters.some((existing) => existing.id === chapterId)) {
+          series.chapters.push({
+            id: chapterId,
+            number,
+            title: chPost.title || `Bölüm ${number}`,
+            date: chPost.publishedDate,
+            translatorNote,
+            pages,
+            isNovel,
+            htmlContent: isNovel ? chPost.html : '',
+            url: chPost.url
+          });
+        }
+        if (
+          (!series.cover || series.cover.includes('placehold.co')) &&
+          pages.length > 0
+        ) {
+          series.cover = pages[0];
+        }
+      });
+      const result = Array.from(seriesMap.values());
+      this._log('info', 'Blogger gonderileri katalog yapisina donusturuldu.', {
+        seriesCount: result.length,
+        chapterCount: chapterItems.length
+      });
+      return result;
+    }
+    /**
+     * Blogger JSON Feed API yanit nesnesini (feed.entry) ayristirir.
+     * @param {Object} feedJson - Blogger ?alt=json yaniti.
+     * @returns {Array<Object>} Katalog seri listesi.
+     */
+    parseBloggerFeedJson(feedJson) {
+      if (!feedJson || !feedJson.feed) {
+        this._log('warn', 'Gecersiz Blogger JSON verisi alindi.');
+        return [];
+      }
+      const entries = Array.isArray(feedJson.feed.entry) ? feedJson.feed.entry : [];
+      const normalized = entries.map((entry) => {
+        const categories = Array.isArray(entry.category)
+          ? entry.category.map((c) => c.term).filter(Boolean)
+          : [];
+        const altLink = Array.isArray(entry.link)
+          ? entry.link.find((l) => l.rel === 'alternate')
+          : null;
+        return {
+          id: entry.id ? entry.id.$t : '',
+          title: entry.title ? entry.title.$t : '',
+          published: entry.published ? entry.published.$t : '',
+          categories,
+          url: altLink ? altLink.href : '',
+          content: entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : '')
+        };
+      });
+      return this.buildCatalogFromPosts(normalized);
+    }
+    /**
+     * Sayfa DOM icindeki .post-entry veya .manowa-* dugumlerini yedek olarak ayristirir.
+     * @param {Document} [doc=document] - Tarayici document nesnesi.
+     * @returns {Array<Object>} Katalog seri listesi.
+     */
+    parseDomEntries(doc = typeof document !== 'undefined' ? document : null) {
+      if (!doc) return [];
+      const rawPosts = [];
+      const postEntries = doc.querySelectorAll('.post-entry');
+      postEntries.forEach((node) => {
+        const titleEl = node.querySelector('.post-title');
+        const bodyEl = node.querySelector('.post-body');
+        const labelEls = node.querySelectorAll('.post-label-item');
+        const categories = Array.from(labelEls).map((el) => el.textContent.trim()).filter(Boolean);
+        const html = bodyEl ? bodyEl.innerHTML : node.innerHTML;
+        const title = titleEl ? titleEl.textContent.trim() : '';
+        if (categories.length === 0) {
+          if (html.includes('actual-series-tag') || /\[Slug:/i.test(html)) {
+            categories.push('Seri');
+          } else if (/b[öo]l[üu]m\s*\d+/i.test(title)) {
+            categories.push('Bölüm');
+          }
+        }
+        rawPosts.push({
+          id: node.getAttribute('data-post-id') || '',
+          title,
+          published: new Date().toISOString(),
+          categories,
+          url: node.getAttribute('data-post-url') || '',
+          content: html
+        });
+      });
+      const customSeries = doc.querySelectorAll('.manowa-series-post');
+      customSeries.forEach((node) => {
+        rawPosts.push({
+          id: node.getAttribute('data-series-id') || '',
+          title: node.getAttribute('data-title') || '',
+          published: new Date().toISOString(),
+          categories: ['Seri', node.getAttribute('data-type') || 'Manhwa'],
+          url: '',
+          content: node.outerHTML
+        });
+      });
+      const customChapters = doc.querySelectorAll('.manowa-chapter-post');
+      customChapters.forEach((node) => {
+        rawPosts.push({
+          id: node.getAttribute('data-chapter-id') || '',
+          title: node.getAttribute('data-chapter-title') || 'Bölüm 1',
+          published: new Date().toISOString(),
+          categories: ['Bölüm', node.getAttribute('data-series-id') || ''],
+          url: '',
+          content: node.outerHTML
+        });
+      });
+      if (rawPosts.length === 0) {
+        return [];
+      }
+      return this.buildCatalogFromPosts(rawPosts);
+    }
+    /**
+     * JSONP (alt=json-in-script) kullanarak Blogger beslemesini ceker (CORS ve yerel onizleme yedegi).
+     * @param {string} [blogOrigin='https://manhwaarsiv.blogspot.com'] - Blog kök adresi.
+     * @returns {Promise<Array<Object>>} Dinamik seri listesi.
+     */
+    fetchViaJsonp(blogOrigin = 'https://manhwaarsiv.blogspot.com') {
+      return new Promise((resolve) => {
+        if (typeof document === 'undefined') {
+          resolve([]);
+          return;
+        }
+        const cbName = '__manowaFeedCb_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+        const script = document.createElement('script');
+        const cleanup = () => {
+          try {
+            delete globalScope[cbName];
+          } catch (_e) {
+            globalScope[cbName] = undefined;
+          }
+          if (script.parentNode) {
+            script.parentNode.removeChild(script);
+          }
+        };
+        const timer = setTimeout(() => {
+          cleanup();
+          resolve([]);
+        }, 6000);
+        globalScope[cbName] = (json) => {
+          clearTimeout(timer);
+          cleanup();
+          const parsed = this.parseBloggerFeedJson(json);
+          this._log('info', 'Blogger JSONP beslemesi basariyla yuklendi.', { count: parsed.length });
+          resolve(parsed);
+        };
+        script.onerror = () => {
+          clearTimeout(timer);
+          cleanup();
+          resolve([]);
+        };
+        script.src = `${blogOrigin}/feeds/posts/default?alt=json-in-script&max-results=500&callback=${cbName}`;
+        (document.head || document.body).appendChild(script);
+      });
+    }
+    /**
+     * Blogger JSON Feed API'sinden (/feeds/posts/default?alt=json&max-results=500) tum verileri ceker.
+     * @param {string} [feedUrl='/feeds/posts/default?alt=json&max-results=500'] - Besleme URL'si.
+     * @returns {Promise<Array<Object>>} Dinamik seri listesi.
+     */
+    async fetchDynamicCatalog(feedUrl = '/feeds/posts/default?alt=json&max-results=500') {
+      const isFileProtocol =
+        typeof location !== 'undefined' && location.protocol === 'file:' && feedUrl.startsWith('/');
+      if (this.fetchFn && !isFileProtocol) {
+        try {
+          this._log('debug', 'Blogger JSON Feed istegi gonderiliyor.', { feedUrl });
+          const response = await this.fetchFn(feedUrl);
+          if (!response || !response.ok) {
+            throw new Error(`HTTP ${response ? response.status : 'NO_RESPONSE'}`);
+          }
+          const json = await response.json();
+          const seriesList = this.parseBloggerFeedJson(json);
+          if (seriesList.length > 0) {
+            this._log('info', 'Blogger JSON Feed basariyla yuklendi.', { count: seriesList.length });
+            return seriesList;
+          }
+        } catch (err) {
+          this._log('warn', 'Blogger JSON Feed alinamadi, yedek yontemler deneniyor.', {
+            error: err.message
+          });
+        }
+      }
+      if (typeof document !== 'undefined') {
+        const origin =
+          typeof location !== 'undefined' && location.origin && location.origin.startsWith('http')
+            ? location.origin
+            : 'https://manhwaarsiv.blogspot.com';
+        const jsonpSeries = await this.fetchViaJsonp(origin);
+        if (jsonpSeries.length > 0) {
+          return jsonpSeries;
+        }
+      }
+      return this.parseDomEntries();
+    }
+  }
+  globalScope.BloggerFeedLoader = BloggerFeedLoader;
+  globalScope.ManowaSlugify = toSlug;
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      BloggerFeedLoader,
+      toSlug,
+      stripTags,
+      detectNovelChapter
+    };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/catalog-controller.js === */
+/**
+ * @fileoverview Katalog verilerini, dil/tur filtrelemesini, aramayi ve bolum siralamasini yoneten modul.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  const LANGUAGE_LABELS = {
+    KR: 'Korece (Manhwa)',
+    JP: 'Japonca (Manga)',
+    CN: 'Çince (Manhua)',
+    EN: 'İngilizce (Comic)'
+  };
+
+  /**
+   * Yerel onizleme (preview.html) icin ornek SVG sayfa gorseli uretir.
+   * @param {string} title - Baslik.
+   * @param {number} pageNo - Sayfa numarasi.
+   * @param {string} colorHex - Tema rengi.
+   * @returns {string} Data URI formatinda SVG.
+   */
+  function createSamplePageSvg(title, pageNo, colorHex) {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1200" viewBox="0 0 800 1200">
+      <defs>
+        <linearGradient id="bg${pageNo}" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#141824"/>
+          <stop offset="100%" stop-color="${colorHex}"/>
+        </linearGradient>
+      </defs>
+      <rect width="800" height="1200" fill="url(#bg${pageNo})"/>
+      <rect x="40" y="40" width="720" height="340" rx="12" fill="#0f1117" stroke="#ffffff" stroke-width="4" opacity="0.85"/>
+      <text x="400" y="180" fill="#ffffff" font-family="sans-serif" font-size="34" font-weight="bold" text-anchor="middle">${title}</text>
+      <text x="400" y="240" fill="#94a3b8" font-family="sans-serif" font-size="24" text-anchor="middle">PANEL 1 - Çeviri Önizleme</text>
+      <rect x="40" y="800" width="720" height="350" rx="12" fill="#0f1117" stroke="#6366f1" stroke-width="4" opacity="0.9"/>
+      <text x="400" y="960" fill="#f8fafc" font-family="sans-serif" font-size="48" font-weight="bold" text-anchor="middle">SAYFA ${pageNo}</text>
+    </svg>`;
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  }
+
+  /**
+   * Yalnizca cevrimdisi (offline) onizleme ortami icin yedek katalog verisi dondurur.
+   * @returns {Array<Object>} Ornek seri listesi.
+   */
+  function getDefaultCatalog() {
+    return [
+      {
+        id: 'wistoria-asa-ve-kilic',
+        title: 'Wistoria: Asa ve Kılıç',
+        altTitle: 'Tsue to Tsurugi no Wistoria',
+        sourceLang: 'JP',
+        type: 'Manga',
+        defaultReaderMode: 'single',
+        status: 'Tamamlandı',
+        translator: 'Manhwa Arşiv',
+        rating: '9.7',
+        genres: ['Manga', 'Orta Çağ', 'Fantastik'],
+        cover: createSamplePageSvg('Wistoria: Asa ve Kılıç', 1, '#be185d'),
+        synopsis: 'Büyü yapamayan ancak kılıç ustalığıyla büyü akademisinde zirveyi hedefleyen Will Serfort\'un hikayesi.',
+        chapters: [
+          {
+            id: 'wistoria-asa-ve-kilic-bolum-1',
+            number: 1,
+            title: 'Wistoria: Asa ve Kılıç Bölüm 1',
+            date: '2026-09-29',
+            translatorNote: '',
+            pages: [
+              createSamplePageSvg('Wistoria - Bölüm 1', 1, '#be185d'),
+              createSamplePageSvg('Wistoria - Bölüm 1', 2, '#9d174d')
+            ]
+          }
+        ]
+      },
+      {
+        id: 'tomb-raider-king',
+        title: 'Tomb Raider King',
+        altTitle: '도굴왕',
+        sourceLang: 'KR',
+        type: 'Manhwa',
+        defaultReaderMode: 'webtoon',
+        status: 'İptal Edildi',
+        translator: 'Manhwa Arşiv',
+        rating: '9.6',
+        genres: ['Aksiyon', 'Sistem'],
+        cover: createSamplePageSvg('Tomb Raider King', 1, '#4f46e5'),
+        synopsis: 'Tanrıların mezarları dünyada belirdiğinde kutsal emanetleri ele geçirmek için geçmişe dönen Jooheon Suh\'un macerası.',
+        chapters: [
+          {
+            id: 'tomb-raider-king-bolum-279',
+            number: 279,
+            title: 'Tomb Raider King Bölüm 279',
+            date: '2026-09-26',
+            translatorNote: '',
+            pages: [
+              createSamplePageSvg('Tomb Raider King - 279', 1, '#4f46e5'),
+              createSamplePageSvg('Tomb Raider King - 279', 2, '#4338ca')
+            ]
+          }
+        ]
+      }
+    ];
+  }
+
+  /**
+   * Seri katalogunu, dil/tur filtrelerini ve aramayi yoneten sinif.
+   */
+  class CatalogController {
+    /**
+     * CatalogController nesnesini baslatir.
+     * @param {Array<Object>|null} [initialSeries=null] - Baslangic serileri.
+     * @param {Object|null} [logger=null] - Logger nesnesi.
+     */
+    constructor(initialSeries = null, logger = null) {
+      this.logger = logger || globalScope.ManowaLogger || null;
+      this.seriesList =
+        Array.isArray(initialSeries) && initialSeries.length > 0
+          ? initialSeries
+          : getDefaultCatalog();
+      this.activeLang = 'ALL';
+      this.searchQuery = '';
+      this._log('debug', 'CatalogController baslatildi.', { count: this.seriesList.length });
+    }
+
+    /**
+     * Ic loglama yardimcisi.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Mesaj.
+     * @param {Object|null} [meta=null] - Ek veri.
+     * @returns {void}
+     */
+    _log(level, msg, meta = null) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+
+    /**
+     * Katalog listesini dinamik Blogger verisiyle tamamen degistirir.
+     * @param {Array<Object>} newSeriesList - Yeni seri listesi.
+     * @returns {Array<Object>} Guncellenmis seri listesi.
+     */
+    setSeriesList(newSeriesList) {
+      if (Array.isArray(newSeriesList)) {
+        this.seriesList = newSeriesList.slice();
+        this._log('info', 'Katalog dinamik seri listesiyle guncellendi.', {
+          count: this.seriesList.length
+        });
+      }
+      return this.seriesList;
+    }
+
+    /**
+     * Dil veya tur filtresini ayarlar (orn: 'ALL', 'KR', 'JP', 'Manhwa', 'Manga', 'Novel').
+     * @param {string} langOrType - Dil veya tur kodu.
+     * @returns {Array<Object>} Filtrelenmis seri listesi.
+     */
+    setLanguageFilter(langOrType) {
+      this.activeLang = String(langOrType || 'ALL').trim().toUpperCase();
+      this._log('info', 'Dil/Tur filtresi degistirildi.', { activeLang: this.activeLang });
+      return this.getFilteredSeries();
+    }
+
+    /**
+     * Arama sorgusunu gunceller.
+     * @param {string} query - Arama metni.
+     * @returns {Array<Object>} Filtrelenmis seri listesi.
+     */
+    setSearchQuery(query) {
+      this.searchQuery = String(query || '').trim().toLowerCase();
+      this._log('debug', 'Arama sorgusu guncellendi.', { searchQuery: this.searchQuery });
+      return this.getFilteredSeries();
+    }
+
+    /**
+     * Aktif filtre ve arama sorgusuna uyan serileri dondurur.
+     * @returns {Array<Object>} Filtrelenmis seriler.
+     */
+    getFilteredSeries() {
+      return this.seriesList.filter((item) => {
+        const itemLang = String(item.sourceLang || '').toUpperCase();
+        const itemType = String(item.type || '').toUpperCase();
+        const matchesLang =
+          this.activeLang === 'ALL' ||
+          itemLang === this.activeLang ||
+          itemType === this.activeLang;
+
+        if (!matchesLang) {
+          return false;
+        }
+        if (!this.searchQuery) {
+          return true;
+        }
+        const haystack = [
+          item.title,
+          item.altTitle || '',
+          item.type || '',
+          item.status || '',
+          (item.genres || []).join(' ')
+        ]
+          .join(' ')
+          .toLowerCase();
+
+        return haystack.includes(this.searchQuery);
+      });
+    }
+
+    /**
+     * ID degerine gore seri bulur.
+     * @param {string} seriesId - Seri kimligi.
+     * @returns {Object|null} Bulunan seri veya null.
+     */
+    getSeriesById(seriesId) {
+      return this.seriesList.find((s) => s.id === seriesId) || null;
+    }
+
+    /**
+     * Belirtilen serinin bolumlerini numara sirasina gore dondurur.
+     * @param {string} seriesId - Seri kimligi.
+     * @param {'asc'|'desc'} [order='desc'] - Siralama yonu.
+     * @returns {Array<Object>} Siralanmis bolum listesi.
+     */
+    getSortedChapters(seriesId, order = 'desc') {
+      const series = this.getSeriesById(seriesId);
+      if (!series || !Array.isArray(series.chapters)) {
+        return [];
+      }
+      const copy = series.chapters.slice();
+      copy.sort((a, b) => (order === 'asc' ? a.number - b.number : b.number - a.number));
+      return copy;
+    }
+
+    /**
+     * Katalog icine yeni seri ekler veya mevcut seriyi gunceller.
+     * @param {Object} seriesObj - Seri nesnesi.
+     * @returns {void}
+     */
+    upsertSeries(seriesObj) {
+      if (!seriesObj || !seriesObj.id) {
+        return;
+      }
+      const idx = this.seriesList.findIndex((s) => s.id === seriesObj.id);
+      if (idx >= 0) {
+        this.seriesList[idx] = seriesObj;
+      } else {
+        this.seriesList.unshift(seriesObj);
+      }
+      this._log('info', 'Katalog serisi guncellendi.', { id: seriesObj.id });
+    }
+  }
+
+  globalScope.CatalogController = CatalogController;
+  globalScope.MANOWA_LANGUAGE_LABELS = LANGUAGE_LABELS;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      CatalogController,
+      LANGUAGE_LABELS,
+      getDefaultCatalog,
+      createSamplePageSvg
+    };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/reading-engine.js === */
+/**
+ * @fileoverview Cok modlu okuma motoru (Webtoon, Tek Sayfa, Cift Sayfa ve Novel) sinifi.
+ * Okuma yonu (LTR/RTL), zoom, sayfa boslugu, otomatik kaydirma ve ilerleme kaydini yonetir.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  const VALID_MODES = ['webtoon', 'single', 'double', 'novel'];
+  const VALID_DIRECTIONS = ['ltr', 'rtl'];
+
+  /**
+   * Manga, Manhwa ve Novel okuma deneyimini yoneten sinif.
+   */
+  class ReadingEngine {
+    /**
+     * ReadingEngine nesnesini baslatir.
+     * @param {Object} [options={}] - Baslangic secenekleri.
+     */
+    constructor(options = {}) {
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.storage =
+        options.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
+      this.historyKey = 'manowa_reading_history';
+      this.mode = VALID_MODES.includes(options.mode) ? options.mode : 'webtoon';
+      this.direction = VALID_DIRECTIONS.includes(options.direction) ? options.direction : 'ltr';
+      this.zoom = this._clamp(options.zoom || 100, 50, 150);
+      this.gap = typeof options.gap === 'number' ? Math.max(0, options.gap) : 0;
+      this.protectImages =
+        options.protectImages !== undefined ? Boolean(options.protectImages) : true;
+      this.pages = [];
+      this.htmlContent = '';
+      this.currentIndex = 0;
+      this.seriesId = '';
+      this.chapterId = '';
+      this.autoScrollActive = false;
+      this.autoScrollSpeed = 2;
+      this._autoScrollTimer = null;
+
+      this._log('debug', 'ReadingEngine baslatildi.', {
+        mode: this.mode,
+        direction: this.direction,
+        zoom: this.zoom
+      });
+    }
+
+    /**
+     * Ic loglama yardimcisi.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Log mesaji.
+     * @param {Object|null} [meta=null] - Ek veri.
+     * @returns {void}
+     */
+    _log(level, msg, meta = null) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+
+    /**
+     * Sayisal degeri min ve max araliginda sinirlar.
+     * @param {number} val - Deger.
+     * @param {number} min - Alt sinir.
+     * @param {number} max - Ust sinir.
+     * @returns {number} Sinirlanmis deger.
+     */
+    _clamp(val, min, max) {
+      return Math.min(max, Math.max(min, Number(val) || min));
+    }
+
+    /**
+     * Yeni bir bolumu okuma motoruna yukler.
+     * @param {Object} [chapterData={}] - Bolum verileri.
+     * @returns {Object} Guncel motor durumu.
+     */
+    loadChapter(chapterData = {}) {
+      this.stopAutoScroll();
+      this.seriesId = chapterData.seriesId || '';
+      this.chapterId = chapterData.chapterId || '';
+      this.pages = Array.isArray(chapterData.pages) ? chapterData.pages.slice() : [];
+      this.htmlContent = String(chapterData.htmlContent || '');
+
+      if (this.pages.length === 0 && this.htmlContent) {
+        this.mode = 'novel';
+      } else if (chapterData.defaultMode && VALID_MODES.includes(chapterData.defaultMode)) {
+        this.mode = chapterData.defaultMode;
+      }
+
+      const saved = this.getProgress(this.seriesId);
+      if (typeof chapterData.startPage === 'number') {
+        this.currentIndex = this._clamp(chapterData.startPage, 0, Math.max(0, this.pages.length - 1));
+      } else if (
+        saved &&
+        saved.chapterId === this.chapterId &&
+        typeof saved.pageIndex === 'number'
+      ) {
+        this.currentIndex = this._clamp(saved.pageIndex, 0, Math.max(0, this.pages.length - 1));
+      } else {
+        this.currentIndex = 0;
+      }
+
+      this.saveProgress();
+      this.preloadAdjacentPages();
+      this._log('info', 'Bolum okuma motoruna yuklendi.', {
+        seriesId: this.seriesId,
+        chapterId: this.chapterId,
+        pageCount: this.pages.length,
+        isNovel: Boolean(this.htmlContent && this.pages.length === 0),
+        startIndex: this.currentIndex
+      });
+
+      return this.getState();
+    }
+
+    /**
+     * Okuma modunu degistirir ('webtoon', 'single', 'double', 'novel').
+     * @param {string} newMode - Yeni okuma modu.
+     * @returns {string} Aktif okuma modu.
+     */
+    setMode(newMode) {
+      if (VALID_MODES.includes(newMode)) {
+        this.mode = newMode;
+        this._log('info', 'Okuma modu degistirildi.', { mode: this.mode });
+      } else {
+        this._log('warn', 'Gecersiz okuma modu reddedildi.', { attempted: newMode });
+      }
+      return this.mode;
+    }
+
+    /**
+     * Okuma yonunu degistirir ('ltr' veya 'rtl').
+     * @param {string} newDir - Yeni yon.
+     * @returns {string} Aktif yon.
+     */
+    setDirection(newDir) {
+      if (VALID_DIRECTIONS.includes(newDir)) {
+        this.direction = newDir;
+        this._log('info', 'Okuma yonu degistirildi.', { direction: this.direction });
+      }
+      return this.direction;
+    }
+
+    /**
+     * Yakinlastirma (zoom) yuzdesini ayarlar (50 - 150).
+     * @param {number} zoomPercent - Zoom degeri.
+     * @returns {number} Guncel zoom degeri.
+     */
+    setZoom(zoomPercent) {
+      this.zoom = this._clamp(zoomPercent, 50, 150);
+      this._log('debug', 'Zoom seviyesi guncellendi.', { zoom: this.zoom });
+      return this.zoom;
+    }
+
+    /**
+     * Webtoon modunda sayfalar arasi boslugu ayarlar.
+     * @param {number} gapPx - Piksel cinsinden bosluk.
+     * @returns {number} Guncel bosluk.
+     */
+    setGap(gapPx) {
+      this.gap = Math.max(0, Number(gapPx) || 0);
+      this._log('debug', 'Sayfa arasi bosluk guncellendi.', { gap: this.gap });
+      return this.gap;
+    }
+
+    /**
+     * Mevcut mod ve yone gore ekranda gosterilecek sayfa indekslerini dondurur.
+     * @returns {Array<number>} Sayfa indeks dizisi.
+     */
+    getVisiblePageIndices() {
+      const total = this.pages.length;
+      if (total === 0) {
+        return [];
+      }
+      if (this.mode === 'webtoon') {
+        return this.pages.map((_, idx) => idx);
+      }
+      if (this.mode === 'single') {
+        return [this.currentIndex];
+      }
+      const pair = [this.currentIndex];
+      if (this.currentIndex + 1 < total) {
+        pair.push(this.currentIndex + 1);
+      }
+      if (this.direction === 'rtl' && pair.length === 2) {
+        return [pair[1], pair[0]];
+      }
+      return pair;
+    }
+
+    /**
+     * Sonraki sayfaya gecer (Single ve Double modlarinda).
+     * @returns {boolean} Sayfa degistiyse true.
+     */
+    nextPage() {
+      if (this.mode === 'webtoon' || this.mode === 'novel' || this.pages.length === 0) {
+        return false;
+      }
+      const step = this.mode === 'double' ? 2 : 1;
+      if (this.currentIndex + step < this.pages.length) {
+        this.currentIndex += step;
+        this.saveProgress();
+        this.preloadAdjacentPages();
+        this._log('debug', 'Sonraki sayfaya gecildi.', { currentIndex: this.currentIndex });
+        return true;
+      }
+      return false;
+    }
+
+    /**
+     * Onceki sayfaya doner (Single ve Double modlarinda).
+     * @returns {boolean} Sayfa degistiyse true.
+     */
+    prevPage() {
+      if (this.mode === 'webtoon' || this.mode === 'novel' || this.pages.length === 0) {
+        return false;
+      }
+      const step = this.mode === 'double' ? 2 : 1;
+      if (this.currentIndex > 0) {
+        this.currentIndex = Math.max(0, this.currentIndex - step);
+        this.saveProgress();
+        this._log('debug', 'Onceki sayfaya donuldu.', { currentIndex: this.currentIndex });
+        return true;
+      }
+      return false;
+    }
+
+    /**
+     * Belirtilen sayfa indeksine dogrudan gider.
+     * @param {number} pageIndex - Hedef sayfa indeksi.
+     * @returns {number} Gidilen sayfa indeksi.
+     */
+    goToPage(pageIndex) {
+      if (this.pages.length === 0) {
+        this.currentIndex = 0;
+        return 0;
+      }
+      this.currentIndex = this._clamp(pageIndex, 0, this.pages.length - 1);
+      this.saveProgress();
+      this.preloadAdjacentPages();
+      return this.currentIndex;
+    }
+
+    /**
+     * Okuma ilerleme yuzdesini hesaplar.
+     * @returns {number} 0-100 arasi yuzde.
+     */
+    getProgressPercent() {
+      if (this.mode === 'novel') {
+        return 100;
+      }
+      const total = this.pages.length;
+      if (total <= 1) {
+        return total === 1 ? 100 : 0;
+      }
+      const lastVisible =
+        this.mode === 'double' ? Math.min(total - 1, this.currentIndex + 1) : this.currentIndex;
+      return Math.round(((lastVisible + 1) / total) * 100);
+    }
+
+    /**
+     * Sonraki 2 sayfanin gorsellerini onceden bellekleme (preload) yapar.
+     * @returns {Array<string>} On yuklenen URL listesi.
+     */
+    preloadAdjacentPages() {
+      const preloaded = [];
+      for (let i = 1; i <= 2; i++) {
+        const targetIdx = this.currentIndex + i;
+        if (targetIdx < this.pages.length) {
+          const url = this.pages[targetIdx];
+          preloaded.push(url);
+          if (typeof Image !== 'undefined') {
+            const img = new Image();
+            img.src = url;
+          }
+        }
+      }
+      return preloaded;
+    }
+
+    /**
+     * Otomatik dikey kaydirmayi baslatir.
+     * @param {Function|null} [scrollCallback=null] - Ozel kaydirma islevi.
+     * @returns {boolean} Aktif durumu.
+     */
+    startAutoScroll(scrollCallback = null) {
+      this.stopAutoScroll();
+      this.autoScrollActive = true;
+      this._log('info', 'Otomatik kaydirma baslatildi.', { speed: this.autoScrollSpeed });
+      this._autoScrollTimer = setInterval(() => {
+        const pixels = this.autoScrollSpeed * 2;
+        if (typeof scrollCallback === 'function') {
+          scrollCallback(pixels);
+        } else if (typeof window !== 'undefined' && typeof window.scrollBy === 'function') {
+          window.scrollBy({ top: pixels, behavior: 'auto' });
+        }
+      }, 30);
+      return this.autoScrollActive;
+    }
+
+    /**
+     * Otomatik kaydirmayi durdurur.
+     * @returns {boolean} Aktif durumu (false).
+     */
+    stopAutoScroll() {
+      if (this._autoScrollTimer) {
+        clearInterval(this._autoScrollTimer);
+        this._autoScrollTimer = null;
+      }
+      this.autoScrollActive = false;
+      return false;
+    }
+
+    /**
+     * Otomatik kaydirmayi acar veya kapatir.
+     * @param {Function|null} [scrollCallback=null] - Ozel kaydirma islevi.
+     * @returns {boolean} Yeni durum.
+     */
+    toggleAutoScroll(scrollCallback = null) {
+      if (this.autoScrollActive) {
+        return this.stopAutoScroll();
+      }
+      return this.startAutoScroll(scrollCallback);
+    }
+
+    /**
+     * Klavye kisayol komutunu isler (RTL yonunde sag/sol tuslarini ters cevirir).
+     * @param {string} key - Klavye tus kodu (orn: 'ArrowRight', 'KeyM').
+     * @returns {string} Yapilan islem ('next', 'prev', 'mode:*', 'none').
+     */
+    handleKeyCommand(key) {
+      if (key === 'ArrowRight' || key === 'KeyD') {
+        if (this.direction === 'rtl') {
+          this.prevPage();
+          return 'prev';
+        }
+        this.nextPage();
+        return 'next';
+      }
+      if (key === 'ArrowLeft' || key === 'KeyA') {
+        if (this.direction === 'rtl') {
+          this.nextPage();
+          return 'next';
+        }
+        this.prevPage();
+        return 'prev';
+      }
+      if (key === 'KeyM') {
+        const imageModes = ['webtoon', 'single', 'double'];
+        const currentIdx = Math.max(0, imageModes.indexOf(this.mode));
+        const nextIdx = (currentIdx + 1) % imageModes.length;
+        this.setMode(imageModes[nextIdx]);
+        return 'mode:' + this.mode;
+      }
+      return 'none';
+    }
+
+    /**
+     * Okuma ilerlemesini localStorage uzerine kaydeder.
+     * @returns {void}
+     */
+    saveProgress() {
+      if (!this.seriesId || !this.chapterId || !this.storage) {
+        return;
+      }
+      try {
+        const history = this.getAllHistory();
+        history[this.seriesId] = {
+          seriesId: this.seriesId,
+          chapterId: this.chapterId,
+          pageIndex: this.currentIndex,
+          updatedAt: new Date().toISOString()
+        };
+        this.storage.setItem(this.historyKey, JSON.stringify(history));
+      } catch (_err) {
+        // Depolama hatasini yoksay
+      }
+    }
+
+    /**
+     * Belirtilen seri icin kaydedilmis okuma ilerlemesini getirir.
+     * @param {string} seriesId - Seri kimligi.
+     * @returns {Object|null} Kayitli ilerleme.
+     */
+    getProgress(seriesId) {
+      const history = this.getAllHistory();
+      return history[seriesId] || null;
+    }
+
+    /**
+     * Tum okuma gecmisini dondurur.
+     * @returns {Object} Seri bazli gecmis nesnesi.
+     */
+    getAllHistory() {
+      if (!this.storage) {
+        return {};
+      }
+      try {
+        const raw = this.storage.getItem(this.historyKey);
+        return raw ? JSON.parse(raw) : {};
+      } catch (_err) {
+        return {};
+      }
+    }
+
+    /**
+     * Motorun anlik durum özetini dondurur.
+     * @returns {Object} Motor durum nesnesi.
+     */
+    getState() {
+      return {
+        mode: this.mode,
+        direction: this.direction,
+        zoom: this.zoom,
+        gap: this.gap,
+        protectImages: this.protectImages,
+        currentIndex: this.currentIndex,
+        totalPages: this.pages.length,
+        hasNovelContent: Boolean(this.htmlContent),
+        visibleIndices: this.getVisiblePageIndices(),
+        progressPercent: this.getProgressPercent(),
+        autoScrollActive: this.autoScrollActive
+      };
+    }
+  }
+
+  globalScope.ReadingEngine = ReadingEngine;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      ReadingEngine,
+      VALID_MODES,
+      VALID_DIRECTIONS
+    };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/post-generator.js === */
+/**
+ * @fileoverview Blogger uzerinde yeni seri tanitimi ve bolum yayinlarken kullanilacak
+ * uyumlu HTML kodunu ve etiket onerilerini ureten modul.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  /**
+   * Özel HTML karakterlerini güvenli hale getirir.
+   * @param {string} str - Giris metni.
+   * @returns {string} Kacisli metin.
+   */
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  /**
+   * Metni URL dostu kimlige (slug) cevirir.
+   * @param {string} text - Giris metni.
+   * @returns {string} Slug.
+   */
+  function slugify(text) {
+    const trMap = {
+      ç: 'c', ğ: 'g', ı: 'i', ö: 'o', ş: 's', ü: 'u',
+      Ç: 'c', Ğ: 'g', İ: 'i', Ö: 'o', Ş: 's', Ü: 'u'
+    };
+    const replaced = String(text || '')
+      .replace(/[çğıöşüÇĞİÖŞÜ]/g, (ch) => trMap[ch] || ch)
+      .toLowerCase();
+    return replaced.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'seri';
+  }
+
+  /**
+   * Blogger seri ve bolum gonderi kodlarini olusturan sinif.
+   */
+  class PostGenerator {
+    /**
+     * PostGenerator nesnesini baslatir.
+     * @param {Object|null} [logger=null] - Logger nesnesi.
+     */
+    constructor(logger = null) {
+      this.logger = logger || globalScope.ManowaLogger || null;
+      this._log('debug', 'PostGenerator baslatildi.');
+    }
+
+    /**
+     * Ic loglama yardimcisi.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Mesaj.
+     * @param {Object|null} [meta=null] - Ek veri.
+     * @returns {void}
+     */
+    _log(level, msg, meta = null) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+
+    /**
+     * Satir veya virgulle ayrilmis sayfa URL'lerini diziye donusturur.
+     * @param {string|Array<string>} rawPages - Ham URL girdisi.
+     * @returns {Array<string>} Temizlenmis URL listesi.
+     */
+    parsePageUrls(rawPages) {
+      if (Array.isArray(rawPages)) {
+        return rawPages.map((u) => String(u).trim()).filter(Boolean);
+      }
+      return String(rawPages || '')
+        .split(/[\r\n,]+/)
+        .map((u) => u.trim())
+        .filter(Boolean);
+    }
+
+    /**
+     * Blogger Seri Tanitim gonderisi icin hem mevcut [Slug: ...] yapisiyla hem de
+     * veri nitelikleriyle uyumlu HTML uretir.
+     * @param {Object} [data={}] - Seri verileri.
+     * @returns {{ html: string, labels: string, seriesObject: Object }}
+     */
+    generateSeriesPost(data = {}) {
+      const title = data.title || 'İsimsiz Seri';
+      const id = data.id || slugify(title);
+      const altTitle = data.altTitle || '';
+      const sourceLang = (data.sourceLang || 'KR').toUpperCase();
+      const type = data.type || (sourceLang === 'JP' ? 'Manga' : 'Manhwa');
+      const defaultReaderMode =
+        data.defaultReaderMode || (sourceLang === 'JP' ? 'single' : 'webtoon');
+      const status = data.status || 'Devam Ediyor';
+      const translator = data.translator || 'Manhwa Arşiv';
+      const cover = data.cover || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak';
+      const genreList = Array.isArray(data.genres)
+        ? data.genres
+        : String(data.genres || 'Aksiyon, Fantastik')
+            .split(',')
+            .map((g) => g.trim())
+            .filter(Boolean);
+      const synopsis = data.synopsis || 'Seri özeti yakında eklenecektir.';
+
+      const seriesObject = {
+        id,
+        title,
+        altTitle,
+        sourceLang,
+        type,
+        defaultReaderMode,
+        status,
+        translator,
+        rating: '9.5',
+        genres: genreList,
+        cover,
+        synopsis,
+        chapters: []
+      };
+
+      const html = [
+        `<!-- MANOWA SERI TANITIM KODU -->`,
+        `<div id="actual-series-tag" style="display:none;">${escapeHtml(title)}</div>`,
+        `<div class="manowa-series-post"`,
+        `  data-series-id="${escapeHtml(id)}"`,
+        `  data-title="${escapeHtml(title)}"`,
+        `  data-alt-title="${escapeHtml(altTitle)}"`,
+        `  data-source-lang="${escapeHtml(sourceLang)}"`,
+        `  data-type="${escapeHtml(type)}"`,
+        `  data-reader-mode="${escapeHtml(defaultReaderMode)}"`,
+        `  data-status="${escapeHtml(status)}"`,
+        `  data-translator="${escapeHtml(translator)}"`,
+        `  data-genres="${escapeHtml(genreList.join(','))}"`,
+        `  data-cover="${escapeHtml(cover)}">`,
+        `  <img src="${escapeHtml(cover)}" alt="${escapeHtml(title)}" />`,
+        `  <div class="synopsis-box">`,
+        `    <h3>Özet</h3>`,
+        `    <p class="manowa-synopsis">${escapeHtml(synopsis)}</p>`,
+        `  </div>`,
+        `</div>`
+      ].join('\n');
+
+      const labels = ['Seri', type, status, ...genreList, title].join(', ');
+      this._log('info', 'Seri gonderi HTML kodu uretildi.', { id, labels });
+      return { html, labels, seriesObject };
+    }
+
+    /**
+     * Blogger Bolum Okuma gonderisi icin HTML kodu ve etiketleri uretir.
+     * @param {Object} [data={}] - Bolum verileri.
+     * @returns {{ html: string, labels: string, chapterObject: Object }}
+     */
+    generateChapterPost(data = {}) {
+      const seriesTitle = data.seriesTitle || data.seriesId || 'Seri';
+      const seriesId = slugify(seriesTitle);
+      const number = Number(data.chapterNumber) || 1;
+      const chapterId = `${seriesId}-bolum-${number}`;
+      const title = data.chapterTitle || `${seriesTitle} Bölüm ${number}`;
+      const readerMode = data.readerMode || 'webtoon';
+      const translatorNote = data.translatorNote || '';
+      const pages = this.parsePageUrls(data.pages);
+
+      const pageImgsHtml = pages
+        .map(
+          (url, idx) =>
+            `    <div class="separator" data-carousel-item=""><img class="manowa-page-img" data-index="${idx}" src="${escapeHtml(url)}" alt="${escapeHtml(title)} - Sayfa ${idx + 1}" loading="lazy" /></div>`
+        )
+        .join('\n');
+
+      const html = [
+        `<!-- MANOWA BOLUM OKUMA KODU -->`,
+        `<div class="manowa-chapter-post"`,
+        `  data-series-id="${escapeHtml(seriesId)}"`,
+        `  data-chapter-id="${escapeHtml(chapterId)}"`,
+        `  data-chapter-number="${number}"`,
+        `  data-chapter-title="${escapeHtml(title)}"`,
+        `  data-reader-mode="${escapeHtml(readerMode)}"`,
+        `  data-translator-note="${escapeHtml(translatorNote)}">`,
+        `  <div class="manowa-pages-data">`,
+        pageImgsHtml,
+        `  </div>`,
+        `</div>`
+      ].join('\n');
+
+      const chapterObject = {
+        id: chapterId,
+        number,
+        title,
+        date: new Date().toISOString().slice(0, 10),
+        translatorNote,
+        pages
+      };
+
+      const labels = ['Bölüm', seriesTitle].join(', ');
+      this._log('info', 'Bolum gonderi HTML kodu uretildi.', {
+        chapterId,
+        pageCount: pages.length
+      });
+      return { html, labels, chapterObject };
+    }
+  }
+
+  globalScope.PostGenerator = PostGenerator;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      PostGenerator,
+      escapeHtml,
+      slugify
+    };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/router-controller.js === */
+/**
+ * @fileoverview Blogger Kalici URL (Permalink), History API (pushState / replaceState)
+ * ve Tarayici Geri/Ileri Tusu (popstate) yonlendirme mantigini yoneten modul.
+ */
+(function (globalScope) {
+  'use strict';
+  /**
+   * Verilen URL dizgesinden kucuk harfli pathname kismini cikarir.
+   * @param {string} rawUrl - Ham URL veya yol.
+   * @returns {string} Normalize edilmis pathname.
+   */
+  function extractPathname(rawUrl) {
+    if (!rawUrl) return '';
+    const str = String(rawUrl).trim();
+    try {
+      if (str.startsWith('http://') || str.startsWith('https://')) {
+        return new URL(str).pathname.toLowerCase().replace(/\/+$/, '') || '/';
+      }
+    } catch (_err) {
+      // Gecersiz URL durumunda alt satirdan devam et
+    }
+    const clean = str.split('?')[0].split('#')[0].toLowerCase();
+    return clean.replace(/\/+$/, '') || '/';
+  }
+  /**
+   * Blogger URL uretimi, History API senkronizasyonu ve rota cozumlemesini yoneten sinif.
+   */
+  class RouterController {
+    /**
+     * RouterController nesnesini yapilandirir.
+     * @param {Object} [options={}] - Yapilandirma secenekleri.
+     */
+    constructor(options = {}) {
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.historyObj =
+        options.historyObj || (typeof history !== 'undefined' ? history : null);
+      this.locationObj =
+        options.locationObj || (typeof location !== 'undefined' ? location : null);
+    }
+    /**
+     * Ortamin yerel dosya onizlemesi (file: veya preview.html) olup olmadigini belirler.
+     * @returns {boolean} Yerel onizleme ise true.
+     */
+    isLocalPreviewEnv() {
+      const loc = this.locationObj;
+      if (!loc) return false;
+      if (loc.protocol === 'file:') return true;
+      const pathname = String(loc.pathname || '').toLowerCase();
+      return pathname.endsWith('/preview.html') || pathname.endsWith('\\preview.html');
+    }
+    /**
+     * Hedef gorunum, seri veya bolum icin gercek Blogger URL'sini veya yedek rotayi uretir.
+     * @param {Object|null} catalog - Katalog denetleyicisi.
+     * @param {'catalog'|'series'|'reader'|'generator'} viewName - Hedef gorunum.
+     * @param {string} [seriesId=''] - Seri kimligi.
+     * @param {string} [chapterId=''] - Bolum kimligi.
+     * @returns {string} Hedef URL veya yol.
+     */
+    computeTargetUrl(catalog, viewName, seriesId = '', chapterId = '') {
+      const isPreview = this.isLocalPreviewEnv();
+      if (viewName === 'catalog') {
+        return isPreview ? '#catalog' : '/';
+      }
+      if (viewName === 'generator') {
+        return isPreview ? '#olusturucu' : '/?gorunum=olusturucu';
+      }
+      if (viewName === 'series' && seriesId) {
+        const series = catalog ? catalog.getSeriesById(seriesId) : null;
+        if (series && series.url && !isPreview) {
+          try {
+            const parsed = new URL(series.url);
+            return parsed.pathname + parsed.search;
+          } catch (_err) {
+            if (series.url.startsWith('/')) return series.url;
+          }
+        }
+        return isPreview
+          ? `#seri/${encodeURIComponent(seriesId)}`
+          : `/?seri=${encodeURIComponent(seriesId)}`;
+      }
+      if (viewName === 'reader' && seriesId && chapterId) {
+        const series = catalog ? catalog.getSeriesById(seriesId) : null;
+        const chapter =
+          series && Array.isArray(series.chapters)
+            ? series.chapters.find((c) => c.id === chapterId)
+            : null;
+        if (chapter && chapter.url && !isPreview) {
+          try {
+            const parsed = new URL(chapter.url);
+            return parsed.pathname + parsed.search;
+          } catch (_err) {
+            if (chapter.url.startsWith('/')) return chapter.url;
+          }
+        }
+        return isPreview
+          ? `#oku/${encodeURIComponent(seriesId)}/${encodeURIComponent(chapterId)}`
+          : `/?seri=${encodeURIComponent(seriesId)}&bolum=${encodeURIComponent(chapterId)}`;
+      }
+      return isPreview ? '#catalog' : '/';
+    }
+    /**
+     * Tarayici adres cubugunu (URL), sayfa basligini ve History API gecmisini gunceller.
+     * @param {Object} stateObj - History state nesnesi ({ view, seriesId, chapterId }).
+     * @param {string} pageTitle - Yeni sayfa basligi.
+     * @param {string} targetUrl - Yeni URL veya yol.
+     * @param {Object} [options={}] - Gecmis guncelleme secenekleri.
+     * @returns {void}
+     */
+    syncBrowserHistory(stateObj, pageTitle, targetUrl, options = {}) {
+      const updateHistory = options.updateHistory !== undefined ? options.updateHistory : true;
+      const replace = Boolean(options.replace);
+      if (typeof document !== 'undefined' && pageTitle) {
+        document.title = pageTitle;
+      }
+      if (!updateHistory || !this.historyObj) {
+        return;
+      }
+      try {
+        if (replace && typeof this.historyObj.replaceState === 'function') {
+          this.historyObj.replaceState(stateObj, pageTitle, targetUrl);
+          return;
+        }
+        if (typeof this.historyObj.pushState === 'function') {
+          const cur = this.historyObj.state;
+          const isSame =
+            cur &&
+            cur.view === stateObj.view &&
+            (cur.seriesId || '') === (stateObj.seriesId || '') &&
+            (cur.chapterId || '') === (stateObj.chapterId || '');
+          if (!isSame) {
+            this.historyObj.pushState(stateObj, pageTitle, targetUrl);
+            if (this.logger && typeof this.logger.info === 'function') {
+              this.logger.info('Tarayici URL pushState ile degistirildi.', {
+                targetUrl,
+                state: stateObj
+              });
+            }
+          }
+        }
+      } catch (err) {
+        if (this.logger && typeof this.logger.warn === 'function') {
+          this.logger.warn('History pushState hatasi.', { error: err.message });
+        }
+      }
+    }
+    /**
+     * Verilen URL'yi cozumleyerek hangi gorunumun acilmasi gerektigini dondurur.
+     * @param {Object|null} catalog - Katalog denetleyicisi.
+     * @param {string} [currentUrl] - Kontrol edilecek URL.
+     * @returns {{ matched: boolean, view: string, seriesId: string, chapterId: string }}
+     */
+    resolveUrlRoute(catalog, currentUrl) {
+      const empty = { matched: false, view: 'catalog', seriesId: '', chapterId: '' };
+      if (!catalog) return empty;
+      const href = currentUrl || (this.locationObj ? this.locationObj.href : '');
+      if (!href) return empty;
+      const hashIndex = href.indexOf('#');
+      if (hashIndex >= 0) {
+        const hashVal = href.slice(hashIndex + 1);
+        if (hashVal.startsWith('oku/')) {
+          const parts = hashVal.slice(4).split('/');
+          if (parts.length >= 2) {
+            return {
+              matched: true,
+              view: 'reader',
+              seriesId: decodeURIComponent(parts[0]),
+              chapterId: decodeURIComponent(parts[1])
+            };
+          }
+        } else if (hashVal.startsWith('seri/')) {
+          const sId = decodeURIComponent(hashVal.slice(5));
+          if (sId) {
+            return { matched: true, view: 'series', seriesId: sId, chapterId: '' };
+          }
+        } else if (hashVal === 'olusturucu') {
+          return { matched: true, view: 'generator', seriesId: '', chapterId: '' };
+        }
+      }
+      try {
+        const parsedUrl = new URL(href, 'https://manhwaarsiv.blogspot.com');
+        const qSeri = parsedUrl.searchParams.get('seri');
+        const qBolum = parsedUrl.searchParams.get('bolum');
+        const qGorunum = parsedUrl.searchParams.get('gorunum');
+        if (qGorunum === 'olusturucu') {
+          return { matched: true, view: 'generator', seriesId: '', chapterId: '' };
+        }
+        if (qSeri && qBolum) {
+          return { matched: true, view: 'reader', seriesId: qSeri, chapterId: qBolum };
+        }
+        if (qSeri) {
+          return { matched: true, view: 'series', seriesId: qSeri, chapterId: '' };
+        }
+      } catch (_err) {
+        // Pathname kontrolune gec
+      }
+      if (!href.includes('.html')) {
+        return empty;
+      }
+      const targetPath = extractPathname(href);
+      if (targetPath.endsWith('/preview.html') || targetPath === '/' || targetPath === '') {
+        return empty;
+      }
+      for (const series of catalog.seriesList) {
+        for (const ch of series.chapters || []) {
+          if (ch.url && extractPathname(ch.url) === targetPath) {
+            return { matched: true, view: 'reader', seriesId: series.id, chapterId: ch.id };
+          }
+        }
+        if (series.url && extractPathname(series.url) === targetPath) {
+          return { matched: true, view: 'series', seriesId: series.id, chapterId: '' };
+        }
+      }
+      for (const series of catalog.seriesList) {
+        if (targetPath.includes(series.id)) {
+          const bolumMatch = targetPath.match(/bolum-(\d+)/);
+          if (bolumMatch) {
+            const targetNo = Number(bolumMatch[1]);
+            const foundCh = (series.chapters || []).find((c) => c.number === targetNo);
+            if (foundCh) {
+              return { matched: true, view: 'reader', seriesId: series.id, chapterId: foundCh.id };
+            }
+          }
+          return { matched: true, view: 'series', seriesId: series.id, chapterId: '' };
+        }
+      }
+      return empty;
+    }
+  }
+  globalScope.RouterController = RouterController;
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { RouterController, extractPathname };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/app-init.js === */
+/**
+ * @fileoverview Ana uygulama denetleyicisi (AppController).
+ * BloggerFeedLoader, CatalogController, ReadingEngine, DisqusLoader, PostGenerator
+ * ve RouterController modullerini birbirine baglar.
+ */
+(function (globalScope) {
+  'use strict';
+  const RouterClass =
+    globalScope.RouterController ||
+    (typeof require === 'function' ? require('./router-controller').RouterController : null);
+  /**
+   * Tum tema gorunumlerini, Blogger URL entegrasyonunu ve dinamik veri akisini yoneten sinif.
+   */
+  class AppController {
+    /**
+     * AppController nesnesini yapilandirir.
+     * @param {Object} [deps={}] - Bagimliliklar.
+     */
+    constructor(deps = {}) {
+      this.logger = deps.logger || globalScope.ManowaLogger || null;
+      this.catalog =
+        deps.catalog ||
+        (globalScope.CatalogController ? new globalScope.CatalogController() : null);
+      this.reader =
+        deps.reader || (globalScope.ReadingEngine ? new globalScope.ReadingEngine() : null);
+      this.disqus =
+        deps.disqus || (globalScope.DisqusLoader ? new globalScope.DisqusLoader() : null);
+      this.generator =
+        deps.generator || (globalScope.PostGenerator ? new globalScope.PostGenerator() : null);
+      this.feedLoader =
+        deps.feedLoader ||
+        (globalScope.BloggerFeedLoader
+          ? new globalScope.BloggerFeedLoader({ logger: this.logger })
+          : null);
+      this.router =
+        deps.router ||
+        (RouterClass
+          ? new RouterClass({
+              logger: this.logger,
+              historyObj: deps.historyObj,
+              locationObj: deps.locationObj
+            })
+          : null);
+      this.siteBaseTitle = 'Manhwa Arşiv';
+      this.currentView = 'catalog';
+      this.activeSeriesId = '';
+      this.activeChapterId = '';
+      this.chapterSortOrder = 'desc';
+    }
+    /**
+     * Tarayici DOM baslatmasini, ust baslik entegrasyonunu ve dinamik Blogger veri cekimini calistirir.
+     * @returns {Promise<void>}
+     */
+    async initDom() {
+      if (typeof document === 'undefined') return;
+      if (document.title) {
+        this.siteBaseTitle = document.title.split(' - ')[0].trim() || 'Manhwa Arşiv';
+      }
+      this.integrateHeaderBar();
+      this.bindEvents();
+      await this.loadDynamicData();
+      this.renderDebugLogs();
+    }
+    /**
+     * Ust kontrol cubugunu (#top-app-bar) Blogger site basliginin (#site-header-inner) icine tasir.
+     * @returns {void}
+     */
+    integrateHeaderBar() {
+      if (typeof document === 'undefined') return;
+      const headerInner =
+        document.getElementById('site-header-inner') ||
+        document.querySelector('.site-header .header-inner');
+      const topAppBar = document.getElementById('top-app-bar');
+      if (headerInner && topAppBar && topAppBar.parentElement !== headerInner) {
+        topAppBar.classList.add('in-header');
+        headerInner.appendChild(topAppBar);
+      }
+    }
+    /**
+     * Hedef gorunum icin Blogger URL'sini uretir.
+     * @param {'catalog'|'series'|'reader'|'generator'} viewName - Hedef gorunum.
+     * @param {string} [seriesId=''] - Seri kimligi.
+     * @param {string} [chapterId=''] - Bolum kimligi.
+     * @returns {string} Hedef URL.
+     */
+    computeTargetUrl(viewName, seriesId = '', chapterId = '') {
+      if (!this.router) return '/';
+      return this.router.computeTargetUrl(this.catalog, viewName, seriesId, chapterId);
+    }
+    /**
+     * Tarayici URL'sini ve History API durumunu gunceller.
+     * @param {Object} stateObj - Durum nesnesi.
+     * @param {string} pageTitle - Sayfa basligi.
+     * @param {string} targetUrl - Hedef URL.
+     * @param {Object} [options={}] - Secenekler.
+     * @returns {void}
+     */
+    syncBrowserHistory(stateObj, pageTitle, targetUrl, options = {}) {
+      if (this.router) {
+        this.router.syncBrowserHistory(stateObj, pageTitle, targetUrl, options);
+      }
+    }
+    /**
+     * Blogger JSON Feed API'sinden veya DOM'dan dinamik serileri yukler ve arayuzu gunceller.
+     * @returns {Promise<number>} Yuklenen seri sayisi.
+     */
+    async loadDynamicData() {
+      let loadedCount = 0;
+      if (this.feedLoader && this.catalog) {
+        const dynamicSeries = await this.feedLoader.fetchDynamicCatalog();
+        if (Array.isArray(dynamicSeries) && dynamicSeries.length > 0) {
+          this.catalog.setSeriesList(dynamicSeries);
+          loadedCount = dynamicSeries.length;
+        }
+      }
+      if (loadedCount === 0) {
+        loadedCount = this.ingestBloggerPostsFromDom();
+      }
+      const firstSeries =
+        this.catalog && this.catalog.seriesList.length > 0 ? this.catalog.seriesList[0] : null;
+      if (firstSeries) {
+        this.activeSeriesId = firstSeries.id;
+        const firstCh = this.catalog.getSortedChapters(firstSeries.id, 'asc')[0];
+        this.activeChapterId = firstCh ? firstCh.id : '';
+      }
+      this.updateHeroShowcase();
+      this.renderCatalogView();
+      const routed = this.handleUrlRouting(undefined, {
+        updateHistory: false,
+        replaceInitialState: true
+      });
+      if (!routed) {
+        const homeUrl = this.computeTargetUrl('catalog');
+        this.syncBrowserHistory(
+          { view: 'catalog', seriesId: '', chapterId: '' },
+          this.siteBaseTitle,
+          homeUrl,
+          { updateHistory: true, replace: true }
+        );
+        this.updateDisqus('manowa-home', this.siteBaseTitle);
+      }
+      return loadedCount;
+    }
+    /**
+     * DOM uzerindeki .post-entry veya .manowa-* dugumlerinden veri okur.
+     * @returns {number} Islenen seri/gonderi sayisi.
+     */
+    ingestBloggerPostsFromDom() {
+      if (typeof document === 'undefined' || !this.catalog) return 0;
+      if (this.feedLoader) {
+        const domSeries = this.feedLoader.parseDomEntries(document);
+        if (domSeries.length > 0) {
+          domSeries.forEach((s) => this.catalog.upsertSeries(s));
+          return domSeries.length;
+        }
+      }
+      let count = 0;
+      const seriesNodes = document.querySelectorAll('.manowa-series-post');
+      seriesNodes.forEach((node) => {
+        const id = node.getAttribute('data-series-id');
+        if (!id) return;
+        const existing = this.catalog.getSeriesById(id);
+        this.catalog.upsertSeries({
+          id,
+          title: node.getAttribute('data-title') || id,
+          altTitle: node.getAttribute('data-alt-title') || '',
+          sourceLang: node.getAttribute('data-source-lang') || 'KR',
+          type: node.getAttribute('data-type') || 'Manhwa',
+          defaultReaderMode: node.getAttribute('data-reader-mode') || 'webtoon',
+          status: node.getAttribute('data-status') || 'Devam Ediyor',
+          translator: node.getAttribute('data-translator') || 'Manhwa Arşiv',
+          rating: '9.6',
+          genres: (node.getAttribute('data-genres') || 'Aksiyon').split(',').map((s) => s.trim()),
+          cover: node.getAttribute('data-cover') || '',
+          synopsis: node.textContent.trim(),
+          chapters: existing ? existing.chapters : []
+        });
+        count++;
+      });
+      return count;
+    }
+    /**
+     * Ana sayfadaki Hero (Vitrin) alanini katalogdaki ilk gercek seriyle dinamik gunceller.
+     * @returns {void}
+     */
+    updateHeroShowcase() {
+      if (typeof document === 'undefined' || !this.catalog) return;
+      const featured =
+        this.catalog.seriesList.find((s) => s.chapters && s.chapters.length > 0) ||
+        this.catalog.seriesList[0];
+      if (!featured) return;
+      if (!this.activeSeriesId) this.activeSeriesId = featured.id;
+      const firstChapter = this.catalog.getSortedChapters(featured.id, 'asc')[0];
+      if (!this.activeChapterId && firstChapter) this.activeChapterId = firstChapter.id;
+      const badgeEl = document.getElementById('hero-badge');
+      const titleEl = document.getElementById('hero-title');
+      const descEl = document.getElementById('hero-desc');
+      const coverEl = document.getElementById('hero-cover-img');
+      const readBtn = document.getElementById('btn-hero-read');
+      const detailBtn = document.getElementById('btn-hero-detail');
+      if (badgeEl) {
+        badgeEl.textContent = `🔥 ${featured.type || 'Seri'} • ${featured.status || 'Güncel'} • ${(featured.chapters || []).length} Bölüm`;
+      }
+      if (titleEl) titleEl.textContent = featured.title;
+      if (descEl) descEl.textContent = featured.synopsis || `${featured.title} serisini hemen okuyun.`;
+      if (coverEl && featured.cover) {
+        coverEl.src = featured.cover;
+        coverEl.alt = featured.title;
+        coverEl.classList.remove('hidden');
+      }
+      if (detailBtn) {
+        detailBtn.setAttribute('href', this.computeTargetUrl('series', featured.id));
+        detailBtn.setAttribute('data-action', 'detail');
+        detailBtn.setAttribute('data-series', featured.id);
+      }
+      if (readBtn) {
+        if (firstChapter) {
+          readBtn.setAttribute('href', this.computeTargetUrl('reader', featured.id, firstChapter.id));
+          readBtn.setAttribute('data-action', 'read');
+          readBtn.setAttribute('data-series', featured.id);
+          readBtn.setAttribute('data-chapter', firstChapter.id);
+        } else {
+          readBtn.setAttribute('href', this.computeTargetUrl('series', featured.id));
+          readBtn.setAttribute('data-action', 'detail');
+          readBtn.setAttribute('data-series', featured.id);
+        }
+      }
+    }
+    /**
+     * Ziyaretci dogrudan bir Blogger seri veya bolum URL'sine girdiyse ilgili ekrani acar.
+     * @param {string} [currentUrl] - Kontrol edilecek URL.
+     * @param {Object} [options={}] - Yonlendirme secenekleri.
+     * @returns {boolean} Ozel bir gorunume yonlendirme yapildiysa true.
+     */
+    handleUrlRouting(currentUrl, options = {}) {
+      if (!this.router || !this.catalog) return false;
+      const resolved = this.router.resolveUrlRoute(this.catalog, currentUrl);
+      const routeOpts = {
+        updateHistory: Boolean(options.updateHistory || options.replaceInitialState),
+        replace: Boolean(options.replaceInitialState)
+      };
+      if (resolved.matched) {
+        if (resolved.view === 'reader') {
+          this.openReader(resolved.seriesId, resolved.chapterId, routeOpts);
+          return true;
+        }
+        if (resolved.view === 'series') {
+          this.openSeriesDetail(resolved.seriesId, routeOpts);
+          return true;
+        }
+        if (resolved.view === 'generator') {
+          this.openGenerator(routeOpts);
+          return true;
+        }
+      }
+      if (options.openCatalogOnRoot) {
+        this.openCatalog({ updateHistory: false });
+      }
+      return false;
+    }
+    /**
+     * Tarayici Geri / Ileri (popstate) olayini isler ve ilgili gorunume gecis yapar.
+     * @param {PopStateEvent|Object} [event] - PopState olayi.
+     * @returns {void}
+     */
+    handlePopState(event) {
+      const state = event && event.state ? event.state : null;
+      if (this.logger) {
+        this.logger.info('Tarayici Geri/Ileri (popstate) olayi isleniyor.', { state });
+      }
+      if (state && state.view) {
+        if (state.view === 'reader' && state.seriesId && state.chapterId) {
+          this.openReader(state.seriesId, state.chapterId, { updateHistory: false });
+          return;
+        }
+        if (state.view === 'series' && state.seriesId) {
+          this.openSeriesDetail(state.seriesId, { updateHistory: false });
+          return;
+        }
+        if (state.view === 'generator') {
+          this.openGenerator({ updateHistory: false });
+          return;
+        }
+        if (state.view === 'catalog') {
+          this.openCatalog({ updateHistory: false });
+          return;
+        }
+      }
+      const routed = this.handleUrlRouting(undefined, {
+        updateHistory: false,
+        openCatalogOnRoot: true
+      });
+      if (!routed) {
+        this.openCatalog({ updateHistory: false });
+      }
+    }
+    /**
+     * Aktif gorunumu degistirir ('catalog', 'series', 'reader', 'generator').
+     * @param {string} viewName - Hedef gorunum.
+     * @returns {void}
+     */
+    switchView(viewName) {
+      this.currentView = viewName;
+      if (typeof document === 'undefined') return;
+      const views = {
+        catalog: document.getElementById('view-catalog'),
+        series: document.getElementById('view-series'),
+        reader: document.getElementById('view-reader'),
+        generator: document.getElementById('view-generator')
+      };
+      Object.keys(views).forEach((key) => {
+        if (views[key]) views[key].classList.toggle('hidden', key !== viewName);
+      });
+      const navCatalog = document.getElementById('nav-catalog');
+      const navGen = document.getElementById('nav-generator');
+      if (navCatalog) navCatalog.classList.toggle('active', viewName === 'catalog');
+      if (navGen) navGen.classList.toggle('active', viewName === 'generator');
+      if (viewName !== 'reader' && this.reader) this.reader.stopAutoScroll();
+      if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      this.renderDebugLogs();
+    }
+    /**
+     * Ana Sayfa (Katalog & Vitrin) gorunumunu acar ve URL'yi ana sayfaya ('/') gunceller.
+     * @param {Object} [options={}] - Gecmis secenekleri.
+     * @returns {void}
+     */
+    openCatalog(options = {}) {
+      this.switchView('catalog');
+      const targetUrl = this.computeTargetUrl('catalog');
+      this.syncBrowserHistory(
+        { view: 'catalog', seriesId: '', chapterId: '' },
+        this.siteBaseTitle,
+        targetUrl,
+        options
+      );
+      this.updateDisqus('manowa-home', this.siteBaseTitle);
+    }
+    /**
+     * Gonderi Olusturucu gorunumunu acar ve URL'yi gunceller.
+     * @param {Object} [options={}] - Gecmis secenekleri.
+     * @returns {void}
+     */
+    openGenerator(options = {}) {
+      this.switchView('generator');
+      this.triggerGenerator('chapter');
+      const targetUrl = this.computeTargetUrl('generator');
+      this.syncBrowserHistory(
+        { view: 'generator', seriesId: '', chapterId: '' },
+        `Gönderi Oluşturucu - ${this.siteBaseTitle}`,
+        targetUrl,
+        options
+      );
+    }
+    /**
+     * Katalog izgarasini dinamik serilerle ve gercek Blogger URL baglantilariyla olusturur.
+     * @returns {void}
+     */
+    renderCatalogView() {
+      if (typeof document === 'undefined') return;
+      const grid = document.getElementById('catalog-grid');
+      const countLabel = document.getElementById('catalog-count-label');
+      if (!grid || !this.catalog) return;
+      const list = this.catalog.getFilteredSeries();
+      if (countLabel) countLabel.textContent = `${list.length} Seri Listeleniyor`;
+      if (list.length === 0) {
+        grid.innerHTML = `<div class="disqus-status-note">Aramanızla eşleşen seri bulunamadı.</div>`;
+        return;
+      }
+      grid.innerHTML = list
+        .map((series) => {
+          const seriesHref = this.computeTargetUrl('series', series.id);
+          const latestChapters = this.catalog.getSortedChapters(series.id, 'desc').slice(0, 2);
+          const chaptersHtml =
+            latestChapters.length > 0
+              ? latestChapters
+                  .map((ch) => {
+                    const chHref = this.computeTargetUrl('reader', series.id, ch.id);
+                    return (
+                      `<a class="chapter-mini-btn" href="${chHref}" data-action="read" data-series="${series.id}" data-chapter="${ch.id}">` +
+                      `<span>Bölüm ${ch.number}</span><span>${ch.date}</span></a>`
+                    );
+                  })
+                  .join('')
+              : `<a class="chapter-mini-btn" href="${seriesHref}" data-action="detail" data-series="${series.id}"><span>Seri Sayfası</span><span>Detay</span></a>`;
+          return `<article class="series-card">
+            <a class="card-cover-wrap" href="${seriesHref}" data-action="detail" data-series="${series.id}">
+              <img class="card-cover" src="${series.cover}" alt="${series.title}" loading="lazy" />
+              <span class="lang-badge lang-${series.sourceLang}">${series.sourceLang}</span>
+              <span class="type-badge">${series.type}</span>
+            </a>
+            <div class="card-body">
+              <a class="card-title" href="${seriesHref}" data-action="detail" data-series="${series.id}">${series.title}</a>
+              <div class="card-meta">
+                <span>📚 ${(series.chapters || []).length} Bölüm</span>
+                <span>${series.status}</span>
+              </div>
+              <div class="card-chapters">${chaptersHtml}</div>
+            </div>
+          </article>`;
+        })
+        .join('');
+    }
+    /**
+     * Secilen serinin tanitim ve bolum listesi sayfasini acar, tarayici URL'sini serinin Blogger adresine gunceller.
+     * @param {string} seriesId - Seri kimligi.
+     * @param {Object} [options={}] - Gecmis guncelleme secenekleri.
+     * @returns {void}
+     */
+    openSeriesDetail(seriesId, options = {}) {
+      const series = this.catalog ? this.catalog.getSeriesById(seriesId) : null;
+      if (!series) return;
+      this.activeSeriesId = series.id;
+      this.switchView('series');
+      const targetUrl = this.computeTargetUrl('series', series.id);
+      const pageTitle = `${series.title} - ${this.siteBaseTitle}`;
+      this.syncBrowserHistory(
+        { view: 'series', seriesId: series.id, chapterId: '' },
+        pageTitle,
+        targetUrl,
+        options
+      );
+      if (typeof document === 'undefined') return;
+      const breadcrumbTitle = document.getElementById('series-breadcrumb-title');
+      if (breadcrumbTitle) breadcrumbTitle.textContent = series.title;
+      const detailBox = document.getElementById('series-detail-box');
+      const savedProgress = this.reader ? this.reader.getProgress(series.id) : null;
+      const sortedAsc = this.catalog.getSortedChapters(series.id, 'asc');
+      const firstChapter = sortedAsc[0];
+      const latestChapter = sortedAsc[sortedAsc.length - 1];
+      const resumeChapterId = savedProgress
+        ? savedProgress.chapterId
+        : firstChapter
+          ? firstChapter.id
+          : '';
+      if (detailBox) {
+        const genresHtml = (series.genres || [])
+          .map((g) => `<span class="meta-tag">${g}</span>`)
+          .join('');
+        const firstHref = firstChapter
+          ? this.computeTargetUrl('reader', series.id, firstChapter.id)
+          : '#';
+        const latestHref = latestChapter
+          ? this.computeTargetUrl('reader', series.id, latestChapter.id)
+          : '#';
+        const resumeHref = resumeChapterId
+          ? this.computeTargetUrl('reader', series.id, resumeChapterId)
+          : '#';
+        detailBox.innerHTML = `<div class="series-detail-header">
+          <img class="detail-cover" src="${series.cover}" alt="${series.title}" />
+          <div class="detail-info">
+            <h1>${series.title}</h1>
+            <div class="detail-alt-title">${series.altTitle || ''}</div>
+            <div class="detail-badges">
+              <span class="meta-tag">Tür: ${series.type}</span>
+              <span class="meta-tag">Durum: ${series.status}</span>
+              <span class="meta-tag">Motor: ${(series.defaultReaderMode || 'webtoon').toUpperCase()}</span>
+              ${series.year ? `<span class="meta-tag">Yıl: ${series.year}</span>` : ''}
+              ${genresHtml}
+            </div>
+            <p class="detail-synopsis">${series.synopsis}</p>
+            <div class="detail-actions">
+              ${firstChapter ? `<a class="primary-btn" href="${firstHref}" data-action="read" data-series="${series.id}" data-chapter="${firstChapter.id}">📖 İlk Bölümü Oku (Bölüm ${firstChapter.number})</a>` : ''}
+              ${latestChapter && latestChapter.id !== (firstChapter && firstChapter.id) ? `<a class="icon-btn" href="${latestHref}" data-action="read" data-series="${series.id}" data-chapter="${latestChapter.id}">🔥 Son Bölüm (Bölüm ${latestChapter.number})</a>` : ''}
+              ${savedProgress && resumeChapterId ? `<a class="icon-btn" href="${resumeHref}" data-action="read" data-series="${series.id}" data-chapter="${resumeChapterId}">⏳ Kaldığım Yerden Devam Et (Sayfa ${savedProgress.pageIndex + 1})</a>` : ''}
+            </div>
+          </div>
+        </div>`;
+      }
+      this.renderChapterList();
+      this.updateDisqus(`series-${series.id}`, `${series.title} - Seri Yorumları`);
+    }
+    /**
+     * Aktif serinin bolum listesini gercek Blogger URL baglantilariyla olusturur.
+     * @returns {void}
+     */
+    renderChapterList() {
+      if (typeof document === 'undefined') return;
+      const listGrid = document.getElementById('chapter-list-grid');
+      if (!listGrid || !this.catalog) return;
+      const chapters = this.catalog.getSortedChapters(this.activeSeriesId, this.chapterSortOrder);
+      const saved = this.reader ? this.reader.getProgress(this.activeSeriesId) : null;
+      if (chapters.length === 0) {
+        listGrid.innerHTML = `<div class="disqus-status-note">Bu seri için henüz bölüm eklenmemiş.</div>`;
+        return;
+      }
+      listGrid.innerHTML = chapters
+        .map((ch) => {
+          const isRead = saved && saved.chapterId === ch.id;
+          const chHref = this.computeTargetUrl('reader', this.activeSeriesId, ch.id);
+          return `<a class="chapter-item-btn ${isRead ? 'is-read' : ''}" href="${chHref}" data-action="read" data-series="${this.activeSeriesId}" data-chapter="${ch.id}">
+            <span><strong>Bölüm ${ch.number}</strong> - ${ch.title}</span>
+            <span style="font-size: 0.78rem; color: var(--text-secondary);">${isRead ? '✓ Okundu' : ch.date}</span>
+          </a>`;
+        })
+        .join('');
+    }
+    /**
+     * Secilen bolumu okuma motorunda acar ve tarayici URL'sini bolumun Blogger adresine gunceller.
+     * @param {string} seriesId - Seri kimligi.
+     * @param {string} chapterId - Bolum kimligi.
+     * @param {Object} [options={}] - Gecmis guncelleme secenekleri.
+     * @returns {void}
+     */
+    openReader(seriesId, chapterId, options = {}) {
+      const series = this.catalog ? this.catalog.getSeriesById(seriesId) : null;
+      if (!series || !Array.isArray(series.chapters) || series.chapters.length === 0) return;
+      const chapter =
+        series.chapters.find((c) => c.id === chapterId) ||
+        this.catalog.getSortedChapters(series.id, 'asc')[0];
+      if (!chapter) return;
+      this.activeSeriesId = series.id;
+      this.activeChapterId = chapter.id;
+      this.switchView('reader');
+      const targetUrl = this.computeTargetUrl('reader', series.id, chapter.id);
+      const pageTitle = `${chapter.title} - ${this.siteBaseTitle}`;
+      this.syncBrowserHistory(
+        { view: 'reader', seriesId: series.id, chapterId: chapter.id },
+        pageTitle,
+        targetUrl,
+        options
+      );
+      if (this.reader) {
+        this.reader.setDirection(series.sourceLang === 'JP' ? 'rtl' : 'ltr');
+        this.reader.loadChapter({
+          seriesId: series.id,
+          chapterId: chapter.id,
+          pages: chapter.pages,
+          htmlContent: chapter.htmlContent || '',
+          defaultMode: chapter.isNovel ? 'novel' : (series.defaultReaderMode || 'webtoon')
+        });
+      }
+      if (typeof document === 'undefined') return;
+      const seriesHref = this.computeTargetUrl('series', series.id);
+      const seriesTitleEl = document.getElementById('reader-series-title');
+      const footerSeriesBtn = document.getElementById('btn-footer-series');
+      const chapterTitleEl = document.getElementById('reader-chapter-title');
+      const noteBox = document.getElementById('translator-note-box');
+      const selectChapter = document.getElementById('select-chapter');
+      if (seriesTitleEl) {
+        seriesTitleEl.textContent = `← ${series.title}`;
+        seriesTitleEl.setAttribute('href', seriesHref);
+        seriesTitleEl.setAttribute('data-action', 'detail');
+        seriesTitleEl.setAttribute('data-series', series.id);
+      }
+      if (footerSeriesBtn) {
+        footerSeriesBtn.setAttribute('href', seriesHref);
+        footerSeriesBtn.setAttribute('data-action', 'detail');
+        footerSeriesBtn.setAttribute('data-series', series.id);
+      }
+      if (chapterTitleEl) chapterTitleEl.textContent = chapter.title;
+      if (noteBox) {
+        if (chapter.translatorNote) {
+          noteBox.textContent = `📝 Çevirmen Notu: ${chapter.translatorNote}`;
+          noteBox.classList.remove('hidden');
+        } else {
+          noteBox.classList.add('hidden');
+        }
+      }
+      if (selectChapter) {
+        const sortedAsc = this.catalog.getSortedChapters(series.id, 'asc');
+        selectChapter.innerHTML = sortedAsc
+          .map(
+            (c) =>
+              `<option value="${c.id}" ${c.id === chapter.id ? 'selected' : ''}>Bölüm ${c.number}: ${c.title}</option>`
+          )
+          .join('');
+      }
+      this.syncReaderControls();
+      this.renderReaderViewport();
+      this.updateDisqus(`chapter-${chapter.id}`, `${series.title} - ${chapter.title}`);
+    }
+    /**
+     * Okuyucu kontrol cubugunu motor durumuyla esitler.
+     * @returns {void}
+     */
+    syncReaderControls() {
+      if (typeof document === 'undefined' || !this.reader) return;
+      const state = this.reader.getState();
+      const modeSelect = document.getElementById('select-mode');
+      const dirSelect = document.getElementById('select-direction');
+      const gapSelect = document.getElementById('select-gap');
+      const zoomLabel = document.getElementById('zoom-label');
+      if (modeSelect) modeSelect.value = state.mode;
+      if (dirSelect) dirSelect.value = state.direction;
+      if (gapSelect) gapSelect.value = String(state.gap);
+      if (zoomLabel) zoomLabel.textContent = `${state.zoom}%`;
+    }
+    /**
+     * Okuma motoru goruntuleme alanini (viewport) aktif moda gore cizer.
+     * @returns {void}
+     */
+    renderReaderViewport() {
+      if (typeof document === 'undefined') return;
+      const viewport = document.getElementById('reader-viewport');
+      const progressBar = document.getElementById('reader-progress-bar');
+      const pageCounter = document.getElementById('page-counter');
+      if (!viewport || !this.reader) return;
+      const state = this.reader.getState();
+      viewport.className = `reader-viewport mode-${state.mode} ${state.protectImages ? 'protect-images' : ''}`;
+      viewport.style.setProperty('--reader-zoom', `${Math.round((state.zoom / 100) * 800)}px`);
+      viewport.style.setProperty('--page-gap', `${state.gap}px`);
+      if (state.mode === 'novel' || (state.totalPages === 0 && this.reader.htmlContent)) {
+        viewport.innerHTML = `<article class="novel-content-box">${this.reader.htmlContent}</article>`;
+      } else if (state.mode === 'double') {
+        const imgs = state.visibleIndices
+          .map(
+            (idx) =>
+              `<img class="reader-page-item" src="${this.reader.pages[idx]}" alt="Sayfa ${idx + 1}" />`
+          )
+          .join('');
+        viewport.innerHTML = `<div class="double-page-grid">${imgs}</div>`;
+      } else {
+        viewport.innerHTML = state.visibleIndices
+          .map(
+            (idx) =>
+              `<img class="reader-page-item" src="${this.reader.pages[idx]}" alt="Sayfa ${idx + 1}" loading="lazy" />`
+          )
+          .join('');
+      }
+      if (progressBar) progressBar.style.width = `${state.progressPercent}%`;
+      if (pageCounter) {
+        if (state.mode === 'novel') {
+          pageCounter.textContent = 'Novel Metin Modu';
+        } else if (state.mode === 'webtoon') {
+          pageCounter.textContent = `Webtoon Şerit (${state.totalPages} Sayfa)`;
+        } else {
+          pageCounter.textContent = `Sayfa ${state.currentIndex + 1} / ${state.totalPages}`;
+        }
+      }
+      this.renderDebugLogs();
+    }
+    /**
+     * Onceki veya sonraki bolume gecis yapar.
+     * @param {number} delta - Bolum degisim yonu (-1 veya +1).
+     * @returns {void}
+     */
+    navigateChapter(delta) {
+      const chapters = this.catalog.getSortedChapters(this.activeSeriesId, 'asc');
+      const idx = chapters.findIndex((c) => c.id === this.activeChapterId);
+      if (idx >= 0 && idx + delta >= 0 && idx + delta < chapters.length) {
+        this.openReader(this.activeSeriesId, chapters[idx + delta].id);
+      }
+    }
+    /**
+     * Disqus yorum basligini gunceller.
+     * @param {string} identifier - Konu kimligi.
+     * @param {string} title - Konu basligi.
+     * @returns {void}
+     */
+    updateDisqus(identifier, title) {
+      if (typeof document === 'undefined' || !this.disqus) return;
+      const statusEl = document.getElementById('disqus-status');
+      this.disqus.loadThread({ identifier, title }, statusEl);
+    }
+    /**
+     * Gelistirici DEBUG log panelini gunceller.
+     * @returns {void}
+     */
+    renderDebugLogs() {
+      if (typeof document === 'undefined') return;
+      const listEl = document.getElementById('debug-log-list');
+      if (!listEl || !this.logger || typeof this.logger.getEntries !== 'function') return;
+      const entries = this.logger.getEntries().slice(-15).reverse();
+      listEl.innerHTML = entries
+        .map((e) => `<div>[${e.timestamp}] <strong>[${e.level}]</strong> ${e.message}</div>`)
+        .join('');
+    }
+    /**
+     * Tum kullanici arayuzu olay dinleyicilerini ve tarayici popstate (Geri/Ileri) dinleyicisini baglar.
+     * @returns {void}
+     */
+    bindEvents() {
+      if (typeof globalScope.addEventListener === 'function') {
+        globalScope.addEventListener('popstate', (ev) => this.handlePopState(ev));
+      }
+      document.addEventListener('click', (ev) => {
+        const target = ev.target.closest('[data-action]');
+        if (!target) return;
+        if (
+          ev.ctrlKey ||
+          ev.metaKey ||
+          ev.shiftKey ||
+          ev.altKey ||
+          (typeof ev.button === 'number' && ev.button !== 0)
+        ) {
+          return;
+        }
+        ev.preventDefault();
+        const action = target.getAttribute('data-action');
+        const seriesId = target.getAttribute('data-series');
+        const chapterId = target.getAttribute('data-chapter');
+        if (action === 'catalog') {
+          this.openCatalog();
+        } else if (action === 'detail' && seriesId) {
+          this.openSeriesDetail(seriesId);
+        } else if (action === 'read' && seriesId && chapterId) {
+          this.openReader(seriesId, chapterId);
+        }
+      });
+      const on = (id, event, fn) => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener(event, fn);
+      };
+      on('btn-gen-close', 'click', () => this.openCatalog());
+      on('nav-generator', 'click', () => this.openGenerator());
+      on('nav-random', 'click', () => {
+        const all = this.catalog.seriesList;
+        const pick = all[Math.floor(Math.random() * all.length)];
+        if (pick) this.openSeriesDetail(pick.id);
+      });
+      on('input-search', 'input', (e) => {
+        this.catalog.setSearchQuery(e.target.value);
+        this.SwitchToCatalogIfNeeded();
+        this.renderCatalogView();
+      });
+      const langGroup = document.getElementById('lang-filter-group');
+      if (langGroup) {
+        langGroup.addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-lang]');
+          if (!btn) return;
+          langGroup.querySelectorAll('.filter-pill').forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+          this.catalog.setLanguageFilter(btn.getAttribute('data-lang'));
+          this.renderCatalogView();
+        });
+      }
+      on('btn-theme-toggle', 'click', () => {
+        const html = document.documentElement;
+        const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', next);
+        if (this.logger) this.logger.info('Tema modu degistirildi.', { theme: next });
+        this.renderDebugLogs();
+      });
+      on('btn-sort-chapters', 'click', (e) => {
+        this.chapterSortOrder = this.chapterSortOrder === 'desc' ? 'asc' : 'desc';
+        e.target.textContent =
+          this.chapterSortOrder === 'desc'
+            ? '⇅ Sıralama: Yeni → Eski'
+            : '⇅ Sıralama: Eski → Yeni';
+        this.renderChapterList();
+      });
+      on('select-chapter', 'change', (e) => this.openReader(this.activeSeriesId, e.target.value));
+      on('select-mode', 'change', (e) => {
+        this.reader.setMode(e.target.value);
+        this.renderReaderViewport();
+      });
+      on('select-direction', 'change', (e) => {
+        this.reader.setDirection(e.target.value);
+        this.renderReaderViewport();
+      });
+      on('select-gap', 'change', (e) => {
+        this.reader.setGap(Number(e.target.value));
+        this.renderReaderViewport();
+      });
+      on('btn-zoom-in', 'click', () => {
+        this.reader.setZoom(this.reader.zoom + 15);
+        this.syncReaderControls();
+        this.renderReaderViewport();
+      });
+      on('btn-zoom-out', 'click', () => {
+        this.reader.setZoom(this.reader.zoom - 15);
+        this.syncReaderControls();
+        this.renderReaderViewport();
+      });
+      on('btn-autoscroll', 'click', (e) => {
+        const active = this.reader.toggleAutoScroll();
+        e.target.classList.toggle('active', active);
+        e.target.textContent = active ? '⏸ Durdur' : '▶️ Oto-Kaydır';
+      });
+      on('btn-protect', 'click', (e) => {
+        this.reader.protectImages = !this.reader.protectImages;
+        e.target.classList.toggle('active', this.reader.protectImages);
+        this.renderReaderViewport();
+      });
+      on('btn-fullscreen', 'click', () => {
+        const wrap = document.getElementById('reader-wrapper');
+        if (wrap && wrap.requestFullscreen) {
+          if (!document.fullscreenElement) wrap.requestFullscreen();
+          else document.exitFullscreen();
+        }
+      });
+      on('btn-next-page', 'click', () => {
+        if (this.reader.nextPage()) this.renderReaderViewport();
+      });
+      on('btn-prev-page', 'click', () => {
+        if (this.reader.prevPage()) this.renderReaderViewport();
+      });
+      on('btn-next-chapter', 'click', () => this.navigateChapter(1));
+      on('btn-prev-chapter', 'click', () => this.navigateChapter(-1));
+      document.addEventListener('keydown', (e) => {
+        if (
+          this.currentView !== 'reader' ||
+          ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)
+        ) {
+          return;
+        }
+        const result = this.reader.handleKeyCommand(e.code);
+        if (result !== 'none') {
+          this.syncReaderControls();
+          this.renderReaderViewport();
+        }
+      });
+      on('btn-apply-disqus', 'click', () => {
+        const input = document.getElementById('input-disqus-shortname');
+        if (input && this.disqus) {
+          this.disqus.setShortname(input.value);
+          this.updateDisqus(this.disqus.currentIdentifier || 'manowa-home', document.title);
+          this.renderDebugLogs();
+        }
+      });
+      on('btn-generate-series', 'click', () => this.triggerGenerator('series'));
+      on('btn-generate-chapter', 'click', () => this.triggerGenerator('chapter'));
+      on('btn-test-generated', 'click', () => this.testGeneratedInReader());
+      on('btn-copy-code', 'click', () => {
+        const out = document.getElementById('gen-code-output');
+        if (out && navigator.clipboard) navigator.clipboard.writeText(out.value);
+      });
+      on('btn-refresh-logs', 'click', () => this.renderDebugLogs());
+    }
+    /**
+     * Arama sirasinda katalog gorunumunde degilse katalog gorunumune gecer.
+     * @returns {void}
+     */
+    SwitchToCatalogIfNeeded() {
+      if (this.currentView !== 'catalog') {
+        this.openCatalog();
+      }
+    }
+    /**
+     * Gonderi kodu olusturucuyu calistirir.
+     * @param {'series'|'chapter'} mode - Olusturma modu.
+     * @returns {Object|null} Uretilen kod nesnesi.
+     */
+    triggerGenerator(mode) {
+      if (!this.generator) return null;
+      const title = (document.getElementById('gen-series-title') || {}).value || 'Yeni Seri';
+      const sourceLang = (document.getElementById('gen-source-lang') || {}).value || 'KR';
+      const chapterNumber = (document.getElementById('gen-chapter-num') || {}).value || 1;
+      const readerMode = (document.getElementById('gen-reader-mode') || {}).value || 'webtoon';
+      const translatorNote = (document.getElementById('gen-translator-note') || {}).value || '';
+      const pages = (document.getElementById('gen-pages-input') || {}).value || '';
+      const res =
+        mode === 'series'
+          ? this.generator.generateSeriesPost({
+              title,
+              sourceLang,
+              defaultReaderMode: readerMode
+            })
+          : this.generator.generateChapterPost({
+              seriesTitle: title,
+              chapterNumber,
+              readerMode,
+              translatorNote,
+              pages
+            });
+      const outEl = document.getElementById('gen-code-output');
+      const labelsEl = document.getElementById('gen-labels-info');
+      if (outEl) outEl.value = res.html;
+      if (labelsEl) labelsEl.textContent = `Önerilen Blogger Etiketleri: ${res.labels}`;
+      this.renderDebugLogs();
+      return res;
+    }
+    /**
+     * Olusturucudaki ornek bolumu aninda okuyucuda test eder.
+     * @returns {void}
+     */
+    testGeneratedInReader() {
+      const seriesRes = this.triggerGenerator('series');
+      const chapterRes = this.triggerGenerator('chapter');
+      if (!seriesRes || !chapterRes) return;
+      const sObj = seriesRes.seriesObject;
+      sObj.chapters = [chapterRes.chapterObject];
+      if (chapterRes.chapterObject.pages[0]) {
+        sObj.cover = chapterRes.chapterObject.pages[0];
+      }
+      this.catalog.upsertSeries(sObj);
+      this.renderCatalogView();
+      this.openReader(sObj.id, chapterRes.chapterObject.id);
+    }
+  }
+  globalScope.AppController = AppController;
+  if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+      const app = new AppController();
+      globalScope.ManowaApp = app;
+      app.initDom();
+    });
+  }
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { AppController };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+  </script>
+</body>
+</html>
