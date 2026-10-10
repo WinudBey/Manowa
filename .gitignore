@@ -4,10 +4,11 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# Çalışma Zamanı ve Derleme Logları (Otomatik oluşturulur ve temizlenir)
+# Çalışma Zamanı, Derleme Logları ve Yerel Proje Hafızası
 logs/
 *.log
 npm-debug.log*
+ai.md
 
 # Test ve Tarayıcı Otomasyon Geçici Dosyaları
 .playwright-mcp/

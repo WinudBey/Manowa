@@ -1,0 +1,80 @@
+name: Release — Otomatik Tema Derleme ve Yayınlama
+
+on:
+  push:
+    branches: [main, master]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Temayı Derle ve Releases Kısmında Yayınla
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Depoyu İndir (Checkout)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Node.js Ortamını Kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Birim Testlerini Çalıştır
+        run: npm test
+
+      - name: Temayı Derle (dist/theme.xml ve dist/preview.html)
+        run: npm run build
+
+      - name: Sürüm Bilgilerini Belirle
+        id: meta
+        run: |
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            TAG="${{ github.ref_name }}"
+          else
+            PKG_VER=$(node -p "require('./package.json').version")
+            TAG="v${PKG_VER}"
+          fi
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "title=Manowa Blogger Teması ${TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: GitHub Release Oluştur veya Güncelle
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.meta.outputs.tag }}
+          TITLE: ${{ steps.meta.outputs.title }}
+        run: |
+          NOTES="### 📦 Manowa Blogger Teması (${TAG})
+          Bu sürüm GitHub Actions tarafından otomatik olarak test edilmiş ve derlenmiştir.
+
+          #### 📥 İndirilebilir Dosyalar
+          * **\`theme.xml\`** — Blogger yönetim paneline (*Tema > Geri Yükle*) doğrudan yüklenecek canlı tema dosyası (geliştirici araçları arındırılmıştır).
+          * **\`preview.html\`** — Tarayıcıda yerel olarak test edebileceğiniz ve Gönderi Oluşturucu aracını içeren önizleme dosyası.
+
+          #### 🔗 Son Değişiklik
+          * Commit: \`${GITHUB_SHA::7}\`"
+
+          if [[ "${{ github.ref_type }}" != "tag" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -f "${TAG}" "${GITHUB_SHA}"
+            git push origin "${TAG}" --force
+          fi
+
+          if gh release view "${TAG}" >/dev/null 2>&1; then
+            echo "Mevcut sürüm (${TAG}) güncelleniyor..."
+            gh release upload "${TAG}" dist/theme.xml dist/preview.html --clobber
+            gh release edit "${TAG}" --title "${TITLE}" --notes "${NOTES}"
+          else
+            echo "Yeni sürüm (${TAG}) oluşturuluyor..."
+            gh release create "${TAG}" dist/theme.xml dist/preview.html \
+              --title "${TITLE}" \
+              --notes "${NOTES}" \
+              --target "${GITHUB_SHA}"
+          fi

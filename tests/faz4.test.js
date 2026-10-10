@@ -201,7 +201,7 @@ test('AppController: Seri ve Bolume girildiginde URL degismeli (pushState) ve Ge
   assert.equal(mockLocation.pathname, '/');
 });
 
-test('GitHub Yayin Hazirligi: .gitignore, README.md, LICENSE ve CI is akisi dosyalari mevcut olmali', () => {
+test('GitHub Yayin Hazirligi: .gitignore, README.md, LICENSE, CI ve Release is akisi dosyalari mevcut olmali', () => {
   const fs = require('node:fs');
   const path = require('node:path');
   const rootDir = path.resolve(__dirname, '..');
@@ -211,6 +211,7 @@ test('GitHub Yayin Hazirligi: .gitignore, README.md, LICENSE ve CI is akisi dosy
     'README.md',
     'LICENSE',
     '.github/workflows/ci.yml',
+    '.github/workflows/release.yml',
     'dist/theme.xml',
     'dist/preview.html'
   ];
@@ -223,6 +224,13 @@ test('GitHub Yayin Hazirligi: .gitignore, README.md, LICENSE ve CI is akisi dosy
   const gitignoreContent = fs.readFileSync(path.join(rootDir, '.gitignore'), 'utf8');
   assert.equal(gitignoreContent.includes('logs/'), true);
   assert.equal(gitignoreContent.includes('node_modules/'), true);
+  assert.equal(gitignoreContent.includes('ai.md'), true);
+
+  const releaseWorkflowContent = fs.readFileSync(path.join(rootDir, '.github/workflows/release.yml'), 'utf8');
+  assert.equal(releaseWorkflowContent.includes('npm run build'), true);
+  assert.equal(releaseWorkflowContent.includes('dist/theme.xml'), true);
+  assert.equal(releaseWorkflowContent.includes('dist/preview.html'), true);
+  assert.equal(releaseWorkflowContent.includes('gh release'), true);
 });
 
 test('UserLibrary: Favoriler (Kitapligim), Okuma Gecmisi ve Son Eklenen Bolumler dogru calismali', () => {

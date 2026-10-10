@@ -76,10 +76,10 @@ manowa/
 
 ## Blogger'a Kurulum (Hızlı Başlangıç)
 
-1. Bu depodaki [`dist/theme.xml`](dist/theme.xml) dosyasını indirin veya kopyalayın.
+1. Sağ menüdeki **Releases** ([Son Sürüm](https://github.com/WinudBey/Manowa/releases/latest)) bölümünden veya [`dist/theme.xml`](dist/theme.xml) konumundan otomatik derlenmiş `theme.xml` dosyasını indirin.
 2. **Blogger Yönetim Paneli** → **Tema** menüsüne gidin.
-3. **Özelleştir** düğmesinin yanındaki aşağı oka tıklayın ve **HTML'yi düzenle** seçeneğini açın.
-4. Mevcut kodun tamamını silin, [`dist/theme.xml`](dist/theme.xml) içeriğini yapıştırın ve sağ üstteki **Kaydet** simgesine tıklayın.
+3. **Özelleştir** düğmesinin yanındaki aşağı oka tıklayın ve **Geri Yükle** (veya **HTML'yi düzenle**) seçeneğini açın.
+4. İndirdiğiniz `theme.xml` dosyasını yükleyin (veya içeriğini yapıştırıp sağ üstteki **Kaydet** simgesine tıklayın).
 
 ---
 
