@@ -1,13 +1,59 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' expr:dir='data:blog.languageDirection' lang='tr' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' data-theme='dark' expr:dir='data:blog.languageDirection' lang='tr' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
   <head>
     <meta charset='utf-8'/>
     <meta content='width=device-width, initial-scale=1' name='viewport'/>
     <title><data:view.title.escaped/></title>
     <b:skin><![CDATA[
 /*
+-----------------------------------------------
+Blogger Tema Bilgileri
+Name:     Manowa Manga, Manhwa & Novel Teması
+Version:  1.1.0
+-----------------------------------------------
+
+<Variable name="keycolor" description="Ana Renk Teması" type="color" default="#6366f1" value="#6366f1"/>
+<Variable name="body.background" description="Arka Plan Resmi" color="$(body.background.color)" type="background" default="$(color) none repeat scroll top left" value="$(color) none repeat scroll top left"/>
+
+<Group description="1. Koyu Tema Arka Plan Renkleri" selector="body">
+  <Variable name="body.background.color" description="Birincil Arka Plan (--bg-primary)" type="color" default="#0f1117" value="#0f1117"/>
+  <Variable name="theme.bg.secondary" description="İkincil Panel Arka Planı (--bg-secondary)" type="color" default="#181b24" value="#181b24"/>
+  <Variable name="theme.bg.card" description="Kart ve Kutu Arka Planı (--bg-card)" type="color" default="#1f2330" value="#1f2330"/>
+  <Variable name="theme.border.color" description="Kenarlık Rengi (--border-color)" type="color" default="#2e3446" value="#2e3446"/>
+</Group>
+
+<Group description="2. Metin ve Vurgu Renkleri" selector=".site-main">
+  <Variable name="theme.text.primary" description="Birincil Metin Rengi (--text-primary)" type="color" default="#f1f5f9" value="#f1f5f9"/>
+  <Variable name="theme.text.secondary" description="İkincil Açıklama Metni (--text-secondary)" type="color" default="#94a3b8" value="#94a3b8"/>
+  <Variable name="theme.accent.primary" description="Ana Vurgu Rengi (--accent-primary)" type="color" default="#6366f1" value="#6366f1"/>
+  <Variable name="theme.accent.hover" description="Vurgu Üzerine Gelme Rengi (--accent-hover)" type="color" default="#818cf8" value="#818cf8"/>
+</Group>
+
+<Group description="3. Açık (Light) Tema Renkleri" selector="[data-theme='light']">
+  <Variable name="light.bg.primary" description="Açık Tema Birincil Arka Plan" type="color" default="#f8fafc" value="#f8fafc"/>
+  <Variable name="light.bg.secondary" description="Açık Tema İkincil Arka Plan" type="color" default="#ffffff" value="#ffffff"/>
+  <Variable name="light.bg.card" description="Açık Tema Kart Arka Planı" type="color" default="#f1f5f9" value="#f1f5f9"/>
+  <Variable name="light.text.primary" description="Açık Tema Birincil Metin" type="color" default="#0f172a" value="#0f172a"/>
+  <Variable name="light.text.secondary" description="Açık Tema İkincil Metin" type="color" default="#475569" value="#475569"/>
+  <Variable name="light.accent.primary" description="Açık Tema Vurgu Rengi" type="color" default="#4f46e5" value="#4f46e5"/>
+  <Variable name="light.accent.hover" description="Açık Tema Vurgu Hover" type="color" default="#4338ca" value="#4338ca"/>
+  <Variable name="light.border.color" description="Açık Tema Kenarlık Rengi" type="color" default="#e2e8f0" value="#e2e8f0"/>
+</Group>
+
+<Group description="4. Tür Rozeti Renkleri (Manhwa, Manga, Manhua, Novel)" selector=".catalog-grid">
+  <Variable name="badge.kr.color" description="Manhwa (KR) Rozet Rengi" type="color" default="#ef4444" value="#ef4444"/>
+  <Variable name="badge.jp.color" description="Manga (JP) Rozet Rengi" type="color" default="#ec4899" value="#ec4899"/>
+  <Variable name="badge.cn.color" description="Manhua (CN) Rozet Rengi" type="color" default="#f59e0b" value="#f59e0b"/>
+  <Variable name="badge.en.color" description="Novel / Diğer Rozet Rengi" type="color" default="#3b82f6" value="#3b82f6"/>
+</Group>
+
+<Group description="5. Tipografi ve Yazı Tipi" selector="body">
+  <Variable name="body.font" description="Site Ana Yazı Tipi" type="font" default="normal normal 16px 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" value="normal normal 16px 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"/>
+</Group>
+
 <Variable name="disqus.shortname" description="Disqus Forum Shortname" type="string" default="" value=""/>
+<Variable name="theme.default.mode" description="Varsayılan Tema Modu (dark veya light)" type="string" default="dark" value="dark"/>
 */
 /* === MODULE: styles/variables.css === */
 /**
@@ -1789,6 +1835,53 @@ html[data-theme="light"] .hero-dot {
   line-height: 1.5;
 }
 
+.blogger-sidebar-gadgets {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.blogger-sidebar-gadgets:empty,
+.blogger-footer-gadgets:empty {
+  display: none;
+}
+
+.blogger-sidebar-gadgets .widget,
+.blogger-footer-gadgets .widget {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.blogger-footer-gadgets {
+  max-width: 1280px;
+  margin: 0 auto 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.blogger-sidebar-gadgets .widget h2,
+.blogger-sidebar-gadgets .widget h3,
+.blogger-footer-gadgets .widget h2,
+.blogger-footer-gadgets .widget h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 0;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.blogger-sidebar-gadgets .widget a,
+.blogger-footer-gadgets .widget a {
+  color: var(--accent-hover);
+  text-decoration: none;
+}
+
 @media (max-width: 1024px) {
   .home-layout-grid {
     grid-template-columns: 1fr;
@@ -2354,13 +2447,120 @@ html[data-theme="light"] .hero-dot {
     padding: 1.25rem;
   }
 }
+
+/* === BLOGGER THEME DESIGNER VARIABLE BINDINGS === */
+:root {
+  --bg-primary: $(body.background.color);
+  --bg-secondary: $(theme.bg.secondary);
+  --bg-card: $(theme.bg.card);
+  --text-primary: $(theme.text.primary);
+  --text-secondary: $(theme.text.secondary);
+  --accent-primary: $(theme.accent.primary);
+  --accent-hover: $(theme.accent.hover);
+  --badge-kr: $(badge.kr.color);
+  --badge-jp: $(badge.jp.color);
+  --badge-cn: $(badge.cn.color);
+  --badge-en: $(badge.en.color);
+  --border-color: $(theme.border.color);
+}
+
+[data-theme="light"] {
+  --bg-primary: $(light.bg.primary);
+  --bg-secondary: $(light.bg.secondary);
+  --bg-card: $(light.bg.card);
+  --text-primary: $(light.text.primary);
+  --text-secondary: $(light.text.secondary);
+  --accent-primary: $(light.accent.primary);
+  --accent-hover: $(light.accent.hover);
+  --border-color: $(light.border.color);
+}
+
+body {
+  background: $(body.background);
+  background-color: var(--bg-primary);
+  font: $(body.font);
+}
     ]]></b:skin>
+    <b:template-skin><![CDATA[
+      body#layout {
+        background-color: #f8fafc;
+        color: #0f172a;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        padding: 16px;
+        margin: 0;
+      }
+      body#layout #top-app-bar,
+      body#layout #view-catalog,
+      body#layout #view-series,
+      body#layout #view-reader,
+      body#layout #view-bookmarks,
+      body#layout #view-history,
+      body#layout #view-generator,
+      body#layout #disqus-section,
+      body#layout #btn-scroll-top,
+      body#layout .site-footer > p {
+        display: none !important;
+      }
+      body#layout .site-header,
+      body#layout .site-main,
+      body#layout .site-footer {
+        max-width: 100%;
+        padding: 0;
+        margin: 0 0 12px 0;
+        background: transparent;
+        border: none;
+      }
+      body#layout .header-inner {
+        max-width: 100%;
+        padding: 0;
+        display: block;
+      }
+      body#layout div.section {
+        background: #ffffff;
+        border: 1px dashed #6366f1;
+        border-radius: 10px;
+        padding: 14px;
+        margin: 0 0 14px 0;
+        box-sizing: border-box;
+      }
+      body#layout #theme-config-section {
+        display: block !important;
+        background: #eef2ff;
+        border: 2px solid #6366f1;
+      }
+      body#layout #theme-config-section .widget {
+        width: 48.5%;
+        display: inline-block;
+        vertical-align: top;
+        margin: 4px 0.5%;
+        box-sizing: border-box;
+      }
+      body#layout .blogger-layout-columns {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        width: 100%;
+      }
+      body#layout #main-blog-section {
+        display: block !important;
+        flex: 2;
+        width: 65%;
+        margin: 0;
+      }
+      body#layout #sidebar-gadgets-section {
+        display: block !important;
+        flex: 1;
+        width: 35%;
+        margin: 0;
+      }
+    ]]></b:template-skin>
     <meta expr:content='data:skin.vars.disqus_shortname' id='manowa-disqus-meta' name='disqus-shortname'/>
+    <meta expr:content='data:skin.vars.theme_default_mode' id='manowa-theme-mode-meta' name='theme-default-mode'/>
   </head>
   <body>
     <header class='site-header'>
       <div class='header-inner' id='site-header-inner'>
-        <b:section id='header-section' maxwidgets='1' showaddelement='no'>
+        <b:section id='header-section' maxwidgets='1' name='Üst Başlık (Logo)' showaddelement='no'>
           <b:widget id='Header1' locked='true' title='Manowa' type='Header' version='2'>
             <b:includable id='main'>
               <a class='brand-logo' data-action='catalog' expr:href='data:blog.homepageUrl' id='brand-home-link'><data:title/></a>
@@ -2371,7 +2571,43 @@ html[data-theme="light"] .hero-dot {
     </header>
 
     <main class='site-main' id='main-content'>
-      <!-- UST KONTROL VE NAVIGASYON CUBUGU -->
+      <b:section class='hidden' id='theme-config-section' maxwidgets='4' name='Tema Değişkenleri ve Ayarları (Kalem Simgesiyle Düzenleyin)' showaddelement='no'>
+        <b:widget id='Text1' locked='true' title='Disqus Shortname (Yorum Kısa Adı)' type='Text' version='2'>
+          <b:widget-settings>
+            <b:widget-setting name='content'/>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <span class='hidden' id='blogger-cfg-disqus'><data:content/></span>
+          </b:includable>
+        </b:widget>
+        <b:widget id='Text2' locked='true' title='Varsayılan Tema Modu (dark veya light)' type='Text' version='2'>
+          <b:widget-settings>
+            <b:widget-setting name='content'>dark</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <span class='hidden' id='blogger-cfg-theme-mode'><data:content/></span>
+          </b:includable>
+        </b:widget>
+        <b:widget id='Text3' locked='true' title='Vitrin (Hero) Otomatik Geçiş Süresi (ms)' type='Text' version='2'>
+          <b:widget-settings>
+            <b:widget-setting name='content'>6000</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <span class='hidden' id='blogger-cfg-hero-interval'><data:content/></span>
+          </b:includable>
+        </b:widget>
+        <b:widget id='Text4' locked='true' title='Alt Bilgi (Footer) Slogan Metni' type='Text' version='2'>
+          <b:widget-settings>
+            <b:widget-setting name='content'>Manga, Manhwa &amp; Novel Okuma Platformu</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <span class='hidden' id='blogger-cfg-footer-text'><data:content/></span>
+          </b:includable>
+        </b:widget>
+      </b:section>
+
+      <b:if cond='!data:view.isLayoutMode'>
+        <!-- UST KONTROL VE NAVIGASYON CUBUGU -->
 <div class="filter-toolbar" id="top-app-bar">
   <div class="nav-links">
     <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Katalog &amp; Vitrin</a>
@@ -2644,29 +2880,35 @@ html[data-theme="light"] .hero-dot {
 
 <!-- YUKARI CIK YUZEN DUGMESI -->
 <button aria-label="Sayfa Başına Dön" class="scroll-top-btn hidden" id="btn-scroll-top" title="Sayfa Başına Dön" type="button">↑</button>
-      <b:section class='hidden' id='main-blog-section' showaddelement='yes'>
-        <b:widget id='Blog1' locked='true' title='Blog Kayıtları' type='Blog' version='2'>
-          <b:includable id='main'>
-            <div class='posts-wrapper hidden'>
-              <b:loop values='data:posts' var='post'>
-                <article class='post-entry' expr:data-post-id='data:post.id' expr:data-post-url='data:post.url'>
-                  <h2 class='post-title'><data:post.title/></h2>
-                  <div class='post-labels'>
-                    <b:loop values='data:post.labels' var='label'>
-                      <span class='post-label-item'><data:label.name/></span>
-                    </b:loop>
-                  </div>
-                  <div class='post-body'><data:post.body/></div>
-                </article>
-              </b:loop>
-            </div>
-          </b:includable>
-        </b:widget>
-      </b:section>
+      </b:if>
+
+      <div class='blogger-layout-columns'>
+        <b:section class='hidden' id='main-blog-section' name='Blog Kayıtları (Veri Kaynağı)' showaddelement='yes'>
+          <b:widget id='Blog1' locked='true' title='Blog Kayıtları' type='Blog' version='2'>
+            <b:includable id='main'>
+              <div class='posts-wrapper hidden'>
+                <b:loop values='data:posts' var='post'>
+                  <article class='post-entry' expr:data-post-id='data:post.id' expr:data-post-url='data:post.url'>
+                    <h2 class='post-title'><data:post.title/></h2>
+                    <div class='post-labels'>
+                      <b:loop values='data:post.labels' var='label'>
+                        <span class='post-label-item'><data:label.name/></span>
+                      </b:loop>
+                    </div>
+                    <div class='post-body'><data:post.body/></div>
+                  </article>
+                </b:loop>
+              </div>
+            </b:includable>
+          </b:widget>
+        </b:section>
+        <b:section class='blogger-sidebar-gadgets' id='sidebar-gadgets-section' name='Yan Panel (Sidebar) Gadget Alanı' showaddelement='yes'/>
+      </div>
     </main>
 
     <footer class='site-footer'>
-      <p><svg class='ui-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/><path d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/></svg> <strong><data:blog.title/></strong> — Manga, Manhwa &amp; Novel Okuma Platformu</p>
+      <b:section class='blogger-footer-gadgets' id='footer-gadgets-section' name='Alt Bilgi (Footer) Gadget Alanı' showaddelement='yes'/>
+      <p><svg class='ui-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/><path d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/></svg> <strong><data:blog.title/></strong> — <span id='footer-slogan-text'>Manga, Manhwa &amp; Novel Okuma Platformu</span></p>
     </footer>
 
     <script type='text/javascript'>
@@ -6507,6 +6749,75 @@ html[data-theme="light"] .hero-dot {
         autoScrollActive: this.autoScrollActive
       };
     }
+
+    /**
+     * Okuyucu kontrol cubugunu motor durumuyla esitler.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    syncControlsIntoDom(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
+      const state = this.getState();
+      const modeSelect = targetDoc.getElementById('select-mode');
+      const dirSelect = targetDoc.getElementById('select-direction');
+      const gapSelect = targetDoc.getElementById('select-gap');
+      const zoomLabel = targetDoc.getElementById('zoom-label');
+      if (modeSelect) modeSelect.value = state.mode;
+      if (dirSelect) dirSelect.value = state.direction;
+      if (gapSelect) gapSelect.value = String(state.gap);
+      if (zoomLabel) zoomLabel.textContent = `${state.zoom}%`;
+    }
+
+    /**
+     * Okuma motoru goruntuleme alanini (viewport) aktif moda gore cizer.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    renderViewportIntoDom(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
+      const viewport = targetDoc.getElementById('reader-viewport');
+      const progressBar = targetDoc.getElementById('reader-progress-bar');
+      const pageCounter = targetDoc.getElementById('page-counter');
+      if (!viewport) return;
+      const state = this.getState();
+      viewport.className = `reader-viewport mode-${state.mode} ${state.protectImages ? 'protect-images' : ''}`;
+      if (viewport.style && typeof viewport.style.setProperty === 'function') {
+        viewport.style.setProperty('--reader-zoom', `${Math.round((state.zoom / 100) * 800)}px`);
+        viewport.style.setProperty('--page-gap', `${state.gap}px`);
+      }
+      if (state.mode === 'novel' || (state.totalPages === 0 && this.htmlContent)) {
+        const fontClass = state.novelFontFamily === 'serif' ? 'font-serif' : '';
+        const fontSizePct = state.novelFontSize || 105;
+        viewport.innerHTML = `<article class="novel-content-box ${fontClass}" style="font-size: ${fontSizePct}%;">${this.htmlContent}</article>`;
+      } else if (state.mode === 'double') {
+        const imgs = state.visibleIndices
+          .map(
+            (idx) =>
+              `<img class="reader-page-item" src="${this.pages[idx]}" alt="Sayfa ${idx + 1}" />`
+          )
+          .join('');
+        viewport.innerHTML = `<div class="double-page-grid">${imgs}</div>`;
+      } else {
+        viewport.innerHTML = state.visibleIndices
+          .map(
+            (idx) =>
+              `<img class="reader-page-item" src="${this.pages[idx]}" alt="Sayfa ${idx + 1}" loading="lazy" />`
+          )
+          .join('');
+      }
+      if (progressBar && progressBar.style) progressBar.style.width = `${state.progressPercent}%`;
+      if (pageCounter) {
+        if (state.mode === 'novel') {
+          pageCounter.textContent = `Novel Metin (${state.novelFontSize || 105}%)`;
+        } else if (state.mode === 'webtoon') {
+          pageCounter.textContent = `Webtoon Şerit (${state.totalPages} Sayfa)`;
+        } else {
+          pageCounter.textContent = `Sayfa ${state.currentIndex + 1} / ${state.totalPages}`;
+        }
+      }
+    }
   }
 
   globalScope.ReadingEngine = ReadingEngine;
@@ -6775,6 +7086,375 @@ html[data-theme="light"] .hero-dot {
   }
 })(typeof window !== 'undefined' ? window : globalThis);
 
+/* === MODULE: scripts/blogger-theme-bridge.js === */
+/**
+ * @fileoverview Blogger Tema Ozellestiricisi (Theme Designer), kalici Koyu/Acik tema modu,
+ * ust baslik cubugu, Yan Panel (Sidebar) Gadget yerlesimi ve gelistirici araci koprusu.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  /**
+   * Kullanicinin sectigi tema modunu saklamak icin kullanilan localStorage anahtari.
+   * @type {string}
+   */
+  const THEME_STORAGE_KEY = 'manowa_theme_mode';
+
+  /**
+   * Blogger XML sablonu ile onyuz bilesenlerini birbirine baglayan kopru sinifi.
+   */
+  class BloggerThemeBridge {
+    /**
+     * BloggerThemeBridge nesnesini yapilandirir.
+     * @param {Object} [options={}] - Yapilandirma secenekleri.
+     * @param {Object} [options.logger] - Kullanilacak logger nesnesi.
+     * @param {Object} [options.storage] - Ozellestirilmis depolama nesnesi (testler icin).
+     */
+    constructor(options = {}) {
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.storage =
+        options.storage ||
+        (typeof globalScope.localStorage !== 'undefined' ? globalScope.localStorage : null);
+    }
+
+    /**
+     * Tema modunu ('dark' veya 'light') gecerli formata normalize eder.
+     * @param {string} rawMode - Ham tema modu degeri.
+     * @returns {'dark'|'light'} Normalize edilmis tema modu.
+     */
+    normalizeThemeMode(rawMode) {
+      const cleaned = String(rawMode || '')
+        .trim()
+        .toLowerCase();
+      return cleaned === 'light' ? 'light' : 'dark';
+    }
+
+    /**
+     * Kullanicinin localStorage uzerinde kayitli tema tercihini okur.
+     * @returns {'dark'|'light'|null} Kayitli tema modu veya yoksa null.
+     */
+    getSavedThemeMode() {
+      if (!this.storage || typeof this.storage.getItem !== 'function') {
+        return null;
+      }
+      try {
+        const saved = this.storage.getItem(THEME_STORAGE_KEY);
+        if (saved === 'light' || saved === 'dark') {
+          return saved;
+        }
+      } catch (_err) {
+        // Gizli sekme veya depolama erisim engeli durumunda sessizce gec
+      }
+      return null;
+    }
+
+    /**
+     * Kullanicinin tema modu tercihini localStorage uzerine kaydeder.
+     * @param {'dark'|'light'} mode - Kaydedilecek tema modu.
+     * @returns {boolean} Kayit basariliysa true.
+     */
+    saveThemeMode(mode) {
+      const normalized = this.normalizeThemeMode(mode);
+      if (!this.storage || typeof this.storage.setItem !== 'function') {
+        return false;
+      }
+      try {
+        this.storage.setItem(THEME_STORAGE_KEY, normalized);
+        return true;
+      } catch (_err) {
+        return false;
+      }
+    }
+
+    /**
+     * Blogger Yerlesim (Layout) yapilandirma widget'indan metin degerini okur ve temizler.
+     * @param {string} elementId - Hedef DOM eleman kimligi.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {string} Temizlenmis metin degeri.
+     */
+    readLayoutWidgetText(elementId, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') {
+        return '';
+      }
+      const el = targetDoc.getElementById(elementId);
+      if (!el) {
+        return '';
+      }
+      const raw =
+        typeof el.textContent === 'string'
+          ? el.textContent
+          : String(el.innerHTML || '').replace(/<[^>]*>/g, '');
+      return raw.trim();
+    }
+
+    /**
+     * Blogger Yerlesim widget'indan (#blogger-cfg-theme-mode), <meta id="manowa-theme-mode-meta">
+     * etiketinden veya <html> uzerinden varsayilan tema modunu cozumler.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {'dark'|'light'} Varsayilan tema modu.
+     */
+    resolveDefaultThemeMode(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc) {
+        return 'dark';
+      }
+      const widgetMode = this.readLayoutWidgetText('blogger-cfg-theme-mode', targetDoc);
+      if (widgetMode) {
+        return this.normalizeThemeMode(widgetMode);
+      }
+      const metaEl =
+        typeof targetDoc.getElementById === 'function'
+          ? targetDoc.getElementById('manowa-theme-mode-meta')
+          : null;
+      const metaContent =
+        metaEl && typeof metaEl.getAttribute === 'function'
+          ? metaEl.getAttribute('content')
+          : '';
+      if (metaContent && metaContent.trim()) {
+        return this.normalizeThemeMode(metaContent);
+      }
+      const htmlEl = targetDoc.documentElement;
+      const htmlAttr =
+        htmlEl && typeof htmlEl.getAttribute === 'function'
+          ? htmlEl.getAttribute('data-theme')
+          : '';
+      return this.normalizeThemeMode(htmlAttr || 'dark');
+    }
+
+    /**
+     * Blogger Yerlesim (Layout) ekranindaki Tema Degiskenleri widget'larini
+     * (Disqus Shortname, Hero Gecis Suresi, Alt Bilgi Slogani) okur ve uygular.
+     * @param {Object} [targets={}] - Hedef denetleyiciler ({ disqus, heroSlider }).
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {{ disqusShortname: string, themeMode: string, heroIntervalMs: number, footerText: string }} Uygulanan degerler.
+     */
+    applyLayoutConfigWidgets(targets = {}, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      const disqusShortname = this.readLayoutWidgetText('blogger-cfg-disqus', targetDoc);
+      if (disqusShortname && targets.disqus && typeof targets.disqus.setShortname === 'function') {
+        targets.disqus.setShortname(disqusShortname);
+      }
+
+      const intervalRaw = this.readLayoutWidgetText('blogger-cfg-hero-interval', targetDoc);
+      const parsedInterval = Number(intervalRaw);
+      const heroIntervalMs =
+        Number.isFinite(parsedInterval) && parsedInterval >= 1000 ? parsedInterval : 6000;
+      if (targets.heroSlider && Number.isFinite(parsedInterval) && parsedInterval >= 1000) {
+        targets.heroSlider.intervalMs = heroIntervalMs;
+      }
+
+      const footerText = this.readLayoutWidgetText('blogger-cfg-footer-text', targetDoc);
+      if (footerText && targetDoc && typeof targetDoc.getElementById === 'function') {
+        const sloganEl = targetDoc.getElementById('footer-slogan-text');
+        if (sloganEl) {
+          sloganEl.textContent = footerText;
+        }
+      }
+
+      return {
+        disqusShortname,
+        themeMode: this.resolveDefaultThemeMode(targetDoc),
+        heroIntervalMs,
+        footerText
+      };
+    }
+
+    /**
+     * Belirtilen tema modunu <html> etiketine uygular.
+     * @param {'dark'|'light'} mode - Uygulanacak tema modu.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {'dark'|'light'} Uygulanan tema modu.
+     */
+    applyThemeMode(mode, doc) {
+      const normalized = this.normalizeThemeMode(mode);
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (targetDoc && targetDoc.documentElement) {
+        targetDoc.documentElement.setAttribute('data-theme', normalized);
+      }
+      if (this.logger && typeof this.logger.debug === 'function') {
+        this.logger.debug('Blogger tema modu uygulandi.', { theme: normalized });
+      }
+      return normalized;
+    }
+
+    /**
+     * Baslangic tema modunu (once localStorage, yoksa Blogger Özelleştirici varsayilani) yukler.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {'dark'|'light'} Baslatilan tema modu.
+     */
+    initThemeMode(doc) {
+      const savedMode = this.getSavedThemeMode();
+      const initialMode = savedMode || this.resolveDefaultThemeMode(doc);
+      return this.applyThemeMode(initialMode, doc);
+    }
+
+    /**
+     * Koyu ve Acik tema arasinda gecis yapar ve secimi kalici olarak kaydeder.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {'dark'|'light'} Yeni aktif tema modu.
+     */
+    toggleThemeMode(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      const htmlEl = targetDoc ? targetDoc.documentElement : null;
+      const current =
+        htmlEl && typeof htmlEl.getAttribute === 'function'
+          ? htmlEl.getAttribute('data-theme')
+          : 'dark';
+      const next = current === 'light' ? 'dark' : 'light';
+      this.applyThemeMode(next, targetDoc);
+      this.saveThemeMode(next);
+      if (this.logger && typeof this.logger.info === 'function') {
+        this.logger.info('Tema modu degistirildi.', { theme: next });
+      }
+      return next;
+    }
+
+    /**
+     * Ust kontrol cubugunu (#top-app-bar) Blogger site basliginin (#site-header-inner) icine tasir.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {boolean} Tasima islemi yapildiysa true.
+     */
+    integrateHeaderBar(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc) return false;
+      const headerInner =
+        targetDoc.getElementById('site-header-inner') ||
+        (typeof targetDoc.querySelector === 'function'
+          ? targetDoc.querySelector('.site-header .header-inner')
+          : null);
+      const topAppBar = targetDoc.getElementById('top-app-bar');
+      if (headerInner && topAppBar && topAppBar.parentElement !== headerInner) {
+        topAppBar.classList.add('in-header');
+        headerInner.appendChild(topAppBar);
+        return true;
+      }
+      return false;
+    }
+
+    /**
+     * Blogger Yerlesim / Ozellestirici uzerinden eklenen Yan Panel Gadget bolumunu
+     * (#sidebar-gadgets-section) sag yan panelin (#home-sidebar) icine tasir.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {boolean} Tasima islemi yapildiysa true.
+     */
+    integrateSidebarGadgets(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return false;
+      const sidebarEl = targetDoc.getElementById('home-sidebar');
+      const gadgetsSection = targetDoc.getElementById('sidebar-gadgets-section');
+      if (sidebarEl && gadgetsSection && gadgetsSection.parentElement !== sidebarEl) {
+        sidebarEl.appendChild(gadgetsSection);
+        if (this.logger && typeof this.logger.debug === 'function') {
+          this.logger.debug('Blogger yan panel gadget alani #home-sidebar icine tasindi.');
+        }
+        return true;
+      }
+      return false;
+    }
+
+    /**
+     * Gelistirici DEBUG log panelini gunceller.
+     * @param {Object} [logger] - Log nesnesi.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    renderDebugLogs(logger, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      const activeLogger = logger || this.logger;
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
+      const listEl = targetDoc.getElementById('debug-log-list');
+      if (!listEl || !activeLogger || typeof activeLogger.getEntries !== 'function') return;
+      const entries = activeLogger.getEntries().slice(-15).reverse();
+      listEl.innerHTML = entries
+        .map((e) => `<div>[${e.timestamp}] <strong>[${e.level}]</strong> ${e.message}</div>`)
+        .join('');
+    }
+
+    /**
+     * Gelistirici gonderi olusturucu form verilerini okuyup cikti uretir.
+     * @param {Object} generator - PostGenerator nesnesi.
+     * @param {'series'|'chapter'} mode - Olusturma modu.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {Object|null} Uretilen kod nesnesi.
+     */
+    runGeneratorFromDom(generator, mode, doc) {
+      if (!generator) return null;
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      const getVal = (id, fallback) => {
+        const el = targetDoc && targetDoc.getElementById ? targetDoc.getElementById(id) : null;
+        return (el && el.value) || fallback;
+      };
+      const title = getVal('gen-series-title', 'Yeni Seri');
+      const sourceLang = getVal('gen-source-lang', 'KR');
+      const chapterNumber = getVal('gen-chapter-num', 1);
+      const readerMode = getVal('gen-reader-mode', 'webtoon');
+      const translatorNote = getVal('gen-translator-note', '');
+      const pages = getVal('gen-pages-input', '');
+      const res =
+        mode === 'series'
+          ? generator.generateSeriesPost({ title, sourceLang, defaultReaderMode: readerMode })
+          : generator.generateChapterPost({
+              seriesTitle: title,
+              chapterNumber,
+              readerMode,
+              translatorNote,
+              pages
+            });
+      if (targetDoc && targetDoc.getElementById) {
+        const outEl = targetDoc.getElementById('gen-code-output');
+        const labelsEl = targetDoc.getElementById('gen-labels-info');
+        if (outEl) outEl.value = res.html;
+        if (labelsEl) labelsEl.textContent = `Önerilen Blogger Etiketleri: ${res.labels}`;
+      }
+      return res;
+    }
+
+    /**
+     * DOM uzerindeki .manowa-series-post dugumlerinden katalog serilerini yukler.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {string} [siteBaseTitle='Manowa'] - Site basligi.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {number} Islenen seri sayisi.
+     */
+    ingestDomSeriesNodes(catalog, siteBaseTitle = 'Manowa', doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || !catalog || typeof targetDoc.querySelectorAll !== 'function') return 0;
+      let count = 0;
+      const seriesNodes = targetDoc.querySelectorAll('.manowa-series-post');
+      seriesNodes.forEach((node) => {
+        const id = node.getAttribute('data-series-id');
+        if (!id) return;
+        const existing = catalog.getSeriesById(id);
+        catalog.upsertSeries({
+          id,
+          title: node.getAttribute('data-title') || id,
+          altTitle: node.getAttribute('data-alt-title') || '',
+          sourceLang: node.getAttribute('data-source-lang') || 'KR',
+          type: node.getAttribute('data-type') || 'Manhwa',
+          defaultReaderMode: node.getAttribute('data-reader-mode') || 'webtoon',
+          status: node.getAttribute('data-status') || 'Devam Ediyor',
+          translator: node.getAttribute('data-translator') || siteBaseTitle,
+          rating: '9.6',
+          genres: (node.getAttribute('data-genres') || 'Aksiyon').split(',').map((s) => s.trim()),
+          cover: node.getAttribute('data-cover') || '',
+          synopsis: node.textContent.trim(),
+          chapters: existing ? existing.chapters : []
+        });
+        count++;
+      });
+      return count;
+    }
+  }
+
+  globalScope.BloggerThemeBridge = BloggerThemeBridge;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { BloggerThemeBridge, THEME_STORAGE_KEY };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
 /* === MODULE: scripts/app-init.js === */
 /**
  * @fileoverview Ana uygulama denetleyicisi (AppController).
@@ -6798,6 +7478,11 @@ html[data-theme="light"] .hero-dot {
   const SeriesPageClass =
     globalScope.SeriesPageController ||
     (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
+  const ThemeBridgeClass =
+    globalScope.BloggerThemeBridge ||
+    (typeof require === 'function'
+      ? require('./blogger-theme-bridge').BloggerThemeBridge
+      : null);
   const iconFn =
     (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
     (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
@@ -6830,6 +7515,10 @@ html[data-theme="light"] .hero-dot {
       this.seriesPage =
         deps.seriesPage ||
         (ResolvedSeriesPage ? new ResolvedSeriesPage({ logger: this.logger }) : null);
+      const ResolvedThemeBridge = globalScope.BloggerThemeBridge || ThemeBridgeClass;
+      this.themeBridge =
+        deps.themeBridge ||
+        (ResolvedThemeBridge ? new ResolvedThemeBridge({ logger: this.logger }) : null);
       this.feedLoader =
         deps.feedLoader ||
         (globalScope.BloggerFeedLoader
@@ -6868,6 +7557,14 @@ html[data-theme="light"] .hero-dot {
       if (originInput && this.feedLoader && typeof this.feedLoader.getSavedBlogOrigin === 'function') {
         originInput.value = this.feedLoader.getSavedBlogOrigin();
       }
+      if (this.themeBridge) {
+        this.themeBridge.applyLayoutConfigWidgets({
+          disqus: this.disqus,
+          heroSlider: this.heroSlider
+        });
+        this.themeBridge.initThemeMode();
+        this.themeBridge.integrateSidebarGadgets();
+      }
       this.integrateHeaderBar();
       this.bindEvents();
       await this.loadDynamicData();
@@ -6878,14 +7575,8 @@ html[data-theme="light"] .hero-dot {
      * @returns {void}
      */
     integrateHeaderBar() {
-      if (typeof document === 'undefined') return;
-      const headerInner =
-        document.getElementById('site-header-inner') ||
-        document.querySelector('.site-header .header-inner');
-      const topAppBar = document.getElementById('top-app-bar');
-      if (headerInner && topAppBar && topAppBar.parentElement !== headerInner) {
-        topAppBar.classList.add('in-header');
-        headerInner.appendChild(topAppBar);
+      if (this.themeBridge) {
+        this.themeBridge.integrateHeaderBar();
       }
     }
     /**
@@ -6961,30 +7652,9 @@ html[data-theme="light"] .hero-dot {
           return domSeries.length;
         }
       }
-      let count = 0;
-      const seriesNodes = document.querySelectorAll('.manowa-series-post');
-      seriesNodes.forEach((node) => {
-        const id = node.getAttribute('data-series-id');
-        if (!id) return;
-        const existing = this.catalog.getSeriesById(id);
-        this.catalog.upsertSeries({
-          id,
-          title: node.getAttribute('data-title') || id,
-          altTitle: node.getAttribute('data-alt-title') || '',
-          sourceLang: node.getAttribute('data-source-lang') || 'KR',
-          type: node.getAttribute('data-type') || 'Manhwa',
-          defaultReaderMode: node.getAttribute('data-reader-mode') || 'webtoon',
-          status: node.getAttribute('data-status') || 'Devam Ediyor',
-          translator: node.getAttribute('data-translator') || this.siteBaseTitle,
-          rating: '9.6',
-          genres: (node.getAttribute('data-genres') || 'Aksiyon').split(',').map((s) => s.trim()),
-          cover: node.getAttribute('data-cover') || '',
-          synopsis: node.textContent.trim(),
-          chapters: existing ? existing.chapters : []
-        });
-        count++;
-      });
-      return count;
+      return this.themeBridge
+        ? this.themeBridge.ingestDomSeriesNodes(this.catalog, this.siteBaseTitle, document)
+        : 0;
     }
     /**
      * Ana sayfadaki Hero Slider (Vitrin) alanini katalogdaki serilerle dinamik gunceller.
@@ -7364,60 +8034,17 @@ html[data-theme="light"] .hero-dot {
      * @returns {void}
      */
     syncReaderControls() {
-      if (typeof document === 'undefined' || !this.reader) return;
-      const state = this.reader.getState();
-      const modeSelect = document.getElementById('select-mode');
-      const dirSelect = document.getElementById('select-direction');
-      const gapSelect = document.getElementById('select-gap');
-      const zoomLabel = document.getElementById('zoom-label');
-      if (modeSelect) modeSelect.value = state.mode;
-      if (dirSelect) dirSelect.value = state.direction;
-      if (gapSelect) gapSelect.value = String(state.gap);
-      if (zoomLabel) zoomLabel.textContent = `${state.zoom}%`;
+      if (this.reader && typeof this.reader.syncControlsIntoDom === 'function') {
+        this.reader.syncControlsIntoDom();
+      }
     }
     /**
      * Okuma motoru goruntuleme alanini (viewport) aktif moda gore cizer.
      * @returns {void}
      */
     renderReaderViewport() {
-      if (typeof document === 'undefined') return;
-      const viewport = document.getElementById('reader-viewport');
-      const progressBar = document.getElementById('reader-progress-bar');
-      const pageCounter = document.getElementById('page-counter');
-      if (!viewport || !this.reader) return;
-      const state = this.reader.getState();
-      viewport.className = `reader-viewport mode-${state.mode} ${state.protectImages ? 'protect-images' : ''}`;
-      viewport.style.setProperty('--reader-zoom', `${Math.round((state.zoom / 100) * 800)}px`);
-      viewport.style.setProperty('--page-gap', `${state.gap}px`);
-      if (state.mode === 'novel' || (state.totalPages === 0 && this.reader.htmlContent)) {
-        const fontClass = state.novelFontFamily === 'serif' ? 'font-serif' : '';
-        const fontSizePct = state.novelFontSize || 105;
-        viewport.innerHTML = `<article class="novel-content-box ${fontClass}" style="font-size: ${fontSizePct}%;">${this.reader.htmlContent}</article>`;
-      } else if (state.mode === 'double') {
-        const imgs = state.visibleIndices
-          .map(
-            (idx) =>
-              `<img class="reader-page-item" src="${this.reader.pages[idx]}" alt="Sayfa ${idx + 1}" />`
-          )
-          .join('');
-        viewport.innerHTML = `<div class="double-page-grid">${imgs}</div>`;
-      } else {
-        viewport.innerHTML = state.visibleIndices
-          .map(
-            (idx) =>
-              `<img class="reader-page-item" src="${this.reader.pages[idx]}" alt="Sayfa ${idx + 1}" loading="lazy" />`
-          )
-          .join('');
-      }
-      if (progressBar) progressBar.style.width = `${state.progressPercent}%`;
-      if (pageCounter) {
-        if (state.mode === 'novel') {
-          pageCounter.textContent = `Novel Metin (${state.novelFontSize || 105}%)`;
-        } else if (state.mode === 'webtoon') {
-          pageCounter.textContent = `Webtoon Şerit (${state.totalPages} Sayfa)`;
-        } else {
-          pageCounter.textContent = `Sayfa ${state.currentIndex + 1} / ${state.totalPages}`;
-        }
+      if (this.reader && typeof this.reader.renderViewportIntoDom === 'function') {
+        this.reader.renderViewportIntoDom();
       }
       this.renderDebugLogs();
     }
@@ -7450,13 +8077,9 @@ html[data-theme="light"] .hero-dot {
      * @returns {void}
      */
     renderDebugLogs() {
-      if (typeof document === 'undefined') return;
-      const listEl = document.getElementById('debug-log-list');
-      if (!listEl || !this.logger || typeof this.logger.getEntries !== 'function') return;
-      const entries = this.logger.getEntries().slice(-15).reverse();
-      listEl.innerHTML = entries
-        .map((e) => `<div>[${e.timestamp}] <strong>[${e.level}]</strong> ${e.message}</div>`)
-        .join('');
+      if (this.themeBridge) {
+        this.themeBridge.renderDebugLogs(this.logger);
+      }
     }
     /**
      * Tum kullanici arayuzu olay dinleyicilerini ve tarayici popstate (Geri/Ileri) dinleyicisini baglar.
@@ -7566,10 +8189,9 @@ html[data-theme="light"] .hero-dot {
         });
       }
       on('btn-theme-toggle', 'click', () => {
-        const html = document.documentElement;
-        const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        html.setAttribute('data-theme', next);
-        if (this.logger) this.logger.info('Tema modu degistirildi.', { theme: next });
+        if (this.themeBridge) {
+          this.themeBridge.toggleThemeMode();
+        }
         this.renderDebugLogs();
       });
       on('select-chapter', 'change', (e) => this.openReader(this.activeSeriesId, e.target.value));
@@ -7706,31 +8328,8 @@ html[data-theme="light"] .hero-dot {
      * @returns {Object|null} Uretilen kod nesnesi.
      */
     triggerGenerator(mode) {
-      if (!this.generator) return null;
-      const title = (document.getElementById('gen-series-title') || {}).value || 'Yeni Seri';
-      const sourceLang = (document.getElementById('gen-source-lang') || {}).value || 'KR';
-      const chapterNumber = (document.getElementById('gen-chapter-num') || {}).value || 1;
-      const readerMode = (document.getElementById('gen-reader-mode') || {}).value || 'webtoon';
-      const translatorNote = (document.getElementById('gen-translator-note') || {}).value || '';
-      const pages = (document.getElementById('gen-pages-input') || {}).value || '';
-      const res =
-        mode === 'series'
-          ? this.generator.generateSeriesPost({
-              title,
-              sourceLang,
-              defaultReaderMode: readerMode
-            })
-          : this.generator.generateChapterPost({
-              seriesTitle: title,
-              chapterNumber,
-              readerMode,
-              translatorNote,
-              pages
-            });
-      const outEl = document.getElementById('gen-code-output');
-      const labelsEl = document.getElementById('gen-labels-info');
-      if (outEl) outEl.value = res.html;
-      if (labelsEl) labelsEl.textContent = `Önerilen Blogger Etiketleri: ${res.labels}`;
+      if (!this.generator || !this.themeBridge) return null;
+      const res = this.themeBridge.runGeneratorFromDom(this.generator, mode);
       this.renderDebugLogs();
       return res;
     }

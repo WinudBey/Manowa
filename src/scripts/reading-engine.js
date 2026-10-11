@@ -449,6 +449,75 @@
         autoScrollActive: this.autoScrollActive
       };
     }
+
+    /**
+     * Okuyucu kontrol cubugunu motor durumuyla esitler.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    syncControlsIntoDom(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
+      const state = this.getState();
+      const modeSelect = targetDoc.getElementById('select-mode');
+      const dirSelect = targetDoc.getElementById('select-direction');
+      const gapSelect = targetDoc.getElementById('select-gap');
+      const zoomLabel = targetDoc.getElementById('zoom-label');
+      if (modeSelect) modeSelect.value = state.mode;
+      if (dirSelect) dirSelect.value = state.direction;
+      if (gapSelect) gapSelect.value = String(state.gap);
+      if (zoomLabel) zoomLabel.textContent = `${state.zoom}%`;
+    }
+
+    /**
+     * Okuma motoru goruntuleme alanini (viewport) aktif moda gore cizer.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    renderViewportIntoDom(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
+      const viewport = targetDoc.getElementById('reader-viewport');
+      const progressBar = targetDoc.getElementById('reader-progress-bar');
+      const pageCounter = targetDoc.getElementById('page-counter');
+      if (!viewport) return;
+      const state = this.getState();
+      viewport.className = `reader-viewport mode-${state.mode} ${state.protectImages ? 'protect-images' : ''}`;
+      if (viewport.style && typeof viewport.style.setProperty === 'function') {
+        viewport.style.setProperty('--reader-zoom', `${Math.round((state.zoom / 100) * 800)}px`);
+        viewport.style.setProperty('--page-gap', `${state.gap}px`);
+      }
+      if (state.mode === 'novel' || (state.totalPages === 0 && this.htmlContent)) {
+        const fontClass = state.novelFontFamily === 'serif' ? 'font-serif' : '';
+        const fontSizePct = state.novelFontSize || 105;
+        viewport.innerHTML = `<article class="novel-content-box ${fontClass}" style="font-size: ${fontSizePct}%;">${this.htmlContent}</article>`;
+      } else if (state.mode === 'double') {
+        const imgs = state.visibleIndices
+          .map(
+            (idx) =>
+              `<img class="reader-page-item" src="${this.pages[idx]}" alt="Sayfa ${idx + 1}" />`
+          )
+          .join('');
+        viewport.innerHTML = `<div class="double-page-grid">${imgs}</div>`;
+      } else {
+        viewport.innerHTML = state.visibleIndices
+          .map(
+            (idx) =>
+              `<img class="reader-page-item" src="${this.pages[idx]}" alt="Sayfa ${idx + 1}" loading="lazy" />`
+          )
+          .join('');
+      }
+      if (progressBar && progressBar.style) progressBar.style.width = `${state.progressPercent}%`;
+      if (pageCounter) {
+        if (state.mode === 'novel') {
+          pageCounter.textContent = `Novel Metin (${state.novelFontSize || 105}%)`;
+        } else if (state.mode === 'webtoon') {
+          pageCounter.textContent = `Webtoon Şerit (${state.totalPages} Sayfa)`;
+        } else {
+          pageCounter.textContent = `Sayfa ${state.currentIndex + 1} / ${state.totalPages}`;
+        }
+      }
+    }
   }
 
   globalScope.ReadingEngine = ReadingEngine;

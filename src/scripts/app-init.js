@@ -20,6 +20,11 @@
   const SeriesPageClass =
     globalScope.SeriesPageController ||
     (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
+  const ThemeBridgeClass =
+    globalScope.BloggerThemeBridge ||
+    (typeof require === 'function'
+      ? require('./blogger-theme-bridge').BloggerThemeBridge
+      : null);
   const iconFn =
     (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
     (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
@@ -52,6 +57,10 @@
       this.seriesPage =
         deps.seriesPage ||
         (ResolvedSeriesPage ? new ResolvedSeriesPage({ logger: this.logger }) : null);
+      const ResolvedThemeBridge = globalScope.BloggerThemeBridge || ThemeBridgeClass;
+      this.themeBridge =
+        deps.themeBridge ||
+        (ResolvedThemeBridge ? new ResolvedThemeBridge({ logger: this.logger }) : null);
       this.feedLoader =
         deps.feedLoader ||
         (globalScope.BloggerFeedLoader
@@ -90,6 +99,14 @@
       if (originInput && this.feedLoader && typeof this.feedLoader.getSavedBlogOrigin === 'function') {
         originInput.value = this.feedLoader.getSavedBlogOrigin();
       }
+      if (this.themeBridge) {
+        this.themeBridge.applyLayoutConfigWidgets({
+          disqus: this.disqus,
+          heroSlider: this.heroSlider
+        });
+        this.themeBridge.initThemeMode();
+        this.themeBridge.integrateSidebarGadgets();
+      }
       this.integrateHeaderBar();
       this.bindEvents();
       await this.loadDynamicData();
@@ -100,14 +117,8 @@
      * @returns {void}
      */
     integrateHeaderBar() {
-      if (typeof document === 'undefined') return;
-      const headerInner =
-        document.getElementById('site-header-inner') ||
-        document.querySelector('.site-header .header-inner');
-      const topAppBar = document.getElementById('top-app-bar');
-      if (headerInner && topAppBar && topAppBar.parentElement !== headerInner) {
-        topAppBar.classList.add('in-header');
-        headerInner.appendChild(topAppBar);
+      if (this.themeBridge) {
+        this.themeBridge.integrateHeaderBar();
       }
     }
     /**
@@ -183,30 +194,9 @@
           return domSeries.length;
         }
       }
-      let count = 0;
-      const seriesNodes = document.querySelectorAll('.manowa-series-post');
-      seriesNodes.forEach((node) => {
-        const id = node.getAttribute('data-series-id');
-        if (!id) return;
-        const existing = this.catalog.getSeriesById(id);
-        this.catalog.upsertSeries({
-          id,
-          title: node.getAttribute('data-title') || id,
-          altTitle: node.getAttribute('data-alt-title') || '',
-          sourceLang: node.getAttribute('data-source-lang') || 'KR',
-          type: node.getAttribute('data-type') || 'Manhwa',
-          defaultReaderMode: node.getAttribute('data-reader-mode') || 'webtoon',
-          status: node.getAttribute('data-status') || 'Devam Ediyor',
-          translator: node.getAttribute('data-translator') || this.siteBaseTitle,
-          rating: '9.6',
-          genres: (node.getAttribute('data-genres') || 'Aksiyon').split(',').map((s) => s.trim()),
-          cover: node.getAttribute('data-cover') || '',
-          synopsis: node.textContent.trim(),
-          chapters: existing ? existing.chapters : []
-        });
-        count++;
-      });
-      return count;
+      return this.themeBridge
+        ? this.themeBridge.ingestDomSeriesNodes(this.catalog, this.siteBaseTitle, document)
+        : 0;
     }
     /**
      * Ana sayfadaki Hero Slider (Vitrin) alanini katalogdaki serilerle dinamik gunceller.
@@ -586,60 +576,17 @@
      * @returns {void}
      */
     syncReaderControls() {
-      if (typeof document === 'undefined' || !this.reader) return;
-      const state = this.reader.getState();
-      const modeSelect = document.getElementById('select-mode');
-      const dirSelect = document.getElementById('select-direction');
-      const gapSelect = document.getElementById('select-gap');
-      const zoomLabel = document.getElementById('zoom-label');
-      if (modeSelect) modeSelect.value = state.mode;
-      if (dirSelect) dirSelect.value = state.direction;
-      if (gapSelect) gapSelect.value = String(state.gap);
-      if (zoomLabel) zoomLabel.textContent = `${state.zoom}%`;
+      if (this.reader && typeof this.reader.syncControlsIntoDom === 'function') {
+        this.reader.syncControlsIntoDom();
+      }
     }
     /**
      * Okuma motoru goruntuleme alanini (viewport) aktif moda gore cizer.
      * @returns {void}
      */
     renderReaderViewport() {
-      if (typeof document === 'undefined') return;
-      const viewport = document.getElementById('reader-viewport');
-      const progressBar = document.getElementById('reader-progress-bar');
-      const pageCounter = document.getElementById('page-counter');
-      if (!viewport || !this.reader) return;
-      const state = this.reader.getState();
-      viewport.className = `reader-viewport mode-${state.mode} ${state.protectImages ? 'protect-images' : ''}`;
-      viewport.style.setProperty('--reader-zoom', `${Math.round((state.zoom / 100) * 800)}px`);
-      viewport.style.setProperty('--page-gap', `${state.gap}px`);
-      if (state.mode === 'novel' || (state.totalPages === 0 && this.reader.htmlContent)) {
-        const fontClass = state.novelFontFamily === 'serif' ? 'font-serif' : '';
-        const fontSizePct = state.novelFontSize || 105;
-        viewport.innerHTML = `<article class="novel-content-box ${fontClass}" style="font-size: ${fontSizePct}%;">${this.reader.htmlContent}</article>`;
-      } else if (state.mode === 'double') {
-        const imgs = state.visibleIndices
-          .map(
-            (idx) =>
-              `<img class="reader-page-item" src="${this.reader.pages[idx]}" alt="Sayfa ${idx + 1}" />`
-          )
-          .join('');
-        viewport.innerHTML = `<div class="double-page-grid">${imgs}</div>`;
-      } else {
-        viewport.innerHTML = state.visibleIndices
-          .map(
-            (idx) =>
-              `<img class="reader-page-item" src="${this.reader.pages[idx]}" alt="Sayfa ${idx + 1}" loading="lazy" />`
-          )
-          .join('');
-      }
-      if (progressBar) progressBar.style.width = `${state.progressPercent}%`;
-      if (pageCounter) {
-        if (state.mode === 'novel') {
-          pageCounter.textContent = `Novel Metin (${state.novelFontSize || 105}%)`;
-        } else if (state.mode === 'webtoon') {
-          pageCounter.textContent = `Webtoon Şerit (${state.totalPages} Sayfa)`;
-        } else {
-          pageCounter.textContent = `Sayfa ${state.currentIndex + 1} / ${state.totalPages}`;
-        }
+      if (this.reader && typeof this.reader.renderViewportIntoDom === 'function') {
+        this.reader.renderViewportIntoDom();
       }
       this.renderDebugLogs();
     }
@@ -672,13 +619,9 @@
      * @returns {void}
      */
     renderDebugLogs() {
-      if (typeof document === 'undefined') return;
-      const listEl = document.getElementById('debug-log-list');
-      if (!listEl || !this.logger || typeof this.logger.getEntries !== 'function') return;
-      const entries = this.logger.getEntries().slice(-15).reverse();
-      listEl.innerHTML = entries
-        .map((e) => `<div>[${e.timestamp}] <strong>[${e.level}]</strong> ${e.message}</div>`)
-        .join('');
+      if (this.themeBridge) {
+        this.themeBridge.renderDebugLogs(this.logger);
+      }
     }
     /**
      * Tum kullanici arayuzu olay dinleyicilerini ve tarayici popstate (Geri/Ileri) dinleyicisini baglar.
@@ -788,10 +731,9 @@
         });
       }
       on('btn-theme-toggle', 'click', () => {
-        const html = document.documentElement;
-        const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        html.setAttribute('data-theme', next);
-        if (this.logger) this.logger.info('Tema modu degistirildi.', { theme: next });
+        if (this.themeBridge) {
+          this.themeBridge.toggleThemeMode();
+        }
         this.renderDebugLogs();
       });
       on('select-chapter', 'change', (e) => this.openReader(this.activeSeriesId, e.target.value));
@@ -928,31 +870,8 @@
      * @returns {Object|null} Uretilen kod nesnesi.
      */
     triggerGenerator(mode) {
-      if (!this.generator) return null;
-      const title = (document.getElementById('gen-series-title') || {}).value || 'Yeni Seri';
-      const sourceLang = (document.getElementById('gen-source-lang') || {}).value || 'KR';
-      const chapterNumber = (document.getElementById('gen-chapter-num') || {}).value || 1;
-      const readerMode = (document.getElementById('gen-reader-mode') || {}).value || 'webtoon';
-      const translatorNote = (document.getElementById('gen-translator-note') || {}).value || '';
-      const pages = (document.getElementById('gen-pages-input') || {}).value || '';
-      const res =
-        mode === 'series'
-          ? this.generator.generateSeriesPost({
-              title,
-              sourceLang,
-              defaultReaderMode: readerMode
-            })
-          : this.generator.generateChapterPost({
-              seriesTitle: title,
-              chapterNumber,
-              readerMode,
-              translatorNote,
-              pages
-            });
-      const outEl = document.getElementById('gen-code-output');
-      const labelsEl = document.getElementById('gen-labels-info');
-      if (outEl) outEl.value = res.html;
-      if (labelsEl) labelsEl.textContent = `Önerilen Blogger Etiketleri: ${res.labels}`;
+      if (!this.generator || !this.themeBridge) return null;
+      const res = this.themeBridge.runGeneratorFromDom(this.generator, mode);
       this.renderDebugLogs();
       return res;
     }

@@ -696,3 +696,130 @@ test('SeriesPageController: Seri bilgileri sayfasi meta veri izgarasi, bolum ara
   assert.equal(typeof stageLocalBuildFiles, 'function');
 });
 
+test('BloggerThemeBridge ve Blogger Tema Ozellestiricisi (b:skin Group/Variable & Gadget) tam entegre calismali', () => {
+  const fs = require('fs');
+  const { BloggerThemeBridge, THEME_STORAGE_KEY } = require('../src/scripts/blogger-theme-bridge');
+  const { ThemeBuilder } = require('../src/core/builder');
+
+  const store = {};
+  const mockStorage = {
+    getItem(k) {
+      return Object.prototype.hasOwnProperty.call(store, k) ? store[k] : null;
+    },
+    setItem(k, v) {
+      store[k] = String(v);
+    }
+  };
+
+  let htmlThemeAttr = 'dark';
+  let metaDefaultMode = 'light';
+  const appendedToSidebar = [];
+  const mockGadgetsEl = { id: 'sidebar-gadgets-section', parentElement: null };
+  const mockSidebarEl = {
+    id: 'home-sidebar',
+    appendChild(child) {
+      child.parentElement = mockSidebarEl;
+      appendedToSidebar.push(child);
+    }
+  };
+
+  const mockSloganEl = { id: 'footer-slogan-text', textContent: 'Eski Slogan' };
+  const mockDoc = {
+    documentElement: {
+      getAttribute(k) {
+        return k === 'data-theme' ? htmlThemeAttr : '';
+      },
+      setAttribute(k, v) {
+        if (k === 'data-theme') htmlThemeAttr = v;
+      }
+    },
+    getElementById(id) {
+      if (id === 'manowa-theme-mode-meta') {
+        return {
+          getAttribute(k) {
+            return k === 'content' ? metaDefaultMode : '';
+          }
+        };
+      }
+      if (id === 'blogger-cfg-disqus') return { textContent: '  manowa-forum-tr  ' };
+      if (id === 'blogger-cfg-hero-interval') return { textContent: '8500' };
+      if (id === 'blogger-cfg-footer-text') return { textContent: 'Güncel Webtoon ve Novel Arşivi' };
+      if (id === 'footer-slogan-text') return mockSloganEl;
+      if (id === 'home-sidebar') return mockSidebarEl;
+      if (id === 'sidebar-gadgets-section') return mockGadgetsEl;
+      return null;
+    }
+  };
+
+  const bridge = new BloggerThemeBridge({ storage: mockStorage });
+
+  let appliedDisqus = '';
+  const mockDisqus = {
+    setShortname(val) {
+      appliedDisqus = val;
+    }
+  };
+  const mockHero = { intervalMs: 6000 };
+  const cfgResult = bridge.applyLayoutConfigWidgets(
+    { disqus: mockDisqus, heroSlider: mockHero },
+    mockDoc
+  );
+  assert.equal(cfgResult.disqusShortname, 'manowa-forum-tr');
+  assert.equal(appliedDisqus, 'manowa-forum-tr');
+  assert.equal(mockHero.intervalMs, 8500);
+  assert.equal(mockSloganEl.textContent, 'Güncel Webtoon ve Novel Arşivi');
+
+  // Kayitli tercih yokken Blogger meta varsayilanini ('light') kullanmali
+  const initialMode = bridge.initThemeMode(mockDoc);
+  assert.equal(initialMode, 'light');
+  assert.equal(htmlThemeAttr, 'light');
+
+  // Tema degistirildiginde 'dark' olmali ve localStorage uzerine yazilmali
+  const toggledMode = bridge.toggleThemeMode(mockDoc);
+  assert.equal(toggledMode, 'dark');
+  assert.equal(htmlThemeAttr, 'dark');
+  assert.equal(store[THEME_STORAGE_KEY], 'dark');
+
+  // Kayitli tercih varken meta 'light' olsa bile 'dark' yuklenmeli
+  const reloadedMode = bridge.initThemeMode(mockDoc);
+  assert.equal(reloadedMode, 'dark');
+
+  // Yan panel gadget bolumu #home-sidebar icine tasinmali
+  const movedGadgets = bridge.integrateSidebarGadgets(mockDoc);
+  assert.equal(movedGadgets, true);
+  assert.equal(appendedToSidebar.length, 1);
+  assert.equal(appendedToSidebar[0], mockGadgetsEl);
+
+  // Derlenen theme.xml icinde Blogger Ozellestirici degiskenleri, Yerlesim degiskenleri ve Gadget bolumleri bulunmali
+  const builder = new ThemeBuilder();
+  const { themeXmlPath } = builder.build();
+  const themeXml = fs.readFileSync(themeXmlPath, 'utf8');
+
+  assert.equal(themeXml.includes('<Variable name="keycolor"'), true);
+  assert.equal(themeXml.includes('<Variable name="body.background"'), true);
+  assert.equal(themeXml.includes('<Group description="1. Koyu Tema Arka Plan Renkleri"'), true);
+  assert.equal(themeXml.includes('<Group description="2. Metin ve Vurgu Renkleri"'), true);
+  assert.equal(themeXml.includes('<Group description="3. Açık (Light) Tema Renkleri"'), true);
+  assert.equal(
+    themeXml.includes('<Group description="4. Tür Rozeti Renkleri (Manhwa, Manga, Manhua, Novel)"'),
+    true
+  );
+  assert.equal(themeXml.includes('<Group description="5. Tipografi ve Yazı Tipi"'), true);
+  assert.equal(themeXml.includes('--bg-primary: $(body.background.color);'), true);
+  assert.equal(themeXml.includes('--accent-primary: $(theme.accent.primary);'), true);
+  assert.equal(themeXml.includes('<b:template-skin>'), true);
+  assert.equal(themeXml.includes("<b:if cond='!data:view.isLayoutMode'>"), true);
+  assert.equal(themeXml.includes("id='theme-config-section'"), true);
+  assert.equal(themeXml.includes("id='blogger-cfg-disqus'"), true);
+  assert.equal(themeXml.includes("id='blogger-cfg-theme-mode'"), true);
+  assert.equal(themeXml.includes("id='blogger-cfg-hero-interval'"), true);
+  assert.equal(themeXml.includes("id='blogger-cfg-footer-text'"), true);
+  assert.equal(themeXml.includes("class='blogger-layout-columns'"), true);
+  assert.equal(themeXml.includes("id='sidebar-gadgets-section'"), true);
+  assert.equal(themeXml.includes("id='footer-gadgets-section'"), true);
+  assert.equal(
+    themeXml.indexOf('MODULE: scripts/blogger-theme-bridge.js') <
+      themeXml.indexOf('MODULE: scripts/app-init.js'),
+    true
+  );
+});

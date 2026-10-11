@@ -157,6 +157,7 @@ class ThemeBuilder {
       'reading-engine.js',
       'post-generator.js',
       'router-controller.js',
+      'blogger-theme-bridge.js',
       'app-init.js'
     ];
 
