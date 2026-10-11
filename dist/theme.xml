@@ -776,6 +776,9 @@ html[data-theme="light"] .series-meta-card {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 1.15rem 1.25rem;
+  min-height: 168px;
+  display: flex;
+  flex-direction: column;
 }
 
 html[data-theme="light"] .series-synopsis-card {
@@ -800,28 +803,71 @@ html[data-theme="light"] .series-synopsis-card {
   margin: 0;
   font-size: 0.94rem;
   line-height: 1.65;
+  min-height: 4.65rem;
   color: var(--text-secondary);
 }
 
+.series-synopsis-card .detail-synopsis.is-collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.series-synopsis-card .detail-synopsis.is-expanded {
+  display: block;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 0.3rem;
+}
+
+.series-synopsis-toggle {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.3rem;
+  margin-top: 0.55rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--accent-hover);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.18s ease, opacity 0.18s ease;
+}
+
+html[data-theme="light"] .series-synopsis-toggle {
+  color: var(--accent-primary);
+}
+
+.series-synopsis-toggle:hover {
+  color: var(--accent-primary);
+  text-decoration: underline;
+}
+
+.detail-actions.series-cta-bar,
 .series-cta-bar {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin: 0;
+  row-gap: 0.9rem;
+  column-gap: 0.75rem;
+  margin: 0.25rem 0 0;
   padding-top: 0;
 }
 
-.series-cta-btn {
-  padding: 0.62rem 1.1rem;
+.series-cta-bar .series-cta-btn,
+.series-cta-bar .series-cta-secondary,
+.series-cta-bar .series-cta-resume {
+  min-height: 42px;
+  padding: 0.62rem 1.05rem;
   font-size: 0.86rem;
-  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
+  line-height: 1.25;
 }
 
-.series-cta-secondary,
-.series-cta-resume {
-  padding: 0.6rem 0.95rem;
-  font-size: 0.84rem;
+.series-cta-btn {
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
 }
 
 .series-cta-resume {
@@ -4548,6 +4594,12 @@ html[data-theme="light"] .hero-dot {
     /buraya serinin özet hikayesini|yepyeni tasarımla çok profesyonel|örnek özet metni/i;
 
   /**
+   * Seri açıklaması için varsayılan maksimum karakter sınırı (~3 satır).
+   * @type {number}
+   */
+  const DEFAULT_SYNOPSIS_MAX_LENGTH = 165;
+
+  /**
    * Seri tanıtım sayfasını, bölüm arama/sıralama araçlarını ve benzer serileri yöneten sınıf.
    */
   class SeriesPageController {
@@ -4555,12 +4607,17 @@ html[data-theme="light"] .hero-dot {
      * SeriesPageController nesnesini başlatır.
      * @param {Object} [options={}] - Yapılandırma seçenekleri.
      * @param {Object} [options.logger=null] - Logger nesnesi.
+     * @param {number} [options.synopsisMaxLength=165] - Özet kısaltma karakter sınırı.
      */
     constructor(options = {}) {
       this.logger = options.logger || globalScope.ManowaLogger || null;
       this.chapterSortOrder = options.chapterSortOrder || 'desc';
       this.chapterSearchQuery = '';
       this.activeSeriesId = '';
+      this.synopsisMaxLength = options.synopsisMaxLength || DEFAULT_SYNOPSIS_MAX_LENGTH;
+      this.activeSynopsisFull = '';
+      this.activeSynopsisPreview = '';
+      this.isSynopsisExpanded = false;
       this._log('debug', 'SeriesPageController baslatildi.');
     }
 
@@ -4588,6 +4645,19 @@ html[data-theme="light"] .hero-dot {
     }
 
     /**
+     * HTML öznitelikleri içinde kullanılacak metinleri güvenli şekilde kaçırır.
+     * @param {string} text - Ham metin.
+     * @returns {string} Kaçırılmış güvenli metin.
+     */
+    _escapeAttr(text) {
+      return String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    /**
      * Seri özet metnini şablon yer tutucularından temizler.
      * @param {string} rawText - Ham özet metni.
      * @param {Object} series - Seri nesnesi.
@@ -4601,6 +4671,90 @@ html[data-theme="light"] .hero-dot {
         return `${series.title || 'Bu seri'}, ${genres} kategorilerinde yer alan güncel bir ${series.type || 'Manhwa'} eseridir. Arşivimizde şu an ${count} Türkçe çeviri bölümü mevcuttur.`;
       }
       return text;
+    }
+
+    /**
+     * Seri özetini uzunluk sınırına göre kontrol eder ve gerekirse kelime bütünlüğünü koruyarak kısaltır.
+     * @param {string} rawText - Ham özet metni.
+     * @param {Object} [series={}] - Seri nesnesi.
+     * @param {number} [maxLength=this.synopsisMaxLength] - Maksimum karakter sınırı.
+     * @returns {{ isLong: boolean, previewText: string, fullText: string }} Özet önizleme bilgisi.
+     */
+    formatSynopsisPreview(rawText, series = {}, maxLength = this.synopsisMaxLength) {
+      const fullText = this.cleanSynopsis(rawText, series);
+      const limit = Number(maxLength) > 0 ? Number(maxLength) : DEFAULT_SYNOPSIS_MAX_LENGTH;
+      if (fullText.length <= limit) {
+        return {
+          isLong: false,
+          previewText: fullText,
+          fullText
+        };
+      }
+      const sliced = fullText.slice(0, limit);
+      const lastSpace = sliced.lastIndexOf(' ');
+      const cutIndex = lastSpace > Math.floor(limit * 0.65) ? lastSpace : limit;
+      const cleanCut = sliced.slice(0, cutIndex).replace(/[.,;:\-\s]+$/, '');
+      return {
+        isLong: true,
+        previewText: `${cleanCut}...`,
+        fullText
+      };
+    }
+
+    /**
+     * Uzun seri özetinin daraltılmış ("Devamını Oku") ve genişletilmiş ("Daha Az Göster") durumunu değiştirir.
+     * @param {Element|null} [cardEl=null] - Özet kartı DOM düğümü.
+     * @param {Element|null} [btnEl=null] - Tıklanan düğme DOM düğümü.
+     * @returns {boolean} Yeni genişletilmişlik durumu (true: açık, false: daraltılmış).
+     */
+    toggleSynopsis(cardEl = null, btnEl = null) {
+      const textEl =
+        (cardEl && typeof cardEl.querySelector === 'function'
+          ? cardEl.querySelector('#series-synopsis-text, .detail-synopsis')
+          : null) ||
+        (typeof document !== 'undefined' ? document.getElementById('series-synopsis-text') : null);
+      const toggleBtn =
+        btnEl ||
+        (cardEl && typeof cardEl.querySelector === 'function'
+          ? cardEl.querySelector('#btn-toggle-synopsis, .series-synopsis-toggle')
+          : null) ||
+        (typeof document !== 'undefined' ? document.getElementById('btn-toggle-synopsis') : null);
+
+      const currentExpanded =
+        toggleBtn && typeof toggleBtn.getAttribute === 'function'
+          ? toggleBtn.getAttribute('aria-expanded') === 'true'
+          : Boolean(this.isSynopsisExpanded);
+      const nextExpanded = !currentExpanded;
+      this.isSynopsisExpanded = nextExpanded;
+
+      if (textEl) {
+        const fullText =
+          (typeof textEl.getAttribute === 'function' && textEl.getAttribute('data-full-text')) ||
+          this.activeSynopsisFull ||
+          textEl.textContent;
+        const shortText =
+          (typeof textEl.getAttribute === 'function' && textEl.getAttribute('data-short-text')) ||
+          this.activeSynopsisPreview ||
+          textEl.textContent;
+        textEl.textContent = nextExpanded ? fullText : shortText;
+        if (textEl.classList) {
+          textEl.classList.toggle('is-collapsed', !nextExpanded);
+          textEl.classList.toggle('is-expanded', nextExpanded);
+        }
+      }
+
+      if (toggleBtn) {
+        if (typeof toggleBtn.setAttribute === 'function') {
+          toggleBtn.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
+        }
+        toggleBtn.textContent = nextExpanded ? 'Daha Az Göster' : 'Devamını Oku';
+      }
+
+      this._log('debug', 'Seri ozeti gorunumu degistirildi.', {
+        seriesId: this.activeSeriesId,
+        expanded: nextExpanded
+      });
+      return nextExpanded;
     }
 
     /**
@@ -4749,7 +4903,10 @@ html[data-theme="light"] .hero-dot {
         )
         .join('');
 
-      const synopsisText = this.cleanSynopsis(series.synopsis, series);
+      const synopsisInfo = this.formatSynopsisPreview(series.synopsis, series);
+      this.activeSynopsisFull = synopsisInfo.fullText;
+      this.activeSynopsisPreview = synopsisInfo.previewText;
+      this.isSynopsisExpanded = false;
       const latestDate =
         latestChapter && latestChapter.date
           ? latestChapter.date
@@ -4794,7 +4951,12 @@ html[data-theme="light"] .hero-dot {
 
             <div class="series-synopsis-card">
               <div class="series-synopsis-title">${this._icon('book')} Seri Özeti</div>
-              <p class="detail-synopsis">${synopsisText}</p>
+              <p class="detail-synopsis ${synopsisInfo.isLong ? 'is-collapsed' : ''}" id="series-synopsis-text" data-full-text="${this._escapeAttr(synopsisInfo.fullText)}" data-short-text="${this._escapeAttr(synopsisInfo.previewText)}">${synopsisInfo.previewText}</p>
+              ${
+                synopsisInfo.isLong
+                  ? `<button class="series-synopsis-toggle" id="btn-toggle-synopsis" type="button" aria-expanded="false">Devamını Oku</button>`
+                  : ''
+              }
             </div>
 
             <div class="detail-actions series-cta-bar">
@@ -5051,6 +5213,14 @@ html[data-theme="light"] .hero-dot {
       const viewSeries = document.getElementById('view-series');
       if (viewSeries) {
         viewSeries.addEventListener('click', (e) => {
+          const synopsisBtn = e.target.closest('#btn-toggle-synopsis, .series-synopsis-toggle');
+          if (synopsisBtn) {
+            e.preventDefault();
+            const cardEl = synopsisBtn.closest('.series-synopsis-card');
+            this.toggleSynopsis(cardEl, synopsisBtn);
+            return;
+          }
+
           const genreBtn = e.target.closest('[data-series-genre]');
           if (genreBtn) {
             e.preventDefault();

@@ -549,6 +549,77 @@ test('SeriesPageController: Seri bilgileri sayfasi meta veri izgarasi, bolum ara
   assert.equal(detailHtml.includes('Manowa Editör'), true);
   assert.equal(detailHtml.includes('data-series-genre="Fantastik"'), true);
   assert.equal(detailHtml.includes('Devam Et: Bölüm 1 (Sayfa 3)'), true);
+  assert.equal(detailHtml.includes('id="btn-toggle-synopsis"'), false);
+
+  const longSynopsis =
+    'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, "consectetur", from a Lorem Ipsum passage.';
+  const longSeries = { ...targetSeries, synopsis: longSynopsis };
+  const previewInfo = seriesPage.formatSynopsisPreview(longSynopsis, longSeries);
+  assert.equal(previewInfo.isLong, true);
+  assert.equal(previewInfo.previewText.endsWith('...'), true);
+  assert.equal(previewInfo.previewText.endsWith('....'), false);
+  assert.equal(previewInfo.previewText.length <= 168, true);
+  assert.equal(previewInfo.fullText, longSynopsis);
+
+  const longDetailHtml = seriesPage.renderSeriesDetailHtml(
+    longSeries,
+    catalog,
+    library,
+    null,
+    (v, s, c) => `/${v}/${s}/${c || ''}`
+  );
+  assert.equal(longDetailHtml.includes('class="detail-synopsis is-collapsed"'), true);
+  assert.equal(longDetailHtml.includes('id="btn-toggle-synopsis"'), true);
+  assert.equal(longDetailHtml.includes('Devamını Oku</button>'), true);
+
+  const mockTextEl = {
+    textContent: previewInfo.previewText,
+    attrs: {
+      'data-full-text': previewInfo.fullText,
+      'data-short-text': previewInfo.previewText
+    },
+    classes: new Set(['detail-synopsis', 'is-collapsed']),
+    getAttribute(k) {
+      return this.attrs[k];
+    },
+    classList: {
+      toggle(cls, force) {
+        if (force) mockTextEl.classes.add(cls);
+        else mockTextEl.classes.delete(cls);
+      }
+    }
+  };
+  const mockBtnEl = {
+    textContent: 'Devamını Oku',
+    attrs: { 'aria-expanded': 'false' },
+    getAttribute(k) {
+      return this.attrs[k];
+    },
+    setAttribute(k, v) {
+      this.attrs[k] = v;
+    }
+  };
+  const mockCardEl = {
+    querySelector(sel) {
+      if (sel.includes('series-synopsis-text')) return mockTextEl;
+      if (sel.includes('btn-toggle-synopsis')) return mockBtnEl;
+      return null;
+    }
+  };
+
+  const expandedState = seriesPage.toggleSynopsis(mockCardEl, mockBtnEl);
+  assert.equal(expandedState, true);
+  assert.equal(mockTextEl.textContent, longSynopsis);
+  assert.equal(mockBtnEl.textContent, 'Daha Az Göster');
+  assert.equal(mockBtnEl.getAttribute('aria-expanded'), 'true');
+  assert.equal(mockTextEl.classes.has('is-expanded'), true);
+
+  const collapsedState = seriesPage.toggleSynopsis(mockCardEl, mockBtnEl);
+  assert.equal(collapsedState, false);
+  assert.equal(mockTextEl.textContent, previewInfo.previewText);
+  assert.equal(mockBtnEl.textContent, 'Devamını Oku');
+  assert.equal(mockBtnEl.getAttribute('aria-expanded'), 'false');
+  assert.equal(mockTextEl.classes.has('is-collapsed'), true);
 
   const loader = new BloggerFeedLoader();
   const parsedMeta = loader.extractSeriesMetadata(
@@ -602,4 +673,6 @@ test('SeriesPageController: Seri bilgileri sayfasi meta veri izgarasi, bolum ara
   );
   assert.equal(themeXml.includes('id="input-chapter-search"'), true);
   assert.equal(themeXml.includes('id="series-related-section"'), true);
+  assert.equal(themeXml.includes('min-height: 168px;'), true);
+  assert.equal(themeXml.includes('btn-toggle-synopsis'), true);
 });
