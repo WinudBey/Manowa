@@ -268,10 +268,10 @@
 
         <div class="hero-slide-grid">
           <div class="hero-content">
-            ${genresBlockHtml}
             <h1 class="hero-title" id="hero-title">
               <a class="hero-title-link" href="${detailHref}" data-action="detail" data-series="${featured.id}">${featured.title}</a>
             </h1>
+            ${genresBlockHtml}
             <div class="hero-details" id="hero-details">
               <span class="hero-detail-item hero-detail-type">${typeLabel}</span>
               <span class="hero-detail-item">${statusLabel}</span>

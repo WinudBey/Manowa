@@ -412,21 +412,21 @@ test('HeroSlider: Coklu seri gecisi, dokunmatik kaydirma ve yer tutucu ozet temi
   // Sablon yer tutucu ozet temizligi
   const cleaned = slider.cleanSynopsis(
     'Buraya serinin özet hikayesini uzun uzun yazabilirsiniz. Yepyeni tasarımla çok profesyonel duracaktır.',
-    { title: 'Gölge Hükümdarı', type: 'Manhwa', genres: ['Aksiyon', 'Zindan'], chapters: [{ id: '1' }] }
+    { title: 'Tomb Raider King', type: 'Manhwa', genres: ['Aksiyon', 'Zindan'], chapters: [{ id: '1' }] }
   );
   assert.equal(cleaned.includes('Buraya serinin özet hikayesini'), false);
-  assert.equal(cleaned.includes('Gölge Hükümdarı'), true);
+  assert.equal(cleaned.includes('Tomb Raider King'), true);
 
-  // Yukarida kategoriler, baslik ve baslik alti seri ayrintilari kontrolu
+  // Baslik -> Kategoriler (#hero-genres) -> Seri Bilgileri (#hero-details) -> Ozet (#hero-desc) siralamasi kontrolu
   slider.goToSlide(0);
   const html = slider.buildSliderHtml(catalog, library, (v, s, c) => `/${v}/${s}/${c || ''}`);
   assert.equal(html.includes('class="hero-backdrop"'), true);
   assert.equal(html.includes('id="hero-badge"'), false);
-  assert.equal(html.includes('id="hero-genres"'), true);
   assert.equal(html.includes('id="hero-title"'), true);
+  assert.equal(html.includes('id="hero-genres"'), true);
   assert.equal(html.includes('id="hero-details"'), true);
-  assert.equal(html.indexOf('id="hero-genres"') < html.indexOf('id="hero-title"'), true);
-  assert.equal(html.indexOf('id="hero-details"') > html.indexOf('id="hero-title"'), true);
+  assert.equal(html.indexOf('id="hero-title"') < html.indexOf('id="hero-genres"'), true);
+  assert.equal(html.indexOf('id="hero-genres"') < html.indexOf('id="hero-details"'), true);
   assert.equal(html.includes('id="hero-desc"'), true);
   assert.equal(html.includes('id="btn-hero-read"'), true);
   assert.equal(html.includes('id="btn-hero-detail"'), true);

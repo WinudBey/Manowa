@@ -1424,11 +1424,11 @@ html[data-theme="light"] .hero-dot {
     <div class="hero-backdrop-overlay"></div>
     <div class="hero-slide-grid">
       <div class="hero-content">
+        <h1 class="hero-title" id="hero-title">Manhwa &amp; Manga Arşivi</h1>
         <div class="hero-genres" id="hero-genres">
           <span class="hero-detail-genre">Aksiyon</span>
           <span class="hero-detail-genre">Fantastik</span>
         </div>
-        <h1 class="hero-title" id="hero-title">Manhwa &amp; Manga Arşivi</h1>
         <div class="hero-details" id="hero-details">
           <span class="hero-detail-item hero-detail-type">Manhwa</span>
           <span class="hero-detail-item">Devam Ediyor</span>
@@ -3628,10 +3628,10 @@ html[data-theme="light"] .hero-dot {
 
         <div class="hero-slide-grid">
           <div class="hero-content">
-            ${genresBlockHtml}
             <h1 class="hero-title" id="hero-title">
               <a class="hero-title-link" href="${detailHref}" data-action="detail" data-series="${featured.id}">${featured.title}</a>
             </h1>
+            ${genresBlockHtml}
             <div class="hero-details" id="hero-details">
               <span class="hero-detail-item hero-detail-type">${typeLabel}</span>
               <span class="hero-detail-item">${statusLabel}</span>
