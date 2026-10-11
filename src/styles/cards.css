@@ -273,21 +273,23 @@
 
 .chapter-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 0.65rem;
-  max-height: 420px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.7rem;
+  max-height: 480px;
   overflow-y: auto;
-  padding-right: 0.25rem;
+  padding: 4px 0.25rem 4px 0;
 }
 
 .chapter-item-btn {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
+  align-items: stretch;
+  gap: 0.45rem;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  padding: 0.65rem 0.9rem;
+  padding: 0.75rem 0.9rem;
   border-radius: var(--radius-md);
   cursor: pointer;
   text-align: left;
@@ -300,8 +302,10 @@
 }
 
 .chapter-item-btn.is-read {
-  opacity: 0.65;
-  border-left: 3px solid var(--accent-primary);
+  opacity: 1;
+  border-color: rgba(16, 185, 129, 0.42);
+  border-left: 3px solid #10b981;
+  background: rgba(16, 185, 129, 0.06);
 }
 
 .disqus-container {

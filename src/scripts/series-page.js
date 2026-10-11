@@ -444,14 +444,61 @@
     }
 
     /**
-     * Bölüm listesi ızgarası (#chapter-list-grid) için numaralı ve durum rozetli HTML üretir.
+     * Bölüm yayın tarihini 1 aya (30 güne) kadar göreceli ("Bugün", "X gün önce", "1 ay önce"),
+     * 30 günden eski ise normal tarih ("YYYY-AA-GG") formatında döndürür.
+     * @param {string} dateStr - Bölüm tarihi ('YYYY-MM-DD' veya ISO dizgesi).
+     * @param {Date|string} [nowDate=new Date()] - Referans güncel tarih.
+     * @returns {string} Formatlanmış tarih metni.
+     */
+    formatRelativeChapterDate(dateStr, nowDate = new Date()) {
+      const raw = String(dateStr || '').trim();
+      if (!raw) {
+        return 'Güncel';
+      }
+      const parseToUtcMidnight = (val) => {
+        if (val instanceof Date && !Number.isNaN(val.getTime())) {
+          return Date.UTC(val.getFullYear(), val.getMonth(), val.getDate());
+        }
+        const str = String(val || '').trim();
+        const ymd = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (ymd) {
+          return Date.UTC(Number(ymd[1]), Number(ymd[2]) - 1, Number(ymd[3]));
+        }
+        const parsed = new Date(str);
+        if (!Number.isNaN(parsed.getTime())) {
+          return Date.UTC(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
+        }
+        return NaN;
+      };
+
+      const targetUtc = parseToUtcMidnight(raw);
+      const nowUtc = parseToUtcMidnight(nowDate);
+      if (Number.isNaN(targetUtc) || Number.isNaN(nowUtc)) {
+        return raw;
+      }
+      const diffDays = Math.floor((nowUtc - targetUtc) / 86400000);
+      if (diffDays <= 0) {
+        return 'Bugün';
+      }
+      if (diffDays < 30) {
+        return `${diffDays} gün önce`;
+      }
+      if (diffDays === 30) {
+        return '1 ay önce';
+      }
+      return raw.slice(0, 10);
+    }
+
+    /**
+     * Bölüm listesi ızgarası (#chapter-list-grid) için kompakt kutu ve göreceli tarihli HTML üretir.
      * @param {string} seriesId - Seri kimliği.
      * @param {Array<Object>} chapters - Sıralanmış/filtrelenmiş bölüm listesi.
      * @param {Object|null} savedProgress - Kullanıcının kayıtlı ilerlemesi.
      * @param {Function} computeUrlFn - URL hesaplama fonksiyonu.
+     * @param {Date|string} [nowDate=new Date()] - Göreceli tarih hesabı için referans tarih.
      * @returns {string} Bölüm listesi HTML içeriği.
      */
-    renderChapterListHtml(seriesId, chapters, savedProgress, computeUrlFn) {
+    renderChapterListHtml(seriesId, chapters, savedProgress, computeUrlFn, nowDate = new Date()) {
       if (!Array.isArray(chapters) || chapters.length === 0) {
         if (this.chapterSearchQuery) {
           return `<div class="disqus-status-note">"${this.chapterSearchQuery}" aramasıyla eşleşen bölüm bulunamadı.</div>`;
@@ -462,21 +509,19 @@
         .map((ch) => {
           const isRead = Boolean(savedProgress && savedProgress.chapterId === ch.id);
           const chHref = computeUrlFn('reader', seriesId, ch.id);
-          const formatBadge = ch.isNovel ? 'Novel' : 'Bölüm';
-          return `<a class="chapter-item-btn chapter-card-item ${isRead ? 'is-read' : ''}" href="${chHref}" data-action="read" data-series="${seriesId}" data-chapter="${ch.id}">
-            <div class="chapter-card-left">
-              <span class="chapter-num-pill">#${ch.number}</span>
-              <div class="chapter-title-group">
-                <strong class="chapter-title-text">Bölüm ${ch.number} - ${ch.title}</strong>
-                <span class="chapter-sub-meta">${formatBadge} • ${ch.date || 'Güncel'}</span>
-              </div>
-            </div>
-            <div class="chapter-card-right">
+          const relDate = this.formatRelativeChapterDate(ch.date, nowDate);
+          return `<a class="chapter-item-btn chapter-card-item chapter-compact-box ${isRead ? 'is-read' : ''}" href="${chHref}" data-action="read" data-series="${seriesId}" data-chapter="${ch.id}" title="Bölüm ${ch.number} (${ch.date || 'Güncel'})">
+            <div class="chapter-box-top">
+              <strong class="chapter-title-text">Bölüm ${ch.number}</strong>
               ${
                 isRead
-                  ? `<span class="chapter-read-badge">${this._icon('check')} Son Okunan</span>`
-                  : `<span class="chapter-open-pill">Oku →</span>`
+                  ? `<span class="chapter-read-badge" title="Son Okunan" aria-label="Son Okunan">${this._icon('check')}</span>`
+                  : ''
               }
+            </div>
+            <div class="chapter-box-bottom">
+              <span class="chapter-sub-meta">${relDate}</span>
+              <span class="chapter-open-pill">Oku</span>
             </div>
           </a>`;
         })

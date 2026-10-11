@@ -425,25 +425,26 @@ html[data-theme="light"] .series-synopsis-toggle {
 
 .chapter-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.7rem;
   max-height: 480px;
   overflow-y: auto;
-  padding-right: 0.25rem;
+  padding: 4px 0.25rem 4px 0;
 }
 
 .chapter-card-item {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
-  gap: 0.75rem;
+  align-items: stretch;
+  gap: 0.45rem;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 0.7rem 0.9rem;
+  padding: 0.75rem 0.9rem;
   text-decoration: none;
   color: var(--text-primary);
-  transition: border-color 0.2s ease, transform 0.18s ease;
+  transition: border-color 0.2s ease, transform 0.18s ease, background 0.2s ease;
 }
 
 .chapter-card-item:hover {
@@ -451,74 +452,88 @@ html[data-theme="light"] .series-synopsis-toggle {
   transform: translateY(-2px);
 }
 
-.chapter-card-left {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-width: 0;
-  flex: 1;
+.chapter-card-item.is-read {
+  opacity: 1;
+  border-color: rgba(16, 185, 129, 0.42);
+  border-left: 3px solid #10b981;
+  background: rgba(16, 185, 129, 0.06);
 }
 
-.chapter-num-pill {
-  min-width: 42px;
-  height: 36px;
-  padding: 0 0.45rem;
-  border-radius: 8px;
-  background: rgba(99, 102, 241, 0.15);
-  color: var(--accent-hover);
-  font-size: 0.8rem;
-  font-weight: 800;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.chapter-title-group {
+.chapter-box-top {
   display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
   min-width: 0;
 }
 
 .chapter-title-text {
-  font-size: 0.88rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.chapter-sub-meta {
-  font-size: 0.74rem;
-  color: var(--text-secondary);
+.chapter-box-bottom {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 1.15rem;
 }
 
-.chapter-card-right {
-  flex-shrink: 0;
+.chapter-sub-meta {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.chapter-card-item:hover .chapter-sub-meta,
+.chapter-card-item:focus-visible .chapter-sub-meta {
+  opacity: 0;
+  transform: translateY(-2px);
 }
 
 .chapter-read-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  font-size: 0.73rem;
-  font-weight: 700;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
   color: #34d399;
-  background: rgba(16, 185, 129, 0.14);
-  padding: 0.2rem 0.55rem;
+  background: rgba(16, 185, 129, 0.16);
   border-radius: 999px;
+  flex-shrink: 0;
+}
+
+html[data-theme="light"] .chapter-read-badge {
+  color: #059669;
 }
 
 .chapter-open-pill {
-  font-size: 0.76rem;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--text-secondary);
-  transition: color 0.18s ease;
+  color: var(--accent-primary);
+  opacity: 0;
+  transform: translateY(-40%);
+  pointer-events: none;
+  transition: opacity 0.16s ease, transform 0.16s ease, color 0.16s ease;
+  white-space: nowrap;
 }
 
-.chapter-card-item:hover .chapter-open-pill {
+.chapter-card-item:hover .chapter-open-pill,
+.chapter-card-item:focus-visible .chapter-open-pill {
+  opacity: 1;
   color: var(--accent-primary);
+  transform: translateY(-50%);
 }
 
 .series-related-box {

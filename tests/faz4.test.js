@@ -644,14 +644,30 @@ test('SeriesPageController: Seri bilgileri sayfasi meta veri izgarasi, bolum ara
   assert.equal(searched.length, 1);
   assert.equal(searched[0].number, 2);
 
+  assert.equal(seriesPage.formatRelativeChapterDate('2026-10-11', '2026-10-11'), 'Bugün');
+  assert.equal(seriesPage.formatRelativeChapterDate('2026-10-10', '2026-10-11'), '1 gün önce');
+  assert.equal(seriesPage.formatRelativeChapterDate('2026-09-29', '2026-10-11'), '12 gün önce');
+  assert.equal(seriesPage.formatRelativeChapterDate('2026-09-11', '2026-10-11'), '1 ay önce');
+  assert.equal(seriesPage.formatRelativeChapterDate('2026-08-20', '2026-10-11'), '2026-08-20');
+
   const chapterListHtml = seriesPage.renderChapterListHtml(
     'kuzeyin-kilici',
     searched,
     { chapterId: 'kuzeyin-kilici-bolum-2', pageIndex: 0 },
-    (v, s, c) => `/${v}/${s}/${c || ''}`
+    (v, s, c) => `/${v}/${s}/${c || ''}`,
+    '2026-10-11'
   );
-  assert.equal(chapterListHtml.includes('class="chapter-num-pill">#2</span>'), true);
-  assert.equal(chapterListHtml.includes('Son Okunan'), true);
+  assert.equal(chapterListHtml.includes('chapter-compact-box'), true);
+  assert.equal(chapterListHtml.includes('<strong class="chapter-title-text">Bölüm 2</strong>'), true);
+  assert.equal(chapterListHtml.includes('Kuzeyin Kılıcı Bölüm 2</strong>'), false);
+  assert.equal(chapterListHtml.includes('11 gün önce'), true);
+  assert.equal(
+    chapterListHtml.includes('class="chapter-read-badge" title="Son Okunan" aria-label="Son Okunan"><svg'),
+    true
+  );
+  assert.equal(chapterListHtml.includes('> Son Okunan</span>'), false);
+  assert.equal(chapterListHtml.includes('<span class="chapter-open-pill">Oku</span>'), true);
+  assert.equal(chapterListHtml.includes('<span class="chapter-open-pill">→</span>'), false);
 
   const related = seriesPage.getRelatedSeries(catalog, targetSeries, 4);
   assert.equal(related.length, 2);
@@ -675,4 +691,8 @@ test('SeriesPageController: Seri bilgileri sayfasi meta veri izgarasi, bolum ara
   assert.equal(themeXml.includes('id="series-related-section"'), true);
   assert.equal(themeXml.includes('min-height: 168px;'), true);
   assert.equal(themeXml.includes('btn-toggle-synopsis'), true);
+
+  const { stageLocalBuildFiles } = require('../src/core/build-cli');
+  assert.equal(typeof stageLocalBuildFiles, 'function');
 });
+
