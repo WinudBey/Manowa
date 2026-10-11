@@ -6,6 +6,10 @@
 (function (globalScope) {
   'use strict';
 
+  const iconFn =
+    (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
+    (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
+
   /**
    * Favori serileri, okuma gecmisini ve son eklenen bolumleri yoneten sinif.
    */
@@ -21,6 +25,17 @@
       this.favoritesKey = options.favoritesKey || 'manowa_favorites';
       this.historyKey = options.historyKey || 'manowa_reading_history';
       this._log('debug', 'UserLibrary baslatildi.');
+    }
+
+    /**
+     * SVG ikon uretici yardimci.
+     * @param {string} name - Ikon adi.
+     * @returns {string} SVG HTML.
+     */
+    _icon(name) {
+      const fn =
+        (globalScope.ManowaIcons && globalScope.ManowaIcons.get) || iconFn;
+      return typeof fn === 'function' ? fn(name) : '';
     }
 
     /**
@@ -269,7 +284,7 @@
               <strong class="continue-title">${item.seriesTitle}</strong>
               <span class="continue-meta">Bölüm ${item.chapterNumber} • Sayfa ${item.pageIndex + 1}</span>
             </div>
-            <span class="continue-play">▶</span>
+            <span class="continue-play">${this._icon('play')}</span>
           </a>`;
         })
         .join('');
@@ -313,12 +328,12 @@
               </a>
               <span class="lang-badge lang-${series.sourceLang}">${series.sourceLang}</span>
               <span class="type-badge">${series.type}</span>
-              <button class="fav-card-btn ${isFav ? 'is-fav' : ''}" type="button" data-action="toggle-fav" data-series="${series.id}" title="${isFav ? 'Kitaplıktan Çıkar' : 'Kitaplığa Ekle'}">${isFav ? '❤️' : '🤍'}</button>
+              <button class="fav-card-btn ${isFav ? 'is-fav' : ''}" type="button" data-action="toggle-fav" data-series="${series.id}" title="${isFav ? 'Kitaplıktan Çıkar' : 'Kitaplığa Ekle'}">${isFav ? this._icon('heart-filled') : this._icon('heart')}</button>
             </div>
             <div class="card-body">
               <a class="card-title" href="${seriesHref}" data-action="detail" data-series="${series.id}">${series.title}</a>
               <div class="card-meta">
-                <span>📚 ${(series.chapters || []).length} Bölüm</span>
+                <span>${this._icon('layers')} ${(series.chapters || []).length} Bölüm</span>
                 <span>${series.status}</span>
               </div>
               <div class="card-chapters">${chaptersHtml}</div>
@@ -349,7 +364,7 @@
               <strong class="continue-title">${item.seriesTitle}</strong>
               <span class="continue-meta">Bölüm ${item.chapterNumber}: ${item.chapterTitle} • Kaldığın Sayfa: ${item.pageIndex + 1}</span>
             </div>
-            <span class="continue-play">▶ Devam Et</span>
+            <span class="continue-play">${this._icon('play')} Devam Et</span>
           </a>`;
         })
         .join('');
@@ -394,10 +409,10 @@
           </div>
           <p class="detail-synopsis">${series.synopsis}</p>
           <div class="detail-actions">
-            ${firstChapter ? `<a class="primary-btn" href="${firstHref}" data-action="read" data-series="${series.id}" data-chapter="${firstChapter.id}">📖 İlk Bölümü Oku (Bölüm ${firstChapter.number})</a>` : ''}
-            ${latestChapter && latestChapter.id !== (firstChapter && firstChapter.id) ? `<a class="icon-btn" href="${latestHref}" data-action="read" data-series="${series.id}" data-chapter="${latestChapter.id}">🔥 Son Bölüm (Bölüm ${latestChapter.number})</a>` : ''}
-            ${savedProgress && resumeChapterId ? `<a class="icon-btn" href="${resumeHref}" data-action="read" data-series="${series.id}" data-chapter="${resumeChapterId}">⏳ Kaldığım Yerden Devam Et (Sayfa ${savedProgress.pageIndex + 1})</a>` : ''}
-            <button class="icon-btn" type="button" data-action="toggle-fav" data-series="${series.id}">${isFav ? '❤️ Kitaplığımda' : '🤍 Kitaplığa Ekle'}</button>
+            ${firstChapter ? `<a class="primary-btn" href="${firstHref}" data-action="read" data-series="${series.id}" data-chapter="${firstChapter.id}">${this._icon('book')} İlk Bölümü Oku (Bölüm ${firstChapter.number})</a>` : ''}
+            ${latestChapter && latestChapter.id !== (firstChapter && firstChapter.id) ? `<a class="icon-btn" href="${latestHref}" data-action="read" data-series="${series.id}" data-chapter="${latestChapter.id}">${this._icon('flame')} Son Bölüm (Bölüm ${latestChapter.number})</a>` : ''}
+            ${savedProgress && resumeChapterId ? `<a class="icon-btn" href="${resumeHref}" data-action="read" data-series="${series.id}" data-chapter="${resumeChapterId}">${this._icon('clock')} Kaldığım Yerden Devam Et (Sayfa ${savedProgress.pageIndex + 1})</a>` : ''}
+            <button class="icon-btn" type="button" data-action="toggle-fav" data-series="${series.id}">${isFav ? `${this._icon('heart-filled')} Kitaplığımda` : `${this._icon('heart')} Kitaplığa Ekle`}</button>
           </div>
         </div>
       </div>`;

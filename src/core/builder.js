@@ -138,17 +138,20 @@ class ThemeBuilder {
       'variables.css',
       'cards.css',
       'hero-slider.css',
+      'sidebar.css',
       'generator.css',
       'layout.css',
       'reader.css'
     ];
     const scriptOrder = [
       'client-logger.js',
+      'svg-icons.js',
       'disqus-loader.js',
       'blogger-feed-loader.js',
       'catalog-controller.js',
       'user-library.js',
       'hero-slider.js',
+      'sidebar-controller.js',
       'reading-engine.js',
       'post-generator.js',
       'router-controller.js',

@@ -14,6 +14,12 @@
   const HeroSliderClass =
     globalScope.HeroSlider ||
     (typeof require === 'function' ? require('./hero-slider').HeroSlider : null);
+  const SidebarClass =
+    globalScope.SidebarController ||
+    (typeof require === 'function' ? require('./sidebar-controller').SidebarController : null);
+  const iconFn =
+    (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
+    (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
   /**
    * Tum tema gorunumlerini, Blogger URL entegrasyonunu ve dinamik veri akisini yoneten sinif.
    */
@@ -37,6 +43,8 @@
         deps.library || (UserLibraryClass ? new UserLibraryClass({ logger: this.logger }) : null);
       this.heroSlider =
         deps.heroSlider || (HeroSliderClass ? new HeroSliderClass({ logger: this.logger }) : null);
+      this.sidebar =
+        deps.sidebar || (SidebarClass ? new SidebarClass({ logger: this.logger }) : null);
       this.feedLoader =
         deps.feedLoader ||
         (globalScope.BloggerFeedLoader
@@ -242,6 +250,9 @@
         latestGrid.innerHTML = html;
         latestSec.classList.toggle('hidden', !html);
       }
+      if (this.sidebar) {
+        this.sidebar.renderIntoDom(this.catalog, this.library, urlFn);
+      }
     }
     /**
      * Ziyaretci dogrudan bir Blogger seri veya bolum URL'sine girdiyse ilgili ekrani acar.
@@ -371,7 +382,7 @@
       if (!grid) return;
       const favSeries = this.library.getFavoriteSeries(this.catalog);
       if (favSeries.length === 0) {
-        grid.innerHTML = `<div class="disqus-status-note">Kitaplığınızda henüz favori seri bulunmuyor. Katalogdaki serilerin üzerindeki 🤍 düğmesine tıklayarak kitaplığınıza ekleyebilirsiniz.</div>`;
+        grid.innerHTML = `<div class="disqus-status-note">Kitaplığınızda henüz favori seri bulunmuyor. Katalogdaki serilerin üzerindeki ${iconFn('heart')} düğmesine tıklayarak kitaplığınıza ekleyebilirsiniz.</div>`;
         return;
       }
       grid.innerHTML = this.library.renderSeriesCardListHtml(
@@ -553,7 +564,7 @@
       if (chapterTitleEl) chapterTitleEl.textContent = chapter.title;
       if (noteBox) {
         if (chapter.translatorNote) {
-          noteBox.textContent = `📝 Çevirmen Notu: ${chapter.translatorNote}`;
+          noteBox.innerHTML = `${iconFn('note')} Çevirmen Notu: ${chapter.translatorNote}`;
           noteBox.classList.remove('hidden');
         } else {
           noteBox.classList.add('hidden');
@@ -686,6 +697,16 @@
         });
       }
       if (this.heroSlider) this.heroSlider.bindDomEvents(() => this.updateHeroShowcase(false));
+      if (this.sidebar) {
+        this.sidebar.bindDomEvents({
+          onTopFilterChange: () => this.renderHomeSections(),
+          onGenreSelect: (genre) => {
+            this.catalog.setGenreFilter(genre);
+            this.renderCatalogView();
+            this.renderHomeSections();
+          }
+        });
+      }
       document.addEventListener('click', (ev) => {
         const target = ev.target.closest('[data-action]');
         if (!target) return;
@@ -814,8 +835,10 @@
       });
       on('btn-autoscroll', 'click', (e) => {
         const active = this.reader.toggleAutoScroll();
-        e.target.classList.toggle('active', active);
-        e.target.textContent = active ? '⏸ Durdur' : '▶️ Oto-Kaydır';
+        e.currentTarget.classList.toggle('active', active);
+        e.currentTarget.innerHTML = active
+          ? `${iconFn('pause')} Durdur`
+          : `${iconFn('play')} Oto-Kaydır`;
       });
       on('btn-protect', 'click', (e) => {
         this.reader.protectImages = !this.reader.protectImages;

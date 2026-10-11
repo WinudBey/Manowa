@@ -417,16 +417,16 @@ test('HeroSlider: Coklu seri gecisi, dokunmatik kaydirma ve yer tutucu ozet temi
   assert.equal(cleaned.includes('Buraya serinin özet hikayesini'), false);
   assert.equal(cleaned.includes('Tomb Raider King'), true);
 
-  // Baslik -> Kategoriler (#hero-genres) -> Seri Bilgileri (#hero-details) -> Ozet (#hero-desc) siralamasi kontrolu
+  // Baslik altinda kategoriler ve seri ayrintilari kontrolu
   slider.goToSlide(0);
   const html = slider.buildSliderHtml(catalog, library, (v, s, c) => `/${v}/${s}/${c || ''}`);
   assert.equal(html.includes('class="hero-backdrop"'), true);
   assert.equal(html.includes('id="hero-badge"'), false);
-  assert.equal(html.includes('id="hero-title"'), true);
   assert.equal(html.includes('id="hero-genres"'), true);
+  assert.equal(html.includes('id="hero-title"'), true);
   assert.equal(html.includes('id="hero-details"'), true);
   assert.equal(html.indexOf('id="hero-title"') < html.indexOf('id="hero-genres"'), true);
-  assert.equal(html.indexOf('id="hero-genres"') < html.indexOf('id="hero-details"'), true);
+  assert.equal(html.indexOf('id="hero-details"') > html.indexOf('id="hero-genres"'), true);
   assert.equal(html.includes('id="hero-desc"'), true);
   assert.equal(html.includes('id="btn-hero-read"'), true);
   assert.equal(html.includes('id="btn-hero-detail"'), true);
@@ -436,3 +436,63 @@ test('HeroSlider: Coklu seri gecisi, dokunmatik kaydirma ve yer tutucu ozet temi
   assert.equal(html.includes('class="hero-dot active"'), true);
   assert.equal(html.includes('data-hero-index="1"'), true);
 });
+
+test('SVG Ikon Sistemi ve SidebarController: Temada emoji kullanilmamali, SVG ikonlar ve Sidebar calismali', () => {
+  const fs = require('node:fs');
+  const { ThemeBuilder } = require('../src/core/builder');
+  const { ManowaIcons } = require('../src/scripts/svg-icons');
+  const { SidebarController } = require('../src/scripts/sidebar-controller');
+  const { UserLibrary } = require('../src/scripts/user-library');
+
+  // 1. SVG Ikon uretimi ve 1. Cilt (layers) ikonu kontrolu
+  const layersSvg = ManowaIcons.get('layers');
+  assert.equal(layersSvg.includes('<svg class="ui-icon'), true);
+  assert.equal(layersSvg.includes('M4 19.5A2.5 2.5 0 0 1 6.5 17H20'), true);
+  assert.equal(ManowaIcons.get('heart-filled').includes('fill="currentColor"'), true);
+
+  // 2. SidebarController mantigi ve kategori filtreleme
+  const catalog = new CatalogController();
+  const library = new UserLibrary();
+  const sidebar = new SidebarController({ topLimit: 5 });
+
+  const topSeries = sidebar.getTopSeries(catalog);
+  assert.equal(topSeries.length, 3);
+
+  const genres = sidebar.getGenreCounts(catalog);
+  assert.equal(genres.length > 0, true);
+
+  const stats = sidebar.getArchiveStats(catalog, library);
+  assert.equal(stats.totalSeries, 3);
+  assert.equal(stats.totalChapters >= 3, true);
+
+  const topHtml = sidebar.renderTopSeriesHtml(catalog, (v, s) => `/${v}/${s}`);
+  assert.equal(topHtml.includes('sidebar-rank-item'), true);
+  assert.equal(topHtml.includes('<svg class="ui-icon'), true);
+
+  // CatalogController kategori filtreleme ve Sidebar kategori bulutu testi
+  catalog.setGenreFilter('Aksiyon');
+  assert.equal(catalog.getFilteredSeries().length, 1);
+  assert.equal(catalog.getFilteredSeries()[0].id, 'golge-hukumdari');
+
+  const genresHtml = sidebar.renderGenresHtml(catalog);
+  assert.equal(genresHtml.includes('data-sidebar-genre="Aksiyon"'), true);
+  assert.equal(genresHtml.includes('class="sidebar-genre-chip active"'), true);
+
+  catalog.setGenreFilter('ALL');
+  assert.equal(catalog.getFilteredSeries().length, 3);
+
+  // 3. Derlenen temada (theme.xml ve preview.html) hicbir emoji bulunmamali
+  const builder = new ThemeBuilder();
+  const { themeXmlPath, previewHtmlPath } = builder.build();
+  const themeXml = fs.readFileSync(themeXmlPath, 'utf8');
+  const previewHtml = fs.readFileSync(previewHtmlPath, 'utf8');
+
+  const emojiRegex = /\p{Extended_Pictographic}/u;
+  assert.equal(emojiRegex.test(themeXml), false, 'theme.xml icinde emoji karakteri bulundu!');
+  assert.equal(emojiRegex.test(previewHtml), false, 'preview.html icinde emoji karakteri bulundu!');
+  assert.equal(themeXml.includes('id="home-sidebar"'), true);
+  assert.equal(themeXml.includes('id="sidebar-top-series"'), true);
+  assert.equal(themeXml.includes('id="sidebar-genres"'), true);
+  assert.equal(themeXml.includes('id="sidebar-quick-library"'), true);
+});
+

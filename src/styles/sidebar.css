@@ -1,0 +1,311 @@
+/**
+ * @fileoverview 2 sutunlu ana sayfa duzeni (.home-layout-grid) ve sag yan panel (Sidebar) stilleri.
+ */
+
+.home-layout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.home-main-column {
+  min-width: 0;
+}
+
+.home-sidebar {
+  position: sticky;
+  top: 5.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sidebar-widget {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem;
+  box-shadow: var(--shadow-card);
+}
+
+.sidebar-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-widget-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+}
+
+.sidebar-widget-title .ui-icon {
+  color: var(--accent-primary);
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.sidebar-tabs {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+  background: var(--bg-card);
+  padding: 0.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.sidebar-tab-btn {
+  flex: 1;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  padding: 0.32rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.sidebar-tab-btn:hover,
+.sidebar-tab-btn.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+.sidebar-rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sidebar-rank-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid transparent;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar-rank-item:hover {
+  border-color: var(--accent-primary);
+  transform: translateX(3px);
+}
+
+.sidebar-rank-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: rgba(148, 163, 184, 0.14);
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebar-rank-badge.rank-top-1 {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #ffffff;
+}
+
+.sidebar-rank-badge.rank-top-2 {
+  background: rgba(99, 102, 241, 0.22);
+  color: var(--accent-hover);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+}
+
+.sidebar-rank-badge.rank-top-3 {
+  background: rgba(236, 72, 153, 0.18);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.35);
+}
+
+.sidebar-rank-thumb {
+  width: 44px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+}
+
+.sidebar-rank-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.sidebar-rank-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-rank-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.sidebar-rank-type {
+  background: rgba(99, 102, 241, 0.14);
+  color: var(--accent-hover);
+  padding: 0.08rem 0.42rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.sidebar-genres-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+}
+
+.sidebar-genre-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.32rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.sidebar-genre-chip:hover,
+.sidebar-genre-chip.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+}
+
+.sidebar-genre-count {
+  font-size: 0.68rem;
+  opacity: 0.8;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.05rem 0.38rem;
+  border-radius: 999px;
+}
+
+.sidebar-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.sidebar-stat-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.55rem 0.35rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.sidebar-stat-val {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--accent-hover);
+}
+
+.sidebar-stat-lbl {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.sidebar-fav-mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.sidebar-fav-mini-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: 8px;
+  background: var(--bg-card);
+  border: 1px solid transparent;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: border-color 0.18s ease;
+}
+
+.sidebar-fav-mini-item:hover {
+  border-color: var(--accent-primary);
+}
+
+.sidebar-fav-mini-thumb {
+  width: 28px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.sidebar-fav-mini-title {
+  flex: 1;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-fav-mini-count {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.sidebar-empty-note {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  padding: 0.65rem;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border-color);
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .home-layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-sidebar {
+    position: static;
+  }
+}

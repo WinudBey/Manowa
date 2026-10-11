@@ -846,6 +846,319 @@ html[data-theme="light"] .hero-dot {
   }
 }
 
+/* === MODULE: styles/sidebar.css === */
+/**
+ * @fileoverview 2 sutunlu ana sayfa duzeni (.home-layout-grid) ve sag yan panel (Sidebar) stilleri.
+ */
+
+.home-layout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.home-main-column {
+  min-width: 0;
+}
+
+.home-sidebar {
+  position: sticky;
+  top: 5.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sidebar-widget {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem;
+  box-shadow: var(--shadow-card);
+}
+
+.sidebar-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-widget-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+}
+
+.sidebar-widget-title .ui-icon {
+  color: var(--accent-primary);
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.sidebar-tabs {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+  background: var(--bg-card);
+  padding: 0.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.sidebar-tab-btn {
+  flex: 1;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  padding: 0.32rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.sidebar-tab-btn:hover,
+.sidebar-tab-btn.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+.sidebar-rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sidebar-rank-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid transparent;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar-rank-item:hover {
+  border-color: var(--accent-primary);
+  transform: translateX(3px);
+}
+
+.sidebar-rank-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: rgba(148, 163, 184, 0.14);
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebar-rank-badge.rank-top-1 {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #ffffff;
+}
+
+.sidebar-rank-badge.rank-top-2 {
+  background: rgba(99, 102, 241, 0.22);
+  color: var(--accent-hover);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+}
+
+.sidebar-rank-badge.rank-top-3 {
+  background: rgba(236, 72, 153, 0.18);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.35);
+}
+
+.sidebar-rank-thumb {
+  width: 44px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+}
+
+.sidebar-rank-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.sidebar-rank-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-rank-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.sidebar-rank-type {
+  background: rgba(99, 102, 241, 0.14);
+  color: var(--accent-hover);
+  padding: 0.08rem 0.42rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.sidebar-genres-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+}
+
+.sidebar-genre-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.32rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.sidebar-genre-chip:hover,
+.sidebar-genre-chip.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+}
+
+.sidebar-genre-count {
+  font-size: 0.68rem;
+  opacity: 0.8;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.05rem 0.38rem;
+  border-radius: 999px;
+}
+
+.sidebar-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.sidebar-stat-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.55rem 0.35rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.sidebar-stat-val {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--accent-hover);
+}
+
+.sidebar-stat-lbl {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.sidebar-fav-mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.sidebar-fav-mini-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: 8px;
+  background: var(--bg-card);
+  border: 1px solid transparent;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: border-color 0.18s ease;
+}
+
+.sidebar-fav-mini-item:hover {
+  border-color: var(--accent-primary);
+}
+
+.sidebar-fav-mini-thumb {
+  width: 28px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.sidebar-fav-mini-title {
+  flex: 1;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-fav-mini-count {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.sidebar-empty-note {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  padding: 0.65rem;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border-color);
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .home-layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-sidebar {
+    position: static;
+  }
+}
+
 /* === MODULE: styles/layout.css === */
 /**
  * @fileoverview Ana yerlesim (layout), ust baslik, vitrin (hero) ve filtre cubugu stilleri.
@@ -1091,6 +1404,24 @@ html[data-theme="light"] .hero-dot {
 #main-blog-section,
 .posts-wrapper {
   display: none !important;
+}
+
+.ui-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  flex-shrink: 0;
+}
+
+.section-title .ui-icon {
+  color: var(--accent-primary);
+  width: 1.15em;
+  height: 1.15em;
+}
+
+.fav-card-btn.is-fav .ui-icon {
+  color: #ef4444;
 }
 
 @media (max-width: 768px) {
@@ -1403,10 +1734,10 @@ html[data-theme="light"] .hero-dot {
       <!-- UST KONTROL VE NAVIGASYON CUBUGU -->
 <div class="filter-toolbar" id="top-app-bar">
   <div class="nav-links">
-    <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog">📚 Katalog &amp; Vitrin</a>
-    <button class="nav-btn" id="nav-bookmarks" type="button">❤️ Kitaplığım <span id="bookmarks-count-badge"></span></button>
-    <button class="nav-btn" id="nav-history" type="button">🕒 Geçmiş</button>
-    <button class="nav-btn" id="nav-random" type="button">🎲 Rastgele Seri</button>
+    <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Katalog &amp; Vitrin</a>
+    <button class="nav-btn" id="nav-bookmarks" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Kitaplığım <span id="bookmarks-count-badge"></span></button>
+    <button class="nav-btn" id="nav-history" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Geçmiş</button>
+    <button class="nav-btn" id="nav-random" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg> Rastgele Seri</button>
     
   </div>
   <div class="header-controls">
@@ -1414,11 +1745,11 @@ html[data-theme="light"] .hero-dot {
     <div class="search-box">
       <input class="search-input" id="input-search" placeholder="Seri, tür veya durum ara..." type="search" />
     </div>
-    <button class="icon-btn" id="btn-theme-toggle" type="button" title="Koyu / Açık Tema Değiştir">🌗 Tema</button>
+    <button class="icon-btn" id="btn-theme-toggle" type="button" title="Koyu / Açık Tema Değiştir"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Tema</button>
   </div>
 </div>
 
-<!-- GORUNUM 1: ANA SAYFA VITRIN VE KATALOG -->
+<!-- GORUNUM 1: ANA SAYFA VITRIN, 2 SUTUNLU GOVDE VE SIDEBAR -->
 <section id="view-catalog">
   <div aria-label="Öne Çıkan Seriler Vitrini" class="hero-banner" id="hero-showcase">
     <div class="hero-backdrop-overlay"></div>
@@ -1445,45 +1776,81 @@ html[data-theme="light"] .hero-dot {
     </div>
   </div>
 
-  <!-- KALDIGIN YERDEN DEVAM ET SERIDI -->
-  <div class="continue-reading-box hidden" id="continue-reading-section">
-    <div class="section-header">
-      <h2 class="section-title">⏳ Kaldığın Yerden Devam Et</h2>
-      <button class="icon-btn" id="btn-view-all-history" type="button">Tüm Geçmiş →</button>
-    </div>
-    <div class="continue-reading-grid" id="continue-reading-grid"></div>
-  </div>
+  <div class="home-layout-grid">
+    <!-- SOL ANA ICERIK SUTUNU -->
+    <div class="home-main-column">
+      <!-- KALDIGIN YERDEN DEVAM ET SERIDI -->
+      <div class="continue-reading-box hidden" id="continue-reading-section">
+        <div class="section-header">
+          <h2 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Kaldığın Yerden Devam Et</h2>
+          <button class="icon-btn" id="btn-view-all-history" type="button">Tüm Geçmiş →</button>
+        </div>
+        <div class="continue-reading-grid" id="continue-reading-grid"></div>
+      </div>
 
-  <!-- SON EKLENEN BOLUMLER AKISI -->
-  <div class="latest-chapters-box hidden" id="latest-chapters-section">
-    <div class="section-header">
-      <h2 class="section-title">🆕 Son Eklenen Bölümler</h2>
-    </div>
-    <div class="latest-chapters-grid" id="latest-chapters-grid"></div>
-  </div>
+      <!-- SON EKLENEN BOLUMLER AKISI -->
+      <div class="latest-chapters-box hidden" id="latest-chapters-section">
+        <div class="section-header">
+          <h2 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3L12 3z"/></svg> Son Eklenen Bölümler</h2>
+        </div>
+        <div class="latest-chapters-grid" id="latest-chapters-grid"></div>
+      </div>
 
-  <div class="filter-toolbar">
-    <div class="lang-filters" id="lang-filter-group">
-      <button class="filter-pill active" data-lang="ALL" type="button">🌍 Tümü</button>
-      <button class="filter-pill" data-lang="Manhwa" type="button">🇰🇷 Manhwa (Korece)</button>
-      <button class="filter-pill" data-lang="Manga" type="button">🇯🇵 Manga (Japonca)</button>
-      <button class="filter-pill" data-lang="Manhua" type="button">🇨🇳 Manhua (Çince)</button>
-      <button class="filter-pill" data-lang="Novel" type="button">📖 Novel (Roman)</button>
-    </div>
-    <div class="catalog-toolbar-right">
-      <select class="reader-select" id="select-catalog-sort" title="Katalog Sıralaması">
-        <option value="updated">🔥 Son Güncellenen</option>
-        <option value="title_asc">🔤 İsim (A - Z)</option>
-        <option value="chapters_desc">📚 Bölüm Sayısı</option>
-      </select>
-      <span class="meta-tag" id="catalog-count-label">Yükleniyor...</span>
-    </div>
-  </div>
+      <!-- KATALOG FILTRE CUBUGU -->
+      <div class="filter-toolbar">
+        <div class="lang-filters" id="lang-filter-group">
+          <button class="filter-pill active" data-lang="ALL" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Tümü</button>
+          <button class="filter-pill" data-lang="Manhwa" type="button">KR Manhwa (Korece)</button>
+          <button class="filter-pill" data-lang="Manga" type="button">JP Manga (Japonca)</button>
+          <button class="filter-pill" data-lang="Manhua" type="button">CN Manhua (Çince)</button>
+          <button class="filter-pill" data-lang="Novel" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Novel (Roman)</button>
+        </div>
+        <div class="catalog-toolbar-right">
+          <select class="reader-select" id="select-catalog-sort" title="Katalog Sıralaması">
+            <option value="updated">Son Güncellenen</option>
+            <option value="title_asc">İsim (A - Z)</option>
+            <option value="chapters_desc">Bölüm Sayısı</option>
+          </select>
+          <span class="meta-tag" id="catalog-count-label">Yükleniyor...</span>
+        </div>
+      </div>
 
-  <div class="section-header">
-    <h2 class="section-title">🔥 Güncel Çeviri Serileri</h2>
+      <div class="section-header">
+        <h2 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> Güncel Çeviri Serileri</h2>
+      </div>
+      <div class="catalog-grid" id="catalog-grid"></div>
+    </div>
+
+    <!-- SAG YAN PANEL (SIDEBAR) -->
+    <aside aria-label="Yan Panel" class="home-sidebar" id="home-sidebar">
+      <div class="sidebar-widget" id="sidebar-top-series">
+        <div class="sidebar-widget-header">
+          <h3 class="sidebar-widget-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> Popüler &amp; Öne Çıkanlar</h3>
+        </div>
+        <div class="sidebar-tabs" role="tablist">
+          <button class="sidebar-tab-btn active" data-sidebar-tab="ALL" type="button">Tümü</button>
+          <button class="sidebar-tab-btn" data-sidebar-tab="Manhwa" type="button">Manhwa</button>
+          <button class="sidebar-tab-btn" data-sidebar-tab="Manga" type="button">Manga</button>
+          <button class="sidebar-tab-btn" data-sidebar-tab="Novel" type="button">Novel</button>
+        </div>
+        <div class="sidebar-rank-list" id="sidebar-top-list"></div>
+      </div>
+
+      <div class="sidebar-widget" id="sidebar-genres">
+        <div class="sidebar-widget-header">
+          <h3 class="sidebar-widget-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Kategoriler</h3>
+        </div>
+        <div class="sidebar-genres-cloud" id="sidebar-genres-list"></div>
+      </div>
+
+      <div class="sidebar-widget" id="sidebar-quick-library">
+        <div class="sidebar-widget-header">
+          <h3 class="sidebar-widget-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Arşiv &amp; Kitaplık Özeti</h3>
+        </div>
+        <div id="sidebar-quick-library-body"></div>
+      </div>
+    </aside>
   </div>
-  <div class="catalog-grid" id="catalog-grid"></div>
 </section>
 
 <!-- GORUNUM 2: SERI TANITIM VE BOLUM LISTESI SAYFASI -->
@@ -1491,7 +1858,7 @@ html[data-theme="light"] .hero-dot {
   <div class="series-nav-bar">
     <a class="icon-btn" data-action="catalog" href="/" id="btn-series-back">← Kataloğa Dön</a>
     <nav aria-label="Sayfa Konumu" class="breadcrumb-trail">
-      <a class="breadcrumb-link" data-action="catalog" href="/">🏠 Ana Sayfa</a>
+      <a class="breadcrumb-link" data-action="catalog" href="/"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Ana Sayfa</a>
       <span>›</span>
       <span id="series-breadcrumb-title">Seri Detayı</span>
     </nav>
@@ -1500,7 +1867,7 @@ html[data-theme="light"] .hero-dot {
 
   <div class="chapter-list-box">
     <div class="section-header">
-      <h3 class="section-title">📑 Bölüm Listesi</h3>
+      <h3 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Bölüm Listesi</h3>
       <button class="icon-btn" id="btn-sort-chapters" type="button">⇅ Sıralama: Yeni → Eski</button>
     </div>
     <div class="chapter-grid" id="chapter-list-grid"></div>
@@ -1517,7 +1884,7 @@ html[data-theme="light"] .hero-dot {
     <div class="reader-toolbar">
       <div class="reader-title-group">
         <div class="reader-nav-links">
-          <a class="reader-btn" data-action="catalog" href="/" id="btn-reader-home" title="Ana Sayfa Kataloğa Dön">🏠 Katalog</a>
+          <a class="reader-btn" data-action="catalog" href="/" id="btn-reader-home" title="Ana Sayfa Kataloğa Dön"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Katalog</a>
           <a class="reader-btn" href="#" id="reader-series-title" title="Seri Sayfasına Dön">← Seri Sayfasına Dön</a>
         </div>
         <span class="reader-chapter-name" id="reader-chapter-title">Bölüm</span>
@@ -1527,15 +1894,15 @@ html[data-theme="light"] .hero-dot {
         <select class="reader-select" id="select-chapter" title="Bölüm Seç"></select>
 
         <select class="reader-select" id="select-mode" title="Okuma Motoru Modu">
-          <option value="webtoon">📜 Webtoon (Dikey Şerit)</option>
-          <option value="single">📄 Tek Sayfa (Manga)</option>
-          <option value="double">📖 Çift Sayfa (Kitap)</option>
-          <option value="novel">📝 Novel (Metin Modu)</option>
+          <option value="webtoon">Webtoon (Dikey Şerit)</option>
+          <option value="single">Tek Sayfa (Manga)</option>
+          <option value="double">Çift Sayfa (Kitap)</option>
+          <option value="novel">Novel (Metin Modu)</option>
         </select>
 
         <select class="reader-select" id="select-direction" title="Okuma Yönü">
-          <option value="ltr">➡️ Soldan Sağa (LTR)</option>
-          <option value="rtl">⬅️ Sağdan Sola (Japon Manga RTL)</option>
+          <option value="ltr">Soldan Sağa (LTR)</option>
+          <option value="rtl">Sağdan Sola (Japon Manga RTL)</option>
         </select>
 
         <select class="reader-select" id="select-gap" title="Webtoon Görsel Boşluğu">
@@ -1544,23 +1911,23 @@ html[data-theme="light"] .hero-dot {
           <option value="16">Boşluk: 16px</option>
         </select>
 
-        <button class="reader-btn" id="btn-zoom-out" type="button" title="Küçült">🔍-</button>
+        <button class="reader-btn" id="btn-zoom-out" type="button" title="Küçült"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
         <span class="page-counter-pill" id="zoom-label">100%</span>
-        <button class="reader-btn" id="btn-zoom-in" type="button" title="Büyüt">🔍+</button>
+        <button class="reader-btn" id="btn-zoom-in" type="button" title="Büyüt"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
 
         <button class="reader-btn" id="btn-font-decrease" type="button" title="Novel Yazı Boyutunu Küçült">A-</button>
         <button class="reader-btn" id="btn-font-increase" type="button" title="Novel Yazı Boyutunu Büyüt">A+</button>
-        <button class="reader-btn" id="btn-font-family" type="button" title="Novel Yazı Tipini Değiştir">🔤 Yazı Tipi</button>
+        <button class="reader-btn" id="btn-font-family" type="button" title="Novel Yazı Tipini Değiştir"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> Yazı Tipi</button>
 
-        <button class="reader-btn" id="btn-autoscroll" type="button" title="Otomatik Kaydırma">▶️ Oto-Kaydır</button>
-        <button class="reader-btn active" id="btn-protect" type="button" title="Sağ Tık Görüntü Koruması">🛡️ Koruma</button>
-        <button class="reader-btn" id="btn-shortcuts-help" type="button" title="Klavye Kısayolları">⌨️ Kısayollar</button>
-        <button class="reader-btn" id="btn-fullscreen" type="button" title="Tam Ekran">⛶ Tam Ekran</button>
+        <button class="reader-btn" id="btn-autoscroll" type="button" title="Otomatik Kaydırma"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> Oto-Kaydır</button>
+        <button class="reader-btn active" id="btn-protect" type="button" title="Sağ Tık Görüntü Koruması"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Koruma</button>
+        <button class="reader-btn" id="btn-shortcuts-help" type="button" title="Klavye Kısayolları"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><rect height="16" rx="2" width="20" x="2" y="4"/><line x1="6" x2="6.01" y1="8" y2="8"/><line x1="10" x2="10.01" y1="8" y2="8"/><line x1="14" x2="14.01" y1="8" y2="8"/><line x1="18" x2="18.01" y1="8" y2="8"/><line x1="8" x2="16" y1="16" y2="16"/></svg> Kısayollar</button>
+        <button class="reader-btn" id="btn-fullscreen" type="button" title="Tam Ekran"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> Tam Ekran</button>
       </div>
     </div>
 
     <div class="shortcuts-help-box hidden" id="reader-shortcuts-box">
-      <span><strong>⌨️ Klavye Kısayolları:</strong></span>
+      <span><strong><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><rect height="16" rx="2" width="20" x="2" y="4"/><line x1="6" x2="6.01" y1="8" y2="8"/><line x1="10" x2="10.01" y1="8" y2="8"/><line x1="14" x2="14.01" y1="8" y2="8"/><line x1="18" x2="18.01" y1="8" y2="8"/><line x1="8" x2="16" y1="16" y2="16"/></svg> Klavye Kısayolları:</strong></span>
       <span><kbd>←</kbd> / <kbd>A</kbd> Önceki Sayfa</span>
       <span><kbd>→</kbd> / <kbd>D</kbd> Sonraki Sayfa</span>
       <span><kbd>M</kbd> Okuma Modu Değiştir</span>
@@ -1574,13 +1941,13 @@ html[data-theme="light"] .hero-dot {
     <div class="reader-footer-bar">
       <div class="reader-controls">
         <a class="reader-btn" href="#" id="btn-footer-series">← Seri Sayfası</a>
-        <button class="reader-btn" id="btn-prev-chapter" type="button">⏮ Önceki Bölüm</button>
-        <button class="reader-btn" id="btn-prev-page" type="button">◀ Önceki Sayfa</button>
+        <button class="reader-btn" id="btn-prev-chapter" type="button">« Önceki Bölüm</button>
+        <button class="reader-btn" id="btn-prev-page" type="button">‹ Önceki Sayfa</button>
       </div>
       <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
       <div class="reader-controls">
-        <button class="reader-btn" id="btn-next-page" type="button">Sonraki Sayfa ▶</button>
-        <button class="reader-btn" id="btn-next-chapter" type="button">Sonraki Bölüm ⏭</button>
+        <button class="reader-btn" id="btn-next-page" type="button">Sonraki Sayfa ›</button>
+        <button class="reader-btn" id="btn-next-chapter" type="button">Sonraki Bölüm »</button>
       </div>
     </div>
   </div>
@@ -1589,7 +1956,7 @@ html[data-theme="light"] .hero-dot {
 <!-- GORUNUM 4: KULLANICI KITAPLIGI / FAVORILERIM -->
 <section class="hidden" id="view-bookmarks">
   <div class="section-header">
-    <h2 class="section-title">❤️ Kitaplığım (Favori Serilerim)</h2>
+    <h2 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="currentColor" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Kitaplığım (Favori Serilerim)</h2>
     <a class="icon-btn" data-action="catalog" href="/" id="btn-bookmarks-back">← Kataloğa Dön</a>
   </div>
   <div class="catalog-grid" id="bookmarks-grid"></div>
@@ -1598,9 +1965,9 @@ html[data-theme="light"] .hero-dot {
 <!-- GORUNUM 5: OKUMA GECMISIM -->
 <section class="hidden" id="view-history">
   <div class="section-header">
-    <h2 class="section-title">🕒 Okuma Geçmişim</h2>
+    <h2 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Okuma Geçmişim</h2>
     <div class="detail-actions">
-      <button class="icon-btn" id="btn-clear-history" type="button">🗑️ Geçmişi Temizle</button>
+      <button class="icon-btn" id="btn-clear-history" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Geçmişi Temizle</button>
       <a class="icon-btn" data-action="catalog" href="/" id="btn-history-back">← Kataloğa Dön</a>
     </div>
   </div>
@@ -1612,7 +1979,7 @@ html[data-theme="light"] .hero-dot {
 <!-- ORTAK DISQUS YORUM ENTEGRASYONU ALANI -->
 <section class="disqus-container hidden" id="disqus-section">
   <div class="disqus-header">
-    <h3 class="section-title">💬 Okuyucu Yorumları</h3>
+    <h3 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Okuyucu Yorumları</h3>
     
   </div>
   
@@ -1643,7 +2010,7 @@ html[data-theme="light"] .hero-dot {
     </main>
 
     <footer class='site-footer'>
-      <p>📚 <strong><data:blog.title/></strong> — Manga, Manhwa &amp; Novel Okuma Platformu</p>
+      <p><svg class='ui-icon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/><path d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/></svg> <strong><data:blog.title/></strong> — Manga, Manhwa &amp; Novel Okuma Platformu</p>
     </footer>
 
     <script type='text/javascript'>
@@ -1779,6 +2146,162 @@ html[data-theme="light"] .hero-dot {
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = { ClientLogger, ManowaLogger: instance };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/svg-icons.js === */
+/**
+ * @fileoverview Tema genelinde emoji yerine kullanilan vektorel SVG ikon kutuphanesi (ManowaIcons).
+ * Blogger XHTML/XML sema kurallariyla tam uyumlu inline SVG dizgeleri uretir.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  /**
+   * Vektorel SVG ic yol (path) tanimlari.
+   * @type {Object<string, { paths: string, filled?: boolean }>}
+   */
+  const ICON_DEFS = {
+    book: {
+      paths:
+        '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>'
+    },
+    heart: {
+      paths:
+        '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>'
+    },
+    'heart-filled': {
+      filled: true,
+      paths:
+        '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>'
+    },
+    clock: {
+      paths: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'
+    },
+    shuffle: {
+      paths:
+        '<polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/>'
+    },
+    wrench: {
+      paths:
+        '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>'
+    },
+    link: {
+      paths:
+        '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>'
+    },
+    'sun-moon': {
+      paths: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    },
+    flame: {
+      paths:
+        '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>'
+    },
+    sparkles: {
+      paths:
+        '<path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3L12 3z"/>'
+    },
+    layers: {
+      paths:
+        '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>'
+    },
+    home: {
+      paths:
+        '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'
+    },
+    list: {
+      paths:
+        '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>'
+    },
+    'zoom-in': {
+      paths:
+        '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>'
+    },
+    'zoom-out': {
+      paths:
+        '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/>'
+    },
+    type: {
+      paths: '<polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/>'
+    },
+    play: {
+      paths: '<polygon points="5 3 19 12 5 21 5 3"/>'
+    },
+    pause: {
+      paths: '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    },
+    shield: {
+      paths: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'
+    },
+    keyboard: {
+      paths:
+        '<rect x="2" y="4" width="20" height="16" rx="2"/><line x1="6" y1="8" x2="6.01" y2="8"/><line x1="10" y1="8" x2="10.01" y2="8"/><line x1="14" y1="8" x2="14.01" y2="8"/><line x1="18" y1="8" x2="18.01" y2="8"/><line x1="8" y1="16" x2="16" y2="16"/>'
+    },
+    maximize: {
+      paths:
+        '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>'
+    },
+    message: {
+      paths: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'
+    },
+    trash: {
+      paths:
+        '<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'
+    },
+    pen: {
+      paths: '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>'
+    },
+    award: {
+      paths: '<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>'
+    },
+    tag: {
+      paths:
+        '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>'
+    },
+    bookmark: {
+      paths: '<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>'
+    },
+    refresh: {
+      paths:
+        '<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>'
+    },
+    copy: {
+      paths:
+        '<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'
+    },
+    globe: {
+      paths:
+        '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'
+    }
+  };
+
+  /**
+   * Belirtilen isimdeki vektorel SVG ikonunun HTML dizgesini dondurur.
+   * @param {string} name - Ikon adi (orn: 'book', 'heart', 'flame').
+   * @param {string} [extraClass=''] - Ek CSS sinifi.
+   * @returns {string} SVG HTML dizgesi.
+   */
+  function getSvgIcon(name, extraClass = '') {
+    const def = ICON_DEFS[name] || ICON_DEFS.book;
+    const cls = ['ui-icon', `ui-icon-${name}`, extraClass].filter(Boolean).join(' ');
+    const fillAttr = def.filled ? 'currentColor' : 'none';
+    return `<svg class="${cls}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="${fillAttr}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${def.paths}</svg>`;
+  }
+
+  const ManowaIcons = {
+    ICON_DEFS,
+    get: getSvgIcon
+  };
+
+  globalScope.ManowaIcons = ManowaIcons;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      ManowaIcons,
+      getSvgIcon,
+      ICON_DEFS
+    };
   }
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -2750,6 +3273,7 @@ html[data-theme="light"] .hero-dot {
           ? initialSeries
           : getDefaultCatalog();
       this.activeLang = 'ALL';
+      this.activeGenre = 'ALL';
       this.searchQuery = '';
       this.sortBy = 'updated';
       this._log('debug', 'CatalogController baslatildi.', { count: this.seriesList.length });
@@ -2795,6 +3319,18 @@ html[data-theme="light"] .hero-dot {
     }
 
     /**
+     * Kategori / etiket filtresini ayarlar (orn: 'ALL', 'Aksiyon', 'Zindan').
+     * @param {string} genre - Kategori adi.
+     * @returns {Array<Object>} Filtrelenmis seri listesi.
+     */
+    setGenreFilter(genre) {
+      const clean = String(genre || 'ALL').trim();
+      this.activeGenre = clean.toUpperCase() === 'ALL' ? 'ALL' : clean;
+      this._log('info', 'Kategori filtresi degistirildi.', { activeGenre: this.activeGenre });
+      return this.getFilteredSeries();
+    }
+
+    /**
      * Arama sorgusunu gunceller.
      * @param {string} query - Arama metni.
      * @returns {Array<Object>} Filtrelenmis seri listesi.
@@ -2833,6 +3369,17 @@ html[data-theme="light"] .hero-dot {
         if (!matchesLang) {
           return false;
         }
+
+        if (this.activeGenre && this.activeGenre !== 'ALL') {
+          const targetGenre = this.activeGenre.toLowerCase();
+          const hasGenre = (item.genres || []).some(
+            (g) => String(g || '').trim().toLowerCase() === targetGenre
+          );
+          if (!hasGenre) {
+            return false;
+          }
+        }
+
         if (!this.searchQuery) {
           return true;
         }
@@ -2928,6 +3475,10 @@ html[data-theme="light"] .hero-dot {
 (function (globalScope) {
   'use strict';
 
+  const iconFn =
+    (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
+    (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
+
   /**
    * Favori serileri, okuma gecmisini ve son eklenen bolumleri yoneten sinif.
    */
@@ -2943,6 +3494,17 @@ html[data-theme="light"] .hero-dot {
       this.favoritesKey = options.favoritesKey || 'manowa_favorites';
       this.historyKey = options.historyKey || 'manowa_reading_history';
       this._log('debug', 'UserLibrary baslatildi.');
+    }
+
+    /**
+     * SVG ikon uretici yardimci.
+     * @param {string} name - Ikon adi.
+     * @returns {string} SVG HTML.
+     */
+    _icon(name) {
+      const fn =
+        (globalScope.ManowaIcons && globalScope.ManowaIcons.get) || iconFn;
+      return typeof fn === 'function' ? fn(name) : '';
     }
 
     /**
@@ -3191,7 +3753,7 @@ html[data-theme="light"] .hero-dot {
               <strong class="continue-title">${item.seriesTitle}</strong>
               <span class="continue-meta">Bölüm ${item.chapterNumber} • Sayfa ${item.pageIndex + 1}</span>
             </div>
-            <span class="continue-play">▶</span>
+            <span class="continue-play">${this._icon('play')}</span>
           </a>`;
         })
         .join('');
@@ -3235,12 +3797,12 @@ html[data-theme="light"] .hero-dot {
               </a>
               <span class="lang-badge lang-${series.sourceLang}">${series.sourceLang}</span>
               <span class="type-badge">${series.type}</span>
-              <button class="fav-card-btn ${isFav ? 'is-fav' : ''}" type="button" data-action="toggle-fav" data-series="${series.id}" title="${isFav ? 'Kitaplıktan Çıkar' : 'Kitaplığa Ekle'}">${isFav ? '❤️' : '🤍'}</button>
+              <button class="fav-card-btn ${isFav ? 'is-fav' : ''}" type="button" data-action="toggle-fav" data-series="${series.id}" title="${isFav ? 'Kitaplıktan Çıkar' : 'Kitaplığa Ekle'}">${isFav ? this._icon('heart-filled') : this._icon('heart')}</button>
             </div>
             <div class="card-body">
               <a class="card-title" href="${seriesHref}" data-action="detail" data-series="${series.id}">${series.title}</a>
               <div class="card-meta">
-                <span>📚 ${(series.chapters || []).length} Bölüm</span>
+                <span>${this._icon('layers')} ${(series.chapters || []).length} Bölüm</span>
                 <span>${series.status}</span>
               </div>
               <div class="card-chapters">${chaptersHtml}</div>
@@ -3271,7 +3833,7 @@ html[data-theme="light"] .hero-dot {
               <strong class="continue-title">${item.seriesTitle}</strong>
               <span class="continue-meta">Bölüm ${item.chapterNumber}: ${item.chapterTitle} • Kaldığın Sayfa: ${item.pageIndex + 1}</span>
             </div>
-            <span class="continue-play">▶ Devam Et</span>
+            <span class="continue-play">${this._icon('play')} Devam Et</span>
           </a>`;
         })
         .join('');
@@ -3316,10 +3878,10 @@ html[data-theme="light"] .hero-dot {
           </div>
           <p class="detail-synopsis">${series.synopsis}</p>
           <div class="detail-actions">
-            ${firstChapter ? `<a class="primary-btn" href="${firstHref}" data-action="read" data-series="${series.id}" data-chapter="${firstChapter.id}">📖 İlk Bölümü Oku (Bölüm ${firstChapter.number})</a>` : ''}
-            ${latestChapter && latestChapter.id !== (firstChapter && firstChapter.id) ? `<a class="icon-btn" href="${latestHref}" data-action="read" data-series="${series.id}" data-chapter="${latestChapter.id}">🔥 Son Bölüm (Bölüm ${latestChapter.number})</a>` : ''}
-            ${savedProgress && resumeChapterId ? `<a class="icon-btn" href="${resumeHref}" data-action="read" data-series="${series.id}" data-chapter="${resumeChapterId}">⏳ Kaldığım Yerden Devam Et (Sayfa ${savedProgress.pageIndex + 1})</a>` : ''}
-            <button class="icon-btn" type="button" data-action="toggle-fav" data-series="${series.id}">${isFav ? '❤️ Kitaplığımda' : '🤍 Kitaplığa Ekle'}</button>
+            ${firstChapter ? `<a class="primary-btn" href="${firstHref}" data-action="read" data-series="${series.id}" data-chapter="${firstChapter.id}">${this._icon('book')} İlk Bölümü Oku (Bölüm ${firstChapter.number})</a>` : ''}
+            ${latestChapter && latestChapter.id !== (firstChapter && firstChapter.id) ? `<a class="icon-btn" href="${latestHref}" data-action="read" data-series="${series.id}" data-chapter="${latestChapter.id}">${this._icon('flame')} Son Bölüm (Bölüm ${latestChapter.number})</a>` : ''}
+            ${savedProgress && resumeChapterId ? `<a class="icon-btn" href="${resumeHref}" data-action="read" data-series="${series.id}" data-chapter="${resumeChapterId}">${this._icon('clock')} Kaldığım Yerden Devam Et (Sayfa ${savedProgress.pageIndex + 1})</a>` : ''}
+            <button class="icon-btn" type="button" data-action="toggle-fav" data-series="${series.id}">${isFav ? `${this._icon('heart-filled')} Kitaplığımda` : `${this._icon('heart')} Kitaplığa Ekle`}</button>
           </div>
         </div>
       </div>`;
@@ -3608,8 +4170,11 @@ html[data-theme="light"] .hero-dot {
         ? `<div class="hero-genres" id="hero-genres">${genresHtml}</div>`
         : '';
 
+      const iconFn =
+        (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
+        (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
       const authorHtml = featured.author
-        ? `<span class="hero-detail-item">✍️ ${featured.author}</span>`
+        ? `<span class="hero-detail-item">${iconFn('pen')} ${featured.author}</span>`
         : '';
 
       const dotsHtml = this.slides
@@ -3635,7 +4200,7 @@ html[data-theme="light"] .hero-dot {
             <div class="hero-details" id="hero-details">
               <span class="hero-detail-item hero-detail-type">${typeLabel}</span>
               <span class="hero-detail-item">${statusLabel}</span>
-              <span class="hero-detail-item">📚 ${chapterCount} Bölüm</span>
+              <span class="hero-detail-item">${iconFn('layers')} ${chapterCount} Bölüm</span>
               ${authorHtml}
             </div>
             <p class="hero-desc" id="hero-desc">${synopsis}</p>
@@ -3745,6 +4310,349 @@ html[data-theme="light"] .hero-dot {
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = { HeroSlider };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/sidebar-controller.js === */
+/**
+ * @fileoverview Ana sayfa sag yan panel (Sidebar) bilesenlerini yoneten modul (SidebarController).
+ * Populer & One Cikan Seriler siralamasi, Kategoriler bulutu ve Hizli Kitaplik / Arsiv Ozetini uretir.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  const EXCLUDED_GENRE_TYPES = ['manhwa', 'manga', 'manhua', 'novel', 'webcomic', 'seri', 'bölüm'];
+
+  /**
+   * Ana sayfa yan panelini (Sidebar) yoneten sinif.
+   */
+  class SidebarController {
+    /**
+     * SidebarController nesnesini yapilandirir.
+     * @param {Object} [options={}] - Yapilandirma secenekleri.
+     * @param {Object} [options.logger=null] - Loglayici nesnesi.
+     * @param {number} [options.topLimit=5] - Populer listedeki maksimum seri sayisi.
+     */
+    constructor(options = {}) {
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.topLimit = typeof options.topLimit === 'number' ? options.topLimit : 5;
+      this.topFilter = 'ALL';
+      this._log('debug', 'SidebarController baslatildi.', { topLimit: this.topLimit });
+    }
+
+    /**
+     * Ic loglama yardimcisi.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Log mesaji.
+     * @param {Object|null} [meta=null] - Ek veri.
+     * @returns {void}
+     */
+    _log(level, msg, meta = null) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+
+    /**
+     * SVG ikon yardimcisini dondurur.
+     * @param {string} name - Ikon adi.
+     * @returns {string} SVG dizgesi.
+     */
+    _icon(name) {
+      if (globalScope.ManowaIcons && typeof globalScope.ManowaIcons.get === 'function') {
+        return globalScope.ManowaIcons.get(name);
+      }
+      if (typeof require === 'function') {
+        try {
+          return require('./svg-icons').getSvgIcon(name);
+        } catch (_err) {
+          return '';
+        }
+      }
+      return '';
+    }
+
+    /**
+     * Populer seriler sekme filtresini degistirir ('ALL', 'Manhwa', 'Manga', 'Novel').
+     * @param {string} filterType - Yeni filtre turu.
+     * @returns {string} Aktif filtre turu.
+     */
+    setTopFilter(filterType) {
+      this.topFilter = String(filterType || 'ALL').trim();
+      this._log('debug', 'Sidebar populer seri filtresi degistirildi.', {
+        topFilter: this.topFilter
+      });
+      return this.topFilter;
+    }
+
+    /**
+     * Katalog icindeki serileri bolum sayisi ve puana gore siralayarak dondurur.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {string} [typeFilter=this.topFilter] - Tur filtresi ('ALL', 'Manhwa', 'Manga', 'Novel').
+     * @param {number} [limit=this.topLimit] - Maksimum kayit sayisi.
+     * @returns {Array<Object>} Siralanmis populer seriler.
+     */
+    getTopSeries(catalog, typeFilter = this.topFilter, limit = this.topLimit) {
+      if (!catalog || !Array.isArray(catalog.seriesList)) {
+        return [];
+      }
+      const normFilter = String(typeFilter || 'ALL').trim().toUpperCase();
+      const filtered = catalog.seriesList.filter((series) => {
+        if (normFilter === 'ALL') {
+          return true;
+        }
+        return (
+          String(series.type || '').toUpperCase() === normFilter ||
+          String(series.sourceLang || '').toUpperCase() === normFilter
+        );
+      });
+
+      filtered.sort((a, b) => {
+        const chDiff = (b.chapters || []).length - (a.chapters || []).length;
+        if (chDiff !== 0) {
+          return chDiff;
+        }
+        return parseFloat(b.rating || '0') - parseFloat(a.rating || '0');
+      });
+
+      return filtered.slice(0, Math.max(1, limit));
+    }
+
+    /**
+     * Katalogdaki tum serilerden kategori (genre) isimlerini ve seri sayilarini cikarir.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @returns {Array<{ name: string, count: number }>} Kategori ve sayac listesi.
+     */
+    getGenreCounts(catalog) {
+      if (!catalog || !Array.isArray(catalog.seriesList)) {
+        return [];
+      }
+      const map = new Map();
+      catalog.seriesList.forEach((series) => {
+        const seenInSeries = new Set();
+        (series.genres || []).forEach((rawGenre) => {
+          const clean = String(rawGenre || '').trim();
+          const lower = clean.toLowerCase();
+          if (!clean || EXCLUDED_GENRE_TYPES.includes(lower) || seenInSeries.has(lower)) {
+            return;
+          }
+          seenInSeries.add(lower);
+          const existing = map.get(lower);
+          if (existing) {
+            existing.count += 1;
+          } else {
+            map.set(lower, { name: clean, count: 1 });
+          }
+        });
+      });
+
+      return Array.from(map.values()).sort((a, b) => {
+        if (b.count !== a.count) {
+          return b.count - a.count;
+        }
+        return a.name.localeCompare(b.name, 'tr');
+      });
+    }
+
+    /**
+     * Toplam seri, toplam bolum ve favori seri istatistiklerini hesaplar.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object|null} [library=null] - UserLibrary nesnesi.
+     * @returns {{ totalSeries: number, totalChapters: number, favoriteCount: number }}
+     */
+    getArchiveStats(catalog, library = null) {
+      const seriesList = catalog && Array.isArray(catalog.seriesList) ? catalog.seriesList : [];
+      const totalSeries = seriesList.length;
+      const totalChapters = seriesList.reduce(
+        (sum, s) => sum + (Array.isArray(s.chapters) ? s.chapters.length : 0),
+        0
+      );
+      const favoriteCount =
+        library && typeof library.getFavoriteIds === 'function'
+          ? library.getFavoriteIds().length
+          : 0;
+      return { totalSeries, totalChapters, favoriteCount };
+    }
+
+    /**
+     * Populer & One Cikan Seriler listesi icin HTML uretir.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Function} computeUrlFn - URL olusturucu fonksiyon.
+     * @returns {string} HTML dizgesi.
+     */
+    renderTopSeriesHtml(catalog, computeUrlFn) {
+      const resolveUrl = typeof computeUrlFn === 'function' ? computeUrlFn : () => '#';
+      const list = this.getTopSeries(catalog, this.topFilter, this.topLimit);
+      if (list.length === 0) {
+        return `<div class="sidebar-empty-note">Bu filtrede seri bulunamadı.</div>`;
+      }
+      return list
+        .map((series, idx) => {
+          const rankNum = String(idx + 1).padStart(2, '0');
+          const rankClass = idx < 3 ? `rank-top-${idx + 1}` : '';
+          const href = resolveUrl('series', series.id);
+          const chCount = (series.chapters || []).length;
+          return `<a class="sidebar-rank-item" href="${href}" data-action="detail" data-series="${series.id}">
+            <span class="sidebar-rank-badge ${rankClass}">${rankNum}</span>
+            <img class="sidebar-rank-thumb" src="${series.cover}" alt="${series.title}" loading="lazy" />
+            <div class="sidebar-rank-info">
+              <strong class="sidebar-rank-title">${series.title}</strong>
+              <div class="sidebar-rank-meta">
+                <span class="sidebar-rank-type">${series.type || 'Seri'}</span>
+                <span>${this._icon('layers')} ${chCount} Bölüm</span>
+              </div>
+            </div>
+          </a>`;
+        })
+        .join('');
+    }
+
+    /**
+     * Kategoriler / Tur Bulutu kutusu icin HTML uretir.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @returns {string} HTML dizgesi.
+     */
+    renderGenresHtml(catalog) {
+      const genres = this.getGenreCounts(catalog);
+      const activeGenre = (catalog && catalog.activeGenre) || 'ALL';
+      const totalCount = catalog && Array.isArray(catalog.seriesList) ? catalog.seriesList.length : 0;
+
+      const allPill = `<button class="sidebar-genre-chip ${activeGenre === 'ALL' ? 'active' : ''}" type="button" data-sidebar-genre="ALL">
+        <span>Tümü</span>
+        <span class="sidebar-genre-count">${totalCount}</span>
+      </button>`;
+
+      const genrePills = genres
+        .map((g) => {
+          const isActive = activeGenre.toLowerCase() === g.name.toLowerCase();
+          return `<button class="sidebar-genre-chip ${isActive ? 'active' : ''}" type="button" data-sidebar-genre="${g.name}">
+            <span>${g.name}</span>
+            <span class="sidebar-genre-count">${g.count}</span>
+          </button>`;
+        })
+        .join('');
+
+      return allPill + genrePills;
+    }
+
+    /**
+     * Hizli Kitapligim ve Arsiv Ozeti kutusu icin HTML uretir.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object|null} library - UserLibrary nesnesi.
+     * @param {Function} computeUrlFn - URL olusturucu fonksiyon.
+     * @returns {string} HTML dizgesi.
+     */
+    renderQuickLibraryHtml(catalog, library, computeUrlFn) {
+      const resolveUrl = typeof computeUrlFn === 'function' ? computeUrlFn : () => '#';
+      const stats = this.getArchiveStats(catalog, library);
+      const favSeries =
+        library && typeof library.getFavoriteSeries === 'function'
+          ? library.getFavoriteSeries(catalog).slice(0, 3)
+          : [];
+
+      const statsHtml = `<div class="sidebar-stats-grid">
+        <div class="sidebar-stat-box">
+          <strong class="sidebar-stat-val">${stats.totalSeries}</strong>
+          <span class="sidebar-stat-lbl">Seri</span>
+        </div>
+        <div class="sidebar-stat-box">
+          <strong class="sidebar-stat-val">${stats.totalChapters}</strong>
+          <span class="sidebar-stat-lbl">Bölüm</span>
+        </div>
+        <div class="sidebar-stat-box">
+          <strong class="sidebar-stat-val">${stats.favoriteCount}</strong>
+          <span class="sidebar-stat-lbl">Kitaplık</span>
+        </div>
+      </div>`;
+
+      const favListHtml =
+        favSeries.length > 0
+          ? `<div class="sidebar-fav-mini-list">` +
+            favSeries
+              .map((s) => {
+                const sHref = resolveUrl('series', s.id);
+                return `<a class="sidebar-fav-mini-item" href="${sHref}" data-action="detail" data-series="${s.id}">
+                  <img class="sidebar-fav-mini-thumb" src="${s.cover}" alt="${s.title}" loading="lazy" />
+                  <span class="sidebar-fav-mini-title">${s.title}</span>
+                  <span class="sidebar-fav-mini-count">${(s.chapters || []).length} Böl.</span>
+                </a>`;
+              })
+              .join('') +
+            `</div>`
+          : `<div class="sidebar-empty-note">Favori serilerinize hızlı erişmek için kartlardaki ${this._icon('heart')} düğmesini kullanın.</div>`;
+
+      return statsHtml + favListHtml;
+    }
+
+    /**
+     * Tarayici DOM icindeki Sidebar bilesenlerini gunceller.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object|null} library - UserLibrary nesnesi.
+     * @param {Function} computeUrlFn - URL olusturucu fonksiyon.
+     * @returns {void}
+     */
+    renderIntoDom(catalog, library, computeUrlFn) {
+      if (typeof document === 'undefined' || !catalog) {
+        return;
+      }
+      const topListEl = document.getElementById('sidebar-top-list');
+      if (topListEl) {
+        topListEl.innerHTML = this.renderTopSeriesHtml(catalog, computeUrlFn);
+      }
+      const genresListEl = document.getElementById('sidebar-genres-list');
+      if (genresListEl) {
+        genresListEl.innerHTML = this.renderGenresHtml(catalog);
+      }
+      const quickLibEl = document.getElementById('sidebar-quick-library-body');
+      if (quickLibEl) {
+        quickLibEl.innerHTML = this.renderQuickLibraryHtml(catalog, library, computeUrlFn);
+      }
+    }
+
+    /**
+     * Sidebar uzerindeki sekme ve kategori filtre tiklamalarini baglar.
+     * @param {Object} callbacks - Geri bildirim islevleri ({ onTopFilterChange, onGenreSelect }).
+     * @returns {void}
+     */
+    bindDomEvents(callbacks = {}) {
+      if (typeof document === 'undefined') {
+        return;
+      }
+      const sidebarEl = document.getElementById('home-sidebar');
+      if (!sidebarEl) {
+        return;
+      }
+      sidebarEl.addEventListener('click', (ev) => {
+        const tabBtn = ev.target.closest('[data-sidebar-tab]');
+        if (tabBtn) {
+          ev.preventDefault();
+          const tabVal = tabBtn.getAttribute('data-sidebar-tab') || 'ALL';
+          this.setTopFilter(tabVal);
+          sidebarEl
+            .querySelectorAll('[data-sidebar-tab]')
+            .forEach((b) => b.classList.toggle('active', b === tabBtn));
+          if (typeof callbacks.onTopFilterChange === 'function') {
+            callbacks.onTopFilterChange(tabVal);
+          }
+          return;
+        }
+        const genreBtn = ev.target.closest('[data-sidebar-genre]');
+        if (genreBtn) {
+          ev.preventDefault();
+          const genreVal = genreBtn.getAttribute('data-sidebar-genre') || 'ALL';
+          if (typeof callbacks.onGenreSelect === 'function') {
+            callbacks.onGenreSelect(genreVal);
+          }
+        }
+      });
+    }
+  }
+
+  globalScope.SidebarController = SidebarController;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { SidebarController };
   }
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -4485,6 +5393,12 @@ html[data-theme="light"] .hero-dot {
   const HeroSliderClass =
     globalScope.HeroSlider ||
     (typeof require === 'function' ? require('./hero-slider').HeroSlider : null);
+  const SidebarClass =
+    globalScope.SidebarController ||
+    (typeof require === 'function' ? require('./sidebar-controller').SidebarController : null);
+  const iconFn =
+    (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
+    (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
   /**
    * Tum tema gorunumlerini, Blogger URL entegrasyonunu ve dinamik veri akisini yoneten sinif.
    */
@@ -4508,6 +5422,8 @@ html[data-theme="light"] .hero-dot {
         deps.library || (UserLibraryClass ? new UserLibraryClass({ logger: this.logger }) : null);
       this.heroSlider =
         deps.heroSlider || (HeroSliderClass ? new HeroSliderClass({ logger: this.logger }) : null);
+      this.sidebar =
+        deps.sidebar || (SidebarClass ? new SidebarClass({ logger: this.logger }) : null);
       this.feedLoader =
         deps.feedLoader ||
         (globalScope.BloggerFeedLoader
@@ -4713,6 +5629,9 @@ html[data-theme="light"] .hero-dot {
         latestGrid.innerHTML = html;
         latestSec.classList.toggle('hidden', !html);
       }
+      if (this.sidebar) {
+        this.sidebar.renderIntoDom(this.catalog, this.library, urlFn);
+      }
     }
     /**
      * Ziyaretci dogrudan bir Blogger seri veya bolum URL'sine girdiyse ilgili ekrani acar.
@@ -4842,7 +5761,7 @@ html[data-theme="light"] .hero-dot {
       if (!grid) return;
       const favSeries = this.library.getFavoriteSeries(this.catalog);
       if (favSeries.length === 0) {
-        grid.innerHTML = `<div class="disqus-status-note">Kitaplığınızda henüz favori seri bulunmuyor. Katalogdaki serilerin üzerindeki 🤍 düğmesine tıklayarak kitaplığınıza ekleyebilirsiniz.</div>`;
+        grid.innerHTML = `<div class="disqus-status-note">Kitaplığınızda henüz favori seri bulunmuyor. Katalogdaki serilerin üzerindeki ${iconFn('heart')} düğmesine tıklayarak kitaplığınıza ekleyebilirsiniz.</div>`;
         return;
       }
       grid.innerHTML = this.library.renderSeriesCardListHtml(
@@ -5024,7 +5943,7 @@ html[data-theme="light"] .hero-dot {
       if (chapterTitleEl) chapterTitleEl.textContent = chapter.title;
       if (noteBox) {
         if (chapter.translatorNote) {
-          noteBox.textContent = `📝 Çevirmen Notu: ${chapter.translatorNote}`;
+          noteBox.innerHTML = `${iconFn('note')} Çevirmen Notu: ${chapter.translatorNote}`;
           noteBox.classList.remove('hidden');
         } else {
           noteBox.classList.add('hidden');
@@ -5157,6 +6076,16 @@ html[data-theme="light"] .hero-dot {
         });
       }
       if (this.heroSlider) this.heroSlider.bindDomEvents(() => this.updateHeroShowcase(false));
+      if (this.sidebar) {
+        this.sidebar.bindDomEvents({
+          onTopFilterChange: () => this.renderHomeSections(),
+          onGenreSelect: (genre) => {
+            this.catalog.setGenreFilter(genre);
+            this.renderCatalogView();
+            this.renderHomeSections();
+          }
+        });
+      }
       document.addEventListener('click', (ev) => {
         const target = ev.target.closest('[data-action]');
         if (!target) return;
@@ -5285,8 +6214,10 @@ html[data-theme="light"] .hero-dot {
       });
       on('btn-autoscroll', 'click', (e) => {
         const active = this.reader.toggleAutoScroll();
-        e.target.classList.toggle('active', active);
-        e.target.textContent = active ? '⏸ Durdur' : '▶️ Oto-Kaydır';
+        e.currentTarget.classList.toggle('active', active);
+        e.currentTarget.innerHTML = active
+          ? `${iconFn('pause')} Durdur`
+          : `${iconFn('play')} Oto-Kaydır`;
       });
       on('btn-protect', 'click', (e) => {
         this.reader.protectImages = !this.reader.protectImages;

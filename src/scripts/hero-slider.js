@@ -248,8 +248,11 @@
         ? `<div class="hero-genres" id="hero-genres">${genresHtml}</div>`
         : '';
 
+      const iconFn =
+        (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
+        (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
       const authorHtml = featured.author
-        ? `<span class="hero-detail-item">✍️ ${featured.author}</span>`
+        ? `<span class="hero-detail-item">${iconFn('pen')} ${featured.author}</span>`
         : '';
 
       const dotsHtml = this.slides
@@ -275,7 +278,7 @@
             <div class="hero-details" id="hero-details">
               <span class="hero-detail-item hero-detail-type">${typeLabel}</span>
               <span class="hero-detail-item">${statusLabel}</span>
-              <span class="hero-detail-item">📚 ${chapterCount} Bölüm</span>
+              <span class="hero-detail-item">${iconFn('layers')} ${chapterCount} Bölüm</span>
               ${authorHtml}
             </div>
             <p class="hero-desc" id="hero-desc">${synopsis}</p>

@@ -142,6 +142,7 @@
           ? initialSeries
           : getDefaultCatalog();
       this.activeLang = 'ALL';
+      this.activeGenre = 'ALL';
       this.searchQuery = '';
       this.sortBy = 'updated';
       this._log('debug', 'CatalogController baslatildi.', { count: this.seriesList.length });
@@ -187,6 +188,18 @@
     }
 
     /**
+     * Kategori / etiket filtresini ayarlar (orn: 'ALL', 'Aksiyon', 'Zindan').
+     * @param {string} genre - Kategori adi.
+     * @returns {Array<Object>} Filtrelenmis seri listesi.
+     */
+    setGenreFilter(genre) {
+      const clean = String(genre || 'ALL').trim();
+      this.activeGenre = clean.toUpperCase() === 'ALL' ? 'ALL' : clean;
+      this._log('info', 'Kategori filtresi degistirildi.', { activeGenre: this.activeGenre });
+      return this.getFilteredSeries();
+    }
+
+    /**
      * Arama sorgusunu gunceller.
      * @param {string} query - Arama metni.
      * @returns {Array<Object>} Filtrelenmis seri listesi.
@@ -225,6 +238,17 @@
         if (!matchesLang) {
           return false;
         }
+
+        if (this.activeGenre && this.activeGenre !== 'ALL') {
+          const targetGenre = this.activeGenre.toLowerCase();
+          const hasGenre = (item.genres || []).some(
+            (g) => String(g || '').trim().toLowerCase() === targetGenre
+          );
+          if (!hasGenre) {
+            return false;
+          }
+        }
+
         if (!this.searchQuery) {
           return true;
         }

@@ -244,6 +244,24 @@
   display: none !important;
 }
 
+.ui-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  flex-shrink: 0;
+}
+
+.section-title .ui-icon {
+  color: var(--accent-primary);
+  width: 1.15em;
+  height: 1.15em;
+}
+
+.fav-card-btn.is-fav .ui-icon {
+  color: #ef4444;
+}
+
 @media (max-width: 768px) {
   .hero-banner {
     grid-template-columns: 1fr;
