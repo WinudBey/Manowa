@@ -34,21 +34,38 @@ jobs:
 
       - name: Sürüm Bilgilerini Belirle
         id: meta
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git fetch --tags --force
           if [[ "${{ github.ref_type }}" == "tag" ]]; then
             TAG="${{ github.ref_name }}"
           else
-            PKG_VER=$(node -p "require('./package.json').version")
-            TAG="v${PKG_VER}"
+            BASE_VER=$(node -p "require('./package.json').version.split('.').slice(0, 2).join('.')")
+            HIGHEST_TAG=$(git tag -l "v${BASE_VER}.*" --sort=-v:refname | head -n 1)
+            if [[ -n "${HIGHEST_TAG}" ]]; then
+              LAST_PATCH="${HIGHEST_TAG##*.}"
+              if [[ "${LAST_PATCH}" =~ ^[0-9]+$ ]]; then
+                NEXT_PATCH=$((LAST_PATCH + 1))
+              else
+                NEXT_PATCH=1
+              fi
+            else
+              NEXT_PATCH=1
+            fi
+            TAG="v${BASE_VER}.${NEXT_PATCH}"
           fi
+          COMMIT_MSG=$(git log -1 --pretty=%s)
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
           echo "title=Manowa Blogger Teması ${TAG}" >> "$GITHUB_OUTPUT"
+          echo "commit_msg=${COMMIT_MSG}" >> "$GITHUB_OUTPUT"
 
       - name: GitHub Release Oluştur veya Güncelle
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.meta.outputs.tag }}
           TITLE: ${{ steps.meta.outputs.title }}
+          COMMIT_MSG: ${{ steps.meta.outputs.commit_msg }}
         run: |
           NOTES="### 📦 Manowa Blogger Teması (${TAG})
           Bu sürüm GitHub Actions tarafından otomatik olarak test edilmiş ve derlenmiştir.
@@ -58,23 +75,17 @@ jobs:
           * **\`preview.html\`** — Tarayıcıda yerel olarak test edebileceğiniz ve Gönderi Oluşturucu aracını içeren önizleme dosyası.
 
           #### 🔗 Son Değişiklik
-          * Commit: \`${GITHUB_SHA::7}\`"
-
-          if [[ "${{ github.ref_type }}" != "tag" ]]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git tag -f "${TAG}" "${GITHUB_SHA}"
-            git push origin "${TAG}" --force
-          fi
+          * Commit: \`${GITHUB_SHA::7}\` — ${COMMIT_MSG}"
 
           if gh release view "${TAG}" >/dev/null 2>&1; then
             echo "Mevcut sürüm (${TAG}) güncelleniyor..."
             gh release upload "${TAG}" dist/theme.xml dist/preview.html --clobber
-            gh release edit "${TAG}" --title "${TITLE}" --notes "${NOTES}"
+            gh release edit "${TAG}" --title "${TITLE}" --notes "${NOTES}" --latest
           else
             echo "Yeni sürüm (${TAG}) oluşturuluyor..."
             gh release create "${TAG}" dist/theme.xml dist/preview.html \
               --title "${TITLE}" \
               --notes "${NOTES}" \
-              --target "${GITHUB_SHA}"
+              --target "${GITHUB_SHA}" \
+              --latest
           fi
