@@ -22,6 +22,11 @@
       this.storage =
         options.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
       this.historyKey = 'manowa_reading_history';
+      this.seriesType = this.normalizeSeriesType(
+        options.seriesType || 'Manhwa',
+        options.sourceLang || '',
+        Boolean(options.isNovel)
+      );
       this.mode = VALID_MODES.includes(options.mode) ? options.mode : 'webtoon';
       this.direction = VALID_DIRECTIONS.includes(options.direction) ? options.direction : 'ltr';
       this.zoom = this._clamp(options.zoom || 100, 50, 150);
@@ -30,6 +35,8 @@
       this.novelFontFamily = options.novelFontFamily === 'serif' ? 'serif' : 'sans';
       this.protectImages =
         options.protectImages !== undefined ? Boolean(options.protectImages) : true;
+      this.rawPages = [];
+      this.pageGroups = [];
       this.pages = [];
       this.htmlContent = '';
       this.currentIndex = 0;
@@ -40,10 +47,133 @@
       this._autoScrollTimer = null;
 
       this._log('debug', 'ReadingEngine baslatildi.', {
+        seriesType: this.seriesType,
         mode: this.mode,
         direction: this.direction,
         zoom: this.zoom
       });
+    }
+
+    /**
+     * Seri turunu ('manhwa', 'manhua', 'manga', 'novel') olarak normalize eder.
+     * @param {string} [rawType=''] - Ham seri turu.
+     * @param {string} [sourceLang=''] - Kaynak dil kodu ('KR', 'JP', 'CN', 'EN').
+     * @param {boolean} [isNovel=false] - Bolumun metin tabanli olup olmadigi.
+     * @returns {'manhwa'|'manhua'|'manga'|'novel'} Normalize edilmis tur.
+     */
+    normalizeSeriesType(rawType = '', sourceLang = '', isNovel = false) {
+      const lower = String(rawType || '').trim().toLowerCase();
+      const lang = String(sourceLang || '').trim().toUpperCase();
+      if (isNovel || lower === 'novel' || lower === 'roman' || lower === 'webnovel') {
+        return 'novel';
+      }
+      if (lower === 'manga' || lang === 'JP') {
+        return 'manga';
+      }
+      if (lower === 'manhua' || lang === 'CN') {
+        return 'manhua';
+      }
+      return 'manhwa';
+    }
+
+    /**
+     * Aktif seri turunun kullanici arayuzu etiketini dondurur.
+     * @returns {string} Gosterilecek tur etiketi.
+     */
+    getSeriesTypeLabel() {
+      const map = {
+        novel: 'Novel',
+        manga: 'Manga',
+        manhua: 'Manhua',
+        manhwa: 'Manhwa'
+      };
+      return map[this.seriesType] || 'Manhwa';
+    }
+
+    /**
+     * Bolum secici acilir kutusu icin tekrarli seri adindan arindirilmis kisa etiket uretir.
+     * @param {Object} [chapter={}] - Bolum nesnesi.
+     * @returns {string} Kisa bolum etiketi (orn: "Bölüm 279").
+     */
+    formatChapterSelectLabel(chapter = {}) {
+      if (chapter && chapter.number !== undefined && chapter.number !== null && chapter.number !== '') {
+        return `Bölüm ${chapter.number}`;
+      }
+      const rawTitle = String((chapter && chapter.title) || '').trim();
+      const match = rawTitle.match(/B[öo]l[üu]m\s*(\d+(?:[.,]\d+)?)/i);
+      if (match) {
+        return `Bölüm ${match[1]}`;
+      }
+      return rawTitle || 'Bölüm';
+    }
+
+    /**
+     * Gorsel URL'sinden "01_01", "01_02", "02-01" gibi bolunmus sayfa grup anahtarini cikarir.
+     * Tekil dosya adlarinda (orn: "Kapak.webp", "p1.webp") null dondurur.
+     * @param {string} rawUrl - Gorsel URL dizgesi.
+     * @returns {string|null} Mantiksal sayfa grup anahtari (orn: "page:1") veya null.
+     */
+    extractSliceGroupKey(rawUrl) {
+      const cleanPath = String(rawUrl || '').split(/[?#]/)[0];
+      const lastSegMatch = cleanPath.match(/([^/]+)$/);
+      if (!lastSegMatch) return null;
+      let fileName = lastSegMatch[1];
+      try {
+        fileName = decodeURIComponent(fileName);
+      } catch (_err) {
+        // Decode hatasini yoksay
+      }
+      const baseName = fileName.replace(/\.(?:webp|jpe?g|png|gif|avif|bmp|svg)$/i, '').trim();
+      const sliceMatch =
+        baseName.match(/^(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)$/i) ||
+        baseName.match(/^(\d{2,})[-_](\d{2,})$/);
+      if (!sliceMatch) {
+        return null;
+      }
+      return `page:${Number(sliceMatch[1])}`;
+    }
+
+    /**
+     * "01_01, 01_02, 01_03" seklinde bolunerek yuklenmis gorsel URL listesini
+     * ardisik mantiksal tam sayfa gruplarina (Array<Array<string>>) donusturur.
+     * @param {Array<string>} [rawPages=[]] - Ham gorsel URL dizisi.
+     * @returns {Array<Array<string>>} Gruplanmis mantiksal sayfa dilimleri.
+     */
+    groupSlicedPages(rawPages = []) {
+      if (!Array.isArray(rawPages) || rawPages.length === 0) {
+        return [];
+      }
+      const groups = [];
+      let currentGroup = [];
+      let currentKey = null;
+
+      rawPages.forEach((url) => {
+        const key = this.extractSliceGroupKey(url);
+        if (key && key === currentKey && currentGroup.length > 0) {
+          currentGroup.push(url);
+        } else {
+          currentGroup = [url];
+          currentKey = key;
+          groups.push(currentGroup);
+        }
+      });
+
+      return groups;
+    }
+
+    /**
+     * Belirtilen mantiksal sayfa indeksine ait tum gorsel dilimlerini dondurur.
+     * @param {number} pageIndex - Mantiksal sayfa indeksi.
+     * @returns {Array<string>} Sayfayi olusturan gorsel URL dilimleri.
+     */
+    getPageSlices(pageIndex) {
+      if (Array.isArray(this.pageGroups) && Array.isArray(this.pageGroups[pageIndex])) {
+        return this.pageGroups[pageIndex];
+      }
+      if (this.pages[pageIndex]) {
+        return [this.pages[pageIndex]];
+      }
+      return [];
     }
 
     /**
@@ -71,7 +201,8 @@
     }
 
     /**
-     * Yeni bir bolumu okuma motoruna yukler.
+     * Yeni bir bolumu okuma motoruna yukler ve seri turune gore modu/yonu otomatik ayarlar.
+     * Bolunmus ("01_01, 01_02") gorselleri mantiksal tam sayfalara gruplar.
      * @param {Object} [chapterData={}] - Bolum verileri.
      * @returns {Object} Guncel motor durumu.
      */
@@ -79,13 +210,39 @@
       this.stopAutoScroll();
       this.seriesId = chapterData.seriesId || '';
       this.chapterId = chapterData.chapterId || '';
-      this.pages = Array.isArray(chapterData.pages) ? chapterData.pages.slice() : [];
+      this.rawPages = Array.isArray(chapterData.pages) ? chapterData.pages.slice() : [];
+      this.pageGroups = this.groupSlicedPages(this.rawPages);
+      this.pages = this.pageGroups.map((group) => group[0]);
       this.htmlContent = String(chapterData.htmlContent || '');
+      const hasOnlyNovelHtml = Boolean(this.pages.length === 0 && this.htmlContent);
+      const isNovelChapter = Boolean(chapterData.isNovel || hasOnlyNovelHtml);
 
-      if (this.pages.length === 0 && this.htmlContent) {
+      this.seriesType = this.normalizeSeriesType(
+        chapterData.seriesType || '',
+        chapterData.sourceLang || '',
+        isNovelChapter
+      );
+
+      if (this.seriesType === 'novel' || hasOnlyNovelHtml) {
+        this.seriesType = 'novel';
         this.mode = 'novel';
-      } else if (chapterData.defaultMode && VALID_MODES.includes(chapterData.defaultMode)) {
-        this.mode = chapterData.defaultMode;
+        this.direction = 'ltr';
+      } else {
+        if (chapterData.defaultMode && VALID_MODES.includes(chapterData.defaultMode) && chapterData.defaultMode !== 'novel') {
+          this.mode = chapterData.defaultMode;
+        } else if (this.seriesType === 'manga') {
+          this.mode = 'single';
+        } else {
+          this.mode = 'webtoon';
+        }
+
+        if (chapterData.direction && VALID_DIRECTIONS.includes(chapterData.direction)) {
+          this.direction = chapterData.direction;
+        } else if (this.seriesType === 'manga') {
+          this.direction = 'rtl';
+        } else {
+          this.direction = 'ltr';
+        }
       }
 
       const saved = this.getProgress(this.seriesId);
@@ -106,8 +263,12 @@
       this._log('info', 'Bolum okuma motoruna yuklendi.', {
         seriesId: this.seriesId,
         chapterId: this.chapterId,
+        seriesType: this.seriesType,
+        mode: this.mode,
+        direction: this.direction,
         pageCount: this.pages.length,
-        isNovel: Boolean(this.htmlContent && this.pages.length === 0),
+        rawSliceCount: this.rawPages.length,
+        isNovel: this.seriesType === 'novel',
         startIndex: this.currentIndex
       });
 
@@ -281,7 +442,7 @@
     }
 
     /**
-     * Sonraki 2 sayfanin gorsellerini onceden bellekleme (preload) yapar.
+     * Sonraki 2 mantiksal sayfanin tum gorsel dilimlerini onceden bellekleme (preload) yapar.
      * @returns {Array<string>} On yuklenen URL listesi.
      */
     preloadAdjacentPages() {
@@ -289,12 +450,14 @@
       for (let i = 1; i <= 2; i++) {
         const targetIdx = this.currentIndex + i;
         if (targetIdx < this.pages.length) {
-          const url = this.pages[targetIdx];
-          preloaded.push(url);
-          if (typeof Image !== 'undefined') {
-            const img = new Image();
-            img.src = url;
-          }
+          const slices = this.getPageSlices(targetIdx);
+          slices.forEach((url) => {
+            preloaded.push(url);
+            if (typeof Image !== 'undefined') {
+              const img = new Image();
+              img.src = url;
+            }
+          });
         }
       }
       return preloaded;
@@ -429,11 +592,55 @@
     }
 
     /**
+     * Seri turune ve aktif moda gore gosterilecek kontrol gruplarini hesaplar.
+     * @returns {{ showMangaControls: boolean, showImageControls: boolean, showAutoScroll: boolean, showNovelControls: boolean, showPageFooterNav: boolean }}
+     */
+    getVisibleControlGroups() {
+      const isNovelMode = this.mode === 'novel' || this.seriesType === 'novel';
+      const isMangaType = this.seriesType === 'manga' && !isNovelMode;
+      const isPagedMode = !isNovelMode && (this.mode === 'single' || this.mode === 'double');
+      return {
+        showMangaControls: isMangaType,
+        showImageControls: !isNovelMode,
+        showAutoScroll: !isNovelMode && this.mode === 'webtoon',
+        showNovelControls: isNovelMode,
+        showPageFooterNav: isPagedMode
+      };
+    }
+
+    /**
+     * Tek sayfa veya cift sayfa modunda goruntu alaninin sol/sag kenarina tiklandiginda sayfa degistirir.
+     * @param {number} clickRatioX - 0 ile 1 arasinda yatay tiklama orani.
+     * @returns {'next'|'prev'|'none'} Yapilan sayfa gecisi.
+     */
+    handleViewportClick(clickRatioX) {
+      if (this.mode !== 'single' && this.mode !== 'double') {
+        return 'none';
+      }
+      const ratio = Number(clickRatioX);
+      if (Number.isNaN(ratio)) {
+        return 'none';
+      }
+      if (ratio < 0.45) {
+        const moved = this.direction === 'rtl' ? this.nextPage() : this.prevPage();
+        return moved ? (this.direction === 'rtl' ? 'next' : 'prev') : 'none';
+      }
+      if (ratio > 0.55) {
+        const moved = this.direction === 'rtl' ? this.prevPage() : this.nextPage();
+        return moved ? (this.direction === 'rtl' ? 'prev' : 'next') : 'none';
+      }
+      return 'none';
+    }
+
+    /**
      * Motorun anlik durum özetini dondurur.
      * @returns {Object} Motor durum nesnesi.
      */
     getState() {
+      const controlGroups = this.getVisibleControlGroups();
       return {
+        seriesType: this.seriesType,
+        seriesTypeLabel: this.getSeriesTypeLabel(),
         mode: this.mode,
         direction: this.direction,
         zoom: this.zoom,
@@ -446,12 +653,13 @@
         hasNovelContent: Boolean(this.htmlContent),
         visibleIndices: this.getVisiblePageIndices(),
         progressPercent: this.getProgressPercent(),
-        autoScrollActive: this.autoScrollActive
+        autoScrollActive: this.autoScrollActive,
+        ...controlGroups
       };
     }
 
     /**
-     * Okuyucu kontrol cubugunu motor durumuyla esitler.
+     * Okuyucu kontrol cubugunu motor durumuyla ve seri turuyle esitler.
      * @param {Document} [doc] - Hedef DOM belgesi.
      * @returns {void}
      */
@@ -461,12 +669,53 @@
       const state = this.getState();
       const modeSelect = targetDoc.getElementById('select-mode');
       const dirSelect = targetDoc.getElementById('select-direction');
-      const gapSelect = targetDoc.getElementById('select-gap');
       const zoomLabel = targetDoc.getElementById('zoom-label');
+      const fontSizeLabel = targetDoc.getElementById('font-size-label');
+      const fontFamilyLabel = targetDoc.getElementById('font-family-label');
+      const typeBadge = targetDoc.getElementById('reader-type-badge');
+      const mangaGroup = targetDoc.getElementById('reader-group-manga');
+      const imageGroup = targetDoc.getElementById('reader-group-image');
+      const novelGroup = targetDoc.getElementById('reader-group-novel');
+      const autoScrollBtn = targetDoc.getElementById('btn-autoscroll');
+      const footerPageNav = targetDoc.getElementById('reader-footer-page-nav');
+      const prevPageBtn = targetDoc.getElementById('btn-prev-page');
+      const nextPageBtn = targetDoc.getElementById('btn-next-page');
+
       if (modeSelect) modeSelect.value = state.mode;
       if (dirSelect) dirSelect.value = state.direction;
-      if (gapSelect) gapSelect.value = String(state.gap);
       if (zoomLabel) zoomLabel.textContent = `${state.zoom}%`;
+      if (fontSizeLabel) fontSizeLabel.textContent = `${state.novelFontSize}%`;
+      if (fontFamilyLabel) {
+        fontFamilyLabel.textContent = state.novelFontFamily === 'serif' ? 'Serif' : 'Sans';
+      }
+      if (typeBadge) {
+        typeBadge.textContent = state.seriesTypeLabel;
+        if (typeof typeBadge.setAttribute === 'function') {
+          typeBadge.setAttribute('data-type', state.seriesType);
+        }
+      }
+      if (mangaGroup && mangaGroup.classList) {
+        mangaGroup.classList.toggle('hidden', !state.showMangaControls);
+      }
+      if (imageGroup && imageGroup.classList) {
+        imageGroup.classList.toggle('hidden', !state.showImageControls);
+      }
+      if (autoScrollBtn && autoScrollBtn.classList) {
+        autoScrollBtn.classList.toggle('hidden', !state.showAutoScroll);
+      }
+      if (novelGroup && novelGroup.classList) {
+        novelGroup.classList.toggle('hidden', !state.showNovelControls);
+      }
+      if (footerPageNav && footerPageNav.classList) {
+        footerPageNav.classList.toggle('hidden', !state.showPageFooterNav);
+      }
+      if (prevPageBtn) {
+        prevPageBtn.disabled = state.currentIndex <= 0;
+      }
+      if (nextPageBtn) {
+        const step = state.mode === 'double' ? 2 : 1;
+        nextPageBtn.disabled = state.currentIndex + step >= state.totalPages;
+      }
     }
 
     /**
@@ -492,19 +741,44 @@
         const fontSizePct = state.novelFontSize || 105;
         viewport.innerHTML = `<article class="novel-content-box ${fontClass}" style="font-size: ${fontSizePct}%;">${this.htmlContent}</article>`;
       } else if (state.mode === 'double') {
-        const imgs = state.visibleIndices
-          .map(
-            (idx) =>
-              `<img class="reader-page-item" src="${this.pages[idx]}" alt="Sayfa ${idx + 1}" />`
-          )
+        const pageBlocks = state.visibleIndices
+          .map((idx) => {
+            const slices = this.getPageSlices(idx);
+            const sliceImgs = slices
+              .map(
+                (src, sIdx) =>
+                  `<img class="reader-page-item" src="${src}" alt="Sayfa ${idx + 1}${slices.length > 1 ? ' Parça ' + (sIdx + 1) : ''}" />`
+              )
+              .join('');
+            return `<div class="reader-logical-page" data-page-index="${idx}">${sliceImgs}</div>`;
+          })
           .join('');
-        viewport.innerHTML = `<div class="double-page-grid">${imgs}</div>`;
+        viewport.innerHTML = `<div class="double-page-grid">${pageBlocks}</div>`;
+      } else if (state.mode === 'single') {
+        const pageBlocks = state.visibleIndices
+          .map((idx) => {
+            const slices = this.getPageSlices(idx);
+            const sliceImgs = slices
+              .map(
+                (src, sIdx) =>
+                  `<img class="reader-page-item" src="${src}" alt="Sayfa ${idx + 1}${slices.length > 1 ? ' Parça ' + (sIdx + 1) : ''}" />`
+              )
+              .join('');
+            return `<div class="reader-logical-page" data-page-index="${idx}">${sliceImgs}</div>`;
+          })
+          .join('');
+        viewport.innerHTML = pageBlocks;
       } else {
         viewport.innerHTML = state.visibleIndices
-          .map(
-            (idx) =>
-              `<img class="reader-page-item" src="${this.pages[idx]}" alt="Sayfa ${idx + 1}" loading="lazy" />`
-          )
+          .map((idx) => {
+            const slices = this.getPageSlices(idx);
+            return slices
+              .map(
+                (src) =>
+                  `<img class="reader-page-item" src="${src}" alt="Sayfa ${idx + 1}" loading="lazy" />`
+              )
+              .join('');
+          })
           .join('');
       }
       if (progressBar && progressBar.style) progressBar.style.width = `${state.progressPercent}%`;
@@ -512,7 +786,7 @@
         if (state.mode === 'novel') {
           pageCounter.textContent = `Novel Metin (${state.novelFontSize || 105}%)`;
         } else if (state.mode === 'webtoon') {
-          pageCounter.textContent = `Webtoon Şerit (${state.totalPages} Sayfa)`;
+          pageCounter.textContent = `${state.totalPages} Sayfa`;
         } else {
           pageCounter.textContent = `Sayfa ${state.currentIndex + 1} / ${state.totalPages}`;
         }

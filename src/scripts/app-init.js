@@ -309,6 +309,9 @@
       this.currentView = viewName;
       this.commentsVisible = viewName === 'series' || viewName === 'reader';
       if (typeof document === 'undefined') return;
+      if (document.body && typeof document.body.setAttribute === 'function') {
+        document.body.setAttribute('data-active-view', viewName);
+      }
       const views = {
         catalog: document.getElementById('view-catalog'),
         series: document.getElementById('view-series'),
@@ -521,13 +524,18 @@
         options
       );
       if (this.reader) {
-        this.reader.setDirection(series.sourceLang === 'JP' ? 'rtl' : 'ltr');
+        const isNovel = Boolean(
+          chapter.isNovel || String(series.type || '').toLowerCase() === 'novel'
+        );
         this.reader.loadChapter({
           seriesId: series.id,
           chapterId: chapter.id,
+          seriesType: series.type || 'Manhwa',
+          sourceLang: series.sourceLang || '',
+          isNovel,
           pages: chapter.pages,
           htmlContent: chapter.htmlContent || '',
-          defaultMode: chapter.isNovel ? 'novel' : (series.defaultReaderMode || 'webtoon')
+          defaultMode: isNovel ? 'novel' : (series.defaultReaderMode || '')
         });
       }
       this.updateDisqus(`chapter-${chapter.id}`, `${series.title} - ${chapter.title}`);
@@ -549,7 +557,11 @@
         footerSeriesBtn.setAttribute('data-action', 'detail');
         footerSeriesBtn.setAttribute('data-series', series.id);
       }
-      if (chapterTitleEl) chapterTitleEl.textContent = chapter.title;
+      if (chapterTitleEl) {
+        chapterTitleEl.textContent = this.reader
+          ? this.reader.formatChapterSelectLabel(chapter)
+          : chapter.title;
+      }
       if (noteBox) {
         if (chapter.translatorNote) {
           noteBox.innerHTML = `${iconFn('note')} Çevirmen Notu: ${chapter.translatorNote}`;
@@ -558,15 +570,26 @@
           noteBox.classList.add('hidden');
         }
       }
+      const sortedAsc = this.catalog.getSortedChapters(series.id, 'asc');
+      const currentChapterIdx = sortedAsc.findIndex((c) => c.id === chapter.id);
       if (selectChapter) {
-        const sortedAsc = this.catalog.getSortedChapters(series.id, 'asc');
         selectChapter.innerHTML = sortedAsc
-          .map(
-            (c) =>
-              `<option value="${c.id}" ${c.id === chapter.id ? 'selected' : ''}>Bölüm ${c.number}: ${c.title}</option>`
-          )
+          .map((c) => {
+            const label = this.reader ? this.reader.formatChapterSelectLabel(c) : `Bölüm ${c.number}`;
+            return `<option value="${c.id}" ${c.id === chapter.id ? 'selected' : ''}>${label}</option>`;
+          })
           .join('');
       }
+      const hasPrevChapter = currentChapterIdx > 0;
+      const hasNextChapter = currentChapterIdx >= 0 && currentChapterIdx < sortedAsc.length - 1;
+      ['btn-prev-chapter', 'btn-top-prev-chapter'].forEach((btnId) => {
+        const btn = document.getElementById(btnId);
+        if (btn) btn.disabled = !hasPrevChapter;
+      });
+      ['btn-next-chapter', 'btn-top-next-chapter'].forEach((btnId) => {
+        const btn = document.getElementById(btnId);
+        if (btn) btn.disabled = !hasNextChapter;
+      });
       this.syncReaderControls();
       this.renderReaderViewport();
       this.renderHomeSections();
@@ -739,14 +762,12 @@
       on('select-chapter', 'change', (e) => this.openReader(this.activeSeriesId, e.target.value));
       on('select-mode', 'change', (e) => {
         this.reader.setMode(e.target.value);
+        this.syncReaderControls();
         this.renderReaderViewport();
       });
       on('select-direction', 'change', (e) => {
         this.reader.setDirection(e.target.value);
-        this.renderReaderViewport();
-      });
-      on('select-gap', 'change', (e) => {
-        this.reader.setGap(Number(e.target.value));
+        this.syncReaderControls();
         this.renderReaderViewport();
       });
       on('btn-zoom-in', 'click', () => {
@@ -761,19 +782,18 @@
       });
       on('btn-font-increase', 'click', () => {
         this.reader.setNovelFontSize((this.reader.novelFontSize || 105) + 10);
+        this.syncReaderControls();
         this.renderReaderViewport();
       });
       on('btn-font-decrease', 'click', () => {
         this.reader.setNovelFontSize((this.reader.novelFontSize || 105) - 10);
+        this.syncReaderControls();
         this.renderReaderViewport();
       });
       on('btn-font-family', 'click', () => {
         this.reader.toggleNovelFontFamily();
+        this.syncReaderControls();
         this.renderReaderViewport();
-      });
-      on('btn-shortcuts-help', 'click', () => {
-        const box = document.getElementById('reader-shortcuts-box');
-        if (box) box.classList.toggle('hidden');
       });
       on('btn-autoscroll', 'click', (e) => {
         const active = this.reader.toggleAutoScroll();
@@ -781,11 +801,6 @@
         e.currentTarget.innerHTML = active
           ? `${iconFn('pause')} Durdur`
           : `${iconFn('play')} Oto-Kaydır`;
-      });
-      on('btn-protect', 'click', (e) => {
-        this.reader.protectImages = !this.reader.protectImages;
-        e.target.classList.toggle('active', this.reader.protectImages);
-        this.renderReaderViewport();
       });
       on('btn-fullscreen', 'click', () => {
         const wrap = document.getElementById('reader-wrapper');
@@ -795,13 +810,33 @@
         }
       });
       on('btn-next-page', 'click', () => {
-        if (this.reader.nextPage()) this.renderReaderViewport();
+        if (this.reader.nextPage()) {
+          this.syncReaderControls();
+          this.renderReaderViewport();
+        }
       });
       on('btn-prev-page', 'click', () => {
-        if (this.reader.prevPage()) this.renderReaderViewport();
+        if (this.reader.prevPage()) {
+          this.syncReaderControls();
+          this.renderReaderViewport();
+        }
+      });
+      on('reader-viewport', 'click', (e) => {
+        if (!this.reader || !e.currentTarget || typeof e.currentTarget.getBoundingClientRect !== 'function') {
+          return;
+        }
+        const rect = e.currentTarget.getBoundingClientRect();
+        if (rect.width <= 0) return;
+        const ratio = (e.clientX - rect.left) / rect.width;
+        if (this.reader.handleViewportClick(ratio) !== 'none') {
+          this.syncReaderControls();
+          this.renderReaderViewport();
+        }
       });
       on('btn-next-chapter', 'click', () => this.navigateChapter(1));
       on('btn-prev-chapter', 'click', () => this.navigateChapter(-1));
+      on('btn-top-next-chapter', 'click', () => this.navigateChapter(1));
+      on('btn-top-prev-chapter', 'click', () => this.navigateChapter(-1));
       on('btn-scroll-top', 'click', () => {
         if (typeof globalScope.scrollTo === 'function') {
           globalScope.scrollTo({ top: 0, behavior: 'smooth' });

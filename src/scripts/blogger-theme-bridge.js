@@ -136,10 +136,10 @@
 
     /**
      * Blogger Yerlesim (Layout) ekranindaki Tema Degiskenleri widget'larini
-     * (Disqus Shortname, Hero Gecis Suresi, Alt Bilgi Slogani) okur ve uygular.
+     * (Disqus Shortname, Hero Gecis Suresi, Alt Bilgi Slogani, Ekibe Katil ve Discord Linkleri) okur ve uygular.
      * @param {Object} [targets={}] - Hedef denetleyiciler ({ disqus, heroSlider }).
      * @param {Document} [doc] - Hedef DOM belgesi.
-     * @returns {{ disqusShortname: string, themeMode: string, heroIntervalMs: number, footerText: string }} Uygulanan degerler.
+     * @returns {{ disqusShortname: string, themeMode: string, heroIntervalMs: number, footerText: string, recruitUrl: string, discordUrl: string }} Uygulanan degerler.
      */
     applyLayoutConfigWidgets(targets = {}, doc) {
       const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
@@ -164,11 +164,34 @@
         }
       }
 
+      const applyBannerHref = (bannerId, rawUrl) => {
+        if (!rawUrl || !targetDoc || typeof targetDoc.getElementById !== 'function') return;
+        const bannerEl = targetDoc.getElementById(bannerId);
+        if (!bannerEl) return;
+        if (typeof bannerEl.setAttribute === 'function') {
+          bannerEl.setAttribute('href', rawUrl);
+          if (/^https?:\/\//i.test(rawUrl)) {
+            bannerEl.setAttribute('target', '_blank');
+            bannerEl.setAttribute('rel', 'noopener noreferrer');
+          }
+        } else {
+          bannerEl.href = rawUrl;
+        }
+      };
+
+      const recruitUrl = this.readLayoutWidgetText('blogger-cfg-recruit-url', targetDoc);
+      applyBannerHref('banner-join-team', recruitUrl);
+
+      const discordUrl = this.readLayoutWidgetText('blogger-cfg-discord-url', targetDoc);
+      applyBannerHref('banner-join-discord', discordUrl);
+
       return {
         disqusShortname,
         themeMode: this.resolveDefaultThemeMode(targetDoc),
         heroIntervalMs,
-        footerText
+        footerText,
+        recruitUrl,
+        discordUrl
       };
     }
 

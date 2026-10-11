@@ -180,7 +180,7 @@ body {
     </header>
 
     <main class='site-main' id='main-content'>
-      <b:section class='hidden' id='theme-config-section' maxwidgets='4' name='Tema Değişkenleri ve Ayarları (Kalem Simgesiyle Düzenleyin)' showaddelement='no'>
+      <b:section class='hidden' id='theme-config-section' maxwidgets='6' name='Tema Değişkenleri ve Ayarları (Kalem Simgesiyle Düzenleyin)' showaddelement='no'>
         <b:widget id='Text1' locked='true' title='Disqus Shortname (Yorum Kısa Adı)' type='Text' version='2'>
           <b:widget-settings>
             <b:widget-setting name='content'/>
@@ -211,6 +211,22 @@ body {
           </b:widget-settings>
           <b:includable id='main'>
             <span class='hidden' id='blogger-cfg-footer-text'><data:content/></span>
+          </b:includable>
+        </b:widget>
+        <b:widget id='Text5' locked='true' title='Ekibe Katıl Başvuru Linki (URL)' type='Text' version='2'>
+          <b:widget-settings>
+            <b:widget-setting name='content'>#ekibe-katil</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <span class='hidden' id='blogger-cfg-recruit-url'><data:content/></span>
+          </b:includable>
+        </b:widget>
+        <b:widget id='Text6' locked='true' title='Discord Sunucu Davet Linki (URL)' type='Text' version='2'>
+          <b:widget-settings>
+            <b:widget-setting name='content'>#discord</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <span class='hidden' id='blogger-cfg-discord-url'><data:content/></span>
           </b:includable>
         </b:widget>
       </b:section>

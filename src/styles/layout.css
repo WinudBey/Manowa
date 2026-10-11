@@ -12,6 +12,10 @@
   transition: background-color 0.25s ease;
 }
 
+body[data-active-view="reader"] .site-header {
+  position: relative;
+}
+
 [data-theme="light"] .site-header {
   background: rgba(255, 255, 255, 0.9);
 }

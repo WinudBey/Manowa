@@ -724,6 +724,16 @@ test('BloggerThemeBridge ve Blogger Tema Ozellestiricisi (b:skin Group/Variable 
   };
 
   const mockSloganEl = { id: 'footer-slogan-text', textContent: 'Eski Slogan' };
+  const bannerAttrs = { 'banner-join-team': {}, 'banner-join-discord': {} };
+  const makeMockBanner = (id) => ({
+    id,
+    setAttribute(k, v) {
+      bannerAttrs[id][k] = v;
+    }
+  });
+  const mockJoinTeamEl = makeMockBanner('banner-join-team');
+  const mockJoinDiscordEl = makeMockBanner('banner-join-discord');
+
   const mockDoc = {
     documentElement: {
       getAttribute(k) {
@@ -744,6 +754,10 @@ test('BloggerThemeBridge ve Blogger Tema Ozellestiricisi (b:skin Group/Variable 
       if (id === 'blogger-cfg-disqus') return { textContent: '  manowa-forum-tr  ' };
       if (id === 'blogger-cfg-hero-interval') return { textContent: '8500' };
       if (id === 'blogger-cfg-footer-text') return { textContent: 'Güncel Webtoon ve Novel Arşivi' };
+      if (id === 'blogger-cfg-recruit-url') return { textContent: 'https://forms.gle/manowa-ekip' };
+      if (id === 'blogger-cfg-discord-url') return { textContent: 'https://discord.gg/manowa' };
+      if (id === 'banner-join-team') return mockJoinTeamEl;
+      if (id === 'banner-join-discord') return mockJoinDiscordEl;
       if (id === 'footer-slogan-text') return mockSloganEl;
       if (id === 'home-sidebar') return mockSidebarEl;
       if (id === 'sidebar-gadgets-section') return mockGadgetsEl;
@@ -768,6 +782,12 @@ test('BloggerThemeBridge ve Blogger Tema Ozellestiricisi (b:skin Group/Variable 
   assert.equal(appliedDisqus, 'manowa-forum-tr');
   assert.equal(mockHero.intervalMs, 8500);
   assert.equal(mockSloganEl.textContent, 'Güncel Webtoon ve Novel Arşivi');
+  assert.equal(cfgResult.recruitUrl, 'https://forms.gle/manowa-ekip');
+  assert.equal(cfgResult.discordUrl, 'https://discord.gg/manowa');
+  assert.equal(bannerAttrs['banner-join-team'].href, 'https://forms.gle/manowa-ekip');
+  assert.equal(bannerAttrs['banner-join-team'].target, '_blank');
+  assert.equal(bannerAttrs['banner-join-discord'].href, 'https://discord.gg/manowa');
+  assert.equal(bannerAttrs['banner-join-discord'].target, '_blank');
 
   // Kayitli tercih yokken Blogger meta varsayilanini ('light') kullanmali
   const initialMode = bridge.initThemeMode(mockDoc);
@@ -814,6 +834,15 @@ test('BloggerThemeBridge ve Blogger Tema Ozellestiricisi (b:skin Group/Variable 
   assert.equal(themeXml.includes("id='blogger-cfg-theme-mode'"), true);
   assert.equal(themeXml.includes("id='blogger-cfg-hero-interval'"), true);
   assert.equal(themeXml.includes("id='blogger-cfg-footer-text'"), true);
+  assert.equal(themeXml.includes("id='blogger-cfg-recruit-url'"), true);
+  assert.equal(themeXml.includes("id='blogger-cfg-discord-url'"), true);
+  assert.equal(themeXml.includes('id="sidebar-cta-banners"'), true);
+  assert.equal(themeXml.includes('id="banner-join-team"'), true);
+  assert.equal(themeXml.includes('id="banner-join-discord"'), true);
+  assert.equal(
+    themeXml.indexOf('id="sidebar-cta-banners"') < themeXml.indexOf('id="sidebar-top-series"'),
+    true
+  );
   assert.equal(themeXml.includes("class='blogger-layout-columns'"), true);
   assert.equal(themeXml.includes("id='sidebar-gadgets-section'"), true);
   assert.equal(themeXml.includes("id='footer-gadgets-section'"), true);

@@ -1556,6 +1556,94 @@ html[data-theme="light"] .hero-dot {
   gap: 1.25rem;
 }
 
+.sidebar-cta-banners {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sidebar-cta-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-cta-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.sidebar-cta-card.cta-join-team {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 55%, #db2777 100%);
+}
+
+.sidebar-cta-card.cta-join-discord {
+  background: linear-gradient(135deg, #5865f2 0%, #4752c4 60%, #313896 100%);
+}
+
+.sidebar-cta-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #ffffff;
+}
+
+.sidebar-cta-icon .ui-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.sidebar-cta-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.sidebar-cta-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.sidebar-cta-sub {
+  font-size: 0.73rem;
+  color: rgba(255, 255, 255, 0.86);
+  line-height: 1.3;
+}
+
+.sidebar-cta-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.28rem 0.58rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.18s ease;
+}
+
+.sidebar-cta-card:hover .sidebar-cta-badge {
+  background: rgba(255, 255, 255, 0.32);
+}
+
 .sidebar-widget {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
@@ -1907,6 +1995,10 @@ html[data-theme="light"] .hero-dot {
   transition: background-color 0.25s ease;
 }
 
+body[data-active-view="reader"] .site-header {
+  position: relative;
+}
+
 [data-theme="light"] .site-header {
   background: rgba(255, 255, 255, 0.9);
 }
@@ -2184,17 +2276,28 @@ html[data-theme="light"] .hero-dot {
   background: #090b10;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  overflow: visible;
   margin-bottom: 2rem;
 }
 
-.reader-progress-track {
+.reader-sticky-header {
   position: sticky;
   top: 0;
-  z-index: 95;
+  z-index: 110;
+  background: rgba(11, 13, 19, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+.reader-progress-track {
   width: 100%;
-  height: 4px;
+  height: 3px;
   background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  overflow: hidden;
 }
 
 .reader-progress-bar {
@@ -2205,51 +2308,234 @@ html[data-theme="light"] .hero-dot {
 }
 
 .reader-toolbar {
-  background: rgba(15, 17, 23, 0.95);
-  border-bottom: 1px solid var(--border-color);
-  padding: 0.85rem 1.15rem;
+  padding: 0.65rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.85rem;
-  flex-wrap: wrap;
+  gap: 0.65rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.reader-toolbar::-webkit-scrollbar {
+  display: none;
 }
 
 .reader-title-group {
   display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.45rem;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
-.reader-series-name {
-  font-size: 0.8rem;
-  color: var(--accent-hover);
+.reader-series-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 36px;
+  padding: 0 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  cursor: pointer;
+  color: #e2e8f0;
+  text-decoration: none;
+  background: #141824;
+  border: 1px solid rgba(99, 102, 241, 0.32);
+  border-radius: 9px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+  transition: all 0.18s ease;
+}
+
+.reader-series-back-btn:hover {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #ffffff;
+}
+
+.reader-type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 0.6rem;
+  border-radius: 7px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  flex-shrink: 0;
+}
+
+.reader-type-badge[data-type='manhwa'],
+.reader-type-badge[data-type='manhua'] {
+  background: rgba(79, 70, 229, 0.22);
+  border-color: rgba(99, 102, 241, 0.45);
+  color: #c7d2fe;
+}
+
+.reader-type-badge[data-type='manga'] {
+  background: rgba(225, 29, 72, 0.22);
+  border-color: rgba(244, 63, 94, 0.45);
+  color: #fecdd3;
+}
+
+.reader-type-badge[data-type='novel'] {
+  background: rgba(13, 148, 136, 0.22);
+  border-color: rgba(20, 184, 166, 0.45);
+  color: #99f6e4;
 }
 
 .reader-chapter-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  line-height: 1.2;
+}
+
+.reader-chapter-switcher {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  background: #141824;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.18rem;
+  gap: 0.18rem;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.reader-step-btn {
+  background: transparent;
+  color: #cbd5e1;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
   font-size: 1.05rem;
   font-weight: 800;
-  color: #f8fafc;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.reader-step-btn:hover:not(:disabled) {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+.reader-step-btn:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+}
+
+.reader-chapter-select {
+  background: transparent !important;
+  border: none !important;
+  height: 28px !important;
+  padding: 0 0.65rem !important;
+  min-width: 138px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.reader-chapter-select:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+}
+
+.reader-chapter-select option {
+  background: #141824;
+  color: #f1f5f9;
 }
 
 .reader-controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.reader-control-cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+.reader-control-cluster.hidden,
+.reader-footer-page-nav.hidden {
+  display: none !important;
+}
+
+.reader-pill-group {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  background: #141824;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
+  padding: 0.18rem;
+  gap: 0.15rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.reader-pill-btn {
+  background: transparent;
+  color: #e2e8f0;
+  border: none;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 0.45rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.reader-pill-btn:hover {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+.reader-pill-value {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  min-width: 44px;
+  text-align: center;
+  padding: 0 0.25rem;
 }
 
 .reader-select,
 .reader-btn {
-  background: #181b24;
+  background: #141824;
   color: #f1f5f9;
-  border: 1px solid #2e3446;
-  padding: 0.42rem 0.7rem;
-  border-radius: 8px;
-  font-size: 0.82rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  height: 36px;
+  padding: 0 0.65rem;
+  border-radius: 9px;
+  font-size: 0.78rem;
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
   cursor: pointer;
   transition: all 0.18s ease;
 }
@@ -2260,6 +2546,11 @@ html[data-theme="light"] .hero-dot {
   border-color: var(--accent-primary);
   background: var(--accent-primary);
   color: #ffffff;
+}
+
+.reader-btn:disabled {
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .translator-note-box {
@@ -2287,6 +2578,7 @@ html[data-theme="light"] .hero-dot {
 
 .reader-viewport.mode-webtoon {
   gap: var(--page-gap);
+  padding: 0;
 }
 
 .reader-viewport.mode-webtoon .reader-page-item {
@@ -2296,13 +2588,29 @@ html[data-theme="light"] .hero-dot {
   margin: 0 auto;
 }
 
+.reader-viewport.mode-single,
+.reader-viewport.mode-double {
+  cursor: pointer;
+}
+
+.reader-viewport.mode-single .reader-logical-page {
+  width: 100%;
+  max-width: var(--reader-zoom);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0 auto;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+}
+
 .reader-viewport.mode-single .reader-page-item {
   width: 100%;
   max-width: var(--reader-zoom);
-  max-height: 88vh;
-  object-fit: contain;
-  border-radius: 6px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+  height: auto;
+  display: block;
+  margin: 0;
 }
 
 .reader-viewport.mode-double .double-page-grid {
@@ -2311,14 +2619,23 @@ html[data-theme="light"] .hero-dot {
   gap: 0.5rem;
   width: 100%;
   max-width: calc(var(--reader-zoom) * 1.6);
-  align-items: center;
+  align-items: start;
+}
+
+.reader-viewport.mode-double .reader-logical-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .reader-viewport.mode-double .reader-page-item {
   width: 100%;
-  max-height: 86vh;
-  object-fit: contain;
-  border-radius: 4px;
+  height: auto;
+  display: block;
+  margin: 0;
 }
 
 .reader-viewport.mode-novel {
@@ -2372,13 +2689,6 @@ html[data-theme="light"] .hero-dot {
   border-radius: 8px;
 }
 
-.reader-nav-links {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
 .reader-btn {
   text-decoration: none;
   display: inline-flex;
@@ -2393,14 +2703,26 @@ html[data-theme="light"] .hero-dot {
 }
 
 .reader-footer-bar {
-  background: rgba(15, 17, 23, 0.95);
+  background: rgba(15, 17, 23, 0.96);
   border-top: 1px solid var(--border-color);
-  padding: 0.85rem 1.15rem;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 0.8rem 1.15rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.85rem;
   flex-wrap: wrap;
+}
+
+.reader-footer-bar .reader-controls {
+  flex: 0 1 auto;
+  justify-content: flex-start;
+}
+
+.reader-footer-page-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .page-counter-pill {
@@ -2408,31 +2730,9 @@ html[data-theme="light"] .hero-dot {
   color: #f8fafc;
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 700;
   border: 1px solid #2e3446;
-}
-
-.shortcuts-help-box {
-  background: #131620;
-  border-bottom: 1px solid var(--border-color);
-  padding: 0.65rem 1.15rem;
-  display: flex;
-  align-items: center;
-  gap: 1.1rem;
-  flex-wrap: wrap;
-  font-size: 0.82rem;
-  color: #cbd5e1;
-}
-
-.shortcuts-help-box kbd {
-  background: #1e293b;
-  border: 1px solid #475569;
-  border-radius: 4px;
-  padding: 0.1rem 0.4rem;
-  font-family: monospace;
-  font-size: 0.78rem;
-  color: #f8fafc;
 }
 
 .novel-content-box.font-serif {
@@ -2440,6 +2740,13 @@ html[data-theme="light"] .hero-dot {
 }
 
 @media (max-width: 768px) {
+  .reader-toolbar {
+    padding: 0.55rem 0.75rem;
+    gap: 0.45rem;
+  }
+  .reader-series-back-btn {
+    max-width: 170px;
+  }
   .reader-viewport.mode-double .double-page-grid {
     grid-template-columns: 1fr;
   }
@@ -2571,7 +2878,7 @@ body {
     </header>
 
     <main class='site-main' id='main-content'>
-      <b:section class='hidden' id='theme-config-section' maxwidgets='4' name='Tema Değişkenleri ve Ayarları (Kalem Simgesiyle Düzenleyin)' showaddelement='no'>
+      <b:section class='hidden' id='theme-config-section' maxwidgets='6' name='Tema Değişkenleri ve Ayarları (Kalem Simgesiyle Düzenleyin)' showaddelement='no'>
         <b:widget id='Text1' locked='true' title='Disqus Shortname (Yorum Kısa Adı)' type='Text' version='2'>
           <b:widget-settings>
             <b:widget-setting name='content'/>
@@ -2602,6 +2909,22 @@ body {
           </b:widget-settings>
           <b:includable id='main'>
             <span class='hidden' id='blogger-cfg-footer-text'><data:content/></span>
+          </b:includable>
+        </b:widget>
+        <b:widget id='Text5' locked='true' title='Ekibe Katıl Başvuru Linki (URL)' type='Text' version='2'>
+          <b:widget-settings>
+            <b:widget-setting name='content'>#ekibe-katil</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <span class='hidden' id='blogger-cfg-recruit-url'><data:content/></span>
+          </b:includable>
+        </b:widget>
+        <b:widget id='Text6' locked='true' title='Discord Sunucu Davet Linki (URL)' type='Text' version='2'>
+          <b:widget-settings>
+            <b:widget-setting name='content'>#discord</b:widget-setting>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <span class='hidden' id='blogger-cfg-discord-url'><data:content/></span>
           </b:includable>
         </b:widget>
       </b:section>
@@ -2699,6 +3022,30 @@ body {
 
     <!-- SAG YAN PANEL (SIDEBAR) -->
     <aside aria-label="Yan Panel" class="home-sidebar" id="home-sidebar">
+      <div class="sidebar-cta-banners" id="sidebar-cta-banners">
+        <a class="sidebar-cta-card cta-join-team" href="#ekibe-katil" id="banner-join-team">
+          <div class="sidebar-cta-icon">
+            <svg aria-hidden="true" class="ui-icon ui-icon-users-plus" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          </div>
+          <div class="sidebar-cta-text">
+            <strong class="sidebar-cta-title">Ekibe Katıl</strong>
+            <span class="sidebar-cta-sub">Çevirmen, Editör &amp; Dizgici Arıyoruz</span>
+          </div>
+          <span class="sidebar-cta-badge">Başvur →</span>
+        </a>
+
+        <a class="sidebar-cta-card cta-join-discord" href="#discord" id="banner-join-discord">
+          <div class="sidebar-cta-icon">
+            <svg aria-hidden="true" class="ui-icon ui-icon-discord" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M9.09 12.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z"/><path d="M14.91 12.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z"/><path d="M18.9 5.3A16.5 16.5 0 0 0 14.8 4l-.5 1a15.2 15.2 0 0 0-4.6 0L9.2 4A16.5 16.5 0 0 0 5.1 5.3C2.5 9.2 1.8 13 2.1 16.7A16.7 16.7 0 0 0 7.2 19.3l1.1-1.8a10.6 10.6 0 0 1-1.7-.8l.4-.3a11.8 11.8 0 0 0 10 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.8a16.7 16.7 0 0 0 5.1-2.6c.4-4.3-.7-8.1-3-11.4Z"/></svg>
+          </div>
+          <div class="sidebar-cta-text">
+            <strong class="sidebar-cta-title">Discord Sunucusuna Katıl</strong>
+            <span class="sidebar-cta-sub">Topluluğa katıl, yeni bölümleri kaçırma</span>
+          </div>
+          <span class="sidebar-cta-badge">Katıl →</span>
+        </a>
+      </div>
+
       <div class="sidebar-widget" id="sidebar-top-series">
         <div class="sidebar-widget-header">
           <h3 class="sidebar-widget-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> Popüler &amp; Öne Çıkanlar</h3>
@@ -2769,61 +3116,58 @@ body {
 <!-- GORUNUM 3: COK MODLU OKUMA MOTORU (READING ENGINE) -->
 <section class="hidden" id="view-reader">
   <div class="reader-wrapper" id="reader-wrapper">
-    <div class="reader-progress-track">
-      <div class="reader-progress-bar" id="reader-progress-bar"></div>
-    </div>
+    <div class="reader-sticky-header" id="reader-sticky-header">
+      <div class="reader-progress-track">
+        <div class="reader-progress-bar" id="reader-progress-bar"></div>
+      </div>
 
-    <div class="reader-toolbar">
-      <div class="reader-title-group">
-        <div class="reader-nav-links">
-          <a class="reader-btn" data-action="catalog" href="/" id="btn-reader-home" title="Ana Sayfa Kataloğa Dön"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Katalog</a>
-          <a class="reader-btn" href="#" id="reader-series-title" title="Seri Sayfasına Dön">← Seri Sayfasına Dön</a>
+      <div class="reader-toolbar">
+        <div class="reader-title-group">
+          <a class="reader-series-back-btn" href="#" id="reader-series-title" title="Seri Sayfasına Dön">← Seri Sayfasına Dön</a>
+          <span class="reader-type-badge" id="reader-type-badge">Manhwa</span>
+          <span class="reader-chapter-name hidden" id="reader-chapter-title">Bölüm</span>
         </div>
-        <span class="reader-chapter-name" id="reader-chapter-title">Bölüm</span>
+
+        <div class="reader-chapter-switcher">
+          <button aria-label="Önceki Bölüm" class="reader-step-btn" id="btn-top-prev-chapter" title="Önceki Bölüm" type="button">‹</button>
+          <select class="reader-select reader-chapter-select" id="select-chapter" title="Bölüm Seç"></select>
+          <button aria-label="Sonraki Bölüm" class="reader-step-btn" id="btn-top-next-chapter" title="Sonraki Bölüm" type="button">›</button>
+        </div>
+
+        <div class="reader-controls">
+          <div class="reader-control-cluster hidden" id="reader-group-manga">
+            <select class="reader-select" id="select-mode" title="Okuma Görünümü">
+              <option value="single">Tek Sayfa</option>
+              <option value="double">Çift Sayfa</option>
+              <option value="webtoon">Dikey Şerit</option>
+            </select>
+            <select class="reader-select" id="select-direction" title="Okuma Yönü">
+              <option value="rtl">Sağdan Sola (RTL)</option>
+              <option value="ltr">Soldan Sağa (LTR)</option>
+            </select>
+          </div>
+
+          <div class="reader-control-cluster" id="reader-group-image">
+            <div class="reader-pill-group">
+              <button class="reader-pill-btn" id="btn-zoom-out" title="Küçült" type="button">−</button>
+              <span class="reader-pill-value" id="zoom-label">100%</span>
+              <button class="reader-pill-btn" id="btn-zoom-in" title="Büyüt" type="button">+</button>
+            </div>
+            <button class="reader-btn" id="btn-autoscroll" title="Otomatik Kaydırma" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> Oto-Kaydır</button>
+          </div>
+
+          <div class="reader-control-cluster hidden" id="reader-group-novel">
+            <div class="reader-pill-group">
+              <button class="reader-pill-btn" id="btn-font-decrease" title="Yazı Boyutunu Küçült" type="button">A−</button>
+              <span class="reader-pill-value" id="font-size-label">105%</span>
+              <button class="reader-pill-btn" id="btn-font-increase" title="Yazı Boyutunu Büyüt" type="button">A+</button>
+            </div>
+            <button class="reader-btn" id="btn-font-family" title="Yazı Tipini Değiştir" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> <span id="font-family-label">Sans</span></button>
+          </div>
+
+          <button class="reader-btn reader-fullscreen-btn" id="btn-fullscreen" title="Tam Ekran (F)" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> Tam Ekran</button>
+        </div>
       </div>
-
-      <div class="reader-controls">
-        <select class="reader-select" id="select-chapter" title="Bölüm Seç"></select>
-
-        <select class="reader-select" id="select-mode" title="Okuma Motoru Modu">
-          <option value="webtoon">Webtoon (Dikey Şerit)</option>
-          <option value="single">Tek Sayfa (Manga)</option>
-          <option value="double">Çift Sayfa (Kitap)</option>
-          <option value="novel">Novel (Metin Modu)</option>
-        </select>
-
-        <select class="reader-select" id="select-direction" title="Okuma Yönü">
-          <option value="ltr">Soldan Sağa (LTR)</option>
-          <option value="rtl">Sağdan Sola (Japon Manga RTL)</option>
-        </select>
-
-        <select class="reader-select" id="select-gap" title="Webtoon Görsel Boşluğu">
-          <option value="0">Boşluk: 0px</option>
-          <option value="8">Boşluk: 8px</option>
-          <option value="16">Boşluk: 16px</option>
-        </select>
-
-        <button class="reader-btn" id="btn-zoom-out" type="button" title="Küçült"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
-        <span class="page-counter-pill" id="zoom-label">100%</span>
-        <button class="reader-btn" id="btn-zoom-in" type="button" title="Büyüt"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
-
-        <button class="reader-btn" id="btn-font-decrease" type="button" title="Novel Yazı Boyutunu Küçült">A-</button>
-        <button class="reader-btn" id="btn-font-increase" type="button" title="Novel Yazı Boyutunu Büyüt">A+</button>
-        <button class="reader-btn" id="btn-font-family" type="button" title="Novel Yazı Tipini Değiştir"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> Yazı Tipi</button>
-
-        <button class="reader-btn" id="btn-autoscroll" type="button" title="Otomatik Kaydırma"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> Oto-Kaydır</button>
-        <button class="reader-btn active" id="btn-protect" type="button" title="Sağ Tık Görüntü Koruması"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Koruma</button>
-        <button class="reader-btn" id="btn-shortcuts-help" type="button" title="Klavye Kısayolları"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><rect height="16" rx="2" width="20" x="2" y="4"/><line x1="6" x2="6.01" y1="8" y2="8"/><line x1="10" x2="10.01" y1="8" y2="8"/><line x1="14" x2="14.01" y1="8" y2="8"/><line x1="18" x2="18.01" y1="8" y2="8"/><line x1="8" x2="16" y1="16" y2="16"/></svg> Kısayollar</button>
-        <button class="reader-btn" id="btn-fullscreen" type="button" title="Tam Ekran"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> Tam Ekran</button>
-      </div>
-    </div>
-
-    <div class="shortcuts-help-box hidden" id="reader-shortcuts-box">
-      <span><strong><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><rect height="16" rx="2" width="20" x="2" y="4"/><line x1="6" x2="6.01" y1="8" y2="8"/><line x1="10" x2="10.01" y1="8" y2="8"/><line x1="14" x2="14.01" y1="8" y2="8"/><line x1="18" x2="18.01" y1="8" y2="8"/><line x1="8" x2="16" y1="16" y2="16"/></svg> Klavye Kısayolları:</strong></span>
-      <span><kbd>←</kbd> / <kbd>A</kbd> Önceki Sayfa</span>
-      <span><kbd>→</kbd> / <kbd>D</kbd> Sonraki Sayfa</span>
-      <span><kbd>M</kbd> Okuma Modu Değiştir</span>
-      <span><kbd>F</kbd> Tam Ekran</span>
     </div>
 
     <div class="translator-note-box hidden" id="translator-note-box"></div>
@@ -2832,13 +3176,15 @@ body {
 
     <div class="reader-footer-bar">
       <div class="reader-controls">
-        <a class="reader-btn" href="#" id="btn-footer-series">← Seri Sayfası</a>
         <button class="reader-btn" id="btn-prev-chapter" type="button">« Önceki Bölüm</button>
-        <button class="reader-btn" id="btn-prev-page" type="button">‹ Önceki Sayfa</button>
+        <a class="reader-btn" href="#" id="btn-footer-series">← Seri Sayfası</a>
       </div>
-      <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
-      <div class="reader-controls">
+      <div class="reader-footer-page-nav hidden" id="reader-footer-page-nav">
+        <button class="reader-btn" id="btn-prev-page" type="button">‹ Önceki Sayfa</button>
+        <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
         <button class="reader-btn" id="btn-next-page" type="button">Sonraki Sayfa ›</button>
+      </div>
+      <div class="reader-controls">
         <button class="reader-btn" id="btn-next-chapter" type="button">Sonraki Bölüm »</button>
       </div>
     </div>
@@ -3191,6 +3537,14 @@ body {
     },
     'arrow-left': {
       paths: '<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>'
+    },
+    'users-plus': {
+      paths:
+        '<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/>'
+    },
+    discord: {
+      paths:
+        '<path d="M9.09 12.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z"/><path d="M14.91 12.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z"/><path d="M18.9 5.3A16.5 16.5 0 0 0 14.8 4l-.5 1a15.2 15.2 0 0 0-4.6 0L9.2 4A16.5 16.5 0 0 0 5.1 5.3C2.5 9.2 1.8 13 2.1 16.7A16.7 16.7 0 0 0 7.2 19.3l1.1-1.8a10.6 10.6 0 0 1-1.7-.8l.4-.3a11.8 11.8 0 0 0 10 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.8a16.7 16.7 0 0 0 5.1-2.6c.4-4.3-.7-8.1-3-11.4Z"/>'
     }
   };
 
@@ -6322,6 +6676,11 @@ body {
       this.storage =
         options.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
       this.historyKey = 'manowa_reading_history';
+      this.seriesType = this.normalizeSeriesType(
+        options.seriesType || 'Manhwa',
+        options.sourceLang || '',
+        Boolean(options.isNovel)
+      );
       this.mode = VALID_MODES.includes(options.mode) ? options.mode : 'webtoon';
       this.direction = VALID_DIRECTIONS.includes(options.direction) ? options.direction : 'ltr';
       this.zoom = this._clamp(options.zoom || 100, 50, 150);
@@ -6330,6 +6689,8 @@ body {
       this.novelFontFamily = options.novelFontFamily === 'serif' ? 'serif' : 'sans';
       this.protectImages =
         options.protectImages !== undefined ? Boolean(options.protectImages) : true;
+      this.rawPages = [];
+      this.pageGroups = [];
       this.pages = [];
       this.htmlContent = '';
       this.currentIndex = 0;
@@ -6340,10 +6701,133 @@ body {
       this._autoScrollTimer = null;
 
       this._log('debug', 'ReadingEngine baslatildi.', {
+        seriesType: this.seriesType,
         mode: this.mode,
         direction: this.direction,
         zoom: this.zoom
       });
+    }
+
+    /**
+     * Seri turunu ('manhwa', 'manhua', 'manga', 'novel') olarak normalize eder.
+     * @param {string} [rawType=''] - Ham seri turu.
+     * @param {string} [sourceLang=''] - Kaynak dil kodu ('KR', 'JP', 'CN', 'EN').
+     * @param {boolean} [isNovel=false] - Bolumun metin tabanli olup olmadigi.
+     * @returns {'manhwa'|'manhua'|'manga'|'novel'} Normalize edilmis tur.
+     */
+    normalizeSeriesType(rawType = '', sourceLang = '', isNovel = false) {
+      const lower = String(rawType || '').trim().toLowerCase();
+      const lang = String(sourceLang || '').trim().toUpperCase();
+      if (isNovel || lower === 'novel' || lower === 'roman' || lower === 'webnovel') {
+        return 'novel';
+      }
+      if (lower === 'manga' || lang === 'JP') {
+        return 'manga';
+      }
+      if (lower === 'manhua' || lang === 'CN') {
+        return 'manhua';
+      }
+      return 'manhwa';
+    }
+
+    /**
+     * Aktif seri turunun kullanici arayuzu etiketini dondurur.
+     * @returns {string} Gosterilecek tur etiketi.
+     */
+    getSeriesTypeLabel() {
+      const map = {
+        novel: 'Novel',
+        manga: 'Manga',
+        manhua: 'Manhua',
+        manhwa: 'Manhwa'
+      };
+      return map[this.seriesType] || 'Manhwa';
+    }
+
+    /**
+     * Bolum secici acilir kutusu icin tekrarli seri adindan arindirilmis kisa etiket uretir.
+     * @param {Object} [chapter={}] - Bolum nesnesi.
+     * @returns {string} Kisa bolum etiketi (orn: "Bölüm 279").
+     */
+    formatChapterSelectLabel(chapter = {}) {
+      if (chapter && chapter.number !== undefined && chapter.number !== null && chapter.number !== '') {
+        return `Bölüm ${chapter.number}`;
+      }
+      const rawTitle = String((chapter && chapter.title) || '').trim();
+      const match = rawTitle.match(/B[öo]l[üu]m\s*(\d+(?:[.,]\d+)?)/i);
+      if (match) {
+        return `Bölüm ${match[1]}`;
+      }
+      return rawTitle || 'Bölüm';
+    }
+
+    /**
+     * Gorsel URL'sinden "01_01", "01_02", "02-01" gibi bolunmus sayfa grup anahtarini cikarir.
+     * Tekil dosya adlarinda (orn: "Kapak.webp", "p1.webp") null dondurur.
+     * @param {string} rawUrl - Gorsel URL dizgesi.
+     * @returns {string|null} Mantiksal sayfa grup anahtari (orn: "page:1") veya null.
+     */
+    extractSliceGroupKey(rawUrl) {
+      const cleanPath = String(rawUrl || '').split(/[?#]/)[0];
+      const lastSegMatch = cleanPath.match(/([^/]+)$/);
+      if (!lastSegMatch) return null;
+      let fileName = lastSegMatch[1];
+      try {
+        fileName = decodeURIComponent(fileName);
+      } catch (_err) {
+        // Decode hatasini yoksay
+      }
+      const baseName = fileName.replace(/\.(?:webp|jpe?g|png|gif|avif|bmp|svg)$/i, '').trim();
+      const sliceMatch =
+        baseName.match(/^(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)$/i) ||
+        baseName.match(/^(\d{2,})[-_](\d{2,})$/);
+      if (!sliceMatch) {
+        return null;
+      }
+      return `page:${Number(sliceMatch[1])}`;
+    }
+
+    /**
+     * "01_01, 01_02, 01_03" seklinde bolunerek yuklenmis gorsel URL listesini
+     * ardisik mantiksal tam sayfa gruplarina (Array<Array<string>>) donusturur.
+     * @param {Array<string>} [rawPages=[]] - Ham gorsel URL dizisi.
+     * @returns {Array<Array<string>>} Gruplanmis mantiksal sayfa dilimleri.
+     */
+    groupSlicedPages(rawPages = []) {
+      if (!Array.isArray(rawPages) || rawPages.length === 0) {
+        return [];
+      }
+      const groups = [];
+      let currentGroup = [];
+      let currentKey = null;
+
+      rawPages.forEach((url) => {
+        const key = this.extractSliceGroupKey(url);
+        if (key && key === currentKey && currentGroup.length > 0) {
+          currentGroup.push(url);
+        } else {
+          currentGroup = [url];
+          currentKey = key;
+          groups.push(currentGroup);
+        }
+      });
+
+      return groups;
+    }
+
+    /**
+     * Belirtilen mantiksal sayfa indeksine ait tum gorsel dilimlerini dondurur.
+     * @param {number} pageIndex - Mantiksal sayfa indeksi.
+     * @returns {Array<string>} Sayfayi olusturan gorsel URL dilimleri.
+     */
+    getPageSlices(pageIndex) {
+      if (Array.isArray(this.pageGroups) && Array.isArray(this.pageGroups[pageIndex])) {
+        return this.pageGroups[pageIndex];
+      }
+      if (this.pages[pageIndex]) {
+        return [this.pages[pageIndex]];
+      }
+      return [];
     }
 
     /**
@@ -6371,7 +6855,8 @@ body {
     }
 
     /**
-     * Yeni bir bolumu okuma motoruna yukler.
+     * Yeni bir bolumu okuma motoruna yukler ve seri turune gore modu/yonu otomatik ayarlar.
+     * Bolunmus ("01_01, 01_02") gorselleri mantiksal tam sayfalara gruplar.
      * @param {Object} [chapterData={}] - Bolum verileri.
      * @returns {Object} Guncel motor durumu.
      */
@@ -6379,13 +6864,39 @@ body {
       this.stopAutoScroll();
       this.seriesId = chapterData.seriesId || '';
       this.chapterId = chapterData.chapterId || '';
-      this.pages = Array.isArray(chapterData.pages) ? chapterData.pages.slice() : [];
+      this.rawPages = Array.isArray(chapterData.pages) ? chapterData.pages.slice() : [];
+      this.pageGroups = this.groupSlicedPages(this.rawPages);
+      this.pages = this.pageGroups.map((group) => group[0]);
       this.htmlContent = String(chapterData.htmlContent || '');
+      const hasOnlyNovelHtml = Boolean(this.pages.length === 0 && this.htmlContent);
+      const isNovelChapter = Boolean(chapterData.isNovel || hasOnlyNovelHtml);
 
-      if (this.pages.length === 0 && this.htmlContent) {
+      this.seriesType = this.normalizeSeriesType(
+        chapterData.seriesType || '',
+        chapterData.sourceLang || '',
+        isNovelChapter
+      );
+
+      if (this.seriesType === 'novel' || hasOnlyNovelHtml) {
+        this.seriesType = 'novel';
         this.mode = 'novel';
-      } else if (chapterData.defaultMode && VALID_MODES.includes(chapterData.defaultMode)) {
-        this.mode = chapterData.defaultMode;
+        this.direction = 'ltr';
+      } else {
+        if (chapterData.defaultMode && VALID_MODES.includes(chapterData.defaultMode) && chapterData.defaultMode !== 'novel') {
+          this.mode = chapterData.defaultMode;
+        } else if (this.seriesType === 'manga') {
+          this.mode = 'single';
+        } else {
+          this.mode = 'webtoon';
+        }
+
+        if (chapterData.direction && VALID_DIRECTIONS.includes(chapterData.direction)) {
+          this.direction = chapterData.direction;
+        } else if (this.seriesType === 'manga') {
+          this.direction = 'rtl';
+        } else {
+          this.direction = 'ltr';
+        }
       }
 
       const saved = this.getProgress(this.seriesId);
@@ -6406,8 +6917,12 @@ body {
       this._log('info', 'Bolum okuma motoruna yuklendi.', {
         seriesId: this.seriesId,
         chapterId: this.chapterId,
+        seriesType: this.seriesType,
+        mode: this.mode,
+        direction: this.direction,
         pageCount: this.pages.length,
-        isNovel: Boolean(this.htmlContent && this.pages.length === 0),
+        rawSliceCount: this.rawPages.length,
+        isNovel: this.seriesType === 'novel',
         startIndex: this.currentIndex
       });
 
@@ -6581,7 +7096,7 @@ body {
     }
 
     /**
-     * Sonraki 2 sayfanin gorsellerini onceden bellekleme (preload) yapar.
+     * Sonraki 2 mantiksal sayfanin tum gorsel dilimlerini onceden bellekleme (preload) yapar.
      * @returns {Array<string>} On yuklenen URL listesi.
      */
     preloadAdjacentPages() {
@@ -6589,12 +7104,14 @@ body {
       for (let i = 1; i <= 2; i++) {
         const targetIdx = this.currentIndex + i;
         if (targetIdx < this.pages.length) {
-          const url = this.pages[targetIdx];
-          preloaded.push(url);
-          if (typeof Image !== 'undefined') {
-            const img = new Image();
-            img.src = url;
-          }
+          const slices = this.getPageSlices(targetIdx);
+          slices.forEach((url) => {
+            preloaded.push(url);
+            if (typeof Image !== 'undefined') {
+              const img = new Image();
+              img.src = url;
+            }
+          });
         }
       }
       return preloaded;
@@ -6729,11 +7246,55 @@ body {
     }
 
     /**
+     * Seri turune ve aktif moda gore gosterilecek kontrol gruplarini hesaplar.
+     * @returns {{ showMangaControls: boolean, showImageControls: boolean, showAutoScroll: boolean, showNovelControls: boolean, showPageFooterNav: boolean }}
+     */
+    getVisibleControlGroups() {
+      const isNovelMode = this.mode === 'novel' || this.seriesType === 'novel';
+      const isMangaType = this.seriesType === 'manga' && !isNovelMode;
+      const isPagedMode = !isNovelMode && (this.mode === 'single' || this.mode === 'double');
+      return {
+        showMangaControls: isMangaType,
+        showImageControls: !isNovelMode,
+        showAutoScroll: !isNovelMode && this.mode === 'webtoon',
+        showNovelControls: isNovelMode,
+        showPageFooterNav: isPagedMode
+      };
+    }
+
+    /**
+     * Tek sayfa veya cift sayfa modunda goruntu alaninin sol/sag kenarina tiklandiginda sayfa degistirir.
+     * @param {number} clickRatioX - 0 ile 1 arasinda yatay tiklama orani.
+     * @returns {'next'|'prev'|'none'} Yapilan sayfa gecisi.
+     */
+    handleViewportClick(clickRatioX) {
+      if (this.mode !== 'single' && this.mode !== 'double') {
+        return 'none';
+      }
+      const ratio = Number(clickRatioX);
+      if (Number.isNaN(ratio)) {
+        return 'none';
+      }
+      if (ratio < 0.45) {
+        const moved = this.direction === 'rtl' ? this.nextPage() : this.prevPage();
+        return moved ? (this.direction === 'rtl' ? 'next' : 'prev') : 'none';
+      }
+      if (ratio > 0.55) {
+        const moved = this.direction === 'rtl' ? this.prevPage() : this.nextPage();
+        return moved ? (this.direction === 'rtl' ? 'prev' : 'next') : 'none';
+      }
+      return 'none';
+    }
+
+    /**
      * Motorun anlik durum özetini dondurur.
      * @returns {Object} Motor durum nesnesi.
      */
     getState() {
+      const controlGroups = this.getVisibleControlGroups();
       return {
+        seriesType: this.seriesType,
+        seriesTypeLabel: this.getSeriesTypeLabel(),
         mode: this.mode,
         direction: this.direction,
         zoom: this.zoom,
@@ -6746,12 +7307,13 @@ body {
         hasNovelContent: Boolean(this.htmlContent),
         visibleIndices: this.getVisiblePageIndices(),
         progressPercent: this.getProgressPercent(),
-        autoScrollActive: this.autoScrollActive
+        autoScrollActive: this.autoScrollActive,
+        ...controlGroups
       };
     }
 
     /**
-     * Okuyucu kontrol cubugunu motor durumuyla esitler.
+     * Okuyucu kontrol cubugunu motor durumuyla ve seri turuyle esitler.
      * @param {Document} [doc] - Hedef DOM belgesi.
      * @returns {void}
      */
@@ -6761,12 +7323,53 @@ body {
       const state = this.getState();
       const modeSelect = targetDoc.getElementById('select-mode');
       const dirSelect = targetDoc.getElementById('select-direction');
-      const gapSelect = targetDoc.getElementById('select-gap');
       const zoomLabel = targetDoc.getElementById('zoom-label');
+      const fontSizeLabel = targetDoc.getElementById('font-size-label');
+      const fontFamilyLabel = targetDoc.getElementById('font-family-label');
+      const typeBadge = targetDoc.getElementById('reader-type-badge');
+      const mangaGroup = targetDoc.getElementById('reader-group-manga');
+      const imageGroup = targetDoc.getElementById('reader-group-image');
+      const novelGroup = targetDoc.getElementById('reader-group-novel');
+      const autoScrollBtn = targetDoc.getElementById('btn-autoscroll');
+      const footerPageNav = targetDoc.getElementById('reader-footer-page-nav');
+      const prevPageBtn = targetDoc.getElementById('btn-prev-page');
+      const nextPageBtn = targetDoc.getElementById('btn-next-page');
+
       if (modeSelect) modeSelect.value = state.mode;
       if (dirSelect) dirSelect.value = state.direction;
-      if (gapSelect) gapSelect.value = String(state.gap);
       if (zoomLabel) zoomLabel.textContent = `${state.zoom}%`;
+      if (fontSizeLabel) fontSizeLabel.textContent = `${state.novelFontSize}%`;
+      if (fontFamilyLabel) {
+        fontFamilyLabel.textContent = state.novelFontFamily === 'serif' ? 'Serif' : 'Sans';
+      }
+      if (typeBadge) {
+        typeBadge.textContent = state.seriesTypeLabel;
+        if (typeof typeBadge.setAttribute === 'function') {
+          typeBadge.setAttribute('data-type', state.seriesType);
+        }
+      }
+      if (mangaGroup && mangaGroup.classList) {
+        mangaGroup.classList.toggle('hidden', !state.showMangaControls);
+      }
+      if (imageGroup && imageGroup.classList) {
+        imageGroup.classList.toggle('hidden', !state.showImageControls);
+      }
+      if (autoScrollBtn && autoScrollBtn.classList) {
+        autoScrollBtn.classList.toggle('hidden', !state.showAutoScroll);
+      }
+      if (novelGroup && novelGroup.classList) {
+        novelGroup.classList.toggle('hidden', !state.showNovelControls);
+      }
+      if (footerPageNav && footerPageNav.classList) {
+        footerPageNav.classList.toggle('hidden', !state.showPageFooterNav);
+      }
+      if (prevPageBtn) {
+        prevPageBtn.disabled = state.currentIndex <= 0;
+      }
+      if (nextPageBtn) {
+        const step = state.mode === 'double' ? 2 : 1;
+        nextPageBtn.disabled = state.currentIndex + step >= state.totalPages;
+      }
     }
 
     /**
@@ -6792,19 +7395,44 @@ body {
         const fontSizePct = state.novelFontSize || 105;
         viewport.innerHTML = `<article class="novel-content-box ${fontClass}" style="font-size: ${fontSizePct}%;">${this.htmlContent}</article>`;
       } else if (state.mode === 'double') {
-        const imgs = state.visibleIndices
-          .map(
-            (idx) =>
-              `<img class="reader-page-item" src="${this.pages[idx]}" alt="Sayfa ${idx + 1}" />`
-          )
+        const pageBlocks = state.visibleIndices
+          .map((idx) => {
+            const slices = this.getPageSlices(idx);
+            const sliceImgs = slices
+              .map(
+                (src, sIdx) =>
+                  `<img class="reader-page-item" src="${src}" alt="Sayfa ${idx + 1}${slices.length > 1 ? ' Parça ' + (sIdx + 1) : ''}" />`
+              )
+              .join('');
+            return `<div class="reader-logical-page" data-page-index="${idx}">${sliceImgs}</div>`;
+          })
           .join('');
-        viewport.innerHTML = `<div class="double-page-grid">${imgs}</div>`;
+        viewport.innerHTML = `<div class="double-page-grid">${pageBlocks}</div>`;
+      } else if (state.mode === 'single') {
+        const pageBlocks = state.visibleIndices
+          .map((idx) => {
+            const slices = this.getPageSlices(idx);
+            const sliceImgs = slices
+              .map(
+                (src, sIdx) =>
+                  `<img class="reader-page-item" src="${src}" alt="Sayfa ${idx + 1}${slices.length > 1 ? ' Parça ' + (sIdx + 1) : ''}" />`
+              )
+              .join('');
+            return `<div class="reader-logical-page" data-page-index="${idx}">${sliceImgs}</div>`;
+          })
+          .join('');
+        viewport.innerHTML = pageBlocks;
       } else {
         viewport.innerHTML = state.visibleIndices
-          .map(
-            (idx) =>
-              `<img class="reader-page-item" src="${this.pages[idx]}" alt="Sayfa ${idx + 1}" loading="lazy" />`
-          )
+          .map((idx) => {
+            const slices = this.getPageSlices(idx);
+            return slices
+              .map(
+                (src) =>
+                  `<img class="reader-page-item" src="${src}" alt="Sayfa ${idx + 1}" loading="lazy" />`
+              )
+              .join('');
+          })
           .join('');
       }
       if (progressBar && progressBar.style) progressBar.style.width = `${state.progressPercent}%`;
@@ -6812,7 +7440,7 @@ body {
         if (state.mode === 'novel') {
           pageCounter.textContent = `Novel Metin (${state.novelFontSize || 105}%)`;
         } else if (state.mode === 'webtoon') {
-          pageCounter.textContent = `Webtoon Şerit (${state.totalPages} Sayfa)`;
+          pageCounter.textContent = `${state.totalPages} Sayfa`;
         } else {
           pageCounter.textContent = `Sayfa ${state.currentIndex + 1} / ${state.totalPages}`;
         }
@@ -7225,10 +7853,10 @@ body {
 
     /**
      * Blogger Yerlesim (Layout) ekranindaki Tema Degiskenleri widget'larini
-     * (Disqus Shortname, Hero Gecis Suresi, Alt Bilgi Slogani) okur ve uygular.
+     * (Disqus Shortname, Hero Gecis Suresi, Alt Bilgi Slogani, Ekibe Katil ve Discord Linkleri) okur ve uygular.
      * @param {Object} [targets={}] - Hedef denetleyiciler ({ disqus, heroSlider }).
      * @param {Document} [doc] - Hedef DOM belgesi.
-     * @returns {{ disqusShortname: string, themeMode: string, heroIntervalMs: number, footerText: string }} Uygulanan degerler.
+     * @returns {{ disqusShortname: string, themeMode: string, heroIntervalMs: number, footerText: string, recruitUrl: string, discordUrl: string }} Uygulanan degerler.
      */
     applyLayoutConfigWidgets(targets = {}, doc) {
       const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
@@ -7253,11 +7881,34 @@ body {
         }
       }
 
+      const applyBannerHref = (bannerId, rawUrl) => {
+        if (!rawUrl || !targetDoc || typeof targetDoc.getElementById !== 'function') return;
+        const bannerEl = targetDoc.getElementById(bannerId);
+        if (!bannerEl) return;
+        if (typeof bannerEl.setAttribute === 'function') {
+          bannerEl.setAttribute('href', rawUrl);
+          if (/^https?:\/\//i.test(rawUrl)) {
+            bannerEl.setAttribute('target', '_blank');
+            bannerEl.setAttribute('rel', 'noopener noreferrer');
+          }
+        } else {
+          bannerEl.href = rawUrl;
+        }
+      };
+
+      const recruitUrl = this.readLayoutWidgetText('blogger-cfg-recruit-url', targetDoc);
+      applyBannerHref('banner-join-team', recruitUrl);
+
+      const discordUrl = this.readLayoutWidgetText('blogger-cfg-discord-url', targetDoc);
+      applyBannerHref('banner-join-discord', discordUrl);
+
       return {
         disqusShortname,
         themeMode: this.resolveDefaultThemeMode(targetDoc),
         heroIntervalMs,
-        footerText
+        footerText,
+        recruitUrl,
+        discordUrl
       };
     }
 
@@ -7767,6 +8418,9 @@ body {
       this.currentView = viewName;
       this.commentsVisible = viewName === 'series' || viewName === 'reader';
       if (typeof document === 'undefined') return;
+      if (document.body && typeof document.body.setAttribute === 'function') {
+        document.body.setAttribute('data-active-view', viewName);
+      }
       const views = {
         catalog: document.getElementById('view-catalog'),
         series: document.getElementById('view-series'),
@@ -7979,13 +8633,18 @@ body {
         options
       );
       if (this.reader) {
-        this.reader.setDirection(series.sourceLang === 'JP' ? 'rtl' : 'ltr');
+        const isNovel = Boolean(
+          chapter.isNovel || String(series.type || '').toLowerCase() === 'novel'
+        );
         this.reader.loadChapter({
           seriesId: series.id,
           chapterId: chapter.id,
+          seriesType: series.type || 'Manhwa',
+          sourceLang: series.sourceLang || '',
+          isNovel,
           pages: chapter.pages,
           htmlContent: chapter.htmlContent || '',
-          defaultMode: chapter.isNovel ? 'novel' : (series.defaultReaderMode || 'webtoon')
+          defaultMode: isNovel ? 'novel' : (series.defaultReaderMode || '')
         });
       }
       this.updateDisqus(`chapter-${chapter.id}`, `${series.title} - ${chapter.title}`);
@@ -8007,7 +8666,11 @@ body {
         footerSeriesBtn.setAttribute('data-action', 'detail');
         footerSeriesBtn.setAttribute('data-series', series.id);
       }
-      if (chapterTitleEl) chapterTitleEl.textContent = chapter.title;
+      if (chapterTitleEl) {
+        chapterTitleEl.textContent = this.reader
+          ? this.reader.formatChapterSelectLabel(chapter)
+          : chapter.title;
+      }
       if (noteBox) {
         if (chapter.translatorNote) {
           noteBox.innerHTML = `${iconFn('note')} Çevirmen Notu: ${chapter.translatorNote}`;
@@ -8016,15 +8679,26 @@ body {
           noteBox.classList.add('hidden');
         }
       }
+      const sortedAsc = this.catalog.getSortedChapters(series.id, 'asc');
+      const currentChapterIdx = sortedAsc.findIndex((c) => c.id === chapter.id);
       if (selectChapter) {
-        const sortedAsc = this.catalog.getSortedChapters(series.id, 'asc');
         selectChapter.innerHTML = sortedAsc
-          .map(
-            (c) =>
-              `<option value="${c.id}" ${c.id === chapter.id ? 'selected' : ''}>Bölüm ${c.number}: ${c.title}</option>`
-          )
+          .map((c) => {
+            const label = this.reader ? this.reader.formatChapterSelectLabel(c) : `Bölüm ${c.number}`;
+            return `<option value="${c.id}" ${c.id === chapter.id ? 'selected' : ''}>${label}</option>`;
+          })
           .join('');
       }
+      const hasPrevChapter = currentChapterIdx > 0;
+      const hasNextChapter = currentChapterIdx >= 0 && currentChapterIdx < sortedAsc.length - 1;
+      ['btn-prev-chapter', 'btn-top-prev-chapter'].forEach((btnId) => {
+        const btn = document.getElementById(btnId);
+        if (btn) btn.disabled = !hasPrevChapter;
+      });
+      ['btn-next-chapter', 'btn-top-next-chapter'].forEach((btnId) => {
+        const btn = document.getElementById(btnId);
+        if (btn) btn.disabled = !hasNextChapter;
+      });
       this.syncReaderControls();
       this.renderReaderViewport();
       this.renderHomeSections();
@@ -8197,14 +8871,12 @@ body {
       on('select-chapter', 'change', (e) => this.openReader(this.activeSeriesId, e.target.value));
       on('select-mode', 'change', (e) => {
         this.reader.setMode(e.target.value);
+        this.syncReaderControls();
         this.renderReaderViewport();
       });
       on('select-direction', 'change', (e) => {
         this.reader.setDirection(e.target.value);
-        this.renderReaderViewport();
-      });
-      on('select-gap', 'change', (e) => {
-        this.reader.setGap(Number(e.target.value));
+        this.syncReaderControls();
         this.renderReaderViewport();
       });
       on('btn-zoom-in', 'click', () => {
@@ -8219,19 +8891,18 @@ body {
       });
       on('btn-font-increase', 'click', () => {
         this.reader.setNovelFontSize((this.reader.novelFontSize || 105) + 10);
+        this.syncReaderControls();
         this.renderReaderViewport();
       });
       on('btn-font-decrease', 'click', () => {
         this.reader.setNovelFontSize((this.reader.novelFontSize || 105) - 10);
+        this.syncReaderControls();
         this.renderReaderViewport();
       });
       on('btn-font-family', 'click', () => {
         this.reader.toggleNovelFontFamily();
+        this.syncReaderControls();
         this.renderReaderViewport();
-      });
-      on('btn-shortcuts-help', 'click', () => {
-        const box = document.getElementById('reader-shortcuts-box');
-        if (box) box.classList.toggle('hidden');
       });
       on('btn-autoscroll', 'click', (e) => {
         const active = this.reader.toggleAutoScroll();
@@ -8239,11 +8910,6 @@ body {
         e.currentTarget.innerHTML = active
           ? `${iconFn('pause')} Durdur`
           : `${iconFn('play')} Oto-Kaydır`;
-      });
-      on('btn-protect', 'click', (e) => {
-        this.reader.protectImages = !this.reader.protectImages;
-        e.target.classList.toggle('active', this.reader.protectImages);
-        this.renderReaderViewport();
       });
       on('btn-fullscreen', 'click', () => {
         const wrap = document.getElementById('reader-wrapper');
@@ -8253,13 +8919,33 @@ body {
         }
       });
       on('btn-next-page', 'click', () => {
-        if (this.reader.nextPage()) this.renderReaderViewport();
+        if (this.reader.nextPage()) {
+          this.syncReaderControls();
+          this.renderReaderViewport();
+        }
       });
       on('btn-prev-page', 'click', () => {
-        if (this.reader.prevPage()) this.renderReaderViewport();
+        if (this.reader.prevPage()) {
+          this.syncReaderControls();
+          this.renderReaderViewport();
+        }
+      });
+      on('reader-viewport', 'click', (e) => {
+        if (!this.reader || !e.currentTarget || typeof e.currentTarget.getBoundingClientRect !== 'function') {
+          return;
+        }
+        const rect = e.currentTarget.getBoundingClientRect();
+        if (rect.width <= 0) return;
+        const ratio = (e.clientX - rect.left) / rect.width;
+        if (this.reader.handleViewportClick(ratio) !== 'none') {
+          this.syncReaderControls();
+          this.renderReaderViewport();
+        }
       });
       on('btn-next-chapter', 'click', () => this.navigateChapter(1));
       on('btn-prev-chapter', 'click', () => this.navigateChapter(-1));
+      on('btn-top-next-chapter', 'click', () => this.navigateChapter(1));
+      on('btn-top-prev-chapter', 'click', () => this.navigateChapter(-1));
       on('btn-scroll-top', 'click', () => {
         if (typeof globalScope.scrollTo === 'function') {
           globalScope.scrollTo({ top: 0, behavior: 'smooth' });
