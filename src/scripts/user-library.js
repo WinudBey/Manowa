@@ -379,47 +379,18 @@
      * @returns {string} Seri detay HTML icerigi.
      */
     renderSeriesDetailHtml(series, catalog, savedProgress, computeUrlFn) {
-      const isFav = this.isFavorite(series.id);
-      const sortedAsc = catalog ? catalog.getSortedChapters(series.id, 'asc') : [];
-      const firstChapter = sortedAsc[0];
-      const latestChapter = sortedAsc[sortedAsc.length - 1];
-      const resumeChapterId = savedProgress
-        ? savedProgress.chapterId
-        : firstChapter
-          ? firstChapter.id
-          : '';
-      const genresHtml = (series.genres || [])
-        .map((g) => `<span class="meta-tag">${g}</span>`)
-        .join('');
-      const firstHref = firstChapter ? computeUrlFn('reader', series.id, firstChapter.id) : '#';
-      const latestHref = latestChapter ? computeUrlFn('reader', series.id, latestChapter.id) : '#';
-      const resumeHref = resumeChapterId ? computeUrlFn('reader', series.id, resumeChapterId) : '#';
-
-      return `<div class="series-detail-header">
-        <img class="detail-cover" src="${series.cover}" alt="${series.title}" />
-        <div class="detail-info">
-          <h1>${series.title}</h1>
-          <div class="detail-alt-title">${series.altTitle || ''}</div>
-          <div class="detail-badges">
-            <span class="meta-tag">Tür: ${series.type}</span>
-            <span class="meta-tag">Durum: ${series.status}</span>
-            <span class="meta-tag">Motor: ${(series.defaultReaderMode || 'webtoon').toUpperCase()}</span>
-            ${series.year ? `<span class="meta-tag">Yıl: ${series.year}</span>` : ''}
-            ${genresHtml}
-          </div>
-          <p class="detail-synopsis">${series.synopsis}</p>
-          <div class="detail-actions">
-            ${firstChapter ? `<a class="primary-btn" href="${firstHref}" data-action="read" data-series="${series.id}" data-chapter="${firstChapter.id}">${this._icon('book')} İlk Bölümü Oku (Bölüm ${firstChapter.number})</a>` : ''}
-            ${latestChapter && latestChapter.id !== (firstChapter && firstChapter.id) ? `<a class="icon-btn" href="${latestHref}" data-action="read" data-series="${series.id}" data-chapter="${latestChapter.id}">${this._icon('flame')} Son Bölüm (Bölüm ${latestChapter.number})</a>` : ''}
-            ${savedProgress && resumeChapterId ? `<a class="icon-btn" href="${resumeHref}" data-action="read" data-series="${series.id}" data-chapter="${resumeChapterId}">${this._icon('clock')} Kaldığım Yerden Devam Et (Sayfa ${savedProgress.pageIndex + 1})</a>` : ''}
-            <button class="icon-btn" type="button" data-action="toggle-fav" data-series="${series.id}">${isFav ? `${this._icon('heart-filled')} Kitaplığımda` : `${this._icon('heart')} Kitaplığa Ekle`}</button>
-          </div>
-        </div>
-      </div>`;
+      const SeriesPageClass =
+        globalScope.SeriesPageController ||
+        (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
+      if (SeriesPageClass) {
+        const sp = new SeriesPageClass({ logger: this.logger });
+        return sp.renderSeriesDetailHtml(series, catalog, this, savedProgress, computeUrlFn);
+      }
+      return '';
     }
 
     /**
-     * Seri sayfasindaki bolum listesi (#chapter-list-grid) icin HTML uretir.
+     * Seri sayfasindaki bolum listesi (#chapter-list-grid) icin SeriesPageController uzerinden HTML uretir.
      * @param {string} seriesId - Seri kimligi.
      * @param {Array<Object>} chapters - Siralanmis bolumler.
      * @param {Object|null} savedProgress - Kayitli ilerleme.
@@ -427,19 +398,14 @@
      * @returns {string} Bolum listesi HTML icerigi.
      */
     renderChapterListHtml(seriesId, chapters, savedProgress, computeUrlFn) {
-      if (!Array.isArray(chapters) || chapters.length === 0) {
-        return `<div class="disqus-status-note">Bu seri için henüz bölüm eklenmemiş.</div>`;
+      const SeriesPageClass =
+        globalScope.SeriesPageController ||
+        (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
+      if (SeriesPageClass) {
+        const sp = new SeriesPageClass({ logger: this.logger });
+        return sp.renderChapterListHtml(seriesId, chapters, savedProgress, computeUrlFn);
       }
-      return chapters
-        .map((ch) => {
-          const isRead = savedProgress && savedProgress.chapterId === ch.id;
-          const chHref = computeUrlFn('reader', seriesId, ch.id);
-          return `<a class="chapter-item-btn ${isRead ? 'is-read' : ''}" href="${chHref}" data-action="read" data-series="${seriesId}" data-chapter="${ch.id}">
-            <span><strong>Bölüm ${ch.number}</strong> - ${ch.title}</span>
-            <span style="font-size: 0.78rem; color: var(--text-secondary);">${isRead ? '✓ Okundu' : ch.date}</span>
-          </a>`;
-        })
-        .join('');
+      return '';
     }
   }
 

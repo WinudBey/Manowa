@@ -130,7 +130,7 @@
 <!-- GORUNUM 2: SERI TANITIM VE BOLUM LISTESI SAYFASI -->
 <section class="hidden" id="view-series">
   <div class="series-nav-bar">
-    <a class="icon-btn" data-action="catalog" href="/" id="btn-series-back">← Kataloğa Dön</a>
+    <a class="icon-btn" data-action="catalog" href="/" id="btn-series-back"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Kataloğa Dön</a>
     <nav aria-label="Sayfa Konumu" class="breadcrumb-trail">
       <a class="breadcrumb-link" data-action="catalog" href="/"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Ana Sayfa</a>
       <span>›</span>
@@ -140,11 +140,27 @@
   <div class="series-detail-box" id="series-detail-box"></div>
 
   <div class="chapter-list-box">
-    <div class="section-header">
-      <h3 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Bölüm Listesi</h3>
-      <button class="icon-btn" id="btn-sort-chapters" type="button">⇅ Sıralama: Yeni → Eski</button>
+    <div class="chapter-toolbar">
+      <div class="chapter-toolbar-left">
+        <h3 class="section-title" style="margin: 0;"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Bölüm Listesi</h3>
+        <span class="series-chapter-count-pill" id="series-chapter-count">0 Bölüm</span>
+      </div>
+      <div class="chapter-toolbar-right">
+        <div class="chapter-search-box">
+          <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="chapter-search-input" id="input-chapter-search" placeholder="Bölüm no veya başlık ara..." type="search" />
+        </div>
+        <button class="icon-btn" id="btn-sort-chapters" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg> Sıralama: Yeni → Eski</button>
+      </div>
     </div>
     <div class="chapter-grid" id="chapter-list-grid"></div>
+  </div>
+
+  <div class="series-related-box hidden" id="series-related-section">
+    <div class="section-header">
+      <h3 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3L12 3z"/></svg> Benzer &amp; Önerilen Seriler</h3>
+    </div>
+    <div class="series-related-grid" id="series-related-grid"></div>
   </div>
 </section>
 

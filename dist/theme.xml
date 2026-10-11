@@ -262,9 +262,9 @@ body {
 }
 
 .detail-info h1 {
-  font-size: 1.65rem;
+  font-size: 2.55rem;
   font-weight: 800;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0;
 }
 
 .detail-alt-title {
@@ -277,7 +277,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 .meta-tag {
@@ -510,6 +510,581 @@ body {
   .detail-cover {
     max-width: 200px;
     margin: 0 auto;
+  }
+}
+
+/* === MODULE: styles/series-page.css === */
+/**
+ * @fileoverview Baştan tasarlanan Seri Bilgileri Sayfası (#view-series) stilleri.
+ * Bulanık arka planlı vitrin, yapılandırılmış meta veri ızgarası, bölüm arama çubuğu,
+ * numaralı bölüm kartları ve benzer seriler öneri şeridini kapsar.
+ */
+
+.series-detail-box {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-bottom: 1.75rem;
+}
+
+.series-hero-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-card);
+  isolation: isolate;
+}
+
+.series-backdrop {
+  position: absolute;
+  inset: -24px;
+  background-size: cover;
+  background-position: center 25%;
+  filter: blur(28px) saturate(1.2);
+  opacity: 0.24;
+  transform: scale(1.08);
+  z-index: -2;
+}
+
+html[data-theme="light"] .series-backdrop {
+  opacity: 0.14;
+}
+
+.series-backdrop-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    rgba(11, 15, 25, 0.94) 0%,
+    rgba(15, 23, 42, 0.86) 55%,
+    rgba(17, 24, 39, 0.78) 100%
+  );
+  z-index: -1;
+}
+
+html[data-theme="light"] .series-backdrop-overlay {
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 250, 252, 0.9) 60%,
+    rgba(241, 245, 249, 0.85) 100%
+  );
+}
+
+.series-detail-header {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr) 420px;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.series-poster-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.series-poster-frame {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.38);
+  background: var(--bg-card);
+}
+
+.series-poster-frame .detail-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: none;
+  border-radius: 0;
+}
+
+.series-poster-quick-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+}
+
+.series-poster-quick-actions .icon-btn {
+  justify-content: center;
+}
+
+.series-fav-btn.is-fav {
+  border-color: rgba(239, 68, 68, 0.55);
+  background: rgba(239, 68, 68, 0.14);
+  color: #f87171;
+}
+
+html[data-theme="light"] .series-fav-btn.is-fav {
+  color: #dc2626;
+}
+
+.series-info-col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.series-top-pills {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.series-status-pill,
+.series-format-pill,
+.series-year-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.24rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+}
+
+.series-status-pill {
+  background: rgba(16, 185, 129, 0.16);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+html[data-theme="light"] .series-status-pill {
+  color: #059669;
+}
+
+.series-format-pill {
+  background: rgba(99, 102, 241, 0.18);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: var(--accent-hover);
+}
+
+html[data-theme="light"] .series-format-pill {
+  color: var(--accent-primary);
+}
+
+.series-year-pill {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+}
+
+.detail-info .series-main-title,
+.series-main-title {
+  font-size: 2.55rem;
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin: -0.25rem 0 0;
+  color: var(--text-primary);
+}
+
+.detail-alt-title {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: -0.55rem 0 0;
+}
+
+.detail-info .series-genre-list,
+.series-genre-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: -0.35rem 0 0;
+}
+
+.series-genre-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.34rem 0.78rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.series-genre-pill:hover {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #ffffff;
+}
+
+.series-meta-col {
+  width: 100%;
+  min-width: 0;
+}
+
+.series-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.series-meta-card {
+  background: rgba(15, 23, 42, 0.42);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.05rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+html[data-theme="light"] .series-meta-card {
+  background: rgba(241, 245, 249, 0.75);
+}
+
+.series-meta-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.series-meta-label .ui-icon {
+  color: var(--accent-primary);
+  width: 15px;
+  height: 15px;
+}
+
+.series-meta-value {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.series-synopsis-card {
+  background: rgba(15, 23, 42, 0.38);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.25rem;
+}
+
+html[data-theme="light"] .series-synopsis-card {
+  background: rgba(241, 245, 249, 0.75);
+}
+
+.series-synopsis-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.55rem;
+}
+
+.series-synopsis-title .ui-icon {
+  color: var(--accent-primary);
+}
+
+.series-synopsis-card .detail-synopsis {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.series-cta-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0;
+  padding-top: 0;
+}
+
+.series-cta-btn {
+  padding: 0.62rem 1.1rem;
+  font-size: 0.86rem;
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
+}
+
+.series-cta-secondary,
+.series-cta-resume {
+  padding: 0.6rem 0.95rem;
+  font-size: 0.84rem;
+}
+
+.series-cta-resume {
+  border-color: rgba(99, 102, 241, 0.5);
+  color: var(--accent-hover);
+}
+
+.chapter-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.chapter-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.series-chapter-count-pill {
+  background: rgba(99, 102, 241, 0.16);
+  color: var(--accent-hover);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.chapter-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.chapter-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.chapter-search-box .ui-icon {
+  position: absolute;
+  left: 0.7rem;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.chapter-search-input {
+  padding: 0.45rem 0.85rem 0.45rem 2.1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  outline: none;
+  min-width: 210px;
+  transition: border-color 0.2s ease;
+}
+
+.chapter-search-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 0.7rem;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.chapter-card-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.7rem 0.9rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, transform 0.18s ease;
+}
+
+.chapter-card-item:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.chapter-card-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.chapter-num-pill {
+  min-width: 42px;
+  height: 36px;
+  padding: 0 0.45rem;
+  border-radius: 8px;
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--accent-hover);
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.chapter-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.chapter-title-text {
+  font-size: 0.88rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chapter-sub-meta {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.chapter-card-right {
+  flex-shrink: 0;
+}
+
+.chapter-read-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.14);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.chapter-open-pill {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  transition: color 0.18s ease;
+}
+
+.chapter-card-item:hover .chapter-open-pill {
+  color: var(--accent-primary);
+}
+
+.series-related-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.series-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 0.85rem;
+}
+
+.series-related-card {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.series-related-card:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.series-related-thumb {
+  width: 52px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+}
+
+.series-related-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.series-related-type {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-hover);
+}
+
+.series-related-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.series-related-meta {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+@media (max-width: 820px) {
+  .series-detail-header {
+    grid-template-columns: 1fr;
+  }
+  .series-poster-col {
+    max-width: 220px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .series-meta-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .series-hero-card {
+    padding: 1.25rem;
+  }
+  .series-meta-grid {
+    grid-template-columns: 1fr;
+  }
+  .chapter-search-input {
+    width: 100%;
+    min-width: 0;
   }
 }
 
@@ -1856,7 +2431,7 @@ html[data-theme="light"] .hero-dot {
 <!-- GORUNUM 2: SERI TANITIM VE BOLUM LISTESI SAYFASI -->
 <section class="hidden" id="view-series">
   <div class="series-nav-bar">
-    <a class="icon-btn" data-action="catalog" href="/" id="btn-series-back">← Kataloğa Dön</a>
+    <a class="icon-btn" data-action="catalog" href="/" id="btn-series-back"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Kataloğa Dön</a>
     <nav aria-label="Sayfa Konumu" class="breadcrumb-trail">
       <a class="breadcrumb-link" data-action="catalog" href="/"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Ana Sayfa</a>
       <span>›</span>
@@ -1866,11 +2441,27 @@ html[data-theme="light"] .hero-dot {
   <div class="series-detail-box" id="series-detail-box"></div>
 
   <div class="chapter-list-box">
-    <div class="section-header">
-      <h3 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Bölüm Listesi</h3>
-      <button class="icon-btn" id="btn-sort-chapters" type="button">⇅ Sıralama: Yeni → Eski</button>
+    <div class="chapter-toolbar">
+      <div class="chapter-toolbar-left">
+        <h3 class="section-title" style="margin: 0;"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Bölüm Listesi</h3>
+        <span class="series-chapter-count-pill" id="series-chapter-count">0 Bölüm</span>
+      </div>
+      <div class="chapter-toolbar-right">
+        <div class="chapter-search-box">
+          <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="chapter-search-input" id="input-chapter-search" placeholder="Bölüm no veya başlık ara..." type="search" />
+        </div>
+        <button class="icon-btn" id="btn-sort-chapters" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg> Sıralama: Yeni → Eski</button>
+      </div>
     </div>
     <div class="chapter-grid" id="chapter-list-grid"></div>
+  </div>
+
+  <div class="series-related-box hidden" id="series-related-section">
+    <div class="section-header">
+      <h3 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3L12 3z"/></svg> Benzer &amp; Önerilen Seriler</h3>
+    </div>
+    <div class="series-related-grid" id="series-related-grid"></div>
   </div>
 </section>
 
@@ -2273,6 +2864,26 @@ html[data-theme="light"] .hero-dot {
     globe: {
       paths:
         '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'
+    },
+    search: {
+      paths: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>'
+    },
+    user: {
+      paths: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'
+    },
+    calendar: {
+      paths:
+        '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>'
+    },
+    check: {
+      paths: '<polyline points="20 6 9 17 4 12"/>'
+    },
+    sort: {
+      paths:
+        '<path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/>'
+    },
+    'arrow-left': {
+      paths: '<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>'
     }
   };
 
@@ -2658,9 +3269,9 @@ html[data-theme="light"] .hero-dot {
       return '';
     }
     /**
-     * Seri tanitim HTML'inden Yazar, Cizer, Diger Isimler ve Ozet bilgilerini cikarir.
+     * Seri tanitim HTML'inden Yazar, Cizer, Cevirmen, Editor, Diger Isimler ve Ozet bilgilerini cikarir.
      * @param {string} html - Seri gonderisi HTML icerigi.
-     * @returns {{ altTitle: string, author: string, artist: string, year: string, synopsis: string }}
+     * @returns {{ altTitle: string, author: string, artist: string, translator: string, editor: string, year: string, synopsis: string }}
      */
     extractSeriesMetadata(html) {
       const str = String(html || '');
@@ -2668,30 +3279,49 @@ html[data-theme="light"] .hero-dot {
         altTitle: '',
         author: '',
         artist: '',
+        translator: '',
+        editor: '',
         year: '',
         synopsis: ''
       };
       const infoRegex = /<strong>\s*([^<]+?)\s*<\/strong>\s*<span>\s*([\s\S]*?)\s*<\/span>/gi;
       let match;
       while ((match = infoRegex.exec(str)) !== null) {
-        const key = stripTags(match[1]).toLowerCase();
+        const key = stripTags(match[1]).toLocaleLowerCase('tr-TR');
         const val = stripTags(match[2]);
+        const valLower = val.toLocaleLowerCase('tr-TR');
         if (!val) continue;
         if (key.includes('diğer') || key.includes('alternatif')) {
-          if (!/isteğe bağlı|alternatif isimler/i.test(val)) {
+          if (!/isteğe bağlı|alternatif isimler/.test(valLower)) {
             meta.altTitle = val;
           }
         } else if (key.includes('yazar')) {
-          if (!/yazar adı/i.test(val)) {
+          if (!/yazar adı|isteğe bağlı/.test(valLower)) {
             meta.author = val;
           }
-        } else if (key.includes('çizer')) {
-          if (!/çizer adı/i.test(val)) {
+        } else if (key.includes('çizer') || key.includes('cizer')) {
+          if (!/çizer adı|isteğe bağlı/.test(valLower)) {
             meta.artist = val;
+          }
+        } else if (key.includes('çevirmen') || key.includes('cevirmen') || key.includes('çeviri')) {
+          if (!/çevirmen adı|isteğe bağlı/.test(valLower)) {
+            meta.translator = val;
+          }
+        } else if (key.includes('editör') || key.includes('editor')) {
+          if (!/editör adı|editor adı|isteğe bağlı/.test(valLower)) {
+            meta.editor = val;
           }
         } else if (key.includes('yıl') || key.includes('stüdyo')) {
           meta.year = val;
         }
+      }
+      const transAttr = str.match(/data-translator=["']([^"']+)["']/i);
+      if (!meta.translator && transAttr && transAttr[1].trim()) {
+        meta.translator = transAttr[1].trim();
+      }
+      const edAttr = str.match(/data-editor=["']([^"']+)["']/i);
+      if (!meta.editor && edAttr && edAttr[1].trim()) {
+        meta.editor = edAttr[1].trim();
       }
       const synMatch =
         str.match(/<div[^>]*class=["'][^"']*synopsis-content[^"']*["'][^>]*>([\s\S]*?)<\/div>/i) ||
@@ -2841,7 +3471,8 @@ html[data-theme="light"] .hero-dot {
             type: labelInfo.type,
             defaultReaderMode: labelInfo.defaultReaderMode,
             status: labelInfo.status,
-            translator: meta.author || 'Manowa Çeviri',
+            translator: meta.translator || '',
+            editor: meta.editor || '',
             rating: '9.6',
             genres: labelInfo.genres,
             cover: images[0] || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak',
@@ -2891,7 +3522,8 @@ html[data-theme="light"] .hero-dot {
             type: isNovelChapter ? 'Novel' : 'Manhwa',
             defaultReaderMode: isNovelChapter ? 'novel' : 'webtoon',
             status: 'Devam Ediyor',
-            translator: 'Manowa Çeviri',
+            translator: '',
+            editor: '',
             rating: '9.5',
             genres: ['Genel'],
             cover: imgs[0] || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak',
@@ -3178,11 +3810,14 @@ html[data-theme="light"] .hero-dot {
         id: 'kuzeyin-kilici',
         title: 'Kuzeyin Kılıcı',
         altTitle: 'Legend of the Northern Blade',
+        author: 'Woo-Gak',
+        artist: 'Hae-Min',
         sourceLang: 'JP',
         type: 'Manga',
         defaultReaderMode: 'single',
         status: 'Tamamlandı',
         translator: 'Manowa Çeviri',
+        editor: 'Manowa Editör',
         rating: '9.7',
         genres: ['Manga', 'Orta Çağ', 'Fantastik'],
         cover: createSamplePageSvg('Kuzeyin Kılıcı', 1, '#be185d'),
@@ -3205,11 +3840,14 @@ html[data-theme="light"] .hero-dot {
         id: 'golge-hukumdari',
         title: 'Gölge Hükümdarı',
         altTitle: 'Shadow Monarch',
+        author: 'Chugong',
+        artist: 'DUBU',
         sourceLang: 'KR',
         type: 'Manhwa',
         defaultReaderMode: 'webtoon',
         status: 'Devam Ediyor',
         translator: 'Manowa Çeviri',
+        editor: 'Manowa Editör',
         rating: '9.6',
         genres: ['Aksiyon', 'Sistem'],
         cover: createSamplePageSvg('Gölge Hükümdarı', 1, '#4f46e5'),
@@ -3232,11 +3870,14 @@ html[data-theme="light"] .hero-dot {
         id: 'goksel-simyaci',
         title: 'Göksel Simyacı',
         altTitle: 'Celestial Alchemist',
+        author: 'Lin Feng',
+        artist: 'Studio Cloud',
         sourceLang: 'CN',
         type: 'Manhua',
         defaultReaderMode: 'webtoon',
         status: 'Devam Ediyor',
         translator: 'Manowa Çeviri',
+        editor: 'Manowa Editör',
         rating: '9.5',
         genres: ['Reenkarnasyon', 'Dövüş Sanatları'],
         cover: createSamplePageSvg('Göksel Simyacı', 1, '#0d9488'),
@@ -3848,47 +4489,18 @@ html[data-theme="light"] .hero-dot {
      * @returns {string} Seri detay HTML icerigi.
      */
     renderSeriesDetailHtml(series, catalog, savedProgress, computeUrlFn) {
-      const isFav = this.isFavorite(series.id);
-      const sortedAsc = catalog ? catalog.getSortedChapters(series.id, 'asc') : [];
-      const firstChapter = sortedAsc[0];
-      const latestChapter = sortedAsc[sortedAsc.length - 1];
-      const resumeChapterId = savedProgress
-        ? savedProgress.chapterId
-        : firstChapter
-          ? firstChapter.id
-          : '';
-      const genresHtml = (series.genres || [])
-        .map((g) => `<span class="meta-tag">${g}</span>`)
-        .join('');
-      const firstHref = firstChapter ? computeUrlFn('reader', series.id, firstChapter.id) : '#';
-      const latestHref = latestChapter ? computeUrlFn('reader', series.id, latestChapter.id) : '#';
-      const resumeHref = resumeChapterId ? computeUrlFn('reader', series.id, resumeChapterId) : '#';
-
-      return `<div class="series-detail-header">
-        <img class="detail-cover" src="${series.cover}" alt="${series.title}" />
-        <div class="detail-info">
-          <h1>${series.title}</h1>
-          <div class="detail-alt-title">${series.altTitle || ''}</div>
-          <div class="detail-badges">
-            <span class="meta-tag">Tür: ${series.type}</span>
-            <span class="meta-tag">Durum: ${series.status}</span>
-            <span class="meta-tag">Motor: ${(series.defaultReaderMode || 'webtoon').toUpperCase()}</span>
-            ${series.year ? `<span class="meta-tag">Yıl: ${series.year}</span>` : ''}
-            ${genresHtml}
-          </div>
-          <p class="detail-synopsis">${series.synopsis}</p>
-          <div class="detail-actions">
-            ${firstChapter ? `<a class="primary-btn" href="${firstHref}" data-action="read" data-series="${series.id}" data-chapter="${firstChapter.id}">${this._icon('book')} İlk Bölümü Oku (Bölüm ${firstChapter.number})</a>` : ''}
-            ${latestChapter && latestChapter.id !== (firstChapter && firstChapter.id) ? `<a class="icon-btn" href="${latestHref}" data-action="read" data-series="${series.id}" data-chapter="${latestChapter.id}">${this._icon('flame')} Son Bölüm (Bölüm ${latestChapter.number})</a>` : ''}
-            ${savedProgress && resumeChapterId ? `<a class="icon-btn" href="${resumeHref}" data-action="read" data-series="${series.id}" data-chapter="${resumeChapterId}">${this._icon('clock')} Kaldığım Yerden Devam Et (Sayfa ${savedProgress.pageIndex + 1})</a>` : ''}
-            <button class="icon-btn" type="button" data-action="toggle-fav" data-series="${series.id}">${isFav ? `${this._icon('heart-filled')} Kitaplığımda` : `${this._icon('heart')} Kitaplığa Ekle`}</button>
-          </div>
-        </div>
-      </div>`;
+      const SeriesPageClass =
+        globalScope.SeriesPageController ||
+        (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
+      if (SeriesPageClass) {
+        const sp = new SeriesPageClass({ logger: this.logger });
+        return sp.renderSeriesDetailHtml(series, catalog, this, savedProgress, computeUrlFn);
+      }
+      return '';
     }
 
     /**
-     * Seri sayfasindaki bolum listesi (#chapter-list-grid) icin HTML uretir.
+     * Seri sayfasindaki bolum listesi (#chapter-list-grid) icin SeriesPageController uzerinden HTML uretir.
      * @param {string} seriesId - Seri kimligi.
      * @param {Array<Object>} chapters - Siralanmis bolumler.
      * @param {Object|null} savedProgress - Kayitli ilerleme.
@@ -3896,19 +4508,14 @@ html[data-theme="light"] .hero-dot {
      * @returns {string} Bolum listesi HTML icerigi.
      */
     renderChapterListHtml(seriesId, chapters, savedProgress, computeUrlFn) {
-      if (!Array.isArray(chapters) || chapters.length === 0) {
-        return `<div class="disqus-status-note">Bu seri için henüz bölüm eklenmemiş.</div>`;
+      const SeriesPageClass =
+        globalScope.SeriesPageController ||
+        (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
+      if (SeriesPageClass) {
+        const sp = new SeriesPageClass({ logger: this.logger });
+        return sp.renderChapterListHtml(seriesId, chapters, savedProgress, computeUrlFn);
       }
-      return chapters
-        .map((ch) => {
-          const isRead = savedProgress && savedProgress.chapterId === ch.id;
-          const chHref = computeUrlFn('reader', seriesId, ch.id);
-          return `<a class="chapter-item-btn ${isRead ? 'is-read' : ''}" href="${chHref}" data-action="read" data-series="${seriesId}" data-chapter="${ch.id}">
-            <span><strong>Bölüm ${ch.number}</strong> - ${ch.title}</span>
-            <span style="font-size: 0.78rem; color: var(--text-secondary);">${isRead ? '✓ Okundu' : ch.date}</span>
-          </a>`;
-        })
-        .join('');
+      return '';
     }
   }
 
@@ -3916,6 +4523,564 @@ html[data-theme="light"] .hero-dot {
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = { UserLibrary };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/series-page.js === */
+/**
+ * @fileoverview Baştan tasarlanan Seri Bilgileri Sayfası (SeriesPageController) modülü.
+ * Bulanık arka planlı seri vitrini, yapılandırılmış meta veri tablosu, temizlenmiş özet,
+ * bölüm içi anlık arama/sıralama ve benzer seriler öneri şeridini yönetir.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  const iconFn =
+    (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
+    (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
+
+  /**
+   * Blogger şablonlarındaki yer tutucu özet ifadeleri.
+   * @type {RegExp}
+   */
+  const PLACEHOLDER_SYNOPSIS_REGEX =
+    /buraya serinin özet hikayesini|yepyeni tasarımla çok profesyonel|örnek özet metni/i;
+
+  /**
+   * Seri tanıtım sayfasını, bölüm arama/sıralama araçlarını ve benzer serileri yöneten sınıf.
+   */
+  class SeriesPageController {
+    /**
+     * SeriesPageController nesnesini başlatır.
+     * @param {Object} [options={}] - Yapılandırma seçenekleri.
+     * @param {Object} [options.logger=null] - Logger nesnesi.
+     */
+    constructor(options = {}) {
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.chapterSortOrder = options.chapterSortOrder || 'desc';
+      this.chapterSearchQuery = '';
+      this.activeSeriesId = '';
+      this._log('debug', 'SeriesPageController baslatildi.');
+    }
+
+    /**
+     * Vektörel SVG ikon üretici yardımcı metod.
+     * @param {string} name - İkon adı.
+     * @returns {string} SVG HTML dizgesi.
+     */
+    _icon(name) {
+      const fn = (globalScope.ManowaIcons && globalScope.ManowaIcons.get) || iconFn;
+      return typeof fn === 'function' ? fn(name) : '';
+    }
+
+    /**
+     * İç loglama yardımcı metodu.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Log mesajı.
+     * @param {Object|null} [meta=null] - Ek veri.
+     * @returns {void}
+     */
+    _log(level, msg, meta = null) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+
+    /**
+     * Seri özet metnini şablon yer tutucularından temizler.
+     * @param {string} rawText - Ham özet metni.
+     * @param {Object} series - Seri nesnesi.
+     * @returns {string} Temizlenmiş özet metni.
+     */
+    cleanSynopsis(rawText, series = {}) {
+      const text = String(rawText || '').trim();
+      if (!text || PLACEHOLDER_SYNOPSIS_REGEX.test(text)) {
+        const genres = Array.isArray(series.genres) ? series.genres.join(', ') : 'Genel';
+        const count = Array.isArray(series.chapters) ? series.chapters.length : 0;
+        return `${series.title || 'Bu seri'}, ${genres} kategorilerinde yer alan güncel bir ${series.type || 'Manhwa'} eseridir. Arşivimizde şu an ${count} Türkçe çeviri bölümü mevcuttur.`;
+      }
+      return text;
+    }
+
+    /**
+     * Okuma motoru kodunu kullanıcı dostu Türkçe etikete dönüştürür.
+     * @param {string} mode - Motor kodu ('webtoon', 'single', 'double', 'novel').
+     * @returns {string} Türkçe motor adı.
+     */
+    formatReaderModeLabel(mode) {
+      const m = String(mode || 'webtoon').toLowerCase();
+      if (m === 'single') return 'Tek Sayfa (Manga)';
+      if (m === 'double') return 'Çift Sayfa (Kitap)';
+      if (m === 'novel') return 'Novel (Metin Modu)';
+      return 'Webtoon (Dikey Şerit)';
+    }
+
+    /**
+     * Kaynak dil kodunu tam açıklamaya dönüştürür.
+     * @param {string} langCode - Dil kodu ('KR', 'JP', 'CN', 'EN').
+     * @returns {string} Açıklamalı dil metni.
+     */
+    formatSourceLangLabel(langCode) {
+      const code = String(langCode || 'KR').toUpperCase();
+      const map = {
+        KR: 'Korece (KR)',
+        JP: 'Japonca (JP)',
+        CN: 'Çince (CN)',
+        EN: 'İngilizce (EN)'
+      };
+      return map[code] || code;
+    }
+
+    /**
+     * Bölüm arama sorgusunu günceller.
+     * @param {string} query - Arama metni veya bölüm numarası.
+     * @returns {void}
+     */
+    setChapterSearchQuery(query) {
+      this.chapterSearchQuery = String(query || '').trim();
+      this._log('debug', 'Bolum arama sorgusu guncellendi.', {
+        seriesId: this.activeSeriesId,
+        query: this.chapterSearchQuery
+      });
+    }
+
+    /**
+     * Bölüm sıralama yönünü değiştirir ('desc' <-> 'asc').
+     * @returns {'desc'|'asc'} Yeni sıralama yönü.
+     */
+    toggleSortOrder() {
+      this.chapterSortOrder = this.chapterSortOrder === 'desc' ? 'asc' : 'desc';
+      this._log('info', 'Bolum siralama yonu degistirildi.', {
+        order: this.chapterSortOrder
+      });
+      return this.chapterSortOrder;
+    }
+
+    /**
+     * Aktif serinin bölümlerini sıralanmış ve arama sorgusuna göre filtrelenmiş olarak döndürür.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {string} seriesId - Seri kimliği.
+     * @returns {Array<Object>} Filtrelenmiş bölüm listesi.
+     */
+    getFilteredChapters(catalog, seriesId) {
+      if (!catalog || !seriesId) {
+        return [];
+      }
+      const sorted = catalog.getSortedChapters(seriesId, this.chapterSortOrder);
+      if (!this.chapterSearchQuery) {
+        return sorted;
+      }
+      const q = this.chapterSearchQuery.toLowerCase();
+      return sorted.filter((ch) => {
+        const numMatch = String(ch.number || '').toLowerCase().includes(q);
+        const titleMatch = String(ch.title || '').toLowerCase().includes(q);
+        return numMatch || titleMatch;
+      });
+    }
+
+    /**
+     * Seçilen seriye tür ve kategori bakımından en yakın benzer serileri döndürür.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object} currentSeries - Aktif seri nesnesi.
+     * @param {number} [limit=4] - Maksimum öneri sayısı.
+     * @returns {Array<Object>} Benzer seri listesi.
+     */
+    getRelatedSeries(catalog, currentSeries, limit = 4) {
+      if (!catalog || !Array.isArray(catalog.seriesList) || !currentSeries) {
+        return [];
+      }
+      const targetGenres = new Set(
+        (currentSeries.genres || []).map((g) => String(g).toLowerCase())
+      );
+      const candidates = catalog.seriesList
+        .filter((s) => s.id !== currentSeries.id)
+        .map((s) => {
+          let score = 0;
+          if (s.type === currentSeries.type) score += 2;
+          (s.genres || []).forEach((g) => {
+            if (targetGenres.has(String(g).toLowerCase())) score += 3;
+          });
+          score += Math.min(2, (s.chapters || []).length * 0.1);
+          return { series: s, score };
+        });
+
+      candidates.sort((a, b) => b.score - a.score);
+      return candidates.slice(0, Math.max(1, limit)).map((item) => item.series);
+    }
+
+    /**
+     * Seri detay vitrin ve bilgi kartı (#series-detail-box) için HTML üretir.
+     * @param {Object} series - Seri nesnesi.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object|null} library - UserLibrary nesnesi.
+     * @param {Object|null} savedProgress - Kullanıcının bu serideki kayıtlı okuma ilerlemesi.
+     * @param {Function} computeUrlFn - URL hesaplama fonksiyonu.
+     * @returns {string} Seri detay HTML içeriği.
+     */
+    renderSeriesDetailHtml(series, catalog, library, savedProgress, computeUrlFn) {
+      if (!series) {
+        return '';
+      }
+      const isFav =
+        library && typeof library.isFavorite === 'function'
+          ? library.isFavorite(series.id)
+          : false;
+      const sortedAsc = catalog ? catalog.getSortedChapters(series.id, 'asc') : [];
+      const totalChapters = sortedAsc.length;
+      const firstChapter = sortedAsc[0] || null;
+      const latestChapter = sortedAsc[totalChapters - 1] || null;
+
+      const resumeChapterObj =
+        savedProgress && savedProgress.chapterId
+          ? sortedAsc.find((c) => c.id === savedProgress.chapterId) || firstChapter
+          : null;
+
+      const firstHref = firstChapter ? computeUrlFn('reader', series.id, firstChapter.id) : '#';
+      const latestHref = latestChapter ? computeUrlFn('reader', series.id, latestChapter.id) : '#';
+      const resumeHref = resumeChapterObj
+        ? computeUrlFn('reader', series.id, resumeChapterObj.id)
+        : '#';
+
+      const genresHtml = (series.genres || [])
+        .map(
+          (g) =>
+            `<button class="series-genre-pill" type="button" data-series-genre="${g}" title="${g} kategorisindeki serileri filtrele">${this._icon('tag')} ${g}</button>`
+        )
+        .join('');
+
+      const synopsisText = this.cleanSynopsis(series.synopsis, series);
+      const latestDate =
+        latestChapter && latestChapter.date
+          ? latestChapter.date
+          : series.publishedDate || 'Güncel';
+      const authorText = series.author || 'Bilinmiyor';
+      const artistText = series.artist || 'Bilinmiyor';
+      const translatorText = series.translator || 'Bilinmiyor';
+      const editorText = series.editor || 'Bilinmiyor';
+      const rawAlt = String(series.altTitle || '').trim();
+      const altTitleText = /isteğe bağlı|alternatif isimler/.test(
+        rawAlt.toLocaleLowerCase('tr-TR')
+      )
+        ? ''
+        : rawAlt;
+
+      return `<div class="series-hero-card">
+        <div class="series-backdrop" style="background-image: url('${series.cover || ''}');"></div>
+        <div class="series-backdrop-overlay"></div>
+
+        <div class="series-detail-header">
+          <div class="series-poster-col">
+            <div class="series-poster-frame">
+              <img class="detail-cover" src="${series.cover}" alt="${series.title}" />
+            </div>
+            <div class="series-poster-quick-actions">
+              <button class="icon-btn series-fav-btn ${isFav ? 'is-fav' : ''}" type="button" data-action="toggle-fav" data-series="${series.id}">
+                ${isFav ? `${this._icon('heart-filled')} Kitaplığımda` : `${this._icon('heart')} Kitaplığa Ekle`}
+              </button>
+              <button class="icon-btn series-share-btn" id="btn-copy-series-url" type="button" title="Seri Bağlantısını Kopyala">
+                ${this._icon('link')} Paylaş
+              </button>
+            </div>
+          </div>
+
+          <div class="series-info-col detail-info">
+            <h1 class="series-main-title">${series.title}</h1>
+            ${altTitleText ? `<div class="detail-alt-title">${altTitleText}</div>` : ''}
+
+            <div class="series-genre-list detail-badges">
+              ${genresHtml}
+            </div>
+
+            <div class="series-synopsis-card">
+              <div class="series-synopsis-title">${this._icon('book')} Seri Özeti</div>
+              <p class="detail-synopsis">${synopsisText}</p>
+            </div>
+
+            <div class="detail-actions series-cta-bar">
+              ${
+                firstChapter
+                  ? `<a class="primary-btn series-cta-btn" href="${firstHref}" data-action="read" data-series="${series.id}" data-chapter="${firstChapter.id}">${this._icon('play')} İlk Bölümü Oku (Bölüm ${firstChapter.number})</a>`
+                  : ''
+              }
+              ${
+                latestChapter && latestChapter.id !== (firstChapter && firstChapter.id)
+                  ? `<a class="icon-btn series-cta-secondary" href="${latestHref}" data-action="read" data-series="${series.id}" data-chapter="${latestChapter.id}">${this._icon('flame')} Son Bölüm (Bölüm ${latestChapter.number})</a>`
+                  : ''
+              }
+              ${
+                resumeChapterObj && savedProgress
+                  ? `<a class="icon-btn series-cta-resume" href="${resumeHref}" data-action="read" data-series="${series.id}" data-chapter="${resumeChapterObj.id}">${this._icon('clock')} Devam Et: Bölüm ${resumeChapterObj.number} (Sayfa ${Number(savedProgress.pageIndex || 0) + 1})</a>`
+                  : ''
+              }
+            </div>
+          </div>
+
+          <aside class="series-meta-col" aria-label="Seri Bilgi Izgarası">
+            <div class="series-meta-grid">
+              <div class="series-meta-card">
+                <span class="series-meta-label">${this._icon('layers')} Toplam Bölüm</span>
+                <strong class="series-meta-value">${totalChapters} Bölüm</strong>
+              </div>
+              <div class="series-meta-card">
+                <span class="series-meta-label">${this._icon('sparkles')} Durum</span>
+                <strong class="series-meta-value">${series.status || 'Devam Ediyor'}</strong>
+              </div>
+              <div class="series-meta-card">
+                <span class="series-meta-label">${this._icon('user')} Yazar</span>
+                <strong class="series-meta-value">${authorText}</strong>
+              </div>
+              <div class="series-meta-card">
+                <span class="series-meta-label">${this._icon('pen')} Çizer</span>
+                <strong class="series-meta-value">${artistText}</strong>
+              </div>
+              <div class="series-meta-card">
+                <span class="series-meta-label">${this._icon('globe')} Çevirmen</span>
+                <strong class="series-meta-value">${translatorText}</strong>
+              </div>
+              <div class="series-meta-card">
+                <span class="series-meta-label">${this._icon('wrench')} Editör</span>
+                <strong class="series-meta-value">${editorText}</strong>
+              </div>
+              <div class="series-meta-card">
+                <span class="series-meta-label">${this._icon('clock')} Son Güncelleme</span>
+                <strong class="series-meta-value">${latestDate}</strong>
+              </div>
+              <div class="series-meta-card">
+                <span class="series-meta-label">${this._icon('award')} Arşiv Puanı</span>
+                <strong class="series-meta-value">${series.rating || '9.6'} / 10</strong>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>`;
+    }
+
+    /**
+     * Bölüm listesi ızgarası (#chapter-list-grid) için numaralı ve durum rozetli HTML üretir.
+     * @param {string} seriesId - Seri kimliği.
+     * @param {Array<Object>} chapters - Sıralanmış/filtrelenmiş bölüm listesi.
+     * @param {Object|null} savedProgress - Kullanıcının kayıtlı ilerlemesi.
+     * @param {Function} computeUrlFn - URL hesaplama fonksiyonu.
+     * @returns {string} Bölüm listesi HTML içeriği.
+     */
+    renderChapterListHtml(seriesId, chapters, savedProgress, computeUrlFn) {
+      if (!Array.isArray(chapters) || chapters.length === 0) {
+        if (this.chapterSearchQuery) {
+          return `<div class="disqus-status-note">"${this.chapterSearchQuery}" aramasıyla eşleşen bölüm bulunamadı.</div>`;
+        }
+        return `<div class="disqus-status-note">Bu seri için henüz bölüm eklenmemiş.</div>`;
+      }
+      return chapters
+        .map((ch) => {
+          const isRead = Boolean(savedProgress && savedProgress.chapterId === ch.id);
+          const chHref = computeUrlFn('reader', seriesId, ch.id);
+          const formatBadge = ch.isNovel ? 'Novel' : 'Bölüm';
+          return `<a class="chapter-item-btn chapter-card-item ${isRead ? 'is-read' : ''}" href="${chHref}" data-action="read" data-series="${seriesId}" data-chapter="${ch.id}">
+            <div class="chapter-card-left">
+              <span class="chapter-num-pill">#${ch.number}</span>
+              <div class="chapter-title-group">
+                <strong class="chapter-title-text">Bölüm ${ch.number} - ${ch.title}</strong>
+                <span class="chapter-sub-meta">${formatBadge} • ${ch.date || 'Güncel'}</span>
+              </div>
+            </div>
+            <div class="chapter-card-right">
+              ${
+                isRead
+                  ? `<span class="chapter-read-badge">${this._icon('check')} Son Okunan</span>`
+                  : `<span class="chapter-open-pill">Oku →</span>`
+              }
+            </div>
+          </a>`;
+        })
+        .join('');
+    }
+
+    /**
+     * Benzer / Önerilen seriler şeridi (#series-related-grid) için HTML üretir.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object} currentSeries - Aktif seri nesnesi.
+     * @param {Function} computeUrlFn - URL hesaplama fonksiyonu.
+     * @returns {string} Benzer seriler HTML içeriği.
+     */
+    renderRelatedSeriesHtml(catalog, currentSeries, computeUrlFn) {
+      const related = this.getRelatedSeries(catalog, currentSeries, 4);
+      if (related.length === 0) {
+        return '';
+      }
+      return related
+        .map((s) => {
+          const href = computeUrlFn('series', s.id);
+          const chCount = (s.chapters || []).length;
+          return `<a class="series-related-card" href="${href}" data-action="detail" data-series="${s.id}">
+            <img class="series-related-thumb" src="${s.cover}" alt="${s.title}" loading="lazy" />
+            <div class="series-related-info">
+              <span class="series-related-type">${s.type || 'Manhwa'} • ${s.sourceLang || 'KR'}</span>
+              <strong class="series-related-title">${s.title}</strong>
+              <span class="series-related-meta">${this._icon('layers')} ${chCount} Bölüm • ${s.status || 'Devam Ediyor'}</span>
+            </div>
+          </a>`;
+        })
+        .join('');
+    }
+
+    /**
+     * Seri sayfasının tüm DOM bileşenlerini günceller.
+     * @param {Object} series - Aktif seri nesnesi.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object|null} library - UserLibrary nesnesi.
+     * @param {Object|null} readingEngine - ReadingEngine nesnesi.
+     * @param {Function} computeUrlFn - URL hesaplama fonksiyonu.
+     * @returns {void}
+     */
+    renderIntoDom(series, catalog, library, readingEngine, computeUrlFn) {
+      if (typeof document === 'undefined' || !series) {
+        return;
+      }
+      if (this.activeSeriesId !== series.id) {
+        this.activeSeriesId = series.id;
+        this.chapterSearchQuery = '';
+        const searchInp = document.getElementById('input-chapter-search');
+        if (searchInp) searchInp.value = '';
+      }
+
+      const breadcrumbTitle = document.getElementById('series-breadcrumb-title');
+      if (breadcrumbTitle) breadcrumbTitle.textContent = series.title;
+
+      const savedProgress =
+        readingEngine && typeof readingEngine.getProgress === 'function'
+          ? readingEngine.getProgress(series.id)
+          : null;
+
+      const detailBox = document.getElementById('series-detail-box');
+      if (detailBox) {
+        detailBox.innerHTML = this.renderSeriesDetailHtml(
+          series,
+          catalog,
+          library,
+          savedProgress,
+          computeUrlFn
+        );
+      }
+
+      this.renderChaptersIntoDom(catalog, readingEngine, computeUrlFn);
+
+      const relatedSec = document.getElementById('series-related-section');
+      const relatedGrid = document.getElementById('series-related-grid');
+      if (relatedSec && relatedGrid) {
+        const relHtml = this.renderRelatedSeriesHtml(catalog, series, computeUrlFn);
+        relatedGrid.innerHTML = relHtml;
+        relatedSec.classList.toggle('hidden', !relHtml);
+      }
+    }
+
+    /**
+     * Yalnızca bölüm listesi ızgarasını ve bölüm sayacı etiketini DOM üzerinde günceller.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object|null} readingEngine - ReadingEngine nesnesi.
+     * @param {Function} computeUrlFn - URL hesaplama fonksiyonu.
+     * @returns {void}
+     */
+    renderChaptersIntoDom(catalog, readingEngine, computeUrlFn) {
+      if (typeof document === 'undefined' || !this.activeSeriesId || !catalog) {
+        return;
+      }
+      const listGrid = document.getElementById('chapter-list-grid');
+      const countBadge = document.getElementById('series-chapter-count');
+      const sortBtn = document.getElementById('btn-sort-chapters');
+      const filtered = this.getFilteredChapters(catalog, this.activeSeriesId);
+      const total = (catalog.getSortedChapters(this.activeSeriesId, 'asc') || []).length;
+
+      if (countBadge) {
+        countBadge.textContent =
+          this.chapterSearchQuery && filtered.length !== total
+            ? `${filtered.length} / ${total} Bölüm`
+            : `${total} Bölüm`;
+      }
+      if (sortBtn) {
+        sortBtn.innerHTML =
+          this.chapterSortOrder === 'desc'
+            ? `${this._icon('sort')} Sıralama: Yeni → Eski`
+            : `${this._icon('sort')} Sıralama: Eski → Yeni`;
+      }
+      if (listGrid) {
+        const saved =
+          readingEngine && typeof readingEngine.getProgress === 'function'
+            ? readingEngine.getProgress(this.activeSeriesId)
+            : null;
+        listGrid.innerHTML = this.renderChapterListHtml(
+          this.activeSeriesId,
+          filtered,
+          saved,
+          computeUrlFn
+        );
+      }
+    }
+
+    /**
+     * Seri sayfası üzerindeki bölüm arama, sıralama, kategori seçimi ve bağlantı paylaşım olaylarını bağlar.
+     * @param {Object} [callbacks={}] - Geri çağırım fonksiyonları.
+     * @param {Function} [callbacks.onChapterUpdate] - Bölüm listesi değiştiğinde çağrılır.
+     * @param {Function} [callbacks.onGenreSelect] - Seri üzerindeki kategori etiketine tıklandığında çağrılır.
+     * @returns {void}
+     */
+    bindDomEvents(callbacks = {}) {
+      if (typeof document === 'undefined') {
+        return;
+      }
+      const searchInp = document.getElementById('input-chapter-search');
+      if (searchInp) {
+        searchInp.addEventListener('input', (e) => {
+          this.setChapterSearchQuery(e.target.value);
+          if (typeof callbacks.onChapterUpdate === 'function') {
+            callbacks.onChapterUpdate();
+          }
+        });
+      }
+
+      const sortBtn = document.getElementById('btn-sort-chapters');
+      if (sortBtn) {
+        sortBtn.addEventListener('click', () => {
+          this.toggleSortOrder();
+          if (typeof callbacks.onChapterUpdate === 'function') {
+            callbacks.onChapterUpdate();
+          }
+        });
+      }
+
+      const viewSeries = document.getElementById('view-series');
+      if (viewSeries) {
+        viewSeries.addEventListener('click', (e) => {
+          const genreBtn = e.target.closest('[data-series-genre]');
+          if (genreBtn) {
+            e.preventDefault();
+            const genre = genreBtn.getAttribute('data-series-genre');
+            if (genre && typeof callbacks.onGenreSelect === 'function') {
+              callbacks.onGenreSelect(genre);
+            }
+            return;
+          }
+
+          const copyBtn = e.target.closest('#btn-copy-series-url');
+          if (copyBtn) {
+            e.preventDefault();
+            const shareUrl =
+              typeof globalScope.location !== 'undefined' ? globalScope.location.href : '';
+            if (shareUrl && typeof navigator !== 'undefined' && navigator.clipboard) {
+              navigator.clipboard.writeText(shareUrl);
+            }
+            copyBtn.innerHTML = `${this._icon('check')} Kopyalandı`;
+            this._log('info', 'Seri baglantisi panoya kopyalandi.', { url: shareUrl });
+          }
+        });
+      }
+    }
+  }
+
+  globalScope.SeriesPageController = SeriesPageController;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { SeriesPageController };
   }
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -5396,6 +6561,9 @@ html[data-theme="light"] .hero-dot {
   const SidebarClass =
     globalScope.SidebarController ||
     (typeof require === 'function' ? require('./sidebar-controller').SidebarController : null);
+  const SeriesPageClass =
+    globalScope.SeriesPageController ||
+    (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
   const iconFn =
     (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
     (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
@@ -5424,6 +6592,10 @@ html[data-theme="light"] .hero-dot {
         deps.heroSlider || (HeroSliderClass ? new HeroSliderClass({ logger: this.logger }) : null);
       this.sidebar =
         deps.sidebar || (SidebarClass ? new SidebarClass({ logger: this.logger }) : null);
+      const ResolvedSeriesPage = globalScope.SeriesPageController || SeriesPageClass;
+      this.seriesPage =
+        deps.seriesPage ||
+        (ResolvedSeriesPage ? new ResolvedSeriesPage({ logger: this.logger }) : null);
       this.feedLoader =
         deps.feedLoader ||
         (globalScope.BloggerFeedLoader
@@ -5854,37 +7026,28 @@ html[data-theme="light"] .hero-dot {
         options
       );
       this.updateDisqus(`series-${series.id}`, `${series.title} - Seri Yorumları`);
-      if (typeof document === 'undefined') return;
-      const breadcrumbTitle = document.getElementById('series-breadcrumb-title');
-      if (breadcrumbTitle) breadcrumbTitle.textContent = series.title;
-      const detailBox = document.getElementById('series-detail-box');
-      const savedProgress = this.reader ? this.reader.getProgress(series.id) : null;
-      if (detailBox && this.library) {
-        detailBox.innerHTML = this.library.renderSeriesDetailHtml(
+      if (this.seriesPage) {
+        this.seriesPage.renderIntoDom(
           series,
           this.catalog,
-          savedProgress,
+          this.library,
+          this.reader,
           (v, s, c) => this.computeTargetUrl(v, s, c)
         );
       }
-      this.renderChapterList();
     }
     /**
      * Aktif serinin bolum listesini gercek Blogger URL baglantilariyla olusturur.
      * @returns {void}
      */
     renderChapterList() {
-      if (typeof document === 'undefined') return;
-      const listGrid = document.getElementById('chapter-list-grid');
-      if (!listGrid || !this.catalog || !this.library) return;
-      const chapters = this.catalog.getSortedChapters(this.activeSeriesId, this.chapterSortOrder);
-      const saved = this.reader ? this.reader.getProgress(this.activeSeriesId) : null;
-      listGrid.innerHTML = this.library.renderChapterListHtml(
-        this.activeSeriesId,
-        chapters,
-        saved,
-        (v, s, c) => this.computeTargetUrl(v, s, c)
-      );
+      if (this.seriesPage) {
+        this.seriesPage.renderChaptersIntoDom(
+          this.catalog,
+          this.reader,
+          (v, s, c) => this.computeTargetUrl(v, s, c)
+        );
+      }
     }
     /**
      * Secilen bolumu okuma motorunda acar ve tarayici URL'sini bolumun Blogger adresine gunceller.
@@ -6086,6 +7249,16 @@ html[data-theme="light"] .hero-dot {
           }
         });
       }
+      if (this.seriesPage) {
+        this.seriesPage.bindDomEvents({
+          onChapterUpdate: () => this.renderChapterList(),
+          onGenreSelect: (genre) => {
+            this.catalog.setGenreFilter(genre);
+            this.openCatalog();
+            this.renderCatalogView();
+          }
+        });
+      }
       document.addEventListener('click', (ev) => {
         const target = ev.target.closest('[data-action]');
         if (!target) return;
@@ -6164,14 +7337,6 @@ html[data-theme="light"] .hero-dot {
         html.setAttribute('data-theme', next);
         if (this.logger) this.logger.info('Tema modu degistirildi.', { theme: next });
         this.renderDebugLogs();
-      });
-      on('btn-sort-chapters', 'click', (e) => {
-        this.chapterSortOrder = this.chapterSortOrder === 'desc' ? 'asc' : 'desc';
-        e.target.textContent =
-          this.chapterSortOrder === 'desc'
-            ? '⇅ Sıralama: Yeni → Eski'
-            : '⇅ Sıralama: Eski → Yeni';
-        this.renderChapterList();
       });
       on('select-chapter', 'change', (e) => this.openReader(this.activeSeriesId, e.target.value));
       on('select-mode', 'change', (e) => {

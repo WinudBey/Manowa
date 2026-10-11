@@ -17,6 +17,9 @@
   const SidebarClass =
     globalScope.SidebarController ||
     (typeof require === 'function' ? require('./sidebar-controller').SidebarController : null);
+  const SeriesPageClass =
+    globalScope.SeriesPageController ||
+    (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
   const iconFn =
     (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
     (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
@@ -45,6 +48,10 @@
         deps.heroSlider || (HeroSliderClass ? new HeroSliderClass({ logger: this.logger }) : null);
       this.sidebar =
         deps.sidebar || (SidebarClass ? new SidebarClass({ logger: this.logger }) : null);
+      const ResolvedSeriesPage = globalScope.SeriesPageController || SeriesPageClass;
+      this.seriesPage =
+        deps.seriesPage ||
+        (ResolvedSeriesPage ? new ResolvedSeriesPage({ logger: this.logger }) : null);
       this.feedLoader =
         deps.feedLoader ||
         (globalScope.BloggerFeedLoader
@@ -475,37 +482,28 @@
         options
       );
       this.updateDisqus(`series-${series.id}`, `${series.title} - Seri Yorumları`);
-      if (typeof document === 'undefined') return;
-      const breadcrumbTitle = document.getElementById('series-breadcrumb-title');
-      if (breadcrumbTitle) breadcrumbTitle.textContent = series.title;
-      const detailBox = document.getElementById('series-detail-box');
-      const savedProgress = this.reader ? this.reader.getProgress(series.id) : null;
-      if (detailBox && this.library) {
-        detailBox.innerHTML = this.library.renderSeriesDetailHtml(
+      if (this.seriesPage) {
+        this.seriesPage.renderIntoDom(
           series,
           this.catalog,
-          savedProgress,
+          this.library,
+          this.reader,
           (v, s, c) => this.computeTargetUrl(v, s, c)
         );
       }
-      this.renderChapterList();
     }
     /**
      * Aktif serinin bolum listesini gercek Blogger URL baglantilariyla olusturur.
      * @returns {void}
      */
     renderChapterList() {
-      if (typeof document === 'undefined') return;
-      const listGrid = document.getElementById('chapter-list-grid');
-      if (!listGrid || !this.catalog || !this.library) return;
-      const chapters = this.catalog.getSortedChapters(this.activeSeriesId, this.chapterSortOrder);
-      const saved = this.reader ? this.reader.getProgress(this.activeSeriesId) : null;
-      listGrid.innerHTML = this.library.renderChapterListHtml(
-        this.activeSeriesId,
-        chapters,
-        saved,
-        (v, s, c) => this.computeTargetUrl(v, s, c)
-      );
+      if (this.seriesPage) {
+        this.seriesPage.renderChaptersIntoDom(
+          this.catalog,
+          this.reader,
+          (v, s, c) => this.computeTargetUrl(v, s, c)
+        );
+      }
     }
     /**
      * Secilen bolumu okuma motorunda acar ve tarayici URL'sini bolumun Blogger adresine gunceller.
@@ -707,6 +705,16 @@
           }
         });
       }
+      if (this.seriesPage) {
+        this.seriesPage.bindDomEvents({
+          onChapterUpdate: () => this.renderChapterList(),
+          onGenreSelect: (genre) => {
+            this.catalog.setGenreFilter(genre);
+            this.openCatalog();
+            this.renderCatalogView();
+          }
+        });
+      }
       document.addEventListener('click', (ev) => {
         const target = ev.target.closest('[data-action]');
         if (!target) return;
@@ -785,14 +793,6 @@
         html.setAttribute('data-theme', next);
         if (this.logger) this.logger.info('Tema modu degistirildi.', { theme: next });
         this.renderDebugLogs();
-      });
-      on('btn-sort-chapters', 'click', (e) => {
-        this.chapterSortOrder = this.chapterSortOrder === 'desc' ? 'asc' : 'desc';
-        e.target.textContent =
-          this.chapterSortOrder === 'desc'
-            ? '⇅ Sıralama: Yeni → Eski'
-            : '⇅ Sıralama: Eski → Yeni';
-        this.renderChapterList();
       });
       on('select-chapter', 'change', (e) => this.openReader(this.activeSeriesId, e.target.value));
       on('select-mode', 'change', (e) => {

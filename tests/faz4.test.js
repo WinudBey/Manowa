@@ -496,3 +496,110 @@ test('SVG Ikon Sistemi ve SidebarController: Temada emoji kullanilmamali, SVG ik
   assert.equal(themeXml.includes('id="sidebar-quick-library"'), true);
 });
 
+test('SeriesPageController: Seri bilgileri sayfasi meta veri izgarasi, bolum arama, siralama ve benzer seriler dogru calismali', () => {
+  const fs = require('node:fs');
+  const { ThemeBuilder } = require('../src/core/builder');
+  const { SeriesPageController } = require('../src/scripts/series-page');
+  const { UserLibrary } = require('../src/scripts/user-library');
+  const catalog = new CatalogController();
+  const library = new UserLibrary();
+  const seriesPage = new SeriesPageController();
+
+  const targetSeries = catalog.getSeriesById('kuzeyin-kilici');
+  assert.equal(Boolean(targetSeries), true);
+  targetSeries.chapters.push({
+    id: 'kuzeyin-kilici-bolum-2',
+    number: 2,
+    title: 'Kuzeyin Kılıcı Bölüm 2',
+    date: '2026-09-30',
+    pages: ['p1.jpg']
+  });
+
+  const detailHtml = seriesPage.renderSeriesDetailHtml(
+    targetSeries,
+    catalog,
+    library,
+    { chapterId: 'kuzeyin-kilici-bolum-1', pageIndex: 2 },
+    (v, s, c) => `/${v}/${s}/${c || ''}`
+  );
+  assert.equal(detailHtml.includes('class="series-hero-card"'), true);
+  assert.equal(detailHtml.includes('class="series-meta-col"'), true);
+  assert.equal(detailHtml.includes('class="series-meta-grid"'), true);
+  assert.equal(detailHtml.includes('class="series-synopsis-card"'), true);
+  assert.equal(
+    detailHtml.indexOf('class="series-synopsis-card"') <
+      detailHtml.indexOf('class="series-meta-col"'),
+    true
+  );
+  assert.equal(detailHtml.includes('lang-badge'), false);
+  assert.equal(detailHtml.includes('type-badge'), false);
+  assert.equal(detailHtml.includes('series-top-pills'), false);
+  assert.equal(detailHtml.includes('Okuma Motoru'), false);
+  assert.equal(detailHtml.includes('Yazar / Çeviri'), false);
+  assert.equal(detailHtml.includes('Çizer / Dönem'), false);
+  assert.equal(detailHtml.includes('Durum</span>'), true);
+  assert.equal(detailHtml.includes('Tamamlandı'), true);
+  assert.equal(detailHtml.includes('Yazar</span>'), true);
+  assert.equal(detailHtml.includes('Woo-Gak'), true);
+  assert.equal(detailHtml.includes('Çizer</span>'), true);
+  assert.equal(detailHtml.includes('Hae-Min'), true);
+  assert.equal(detailHtml.includes('Çevirmen</span>'), true);
+  assert.equal(detailHtml.includes('Manowa Çeviri'), true);
+  assert.equal(detailHtml.includes('Editör</span>'), true);
+  assert.equal(detailHtml.includes('Manowa Editör'), true);
+  assert.equal(detailHtml.includes('data-series-genre="Fantastik"'), true);
+  assert.equal(detailHtml.includes('Devam Et: Bölüm 1 (Sayfa 3)'), true);
+
+  const loader = new BloggerFeedLoader();
+  const parsedMeta = loader.extractSeriesMetadata(
+    '<div><strong>Diğer İsimler:</strong><span>İsteğe bağlı isimler</span><strong>Çevirmen:</strong><span>Ahmet</span><strong>Editör:</strong><span>Mehmet</span></div>'
+  );
+  assert.equal(parsedMeta.altTitle, '');
+  assert.equal(parsedMeta.translator, 'Ahmet');
+  assert.equal(parsedMeta.editor, 'Mehmet');
+
+  assert.equal(seriesPage.chapterSortOrder, 'desc');
+  let chapters = seriesPage.getFilteredChapters(catalog, 'kuzeyin-kilici');
+  assert.equal(chapters.length, 2);
+  assert.equal(chapters[0].number, 2);
+
+  seriesPage.toggleSortOrder();
+  assert.equal(seriesPage.chapterSortOrder, 'asc');
+  chapters = seriesPage.getFilteredChapters(catalog, 'kuzeyin-kilici');
+  assert.equal(chapters[0].number, 1);
+
+  seriesPage.setChapterSearchQuery('2');
+  const searched = seriesPage.getFilteredChapters(catalog, 'kuzeyin-kilici');
+  assert.equal(searched.length, 1);
+  assert.equal(searched[0].number, 2);
+
+  const chapterListHtml = seriesPage.renderChapterListHtml(
+    'kuzeyin-kilici',
+    searched,
+    { chapterId: 'kuzeyin-kilici-bolum-2', pageIndex: 0 },
+    (v, s, c) => `/${v}/${s}/${c || ''}`
+  );
+  assert.equal(chapterListHtml.includes('class="chapter-num-pill">#2</span>'), true);
+  assert.equal(chapterListHtml.includes('Son Okunan'), true);
+
+  const related = seriesPage.getRelatedSeries(catalog, targetSeries, 4);
+  assert.equal(related.length, 2);
+  assert.equal(related.some((s) => s.id === 'kuzeyin-kilici'), false);
+  const relatedHtml = seriesPage.renderRelatedSeriesHtml(
+    catalog,
+    targetSeries,
+    (v, s) => `/${v}/${s}`
+  );
+  assert.equal(relatedHtml.includes('class="series-related-card"'), true);
+
+  const builder = new ThemeBuilder();
+  const { themeXmlPath } = builder.build();
+  const themeXml = fs.readFileSync(themeXmlPath, 'utf8');
+  assert.equal(
+    themeXml.indexOf('MODULE: scripts/series-page.js') <
+      themeXml.indexOf('MODULE: scripts/app-init.js'),
+    true
+  );
+  assert.equal(themeXml.includes('id="input-chapter-search"'), true);
+  assert.equal(themeXml.includes('id="series-related-section"'), true);
+});

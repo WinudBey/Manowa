@@ -184,9 +184,9 @@
       return '';
     }
     /**
-     * Seri tanitim HTML'inden Yazar, Cizer, Diger Isimler ve Ozet bilgilerini cikarir.
+     * Seri tanitim HTML'inden Yazar, Cizer, Cevirmen, Editor, Diger Isimler ve Ozet bilgilerini cikarir.
      * @param {string} html - Seri gonderisi HTML icerigi.
-     * @returns {{ altTitle: string, author: string, artist: string, year: string, synopsis: string }}
+     * @returns {{ altTitle: string, author: string, artist: string, translator: string, editor: string, year: string, synopsis: string }}
      */
     extractSeriesMetadata(html) {
       const str = String(html || '');
@@ -194,30 +194,49 @@
         altTitle: '',
         author: '',
         artist: '',
+        translator: '',
+        editor: '',
         year: '',
         synopsis: ''
       };
       const infoRegex = /<strong>\s*([^<]+?)\s*<\/strong>\s*<span>\s*([\s\S]*?)\s*<\/span>/gi;
       let match;
       while ((match = infoRegex.exec(str)) !== null) {
-        const key = stripTags(match[1]).toLowerCase();
+        const key = stripTags(match[1]).toLocaleLowerCase('tr-TR');
         const val = stripTags(match[2]);
+        const valLower = val.toLocaleLowerCase('tr-TR');
         if (!val) continue;
         if (key.includes('diğer') || key.includes('alternatif')) {
-          if (!/isteğe bağlı|alternatif isimler/i.test(val)) {
+          if (!/isteğe bağlı|alternatif isimler/.test(valLower)) {
             meta.altTitle = val;
           }
         } else if (key.includes('yazar')) {
-          if (!/yazar adı/i.test(val)) {
+          if (!/yazar adı|isteğe bağlı/.test(valLower)) {
             meta.author = val;
           }
-        } else if (key.includes('çizer')) {
-          if (!/çizer adı/i.test(val)) {
+        } else if (key.includes('çizer') || key.includes('cizer')) {
+          if (!/çizer adı|isteğe bağlı/.test(valLower)) {
             meta.artist = val;
+          }
+        } else if (key.includes('çevirmen') || key.includes('cevirmen') || key.includes('çeviri')) {
+          if (!/çevirmen adı|isteğe bağlı/.test(valLower)) {
+            meta.translator = val;
+          }
+        } else if (key.includes('editör') || key.includes('editor')) {
+          if (!/editör adı|editor adı|isteğe bağlı/.test(valLower)) {
+            meta.editor = val;
           }
         } else if (key.includes('yıl') || key.includes('stüdyo')) {
           meta.year = val;
         }
+      }
+      const transAttr = str.match(/data-translator=["']([^"']+)["']/i);
+      if (!meta.translator && transAttr && transAttr[1].trim()) {
+        meta.translator = transAttr[1].trim();
+      }
+      const edAttr = str.match(/data-editor=["']([^"']+)["']/i);
+      if (!meta.editor && edAttr && edAttr[1].trim()) {
+        meta.editor = edAttr[1].trim();
       }
       const synMatch =
         str.match(/<div[^>]*class=["'][^"']*synopsis-content[^"']*["'][^>]*>([\s\S]*?)<\/div>/i) ||
@@ -367,7 +386,8 @@
             type: labelInfo.type,
             defaultReaderMode: labelInfo.defaultReaderMode,
             status: labelInfo.status,
-            translator: meta.author || 'Manowa Çeviri',
+            translator: meta.translator || '',
+            editor: meta.editor || '',
             rating: '9.6',
             genres: labelInfo.genres,
             cover: images[0] || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak',
@@ -417,7 +437,8 @@
             type: isNovelChapter ? 'Novel' : 'Manhwa',
             defaultReaderMode: isNovelChapter ? 'novel' : 'webtoon',
             status: 'Devam Ediyor',
-            translator: 'Manowa Çeviri',
+            translator: '',
+            editor: '',
             rating: '9.5',
             genres: ['Genel'],
             cover: imgs[0] || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak',

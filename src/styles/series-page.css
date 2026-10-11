@@ -1,0 +1,573 @@
+/**
+ * @fileoverview Baştan tasarlanan Seri Bilgileri Sayfası (#view-series) stilleri.
+ * Bulanık arka planlı vitrin, yapılandırılmış meta veri ızgarası, bölüm arama çubuğu,
+ * numaralı bölüm kartları ve benzer seriler öneri şeridini kapsar.
+ */
+
+.series-detail-box {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-bottom: 1.75rem;
+}
+
+.series-hero-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-card);
+  isolation: isolate;
+}
+
+.series-backdrop {
+  position: absolute;
+  inset: -24px;
+  background-size: cover;
+  background-position: center 25%;
+  filter: blur(28px) saturate(1.2);
+  opacity: 0.24;
+  transform: scale(1.08);
+  z-index: -2;
+}
+
+html[data-theme="light"] .series-backdrop {
+  opacity: 0.14;
+}
+
+.series-backdrop-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    rgba(11, 15, 25, 0.94) 0%,
+    rgba(15, 23, 42, 0.86) 55%,
+    rgba(17, 24, 39, 0.78) 100%
+  );
+  z-index: -1;
+}
+
+html[data-theme="light"] .series-backdrop-overlay {
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(248, 250, 252, 0.9) 60%,
+    rgba(241, 245, 249, 0.85) 100%
+  );
+}
+
+.series-detail-header {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr) 420px;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.series-poster-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.series-poster-frame {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.38);
+  background: var(--bg-card);
+}
+
+.series-poster-frame .detail-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: none;
+  border-radius: 0;
+}
+
+.series-poster-quick-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+}
+
+.series-poster-quick-actions .icon-btn {
+  justify-content: center;
+}
+
+.series-fav-btn.is-fav {
+  border-color: rgba(239, 68, 68, 0.55);
+  background: rgba(239, 68, 68, 0.14);
+  color: #f87171;
+}
+
+html[data-theme="light"] .series-fav-btn.is-fav {
+  color: #dc2626;
+}
+
+.series-info-col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.series-top-pills {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.series-status-pill,
+.series-format-pill,
+.series-year-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.24rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+}
+
+.series-status-pill {
+  background: rgba(16, 185, 129, 0.16);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+html[data-theme="light"] .series-status-pill {
+  color: #059669;
+}
+
+.series-format-pill {
+  background: rgba(99, 102, 241, 0.18);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: var(--accent-hover);
+}
+
+html[data-theme="light"] .series-format-pill {
+  color: var(--accent-primary);
+}
+
+.series-year-pill {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+}
+
+.detail-info .series-main-title,
+.series-main-title {
+  font-size: 2.55rem;
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin: -0.25rem 0 0;
+  color: var(--text-primary);
+}
+
+.detail-alt-title {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: -0.55rem 0 0;
+}
+
+.detail-info .series-genre-list,
+.series-genre-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: -0.35rem 0 0;
+}
+
+.series-genre-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.34rem 0.78rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.series-genre-pill:hover {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #ffffff;
+}
+
+.series-meta-col {
+  width: 100%;
+  min-width: 0;
+}
+
+.series-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.series-meta-card {
+  background: rgba(15, 23, 42, 0.42);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.05rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+html[data-theme="light"] .series-meta-card {
+  background: rgba(241, 245, 249, 0.75);
+}
+
+.series-meta-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.series-meta-label .ui-icon {
+  color: var(--accent-primary);
+  width: 15px;
+  height: 15px;
+}
+
+.series-meta-value {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.series-synopsis-card {
+  background: rgba(15, 23, 42, 0.38);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.25rem;
+}
+
+html[data-theme="light"] .series-synopsis-card {
+  background: rgba(241, 245, 249, 0.75);
+}
+
+.series-synopsis-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.55rem;
+}
+
+.series-synopsis-title .ui-icon {
+  color: var(--accent-primary);
+}
+
+.series-synopsis-card .detail-synopsis {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.series-cta-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0;
+  padding-top: 0;
+}
+
+.series-cta-btn {
+  padding: 0.62rem 1.1rem;
+  font-size: 0.86rem;
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
+}
+
+.series-cta-secondary,
+.series-cta-resume {
+  padding: 0.6rem 0.95rem;
+  font-size: 0.84rem;
+}
+
+.series-cta-resume {
+  border-color: rgba(99, 102, 241, 0.5);
+  color: var(--accent-hover);
+}
+
+.chapter-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.chapter-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.series-chapter-count-pill {
+  background: rgba(99, 102, 241, 0.16);
+  color: var(--accent-hover);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.chapter-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.chapter-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.chapter-search-box .ui-icon {
+  position: absolute;
+  left: 0.7rem;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.chapter-search-input {
+  padding: 0.45rem 0.85rem 0.45rem 2.1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  outline: none;
+  min-width: 210px;
+  transition: border-color 0.2s ease;
+}
+
+.chapter-search-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 0.7rem;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.chapter-card-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.7rem 0.9rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, transform 0.18s ease;
+}
+
+.chapter-card-item:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.chapter-card-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.chapter-num-pill {
+  min-width: 42px;
+  height: 36px;
+  padding: 0 0.45rem;
+  border-radius: 8px;
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--accent-hover);
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.chapter-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.chapter-title-text {
+  font-size: 0.88rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chapter-sub-meta {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.chapter-card-right {
+  flex-shrink: 0;
+}
+
+.chapter-read-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.14);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.chapter-open-pill {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  transition: color 0.18s ease;
+}
+
+.chapter-card-item:hover .chapter-open-pill {
+  color: var(--accent-primary);
+}
+
+.series-related-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.series-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 0.85rem;
+}
+
+.series-related-card {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.series-related-card:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.series-related-thumb {
+  width: 52px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+}
+
+.series-related-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.series-related-type {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-hover);
+}
+
+.series-related-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.series-related-meta {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+@media (max-width: 820px) {
+  .series-detail-header {
+    grid-template-columns: 1fr;
+  }
+  .series-poster-col {
+    max-width: 220px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .series-meta-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .series-hero-card {
+    padding: 1.25rem;
+  }
+  .series-meta-grid {
+    grid-template-columns: 1fr;
+  }
+  .chapter-search-input {
+    width: 100%;
+    min-width: 0;
+  }
+}

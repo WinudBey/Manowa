@@ -137,6 +137,7 @@ class ThemeBuilder {
     const styleOrder = [
       'variables.css',
       'cards.css',
+      'series-page.css',
       'hero-slider.css',
       'sidebar.css',
       'generator.css',
@@ -150,6 +151,7 @@ class ThemeBuilder {
       'blogger-feed-loader.js',
       'catalog-controller.js',
       'user-library.js',
+      'series-page.js',
       'hero-slider.js',
       'sidebar-controller.js',
       'reading-engine.js',
