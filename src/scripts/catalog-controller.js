@@ -96,6 +96,32 @@
             ]
           }
         ]
+      },
+      {
+        id: 'goksel-simyaci',
+        title: 'Göksel Simyacı',
+        altTitle: 'Celestial Alchemist',
+        sourceLang: 'CN',
+        type: 'Manhua',
+        defaultReaderMode: 'webtoon',
+        status: 'Devam Ediyor',
+        translator: 'Manowa Çeviri',
+        rating: '9.5',
+        genres: ['Reenkarnasyon', 'Dövüş Sanatları'],
+        cover: createSamplePageSvg('Göksel Simyacı', 1, '#0d9488'),
+        synopsis: 'Kadim simya sanatlarının efendisi, bin yıl sonra genç bir bedende yeniden uyanır.',
+        chapters: [
+          {
+            id: 'goksel-simyaci-bolum-1',
+            number: 1,
+            title: 'Göksel Simyacı Bölüm 1',
+            date: '2026-09-20',
+            translatorNote: '',
+            pages: [
+              createSamplePageSvg('Göksel Simyacı - Bölüm 1', 1, '#0d9488')
+            ]
+          }
+        ]
       }
     ];
   }

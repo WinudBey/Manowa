@@ -137,6 +137,7 @@ class ThemeBuilder {
     const styleOrder = [
       'variables.css',
       'cards.css',
+      'hero-slider.css',
       'generator.css',
       'layout.css',
       'reader.css'
@@ -147,6 +148,7 @@ class ThemeBuilder {
       'blogger-feed-loader.js',
       'catalog-controller.js',
       'user-library.js',
+      'hero-slider.js',
       'reading-engine.js',
       'post-generator.js',
       'router-controller.js',
@@ -178,9 +180,22 @@ class ThemeBuilder {
 
     const themeXmlPath = path.join(this.distDir, 'theme.xml');
     const previewHtmlPath = path.join(this.distDir, 'preview.html');
+    const personalXmlPath = path.join(this.distDir, 'theme.personal.xml');
 
     fs.writeFileSync(themeXmlPath, finalXml, 'utf8');
     fs.writeFileSync(previewHtmlPath, finalPreview, 'utf8');
+
+    if (fs.existsSync(personalXmlPath)) {
+      const existingPersonal = fs.readFileSync(personalXmlPath, 'utf8');
+      const cfgMatch = existingPersonal.match(
+        /(\/\*\s*===\s*LOCAL PERSONAL CONFIG\s*===\s*\*\/[\s\S]*?)(?=\/\*\s*===\s*MODULE:)/
+      );
+      const personalHeader = cfgMatch ? cfgMatch[1] : '';
+      const updatedPersonal = personalHeader
+        ? finalXml.replace('//<![CDATA[\n', `//<![CDATA[\n${personalHeader}`)
+        : finalXml;
+      fs.writeFileSync(personalXmlPath, updatedPersonal, 'utf8');
+    }
 
     this.logger.info('Derleme basariyla tamamlandi.', {
       themeXmlPath,

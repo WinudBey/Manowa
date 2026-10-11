@@ -513,6 +513,339 @@ body {
   }
 }
 
+/* === MODULE: styles/hero-slider.css === */
+/**
+ * @fileoverview Minimalist ana sayfa vitrin kaydiricisi (Hero Slider) stilleri.
+ * Sadece arka plan gorseli, baslik, tek buton, kenar gecis oklari ve sade nokta gostergeleri icerir.
+ */
+
+.hero-banner {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem 3.75rem 2.25rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-card);
+  isolation: isolate;
+}
+
+.hero-backdrop {
+  position: absolute;
+  inset: -20px;
+  background-size: cover;
+  background-position: center 30%;
+  filter: blur(24px) saturate(1.25);
+  opacity: 0.32;
+  transform: scale(1.06);
+  z-index: -2;
+  transition: background-image 0.4s ease;
+}
+
+html[data-theme="light"] .hero-backdrop {
+  opacity: 0.18;
+}
+
+.hero-backdrop-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(11, 15, 25, 0.92) 0%,
+    rgba(11, 15, 25, 0.76) 60%,
+    rgba(17, 24, 39, 0.55) 100%
+  );
+  z-index: -1;
+}
+
+html[data-theme="light"] .hero-backdrop-overlay {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(248, 250, 252, 0.85) 60%,
+    rgba(241, 245, 249, 0.72) 100%
+  );
+}
+
+@keyframes heroFade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-slide-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: center;
+  animation: heroFade 0.3s ease-out;
+}
+
+.hero-content {
+  min-width: 0;
+}
+
+.hero-title {
+  font-size: 2.15rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
+}
+
+.hero-title-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.hero-title-link:hover {
+  color: var(--accent-primary);
+}
+
+.hero-details {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.7rem;
+}
+
+.hero-genres {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.55rem;
+}
+
+.hero-detail-item {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  padding: 0.22rem 0.65rem;
+  border-radius: 999px;
+}
+
+html[data-theme="light"] .hero-detail-item {
+  background: rgba(15, 23, 42, 0.06);
+}
+
+.hero-detail-type {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.45);
+  color: #a5b4fc;
+}
+
+html[data-theme="light"] .hero-detail-type {
+  color: var(--accent-primary);
+}
+
+.hero-detail-genre {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(148, 163, 184, 0.12);
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+}
+
+.hero-desc {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  max-width: 640px;
+  margin-bottom: 1.1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.hero-primary-cta {
+  padding: 0.65rem 1.35rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+}
+
+.hero-detail-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.62rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+html[data-theme="light"] .hero-detail-btn {
+  background: rgba(15, 23, 42, 0.06);
+}
+
+.hero-detail-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.hero-cover-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-poster-card {
+  display: block;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+  transition: transform 0.25s ease;
+}
+
+.hero-poster-card:hover {
+  transform: scale(1.03);
+}
+
+.hero-cover-img {
+  width: 145px;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: rgba(15, 23, 42, 0.55);
+  color: #ffffff;
+  font-size: 1.3rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+html[data-theme="light"] .hero-arrow-btn {
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--text-primary);
+}
+
+.hero-arrow-btn:hover {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #ffffff;
+}
+
+.hero-arrow-prev {
+  left: 0.85rem;
+}
+
+.hero-arrow-next {
+  right: 0.85rem;
+}
+
+.hero-dots-bar {
+  position: absolute;
+  bottom: 0.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  z-index: 2;
+}
+
+.hero-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+html[data-theme="light"] .hero-dot {
+  background: rgba(15, 23, 42, 0.25);
+}
+
+.hero-dot:hover {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.hero-dot.active {
+  width: 24px;
+  background: var(--accent-primary);
+}
+
+@media (max-width: 768px) {
+  .hero-banner {
+    padding: 1.5rem 2.75rem 2.1rem;
+  }
+
+  .hero-slide-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .hero-cover-wrap {
+    order: -1;
+  }
+
+  .hero-cover-img {
+    width: 120px;
+    height: 165px;
+  }
+
+  .hero-title {
+    font-size: 1.45rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-details,
+  .hero-genres {
+    justify-content: center;
+  }
+
+  .hero-desc {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+}
+
 /* === MODULE: styles/layout.css === */
 /**
  * @fileoverview Ana yerlesim (layout), ust baslik, vitrin (hero) ve filtre cubugu stilleri.
@@ -651,56 +984,6 @@ body {
   max-width: 1280px;
   margin: 0 auto;
   padding: 1.5rem 1.25rem 4rem;
-}
-
-.hero-banner {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(236, 72, 153, 0.12));
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  margin-bottom: 1.75rem;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1.5rem;
-  align-items: center;
-}
-
-.hero-cover-img {
-  width: 130px;
-  height: 180px;
-  object-fit: cover;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-}
-
-.hero-badge {
-  display: inline-block;
-  background: var(--accent-primary);
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.25rem 0.65rem;
-  border-radius: 999px;
-  text-transform: uppercase;
-  margin-bottom: 0.6rem;
-}
-
-.hero-title {
-  font-size: 1.75rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-}
-
-.hero-desc {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  max-width: 680px;
-  margin-bottom: 1rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .filter-toolbar {
@@ -1137,20 +1420,28 @@ body {
 
 <!-- GORUNUM 1: ANA SAYFA VITRIN VE KATALOG -->
 <section id="view-catalog">
-  <div class="hero-banner" id="hero-showcase">
-    <div class="hero-content">
-      <span class="hero-badge" id="hero-badge">⏳ Veriler Yükleniyor...</span>
-      <h1 class="hero-title" id="hero-title">Manhwa &amp; Manga Arşivi</h1>
-      <p class="hero-desc" id="hero-desc">
-        Blogger gönderileriniz dinamik olarak taranıyor. Lütfen bekleyin...
-      </p>
-      <div class="detail-actions">
-        <a class="primary-btn" href="#" id="btn-hero-read">⚡ Hemen Oku</a>
-        <a class="icon-btn" href="#" id="btn-hero-detail">📖 Seri Detayı</a>
+  <div aria-label="Öne Çıkan Seriler Vitrini" class="hero-banner" id="hero-showcase">
+    <div class="hero-backdrop-overlay"></div>
+    <div class="hero-slide-grid">
+      <div class="hero-content">
+        <div class="hero-genres" id="hero-genres">
+          <span class="hero-detail-genre">Aksiyon</span>
+          <span class="hero-detail-genre">Fantastik</span>
+        </div>
+        <h1 class="hero-title" id="hero-title">Manhwa &amp; Manga Arşivi</h1>
+        <div class="hero-details" id="hero-details">
+          <span class="hero-detail-item hero-detail-type">Manhwa</span>
+          <span class="hero-detail-item">Devam Ediyor</span>
+        </div>
+        <p class="hero-desc" id="hero-desc">Güncel Türkçe çeviri serileri ve bölümleri.</p>
+        <div class="hero-actions">
+          <a class="primary-btn hero-primary-cta" href="#" id="btn-hero-read">Hemen Oku →</a>
+          <a class="hero-detail-btn" href="#" id="btn-hero-detail">Seri Ayrıntıları</a>
+        </div>
       </div>
-    </div>
-    <div class="hero-cover-wrap">
-      <img alt="Vitrin Kapak" class="hero-cover-img hidden" id="hero-cover-img" src="" />
+      <div class="hero-cover-wrap">
+        <img alt="Vitrin Kapak" class="hero-cover-img hidden" id="hero-cover-img" src="" />
+      </div>
     </div>
   </div>
 
@@ -1885,7 +2176,9 @@ body {
         str.match(/<p[^>]*class=["'][^"']*manowa-synopsis[^"']*["'][^>]*>([\s\S]*?)<\/p>/i);
       if (synMatch && synMatch[1]) {
         const cleaned = stripTags(synMatch[1].replace(/<h3[^>]*>[\s\S]*?<\/h3>/gi, ''));
-        meta.synopsis = cleaned;
+        if (!/buraya serinin özet hikayesini|yepyeni tasarımla çok profesyonel/i.test(cleaned)) {
+          meta.synopsis = cleaned;
+        }
       }
       return meta;
     }
@@ -2408,6 +2701,32 @@ body {
             pages: [
               createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 1, '#4f46e5'),
               createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 2, '#4338ca')
+            ]
+          }
+        ]
+      },
+      {
+        id: 'goksel-simyaci',
+        title: 'Göksel Simyacı',
+        altTitle: 'Celestial Alchemist',
+        sourceLang: 'CN',
+        type: 'Manhua',
+        defaultReaderMode: 'webtoon',
+        status: 'Devam Ediyor',
+        translator: 'Manowa Çeviri',
+        rating: '9.5',
+        genres: ['Reenkarnasyon', 'Dövüş Sanatları'],
+        cover: createSamplePageSvg('Göksel Simyacı', 1, '#0d9488'),
+        synopsis: 'Kadim simya sanatlarının efendisi, bin yıl sonra genç bir bedende yeniden uyanır.',
+        chapters: [
+          {
+            id: 'goksel-simyaci-bolum-1',
+            number: 1,
+            title: 'Göksel Simyacı Bölüm 1',
+            date: '2026-09-20',
+            translatorNote: '',
+            pages: [
+              createSamplePageSvg('Göksel Simyacı - Bölüm 1', 1, '#0d9488')
             ]
           }
         ]
@@ -3035,6 +3354,397 @@ body {
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = { UserLibrary };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/hero-slider.js === */
+/**
+ * @fileoverview Minimalist ana sayfa vitrin kaydiricisi (HeroSlider) modulu.
+ * Sadece arka plan, baslik, tek buton, kenar gecis oklari ve sade nokta gostergeleri sunar.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  /**
+   * Ana sayfa vitrin kaydiricisini (Hero Slider) yoneten sinif.
+   */
+  class HeroSlider {
+    /**
+     * HeroSlider nesnesini yapilandirir.
+     * @param {Object} [options={}] - Kaydirici secenekleri.
+     * @param {Object} [options.logger] - Istemci loglayici nesnesi.
+     * @param {number} [options.maxSlides=6] - Vitrinde gosterilecek maksimum seri sayisi.
+     * @param {number} [options.autoPlayMs=6000] - Otomatik gecis suresi (ms). 0 ise kapali.
+     */
+    constructor(options = {}) {
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.maxSlides = typeof options.maxSlides === 'number' ? options.maxSlides : 6;
+      this.autoPlayMs = typeof options.autoPlayMs === 'number' ? options.autoPlayMs : 6000;
+      this.slides = [];
+      this.currentIndex = 0;
+      this.isPaused = false;
+      this.timerId = null;
+      this.touchStartX = null;
+
+      this._log('debug', 'Minimalist HeroSlider baslatildi.', {
+        maxSlides: this.maxSlides,
+        autoPlayMs: this.autoPlayMs
+      });
+    }
+
+    /**
+     * Ic loglama yardimcisi.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Log mesaji.
+     * @param {Object} [meta={}] - Ek veri.
+     * @returns {void}
+     */
+    _log(level, msg, meta = {}) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+
+    /**
+     * Sablondan kalan yer tutucu ozet metinlerini temizler.
+     * @param {string} rawSynopsis - Ham ozet metni.
+     * @param {Object} [series={}] - Seri nesnesi.
+     * @returns {string} Temizlenmis ozet metni.
+     */
+    cleanSynopsis(rawSynopsis, series = {}) {
+      const text = String(rawSynopsis || '').trim();
+      const isPlaceholder =
+        !text ||
+        /buraya serinin özet hikayesini|yepyeni tasarımla çok profesyonel|serisi tüm bölümleriyle arşivimizde/i.test(
+          text
+        );
+      if (!isPlaceholder) {
+        return text;
+      }
+      const typeLabel = series.type || 'Manhwa';
+      const statusLabel = series.status || 'Devam Ediyor';
+      const chapterCount = Array.isArray(series.chapters) ? series.chapters.length : 0;
+      const genresText =
+        Array.isArray(series.genres) && series.genres.length > 0
+          ? `${series.genres.slice(0, 3).join(', ')} kategorilerinde `
+          : '';
+      return `${series.title || 'Seri'} (${typeLabel}) — ${genresText}${statusLabel.toLowerCase()} durumunda, ${chapterCount} Türkçe çeviri bölümüyle arşivde.`;
+    }
+
+    /**
+     * Katalogdan one cikan serileri secerek slayt listesini gunceller.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @returns {Array<Object>} Secilen slayt dizisi.
+     */
+    setSlidesFromCatalog(catalog) {
+      if (!catalog || !Array.isArray(catalog.seriesList)) {
+        this.slides = [];
+        this.currentIndex = 0;
+        return this.slides;
+      }
+
+      const all = catalog.seriesList.slice();
+      const withChapters = all.filter((s) => Array.isArray(s.chapters) && s.chapters.length > 0);
+      const withoutChapters = all.filter((s) => !Array.isArray(s.chapters) || s.chapters.length === 0);
+
+      this.slides = [...withChapters, ...withoutChapters].slice(0, this.maxSlides);
+      if (this.currentIndex >= this.slides.length) {
+        this.currentIndex = 0;
+      }
+
+      this._log('debug', 'HeroSlider slayt listesi guncellendi.', {
+        slideCount: this.slides.length
+      });
+      return this.slides;
+    }
+
+    /**
+     * Aktif slayt nesnesini dondurur.
+     * @returns {Object|null} Aktif seri nesnesi veya null.
+     */
+    getCurrentSlide() {
+      if (this.slides.length === 0) {
+        return null;
+      }
+      return this.slides[this.currentIndex] || this.slides[0];
+    }
+
+    /**
+     * Belirtilen indeksteki slayta gecis yapar (dairesel sarma destekli).
+     * @param {number} targetIndex - Hedef slayt indeksi.
+     * @returns {Object|null} Yeni aktif slayt nesnesi.
+     */
+    goToSlide(targetIndex) {
+      const len = this.slides.length;
+      if (len === 0) {
+        this.currentIndex = 0;
+        return null;
+      }
+      const normalized = ((Number(targetIndex) % len) + len) % len;
+      this.currentIndex = normalized;
+      const active = this.slides[this.currentIndex];
+      this._log('debug', 'HeroSlider slayt degisti.', {
+        currentIndex: this.currentIndex,
+        seriesId: active ? active.id : ''
+      });
+      return active;
+    }
+
+    /**
+     * Bir sonraki slayta gecer.
+     * @returns {Object|null} Yeni aktif slayt nesnesi.
+     */
+    nextSlide() {
+      return this.goToSlide(this.currentIndex + 1);
+    }
+
+    /**
+     * Bir onceki slayta gecer.
+     * @returns {Object|null} Yeni aktif slayt nesnesi.
+     */
+    prevSlide() {
+      return this.goToSlide(this.currentIndex - 1);
+    }
+
+    /**
+     * Fare uzerine geldiginde veya ayrildiginda duraklatma durumunu degistirir.
+     * @param {boolean} paused - Duraklatildi mi?
+     * @returns {void}
+     */
+    setPaused(paused) {
+      this.isPaused = Boolean(paused);
+    }
+
+    /**
+     * Dokunmatik ekranda kaydirma hareketini (swipe) degerlendirir.
+     * @param {number} startX - Dokunma baslangic X koordinati.
+     * @param {number} endX - Dokunma bitis X koordinati.
+     * @param {number} [threshold=45] - Minimum piksel esigi.
+     * @returns {'next'|'prev'|'none'} Tetiklenen hareket yonu.
+     */
+    handleTouchGesture(startX, endX, threshold = 45) {
+      const diff = Number(endX) - Number(startX);
+      if (Math.abs(diff) < threshold) {
+        return 'none';
+      }
+      if (diff < 0) {
+        this.nextSlide();
+        return 'next';
+      }
+      this.prevSlide();
+      return 'prev';
+    }
+
+    /**
+     * Otomatik slayt gecis zamanlayicisini baslatir.
+     * @param {Function} [onTick] - Her geciste cagrilacak geri bildirim fonksiyonu.
+     * @returns {void}
+     */
+    startAutoPlay(onTick) {
+      this.stopAutoPlay();
+      if (this.autoPlayMs <= 0 || this.slides.length <= 1) {
+        return;
+      }
+      this.timerId = setInterval(() => {
+        if (this.isPaused || this.slides.length <= 1) {
+          return;
+        }
+        this.nextSlide();
+        if (typeof onTick === 'function') {
+          onTick(this.getCurrentSlide(), this.currentIndex);
+        }
+      }, this.autoPlayMs);
+    }
+
+    /**
+     * Otomatik slayt gecis zamanlayicisini durdurur.
+     * @returns {void}
+     */
+    stopAutoPlay() {
+      if (this.timerId !== null) {
+        clearInterval(this.timerId);
+        this.timerId = null;
+      }
+    }
+
+    /**
+     * Aktif slayt icin HTML kodunu uretir (arka plan, baslik, baslik alti seri ayrintilari, butonlar ve noktalar).
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object} [_library=null] - UserLibrary nesnesi (arayuz uyumu icin).
+     * @param {Function} [urlBuilder=null] - URL olusturucu fonksiyon.
+     * @returns {string} Uretilen HTML dizgesi.
+     */
+    buildSliderHtml(catalog, _library = null, urlBuilder = null) {
+      const featured = this.getCurrentSlide();
+      if (!featured) {
+        return '';
+      }
+
+      const resolveUrl = typeof urlBuilder === 'function' ? urlBuilder : () => '#';
+      const sortedAsc = catalog ? catalog.getSortedChapters(featured.id, 'asc') : [];
+      const firstChapter = sortedAsc[0] || null;
+      const chapterCount = Array.isArray(featured.chapters) ? featured.chapters.length : 0;
+
+      const detailHref = resolveUrl('series', featured.id);
+      const firstReadHref = firstChapter
+        ? resolveUrl('reader', featured.id, firstChapter.id)
+        : detailHref;
+      const firstReadAction = firstChapter ? 'read' : 'detail';
+      const firstReadChapterAttr = firstChapter ? `data-chapter="${firstChapter.id}"` : '';
+
+      const coverSrc = featured.cover || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak';
+      const typeLabel = featured.type || 'Manhwa';
+      const statusLabel = featured.status || 'Devam Ediyor';
+      const synopsis = this.cleanSynopsis(featured.synopsis, featured);
+
+      const genresList = (Array.isArray(featured.genres) ? featured.genres : [])
+        .filter((g) => String(g).toLowerCase() !== typeLabel.toLowerCase())
+        .slice(0, 5);
+      const genresHtml = genresList
+        .map((g) => `<span class="hero-detail-genre">${g}</span>`)
+        .join('');
+      const genresBlockHtml = genresHtml
+        ? `<div class="hero-genres" id="hero-genres">${genresHtml}</div>`
+        : '';
+
+      const authorHtml = featured.author
+        ? `<span class="hero-detail-item">✍️ ${featured.author}</span>`
+        : '';
+
+      const dotsHtml = this.slides
+        .map((slide, idx) => {
+          const isActive = idx === this.currentIndex;
+          return `<button class="hero-dot ${isActive ? 'active' : ''}" type="button" data-hero-index="${idx}" aria-label="${slide.title}" title="${slide.title}"></button>`;
+        })
+        .join('');
+
+      return `
+        <div class="hero-backdrop" style="background-image: url('${coverSrc}');"></div>
+        <div class="hero-backdrop-overlay"></div>
+
+        <button class="hero-arrow-btn hero-arrow-prev" id="btn-hero-prev" type="button" data-hero-nav="prev" aria-label="Önceki Slayt" title="Önceki">‹</button>
+        <button class="hero-arrow-btn hero-arrow-next" id="btn-hero-next" type="button" data-hero-nav="next" aria-label="Sonraki Slayt" title="Sonraki">›</button>
+
+        <div class="hero-slide-grid">
+          <div class="hero-content">
+            ${genresBlockHtml}
+            <h1 class="hero-title" id="hero-title">
+              <a class="hero-title-link" href="${detailHref}" data-action="detail" data-series="${featured.id}">${featured.title}</a>
+            </h1>
+            <div class="hero-details" id="hero-details">
+              <span class="hero-detail-item hero-detail-type">${typeLabel}</span>
+              <span class="hero-detail-item">${statusLabel}</span>
+              <span class="hero-detail-item">📚 ${chapterCount} Bölüm</span>
+              ${authorHtml}
+            </div>
+            <p class="hero-desc" id="hero-desc">${synopsis}</p>
+            <div class="hero-actions">
+              <a class="primary-btn hero-primary-cta" href="${firstReadHref}" id="btn-hero-read" data-action="${firstReadAction}" data-series="${featured.id}" ${firstReadChapterAttr}>Hemen Oku →</a>
+              <a class="hero-detail-btn" href="${detailHref}" id="btn-hero-detail" data-action="detail" data-series="${featured.id}">Seri Ayrıntıları</a>
+            </div>
+          </div>
+
+          <div class="hero-cover-wrap">
+            <a class="hero-poster-card" href="${detailHref}" data-action="detail" data-series="${featured.id}" title="${featured.title}">
+              <img alt="${featured.title}" class="hero-cover-img" id="hero-cover-img" src="${coverSrc}" />
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-dots-bar" id="hero-dots-track">
+          ${dotsHtml}
+        </div>
+      `.trim();
+    }
+
+    /**
+     * Tarayici DOM icindeki #hero-showcase kapsayicisini gunceller.
+     * @param {Object} catalog - CatalogController nesnesi.
+     * @param {Object} [library=null] - UserLibrary nesnesi.
+     * @param {Function} [urlBuilder=null] - URL olusturucu fonksiyon.
+     * @returns {boolean} Guncelleme yapildiysa true.
+     */
+    renderIntoDom(catalog, library = null, urlBuilder = null) {
+      if (typeof document === 'undefined') {
+        return false;
+      }
+      const container = document.getElementById('hero-showcase');
+      if (!container) {
+        return false;
+      }
+      if (this.slides.length === 0 && catalog) {
+        this.setSlidesFromCatalog(catalog);
+      }
+      const html = this.buildSliderHtml(catalog, library, urlBuilder);
+      if (!html) {
+        return false;
+      }
+      container.innerHTML = html;
+      return true;
+    }
+
+    /**
+     * #hero-showcase uzerindeki tiklama, uzerine gelme ve dokunmatik kaydirma olaylarini baglar.
+     * @param {Function} onChange - Slayt degistiginde cagrilacak guncelleme fonksiyonu.
+     * @returns {void}
+     */
+    bindDomEvents(onChange) {
+      if (typeof document === 'undefined') {
+        return;
+      }
+      const heroBox = document.getElementById('hero-showcase');
+      if (!heroBox) {
+        return;
+      }
+      const refresh = () => {
+        if (typeof onChange === 'function') {
+          onChange();
+        }
+      };
+      heroBox.addEventListener('click', (ev) => {
+        const heroNav = ev.target.closest('[data-hero-nav], [data-hero-index]');
+        if (!heroNav) {
+          return;
+        }
+        ev.preventDefault();
+        const dir = heroNav.getAttribute('data-hero-nav');
+        const idx = heroNav.getAttribute('data-hero-index');
+        if (dir === 'next') this.nextSlide();
+        else if (dir === 'prev') this.prevSlide();
+        else if (idx !== null) this.goToSlide(Number(idx));
+        refresh();
+        this.startAutoPlay(refresh);
+      });
+      heroBox.addEventListener('mouseenter', () => this.setPaused(true));
+      heroBox.addEventListener('mouseleave', () => this.setPaused(false));
+      heroBox.addEventListener(
+        'touchstart',
+        (e) => {
+          if (e.touches && e.touches[0]) {
+            this.touchStartX = e.touches[0].clientX;
+          }
+        },
+        { passive: true }
+      );
+      heroBox.addEventListener(
+        'touchend',
+        (e) => {
+          if (this.touchStartX !== null && e.changedTouches && e.changedTouches[0]) {
+            const moved = this.handleTouchGesture(this.touchStartX, e.changedTouches[0].clientX);
+            this.touchStartX = null;
+            if (moved !== 'none') refresh();
+          }
+        },
+        { passive: true }
+      );
+    }
+  }
+
+  globalScope.HeroSlider = HeroSlider;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { HeroSlider };
   }
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -3772,6 +4482,9 @@ body {
   const UserLibraryClass =
     globalScope.UserLibrary ||
     (typeof require === 'function' ? require('./user-library').UserLibrary : null);
+  const HeroSliderClass =
+    globalScope.HeroSlider ||
+    (typeof require === 'function' ? require('./hero-slider').HeroSlider : null);
   /**
    * Tum tema gorunumlerini, Blogger URL entegrasyonunu ve dinamik veri akisini yoneten sinif.
    */
@@ -3793,6 +4506,8 @@ body {
         deps.generator || (globalScope.PostGenerator ? new globalScope.PostGenerator() : null);
       this.library =
         deps.library || (UserLibraryClass ? new UserLibraryClass({ logger: this.logger }) : null);
+      this.heroSlider =
+        deps.heroSlider || (HeroSliderClass ? new HeroSliderClass({ logger: this.logger }) : null);
       this.feedLoader =
         deps.feedLoader ||
         (globalScope.BloggerFeedLoader
@@ -3950,50 +4665,26 @@ body {
       return count;
     }
     /**
-     * Ana sayfadaki Hero (Vitrin) alanini katalogdaki ilk gercek seriyle dinamik gunceller.
+     * Ana sayfadaki Hero Slider (Vitrin) alanini katalogdaki serilerle dinamik gunceller.
+     * @param {boolean} [resetSlides=true] - Slayt listesini bastan yukle.
      * @returns {void}
      */
-    updateHeroShowcase() {
-      if (typeof document === 'undefined' || !this.catalog) return;
-      const featured =
-        this.catalog.seriesList.find((s) => s.chapters && s.chapters.length > 0) ||
-        this.catalog.seriesList[0];
-      if (!featured) return;
-      if (!this.activeSeriesId) this.activeSeriesId = featured.id;
-      const firstChapter = this.catalog.getSortedChapters(featured.id, 'asc')[0];
-      if (!this.activeChapterId && firstChapter) this.activeChapterId = firstChapter.id;
-      const badgeEl = document.getElementById('hero-badge');
-      const titleEl = document.getElementById('hero-title');
-      const descEl = document.getElementById('hero-desc');
-      const coverEl = document.getElementById('hero-cover-img');
-      const readBtn = document.getElementById('btn-hero-read');
-      const detailBtn = document.getElementById('btn-hero-detail');
-      if (badgeEl) {
-        badgeEl.textContent = `🔥 ${featured.type || 'Seri'} • ${featured.status || 'Güncel'} • ${(featured.chapters || []).length} Bölüm`;
+    updateHeroShowcase(resetSlides = true) {
+      if (!this.catalog || !this.heroSlider) return;
+      if (resetSlides) this.heroSlider.setSlidesFromCatalog(this.catalog);
+      const featured = this.heroSlider.getCurrentSlide();
+      if (featured && !this.activeSeriesId) {
+        this.activeSeriesId = featured.id;
+        const firstChapter = this.catalog.getSortedChapters(featured.id, 'asc')[0];
+        if (!this.activeChapterId && firstChapter) this.activeChapterId = firstChapter.id;
       }
-      if (titleEl) titleEl.textContent = featured.title;
-      if (descEl) descEl.textContent = featured.synopsis || `${featured.title} serisini hemen okuyun.`;
-      if (coverEl && featured.cover) {
-        coverEl.src = featured.cover;
-        coverEl.alt = featured.title;
-        coverEl.classList.remove('hidden');
-      }
-      if (detailBtn) {
-        detailBtn.setAttribute('href', this.computeTargetUrl('series', featured.id));
-        detailBtn.setAttribute('data-action', 'detail');
-        detailBtn.setAttribute('data-series', featured.id);
-      }
-      if (readBtn) {
-        if (firstChapter) {
-          readBtn.setAttribute('href', this.computeTargetUrl('reader', featured.id, firstChapter.id));
-          readBtn.setAttribute('data-action', 'read');
-          readBtn.setAttribute('data-series', featured.id);
-          readBtn.setAttribute('data-chapter', firstChapter.id);
-        } else {
-          readBtn.setAttribute('href', this.computeTargetUrl('series', featured.id));
-          readBtn.setAttribute('data-action', 'detail');
-          readBtn.setAttribute('data-series', featured.id);
-        }
+      this.heroSlider.renderIntoDom(
+        this.catalog,
+        this.library,
+        (v, s, c) => this.computeTargetUrl(v, s, c)
+      );
+      if (resetSlides && typeof document !== 'undefined') {
+        this.heroSlider.startAutoPlay(() => this.updateHeroShowcase(false));
       }
     }
     /**
@@ -4465,6 +5156,7 @@ body {
           }
         });
       }
+      if (this.heroSlider) this.heroSlider.bindDomEvents(() => this.updateHeroShowcase(false));
       document.addEventListener('click', (ev) => {
         const target = ev.target.closest('[data-action]');
         if (!target) return;
@@ -4490,6 +5182,7 @@ body {
         } else if (action === 'toggle-fav' && seriesId && this.library) {
           this.library.toggleFavorite(seriesId);
           this.renderHomeSections();
+          this.updateHeroShowcase(false);
           if (this.currentView === 'catalog') this.renderCatalogView();
           else if (this.currentView === 'bookmarks') this.renderBookmarksView();
           else if (this.currentView === 'series') {

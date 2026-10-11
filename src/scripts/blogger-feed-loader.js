@@ -225,7 +225,9 @@
         str.match(/<p[^>]*class=["'][^"']*manowa-synopsis[^"']*["'][^>]*>([\s\S]*?)<\/p>/i);
       if (synMatch && synMatch[1]) {
         const cleaned = stripTags(synMatch[1].replace(/<h3[^>]*>[\s\S]*?<\/h3>/gi, ''));
-        meta.synopsis = cleaned;
+        if (!/buraya serinin özet hikayesini|yepyeni tasarımla çok profesyonel/i.test(cleaned)) {
+          meta.synopsis = cleaned;
+        }
       }
       return meta;
     }

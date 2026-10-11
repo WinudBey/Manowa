@@ -379,3 +379,60 @@ test('AppController: Yorumlar yalnizca seri ayrintilarinda ve bolumlerde gosteri
   assert.equal(app.commentsVisible, false);
 });
 
+test('HeroSlider: Coklu seri gecisi, dokunmatik kaydirma ve yer tutucu ozet temizligi dogru calismali', () => {
+  const { HeroSlider } = require('../src/scripts/hero-slider');
+  const { UserLibrary } = require('../src/scripts/user-library');
+  const catalog = new CatalogController();
+  const library = new UserLibrary();
+  const slider = new HeroSlider({ maxSlides: 4, autoPlayMs: 0 });
+
+  const slides = slider.setSlidesFromCatalog(catalog);
+  assert.equal(slides.length, 3);
+  assert.equal(slider.currentIndex, 0);
+
+  // Ileri / Geri ve dairesel gecis
+  slider.nextSlide();
+  assert.equal(slider.currentIndex, 1);
+
+  slider.prevSlide();
+  assert.equal(slider.currentIndex, 0);
+
+  slider.prevSlide();
+  assert.equal(slider.currentIndex, 2);
+
+  slider.goToSlide(1);
+  assert.equal(slider.currentIndex, 1);
+
+  // Dokunmatik kaydirma (Swipe Left -> Next, Swipe Right -> Prev)
+  assert.equal(slider.handleTouchGesture(300, 200), 'next');
+  assert.equal(slider.currentIndex, 2);
+  assert.equal(slider.handleTouchGesture(200, 300), 'prev');
+  assert.equal(slider.currentIndex, 1);
+
+  // Sablon yer tutucu ozet temizligi
+  const cleaned = slider.cleanSynopsis(
+    'Buraya serinin özet hikayesini uzun uzun yazabilirsiniz. Yepyeni tasarımla çok profesyonel duracaktır.',
+    { title: 'Gölge Hükümdarı', type: 'Manhwa', genres: ['Aksiyon', 'Zindan'], chapters: [{ id: '1' }] }
+  );
+  assert.equal(cleaned.includes('Buraya serinin özet hikayesini'), false);
+  assert.equal(cleaned.includes('Gölge Hükümdarı'), true);
+
+  // Yukarida kategoriler, baslik ve baslik alti seri ayrintilari kontrolu
+  slider.goToSlide(0);
+  const html = slider.buildSliderHtml(catalog, library, (v, s, c) => `/${v}/${s}/${c || ''}`);
+  assert.equal(html.includes('class="hero-backdrop"'), true);
+  assert.equal(html.includes('id="hero-badge"'), false);
+  assert.equal(html.includes('id="hero-genres"'), true);
+  assert.equal(html.includes('id="hero-title"'), true);
+  assert.equal(html.includes('id="hero-details"'), true);
+  assert.equal(html.indexOf('id="hero-genres"') < html.indexOf('id="hero-title"'), true);
+  assert.equal(html.indexOf('id="hero-details"') > html.indexOf('id="hero-title"'), true);
+  assert.equal(html.includes('id="hero-desc"'), true);
+  assert.equal(html.includes('id="btn-hero-read"'), true);
+  assert.equal(html.includes('id="btn-hero-detail"'), true);
+  assert.equal(html.includes('Seri Ayrıntıları'), true);
+  assert.equal(html.includes('id="btn-hero-prev"'), true);
+  assert.equal(html.includes('id="btn-hero-next"'), true);
+  assert.equal(html.includes('class="hero-dot active"'), true);
+  assert.equal(html.includes('data-hero-index="1"'), true);
+});

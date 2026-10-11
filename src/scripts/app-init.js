@@ -11,6 +11,9 @@
   const UserLibraryClass =
     globalScope.UserLibrary ||
     (typeof require === 'function' ? require('./user-library').UserLibrary : null);
+  const HeroSliderClass =
+    globalScope.HeroSlider ||
+    (typeof require === 'function' ? require('./hero-slider').HeroSlider : null);
   /**
    * Tum tema gorunumlerini, Blogger URL entegrasyonunu ve dinamik veri akisini yoneten sinif.
    */
@@ -32,6 +35,8 @@
         deps.generator || (globalScope.PostGenerator ? new globalScope.PostGenerator() : null);
       this.library =
         deps.library || (UserLibraryClass ? new UserLibraryClass({ logger: this.logger }) : null);
+      this.heroSlider =
+        deps.heroSlider || (HeroSliderClass ? new HeroSliderClass({ logger: this.logger }) : null);
       this.feedLoader =
         deps.feedLoader ||
         (globalScope.BloggerFeedLoader
@@ -189,50 +194,26 @@
       return count;
     }
     /**
-     * Ana sayfadaki Hero (Vitrin) alanini katalogdaki ilk gercek seriyle dinamik gunceller.
+     * Ana sayfadaki Hero Slider (Vitrin) alanini katalogdaki serilerle dinamik gunceller.
+     * @param {boolean} [resetSlides=true] - Slayt listesini bastan yukle.
      * @returns {void}
      */
-    updateHeroShowcase() {
-      if (typeof document === 'undefined' || !this.catalog) return;
-      const featured =
-        this.catalog.seriesList.find((s) => s.chapters && s.chapters.length > 0) ||
-        this.catalog.seriesList[0];
-      if (!featured) return;
-      if (!this.activeSeriesId) this.activeSeriesId = featured.id;
-      const firstChapter = this.catalog.getSortedChapters(featured.id, 'asc')[0];
-      if (!this.activeChapterId && firstChapter) this.activeChapterId = firstChapter.id;
-      const badgeEl = document.getElementById('hero-badge');
-      const titleEl = document.getElementById('hero-title');
-      const descEl = document.getElementById('hero-desc');
-      const coverEl = document.getElementById('hero-cover-img');
-      const readBtn = document.getElementById('btn-hero-read');
-      const detailBtn = document.getElementById('btn-hero-detail');
-      if (badgeEl) {
-        badgeEl.textContent = `🔥 ${featured.type || 'Seri'} • ${featured.status || 'Güncel'} • ${(featured.chapters || []).length} Bölüm`;
+    updateHeroShowcase(resetSlides = true) {
+      if (!this.catalog || !this.heroSlider) return;
+      if (resetSlides) this.heroSlider.setSlidesFromCatalog(this.catalog);
+      const featured = this.heroSlider.getCurrentSlide();
+      if (featured && !this.activeSeriesId) {
+        this.activeSeriesId = featured.id;
+        const firstChapter = this.catalog.getSortedChapters(featured.id, 'asc')[0];
+        if (!this.activeChapterId && firstChapter) this.activeChapterId = firstChapter.id;
       }
-      if (titleEl) titleEl.textContent = featured.title;
-      if (descEl) descEl.textContent = featured.synopsis || `${featured.title} serisini hemen okuyun.`;
-      if (coverEl && featured.cover) {
-        coverEl.src = featured.cover;
-        coverEl.alt = featured.title;
-        coverEl.classList.remove('hidden');
-      }
-      if (detailBtn) {
-        detailBtn.setAttribute('href', this.computeTargetUrl('series', featured.id));
-        detailBtn.setAttribute('data-action', 'detail');
-        detailBtn.setAttribute('data-series', featured.id);
-      }
-      if (readBtn) {
-        if (firstChapter) {
-          readBtn.setAttribute('href', this.computeTargetUrl('reader', featured.id, firstChapter.id));
-          readBtn.setAttribute('data-action', 'read');
-          readBtn.setAttribute('data-series', featured.id);
-          readBtn.setAttribute('data-chapter', firstChapter.id);
-        } else {
-          readBtn.setAttribute('href', this.computeTargetUrl('series', featured.id));
-          readBtn.setAttribute('data-action', 'detail');
-          readBtn.setAttribute('data-series', featured.id);
-        }
+      this.heroSlider.renderIntoDom(
+        this.catalog,
+        this.library,
+        (v, s, c) => this.computeTargetUrl(v, s, c)
+      );
+      if (resetSlides && typeof document !== 'undefined') {
+        this.heroSlider.startAutoPlay(() => this.updateHeroShowcase(false));
       }
     }
     /**
@@ -704,6 +685,7 @@
           }
         });
       }
+      if (this.heroSlider) this.heroSlider.bindDomEvents(() => this.updateHeroShowcase(false));
       document.addEventListener('click', (ev) => {
         const target = ev.target.closest('[data-action]');
         if (!target) return;
@@ -729,6 +711,7 @@
         } else if (action === 'toggle-fav' && seriesId && this.library) {
           this.library.toggleFavorite(seriesId);
           this.renderHomeSections();
+          this.updateHeroShowcase(false);
           if (this.currentView === 'catalog') this.renderCatalogView();
           else if (this.currentView === 'bookmarks') this.renderBookmarksView();
           else if (this.currentView === 'series') {
