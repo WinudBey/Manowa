@@ -114,23 +114,29 @@
      * @returns {string|null} Mantiksal sayfa grup anahtari (orn: "page:1") veya null.
      */
     extractSliceGroupKey(rawUrl) {
-      const cleanPath = String(rawUrl || '').split(/[?#]/)[0];
-      const lastSegMatch = cleanPath.match(/([^/]+)$/);
-      if (!lastSegMatch) return null;
-      let fileName = lastSegMatch[1];
-      try {
-        fileName = decodeURIComponent(fileName);
-      } catch (_err) {
-        // Decode hatasini yoksay
+      const rawStr = String(rawUrl || '');
+      const cleanPath = rawStr.split(/[?#]/)[0];
+      const hashPath = rawStr.includes('#') ? rawStr.split('#').pop() : '';
+      const candidates = [cleanPath, hashPath, rawStr];
+
+      for (const candidate of candidates) {
+        const lastSegMatch = String(candidate || '').match(/([^/?#&]+)$/);
+        if (!lastSegMatch) continue;
+        let fileName = lastSegMatch[1];
+        try {
+          fileName = decodeURIComponent(fileName);
+        } catch (_err) {
+          // Decode hatasini yoksay
+        }
+        const baseName = fileName.replace(/\.(?:webp|jpe?g|png|gif|avif|bmp|svg)$/i, '').trim();
+        const sliceMatch =
+          baseName.match(/^(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)$/i) ||
+          baseName.match(/^(\d{2,})[-_](\d{2,})$/);
+        if (sliceMatch) {
+          return `page:${Number(sliceMatch[1])}`;
+        }
       }
-      const baseName = fileName.replace(/\.(?:webp|jpe?g|png|gif|avif|bmp|svg)$/i, '').trim();
-      const sliceMatch =
-        baseName.match(/^(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)$/i) ||
-        baseName.match(/^(\d{2,})[-_](\d{2,})$/);
-      if (!sliceMatch) {
-        return null;
-      }
-      return `page:${Number(sliceMatch[1])}`;
+      return null;
     }
 
     /**
@@ -633,6 +639,34 @@
     }
 
     /**
+     * Mobil dokunmatik ekranlarda yatay kaydirma (swipe) hareketiyle sayfa degistirir.
+     * @param {number} startX - Dokunma baslangic X koordinati.
+     * @param {number} endX - Dokunma bitis X koordinati.
+     * @param {number} [startY=0] - Dokunma baslangic Y koordinati.
+     * @param {number} [endY=0] - Dokunma bitis Y koordinati.
+     * @returns {'next'|'prev'|'none'} Yapilan sayfa gecisi.
+     */
+    handleTouchSwipe(startX, endX, startY = 0, endY = 0) {
+      if (this.mode !== 'single' && this.mode !== 'double') {
+        return 'none';
+      }
+      const deltaX = Number(endX) - Number(startX);
+      const deltaY = Number(endY) - Number(startY);
+      if (Number.isNaN(deltaX) || Math.abs(deltaX) < 45) {
+        return 'none';
+      }
+      if (!Number.isNaN(deltaY) && Math.abs(deltaY) > Math.abs(deltaX) * 0.85) {
+        return 'none';
+      }
+      if (deltaX < 0) {
+        const moved = this.direction === 'rtl' ? this.prevPage() : this.nextPage();
+        return moved ? (this.direction === 'rtl' ? 'prev' : 'next') : 'none';
+      }
+      const moved = this.direction === 'rtl' ? this.nextPage() : this.prevPage();
+      return moved ? (this.direction === 'rtl' ? 'next' : 'prev') : 'none';
+    }
+
+    /**
      * Motorun anlik durum özetini dondurur.
      * @returns {Object} Motor durum nesnesi.
      */
@@ -730,6 +764,44 @@
       const progressBar = targetDoc.getElementById('reader-progress-bar');
       const pageCounter = targetDoc.getElementById('page-counter');
       if (!viewport) return;
+      if (!viewport._manowaTouchBound && typeof viewport.addEventListener === 'function') {
+        viewport._manowaTouchBound = true;
+        viewport.addEventListener(
+          'touchstart',
+          (ev) => {
+            if (ev.touches && ev.touches[0]) {
+              this._touchStartX = ev.touches[0].clientX;
+              this._touchStartY = ev.touches[0].clientY;
+            }
+          },
+          { passive: true }
+        );
+        viewport.addEventListener(
+          'touchend',
+          (ev) => {
+            if (
+              this._touchStartX !== null &&
+              this._touchStartX !== undefined &&
+              ev.changedTouches &&
+              ev.changedTouches[0]
+            ) {
+              const res = this.handleTouchSwipe(
+                this._touchStartX,
+                ev.changedTouches[0].clientX,
+                this._touchStartY || 0,
+                ev.changedTouches[0].clientY || 0
+              );
+              this._touchStartX = null;
+              this._touchStartY = null;
+              if (res !== 'none') {
+                this.syncControlsIntoDom(targetDoc);
+                this.renderViewportIntoDom(targetDoc);
+              }
+            }
+          },
+          { passive: true }
+        );
+      }
       const state = this.getState();
       viewport.className = `reader-viewport mode-${state.mode} ${state.protectImages ? 'protect-images' : ''}`;
       if (viewport.style && typeof viewport.style.setProperty === 'function') {

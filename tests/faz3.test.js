@@ -285,3 +285,122 @@ test('Reader Sticky Header: Ust cubuk asagi kaydirildiginda uste yapismali ve te
     true
   );
 });
+
+test('Mobil Uyumluluk: Hamburger menu, acilir arama, simge odakli dugmeler ve ReadingEngine dokunmatik kaydirma (swipe) destegi dogru calismali', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const { BloggerThemeBridge } = require('../src/scripts/blogger-theme-bridge');
+  const rootDir = path.resolve(__dirname, '..');
+  const bodyHtml = fs.readFileSync(path.join(rootDir, 'src/templates/body-content.html'), 'utf8');
+  const layoutCss = fs.readFileSync(path.join(rootDir, 'src/styles/layout.css'), 'utf8');
+  const cardsCss = fs.readFileSync(path.join(rootDir, 'src/styles/cards.css'), 'utf8');
+  const seriesCss = fs.readFileSync(path.join(rootDir, 'src/styles/series-page.css'), 'utf8');
+  const heroCss = fs.readFileSync(path.join(rootDir, 'src/styles/hero-slider.css'), 'utf8');
+  const readerCss = fs.readFileSync(path.join(rootDir, 'src/styles/reader.css'), 'utf8');
+
+  // Hamburger menu, mobil arama ve simge odakli .btn-label yapisi kontrolu
+  assert.equal(bodyHtml.includes('id="mobile-nav-drawer"'), true);
+  assert.equal(bodyHtml.includes('id="btn-mobile-menu"'), true);
+  assert.equal(bodyHtml.includes('id="btn-mobile-search"'), true);
+  assert.equal(bodyHtml.includes('class="btn-label"'), true);
+  assert.equal(layoutCss.includes('.hero-cover-img'), false);
+  assert.equal(layoutCss.includes('#mobile-nav-drawer.is-mobile-open'), true);
+  assert.equal(layoutCss.includes('#header-search-box.is-mobile-open'), true);
+  assert.equal(layoutCss.includes('.btn-label,'), true);
+  assert.equal(cardsCss.includes('@media (max-width: 540px)'), true);
+  assert.equal(cardsCss.includes('grid-template-columns: repeat(2, minmax(0, 1fr))'), true);
+  assert.equal(seriesCss.includes('@media (max-width: 1080px)'), true);
+  assert.equal(seriesCss.includes('@media (max-width: 768px)'), true);
+  assert.equal(seriesCss.includes('@media (max-width: 480px)'), true);
+  assert.equal(heroCss.includes('@media (max-width: 480px)'), true);
+  assert.equal(readerCss.includes('@media (max-width: 480px)'), true);
+
+  // BloggerThemeBridge hamburger menu ve mobil arama gecis testi
+  const makeClassEl = () => {
+    const classes = new Set();
+    const attrs = {};
+    return {
+      classes,
+      attrs,
+      focused: false,
+      focus() {
+        this.focused = true;
+      },
+      setAttribute(k, v) {
+        attrs[k] = v;
+      },
+      querySelector(sel) {
+        if (sel === '.icon-menu-open') return openIconEl;
+        if (sel === '.icon-menu-close') return closeIconEl;
+        return null;
+      },
+      classList: {
+        contains: (c) => classes.has(c),
+        toggle(c, force) {
+          const next = typeof force === 'boolean' ? force : !classes.has(c);
+          if (next) classes.add(c);
+          else classes.delete(c);
+          return next;
+        }
+      }
+    };
+  };
+  const openIconEl = makeClassEl();
+  const closeIconEl = makeClassEl();
+  closeIconEl.classes.add('hidden');
+  const mockMobileDom = {
+    'top-app-bar': makeClassEl(),
+    'mobile-nav-drawer': makeClassEl(),
+    'btn-mobile-menu': makeClassEl(),
+    'header-search-box': makeClassEl(),
+    'btn-mobile-search': makeClassEl(),
+    'input-search': makeClassEl()
+  };
+  const mockDoc = {
+    getElementById(id) {
+      return mockMobileDom[id] || null;
+    }
+  };
+  const bridge = new BloggerThemeBridge({ storage: createMockStorage() });
+
+  // Hamburger menuyu ac -> menu acilir, ikon X olur
+  assert.equal(bridge.toggleMobileMenu(undefined, mockDoc), true);
+  assert.equal(mockMobileDom['mobile-nav-drawer'].classes.has('is-mobile-open'), true);
+  assert.equal(mockMobileDom['btn-mobile-menu'].attrs['aria-expanded'], 'true');
+  assert.equal(openIconEl.classes.has('hidden'), true);
+  assert.equal(closeIconEl.classes.has('hidden'), false);
+
+  // Mobil aramayi ac -> arama acilir, input odaklanir ve hamburger menu otomatik kapanir
+  assert.equal(bridge.toggleMobileSearch(undefined, mockDoc), true);
+  assert.equal(mockMobileDom['header-search-box'].classes.has('is-mobile-open'), true);
+  assert.equal(mockMobileDom['input-search'].focused, true);
+  assert.equal(mockMobileDom['mobile-nav-drawer'].classes.has('is-mobile-open'), false);
+
+  bridge.closeMobilePanels(mockDoc);
+  assert.equal(mockMobileDom['header-search-box'].classes.has('is-mobile-open'), false);
+
+  // ReadingEngine dokunmatik kaydirma (LTR ve RTL) testi
+  const engine = new ReadingEngine({ storage: createMockStorage() });
+  engine.loadChapter({
+    seriesId: 'test-manga',
+    chapterId: 'bolum-1',
+    seriesType: 'Manga',
+    sourceLang: 'JP',
+    pages: ['p1.webp', 'p2.webp', 'p3.webp']
+  });
+
+  // Varsayilan Manga modu: single + rtl
+  assert.equal(engine.handleTouchSwipe(100, 220, 300, 305), 'next');
+  assert.equal(engine.currentIndex, 1);
+  assert.equal(engine.handleTouchSwipe(220, 100, 300, 305), 'prev');
+  assert.equal(engine.currentIndex, 0);
+  assert.equal(engine.handleTouchSwipe(100, 200, 100, 350), 'none');
+  assert.equal(engine.handleTouchSwipe(100, 120, 100, 102), 'none');
+
+  engine.setDirection('ltr');
+  assert.equal(engine.handleTouchSwipe(240, 110, 200, 210), 'next');
+  assert.equal(engine.currentIndex, 1);
+  assert.equal(engine.handleTouchSwipe(110, 240, 200, 210), 'prev');
+  assert.equal(engine.currentIndex, 0);
+});
+

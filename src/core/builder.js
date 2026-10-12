@@ -162,15 +162,23 @@ class ThemeBuilder {
     ];
 
     // Canli Tema (theme.xml) icin gelistirici modullerini ve DEV_ONLY bloklarini temizle
-    const themeStylesBundle = this.bundleDirectory('styles', '.css', styleOrder, ['generator.css']);
+    const themeStylesBundle = this.bundleDirectory('styles', '.css', styleOrder, [
+      'generator.css',
+      'reader-next.css'
+    ]);
     const themeScriptsBundle = this.bundleDirectory('scripts', '.js', scriptOrder, [
-      'post-generator.js'
+      'post-generator.js',
+      'reader-next-controller.js'
     ]);
     const themeBody = this.stripDevOnlyBlocks(resolvedBody);
 
     // Yerel Onizleme (preview.html) icin tum gelistirici araclarini koru
-    const previewStylesBundle = this.bundleDirectory('styles', '.css', styleOrder);
-    const previewScriptsBundle = this.bundleDirectory('scripts', '.js', scriptOrder);
+    const previewStylesBundle = this.bundleDirectory('styles', '.css', styleOrder, [
+      'reader-next.css'
+    ]);
+    const previewScriptsBundle = this.bundleDirectory('scripts', '.js', scriptOrder, [
+      'reader-next-controller.js'
+    ]);
 
     // Blogger XML ciktisini olustur
     const finalXml = baseXml
@@ -187,9 +195,45 @@ class ThemeBuilder {
     const themeXmlPath = path.join(this.distDir, 'theme.xml');
     const previewHtmlPath = path.join(this.distDir, 'preview.html');
     const personalXmlPath = path.join(this.distDir, 'theme.personal.xml');
+    const readerPreviewHtmlPath = path.join(this.distDir, 'reader-preview.html');
 
     fs.writeFileSync(themeXmlPath, finalXml, 'utf8');
     fs.writeFileSync(previewHtmlPath, finalPreview, 'utf8');
+
+    // Bagimsiz yeni okuyucu test dosyasini (dist/reader-preview.html) olustur
+    const readerShellPath = path.join(this.srcDir, 'templates', 'reader-preview-shell.html');
+    if (fs.existsSync(readerShellPath)) {
+      const readerShell = fs.readFileSync(readerShellPath, 'utf8');
+      this.validateLineLimit(readerShellPath, readerShell);
+      const readerStyles = this.bundleDirectory(
+        'styles',
+        '.css',
+        ['variables.css', 'reader.css', 'reader-next.css'],
+        ['cards.css', 'series-page.css', 'hero-slider.css', 'sidebar.css', 'generator.css', 'layout.css']
+      );
+      const readerScripts = this.bundleDirectory(
+        'scripts',
+        '.js',
+        ['client-logger.js', 'svg-icons.js', 'reading-engine.js', 'reader-next-controller.js'],
+        [
+          'disqus-loader.js',
+          'blogger-feed-loader.js',
+          'catalog-controller.js',
+          'user-library.js',
+          'series-page.js',
+          'hero-slider.js',
+          'sidebar-controller.js',
+          'post-generator.js',
+          'router-controller.js',
+          'blogger-theme-bridge.js',
+          'app-init.js'
+        ]
+      );
+      const finalReaderPreview = readerShell
+        .replace('/* {{READER_STYLES}} */', readerStyles)
+        .replace('// {{READER_SCRIPTS}}', readerScripts);
+      fs.writeFileSync(readerPreviewHtmlPath, finalReaderPreview, 'utf8');
+    }
 
     if (fs.existsSync(personalXmlPath)) {
       const existingPersonal = fs.readFileSync(personalXmlPath, 'utf8');
@@ -205,10 +249,11 @@ class ThemeBuilder {
 
     this.logger.info('Derleme basariyla tamamlandi.', {
       themeXmlPath,
-      previewHtmlPath
+      previewHtmlPath,
+      readerPreviewHtmlPath
     });
 
-    return { themeXmlPath, previewHtmlPath };
+    return { themeXmlPath, previewHtmlPath, readerPreviewHtmlPath };
   }
 }
 

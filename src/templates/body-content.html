@@ -1,25 +1,30 @@
 <!-- UST KONTROL VE NAVIGASYON CUBUGU -->
 <div class="filter-toolbar" id="top-app-bar">
-  <div class="nav-links">
-    <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Katalog &amp; Vitrin</a>
-    <button class="nav-btn" id="nav-bookmarks" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Kitaplığım <span id="bookmarks-count-badge"></span></button>
-    <button class="nav-btn" id="nav-history" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Geçmiş</button>
-    <button class="nav-btn" id="nav-random" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg> Rastgele Seri</button>
+  <div class="nav-links" id="mobile-nav-drawer">
+    <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span>Katalog &amp; Vitrin</span></a>
+    <button class="nav-btn" id="nav-bookmarks" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Kitaplığım</span> <span id="bookmarks-count-badge"></span></button>
+    <button class="nav-btn" id="nav-history" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span>Geçmiş</span></button>
+    <button class="nav-btn" id="nav-random" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg> <span>Rastgele Seri</span></button>
     <!-- DEV_ONLY_START -->
-    <button class="nav-btn" id="nav-generator" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Gönderi Oluşturucu</button>
+    <button class="nav-btn" id="nav-generator" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> <span>Gönderi Oluşturucu</span></button>
     <!-- DEV_ONLY_END -->
   </div>
   <div class="header-controls">
     <!-- DEV_ONLY_START -->
     <div class="search-box" id="dev-blog-origin-box" style="display: flex; gap: 0.35rem; align-items: center;">
       <input class="search-input" id="input-blog-origin" placeholder="Blog URL (örn: blogadi.blogspot.com)" style="max-width: 225px;" type="url" />
-      <button class="icon-btn" id="btn-connect-blog" title="Blogger Verilerini Çek" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Bağla</button>
+      <button class="icon-btn" id="btn-connect-blog" title="Blogger Verilerini Çek" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> <span class="btn-label">Bağla</span></button>
     </div>
     <!-- DEV_ONLY_END -->
-    <div class="search-box">
+    <div class="search-box" id="header-search-box">
       <input class="search-input" id="input-search" placeholder="Seri, tür veya durum ara..." type="search" />
     </div>
-    <button class="icon-btn" id="btn-theme-toggle" type="button" title="Koyu / Açık Tema Değiştir"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Tema</button>
+    <button aria-controls="header-search-box" aria-expanded="false" aria-label="Arama Çubuğunu Aç/Kapat" class="icon-btn mobile-only-btn" id="btn-mobile-search" title="Ara" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+    <button aria-label="Koyu / Açık Tema Değiştir" class="icon-btn" id="btn-theme-toggle" type="button" title="Koyu / Açık Tema Değiştir"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> <span class="btn-label">Tema</span></button>
+    <button aria-controls="mobile-nav-drawer" aria-expanded="false" aria-label="Menüyü Aç/Kapat" class="icon-btn mobile-only-btn hamburger-btn" id="btn-mobile-menu" title="Menü" type="button">
+      <svg aria-hidden="true" class="ui-icon icon-menu-open" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg aria-hidden="true" class="ui-icon icon-menu-close hidden" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
   </div>
 </div>
 
@@ -57,7 +62,7 @@
       <div class="continue-reading-box hidden" id="continue-reading-section">
         <div class="section-header">
           <h2 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Kaldığın Yerden Devam Et</h2>
-          <button class="icon-btn" id="btn-view-all-history" type="button">Tüm Geçmiş →</button>
+          <button class="icon-btn" id="btn-view-all-history" title="Tüm Geçmiş" type="button"><span class="btn-label">Tüm Geçmiş</span> →</button>
         </div>
         <div class="continue-reading-grid" id="continue-reading-grid"></div>
       </div>
@@ -74,10 +79,10 @@
       <div class="filter-toolbar">
         <div class="lang-filters" id="lang-filter-group">
           <button class="filter-pill active" data-lang="ALL" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Tümü</button>
-          <button class="filter-pill" data-lang="Manhwa" type="button">KR Manhwa (Korece)</button>
-          <button class="filter-pill" data-lang="Manga" type="button">JP Manga (Japonca)</button>
-          <button class="filter-pill" data-lang="Manhua" type="button">CN Manhua (Çince)</button>
-          <button class="filter-pill" data-lang="Novel" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Novel (Roman)</button>
+          <button class="filter-pill" data-lang="Manhwa" type="button">KR Manhwa <span class="btn-label-sub">(Korece)</span></button>
+          <button class="filter-pill" data-lang="Manga" type="button">JP Manga <span class="btn-label-sub">(Japonca)</span></button>
+          <button class="filter-pill" data-lang="Manhua" type="button">CN Manhua <span class="btn-label-sub">(Çince)</span></button>
+          <button class="filter-pill" data-lang="Novel" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Novel <span class="btn-label-sub">(Roman)</span></button>
         </div>
         <div class="catalog-toolbar-right">
           <select class="reader-select" id="select-catalog-sort" title="Katalog Sıralaması">
@@ -154,9 +159,9 @@
 <!-- GORUNUM 2: SERI TANITIM VE BOLUM LISTESI SAYFASI -->
 <section class="hidden" id="view-series">
   <div class="series-nav-bar">
-    <a class="icon-btn" data-action="catalog" href="/" id="btn-series-back"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Kataloğa Dön</a>
+    <a class="icon-btn" data-action="catalog" href="/" id="btn-series-back" title="Kataloğa Dön"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span class="btn-label">Kataloğa Dön</span></a>
     <nav aria-label="Sayfa Konumu" class="breadcrumb-trail">
-      <a class="breadcrumb-link" data-action="catalog" href="/"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Ana Sayfa</a>
+      <a class="breadcrumb-link" data-action="catalog" href="/"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> <span class="btn-label">Ana Sayfa</span></a>
       <span>›</span>
       <span id="series-breadcrumb-title">Seri Detayı</span>
     </nav>
@@ -174,7 +179,7 @@
           <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input class="chapter-search-input" id="input-chapter-search" placeholder="Bölüm no veya başlık ara..." type="search" />
         </div>
-        <button class="icon-btn" id="btn-sort-chapters" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg> Sıralama: Yeni → Eski</button>
+        <button class="icon-btn" id="btn-sort-chapters" title="Sıralama Yönünü Değiştir" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg> <span class="btn-label">Sıralama: Yeni → Eski</span></button>
       </div>
     </div>
     <div class="chapter-grid" id="chapter-list-grid"></div>
@@ -228,7 +233,7 @@
               <span class="reader-pill-value" id="zoom-label">100%</span>
               <button class="reader-pill-btn" id="btn-zoom-in" title="Büyüt" type="button">+</button>
             </div>
-            <button class="reader-btn" id="btn-autoscroll" title="Otomatik Kaydırma" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> Oto-Kaydır</button>
+            <button class="reader-btn" id="btn-autoscroll" title="Otomatik Kaydırma" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> <span class="btn-label">Oto-Kaydır</span></button>
           </div>
 
           <div class="reader-control-cluster hidden" id="reader-group-novel">
@@ -240,7 +245,7 @@
             <button class="reader-btn" id="btn-font-family" title="Yazı Tipini Değiştir" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> <span id="font-family-label">Sans</span></button>
           </div>
 
-          <button class="reader-btn reader-fullscreen-btn" id="btn-fullscreen" title="Tam Ekran (F)" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> Tam Ekran</button>
+          <button class="reader-btn reader-fullscreen-btn" id="btn-fullscreen" title="Tam Ekran (F)" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> <span class="btn-label">Tam Ekran</span></button>
         </div>
       </div>
     </div>
@@ -251,16 +256,16 @@
 
     <div class="reader-footer-bar">
       <div class="reader-controls">
-        <button class="reader-btn" id="btn-prev-chapter" type="button">« Önceki Bölüm</button>
-        <a class="reader-btn" href="#" id="btn-footer-series">← Seri Sayfası</a>
+        <button class="reader-btn" id="btn-prev-chapter" title="Önceki Bölüm" type="button">« <span class="btn-label">Önceki Bölüm</span></button>
+        <a class="reader-btn" href="#" id="btn-footer-series" title="Seri Sayfası"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> <span class="btn-label">Seri Sayfası</span></a>
       </div>
       <div class="reader-footer-page-nav hidden" id="reader-footer-page-nav">
-        <button class="reader-btn" id="btn-prev-page" type="button">‹ Önceki Sayfa</button>
+        <button class="reader-btn" id="btn-prev-page" title="Önceki Sayfa" type="button">‹ <span class="btn-label">Önceki Sayfa</span></button>
         <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
-        <button class="reader-btn" id="btn-next-page" type="button">Sonraki Sayfa ›</button>
+        <button class="reader-btn" id="btn-next-page" title="Sonraki Sayfa" type="button"><span class="btn-label">Sonraki Sayfa</span> ›</button>
       </div>
       <div class="reader-controls">
-        <button class="reader-btn" id="btn-next-chapter" type="button">Sonraki Bölüm »</button>
+        <button class="reader-btn" id="btn-next-chapter" title="Sonraki Bölüm" type="button"><span class="btn-label">Sonraki Bölüm</span> »</button>
       </div>
     </div>
   </div>
@@ -270,7 +275,7 @@
 <section class="hidden" id="view-bookmarks">
   <div class="section-header">
     <h2 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="currentColor" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Kitaplığım (Favori Serilerim)</h2>
-    <a class="icon-btn" data-action="catalog" href="/" id="btn-bookmarks-back">← Kataloğa Dön</a>
+    <a class="icon-btn" data-action="catalog" href="/" id="btn-bookmarks-back" title="Kataloğa Dön"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span class="btn-label">Kataloğa Dön</span></a>
   </div>
   <div class="catalog-grid" id="bookmarks-grid"></div>
 </section>
@@ -280,8 +285,8 @@
   <div class="section-header">
     <h2 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Okuma Geçmişim</h2>
     <div class="detail-actions">
-      <button class="icon-btn" id="btn-clear-history" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Geçmişi Temizle</button>
-      <a class="icon-btn" data-action="catalog" href="/" id="btn-history-back">← Kataloğa Dön</a>
+      <button class="icon-btn" id="btn-clear-history" title="Geçmişi Temizle" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> <span class="btn-label">Geçmişi Temizle</span></button>
+      <a class="icon-btn" data-action="catalog" href="/" id="btn-history-back" title="Kataloğa Dön"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span class="btn-label">Kataloğa Dön</span></a>
     </div>
   </div>
   <div class="chapter-grid" id="history-list-grid"></div>

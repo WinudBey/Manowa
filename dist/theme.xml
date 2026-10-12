@@ -94,6 +94,7 @@ Version:  1.1.0
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -101,6 +102,7 @@ body {
   color: var(--text-primary);
   font-family: var(--font-main);
   line-height: 1.6;
+  overflow-x: clip;
 }
 
 /* === MODULE: styles/cards.css === */
@@ -554,12 +556,83 @@ body {
 }
 
 @media (max-width: 768px) {
+  .catalog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.85rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .continue-reading-grid,
+  .latest-chapters-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.65rem;
+  }
+
   .series-detail-header {
     grid-template-columns: 1fr;
   }
+
   .detail-cover {
     max-width: 200px;
     margin: 0 auto;
+  }
+
+  .disqus-container {
+    padding: 1rem;
+    margin-top: 1.25rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .catalog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .card-body {
+    padding: 0.6rem;
+    gap: 0.38rem;
+  }
+
+  .card-title {
+    font-size: 0.86rem;
+  }
+
+  .card-meta {
+    font-size: 0.72rem;
+  }
+
+  .chapter-mini-btn {
+    padding: 0.3rem 0.45rem;
+    font-size: 0.72rem;
+  }
+
+  .lang-badge,
+  .type-badge {
+    font-size: 0.64rem;
+    padding: 0.15rem 0.42rem;
+    top: 0.4rem;
+  }
+
+  .lang-badge {
+    left: 0.4rem;
+  }
+
+  .type-badge {
+    right: 0.4rem;
+  }
+
+  .fav-card-btn {
+    width: 30px;
+    height: 30px;
+    bottom: 0.4rem;
+    right: 0.4rem;
+    font-size: 0.82rem;
+  }
+
+  .continue-reading-grid,
+  .latest-chapters-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1172,30 +1245,175 @@ html[data-theme="light"] .chapter-read-badge {
   gap: 0.3rem;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1080px) {
   .series-detail-header {
-    grid-template-columns: 1fr;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 1.35rem;
   }
-  .series-poster-col {
-    max-width: 220px;
-    margin: 0 auto;
-    width: 100%;
+
+  .series-meta-col {
+    grid-column: 1 / -1;
   }
+
   .series-meta-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 768px) {
   .series-hero-card {
-    padding: 1.25rem;
+    padding: 1.35rem;
   }
-  .series-meta-grid {
+
+  .series-detail-header {
     grid-template-columns: 1fr;
+    gap: 1.15rem;
   }
+
+  .series-poster-col {
+    max-width: 180px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .series-info-col {
+    align-items: center;
+    text-align: center;
+    gap: 0.9rem;
+  }
+
+  .series-top-pills,
+  .detail-info .series-genre-list,
+  .series-genre-list {
+    justify-content: center;
+  }
+
+  .detail-info .series-main-title,
+  .series-main-title {
+    font-size: 1.72rem;
+    margin: 0;
+  }
+
+  .detail-alt-title {
+    margin: -0.35rem 0 0;
+  }
+
+  .series-synopsis-card {
+    width: 100%;
+    text-align: left;
+    min-height: auto;
+    padding: 0.95rem 1rem;
+  }
+
+  .detail-actions.series-cta-bar,
+  .series-cta-bar {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .series-meta-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .chapter-list-box,
+  .series-related-box {
+    padding: 1rem;
+  }
+
+  .chapter-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .chapter-toolbar-left {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .chapter-toolbar-right {
+    width: 100%;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .chapter-search-box {
+    flex: 1;
+    min-width: 0;
+  }
+
   .chapter-search-input {
     width: 100%;
     min-width: 0;
+  }
+
+  .chapter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    max-height: 420px;
+  }
+}
+
+@media (max-width: 480px) {
+  .series-hero-card {
+    padding: 1.1rem 0.9rem;
+  }
+
+  .series-poster-col {
+    max-width: 155px;
+  }
+
+  .detail-info .series-main-title,
+  .series-main-title {
+    font-size: 1.4rem;
+  }
+
+  .series-meta-card {
+    padding: 0.7rem 0.8rem;
+  }
+
+  .series-meta-value {
+    font-size: 0.88rem;
+  }
+
+  .detail-actions.series-cta-bar,
+  .series-cta-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.55rem;
+  }
+
+  .series-cta-bar .series-cta-btn,
+  .series-cta-bar .series-cta-secondary,
+  .series-cta-bar .series-cta-resume {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .chapter-toolbar-right {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .chapter-toolbar-right .icon-btn {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .chapter-card-item {
+    padding: 0.6rem 0.7rem;
+  }
+
+  .chapter-title-text {
+    font-size: 0.84rem;
+  }
+
+  .series-related-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1494,12 +1712,13 @@ html[data-theme="light"] .hero-dot {
 
 @media (max-width: 768px) {
   .hero-banner {
-    padding: 1.5rem 2.75rem 2.1rem;
+    padding: 1.35rem 2.5rem 2rem;
+    margin-bottom: 1.35rem;
   }
 
   .hero-slide-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 0.85rem;
     text-align: center;
   }
 
@@ -1508,13 +1727,13 @@ html[data-theme="light"] .hero-dot {
   }
 
   .hero-cover-img {
-    width: 120px;
-    height: 165px;
+    width: 112px;
+    height: 154px;
   }
 
   .hero-title {
-    font-size: 1.45rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.35rem;
+    margin-bottom: 0.45rem;
   }
 
   .hero-details,
@@ -1525,10 +1744,47 @@ html[data-theme="light"] .hero-dot {
   .hero-desc {
     margin-left: auto;
     margin-right: auto;
+    font-size: 0.85rem;
+    margin-bottom: 0.85rem;
   }
 
   .hero-actions {
     justify-content: center;
+  }
+
+  .hero-arrow-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 1.15rem;
+  }
+
+  .hero-arrow-prev {
+    left: 0.45rem;
+  }
+
+  .hero-arrow-next {
+    right: 0.45rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-banner {
+    padding: 1.15rem 2.1rem 1.85rem;
+  }
+
+  .hero-cover-img {
+    width: 96px;
+    height: 132px;
+  }
+
+  .hero-title {
+    font-size: 1.18rem;
+  }
+
+  .hero-primary-cta,
+  .hero-detail-btn {
+    padding: 0.52rem 0.95rem;
+    font-size: 0.82rem;
   }
 }
 
@@ -1980,6 +2236,22 @@ html[data-theme="light"] .hero-dot {
   }
 }
 
+@media (max-width: 768px) {
+  .sidebar-cta-banners {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.65rem;
+  }
+
+  .sidebar-widget {
+    padding: 0.95rem;
+  }
+
+  .blogger-footer-gadgets {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* === MODULE: styles/layout.css === */
 /**
  * @fileoverview Ana yerlesim (layout), ust baslik, vitrin (hero) ve filtre cubugu stilleri.
@@ -2249,20 +2521,185 @@ body[data-active-view="reader"] .site-header {
   color: #ef4444;
 }
 
+.mobile-only-btn {
+  display: none;
+}
+
 @media (max-width: 768px) {
-  .hero-banner {
-    grid-template-columns: 1fr;
-    padding: 1.25rem;
+  .mobile-only-btn {
+    display: inline-flex;
   }
-  .hero-cover-img {
+
+  .btn-label,
+  .btn-label-sub {
+    display: none !important;
+  }
+
+  .header-inner {
+    padding: 0.6rem 0.85rem;
+    gap: 0.45rem;
+    align-items: center;
+  }
+
+  #header-section,
+  .brand-logo {
+    order: 1;
+    margin-right: auto;
+  }
+
+  .brand-logo {
+    font-size: 1.2rem;
+  }
+
+  .filter-toolbar.in-header,
+  .header-controls {
+    display: contents;
+  }
+
+  #btn-mobile-search,
+  #btn-theme-toggle,
+  #btn-mobile-menu {
+    order: 2;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  #btn-mobile-search.active,
+  #btn-mobile-menu.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: #ffffff;
+  }
+
+  #dev-blog-origin-box {
+    display: none !important;
+  }
+
+  #header-search-box {
+    order: 3;
+    width: 100%;
+    flex: 0 0 100%;
+    max-width: none;
+    display: none;
+    margin-top: 0.25rem;
+  }
+
+  #header-search-box.is-mobile-open {
+    display: block;
+  }
+
+  #mobile-nav-drawer {
+    order: 4;
+    width: 100%;
+    flex: 0 0 100%;
+    display: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+    padding: 0.6rem;
+    margin-top: 0.25rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+  }
+
+  #mobile-nav-drawer.is-mobile-open {
+    display: grid;
+  }
+
+  #mobile-nav-drawer .nav-btn {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.84rem;
+    background: var(--bg-card);
+    border-color: var(--border-color);
+  }
+
+  #mobile-nav-drawer .nav-btn.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: #ffffff;
+  }
+
+  .site-main {
+    padding: 1rem 0.75rem 3rem;
+  }
+
+  body[data-active-view="reader"] .site-main {
+    padding: 0.35rem 0 2.5rem;
+  }
+
+  .filter-toolbar {
+    padding: 0.65rem 0.75rem;
+    gap: 0.65rem;
+    margin-bottom: 1.15rem;
+  }
+
+  .lang-filters {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.4rem;
+    padding-bottom: 2px;
+  }
+
+  .lang-filters::-webkit-scrollbar {
     display: none;
   }
-  .header-controls {
+
+  .filter-pill {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 0.36rem 0.75rem;
+    font-size: 0.78rem;
+  }
+
+  .catalog-toolbar-right {
     width: 100%;
     justify-content: space-between;
   }
-  .search-box {
-    max-width: none;
+
+  .section-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .section-title {
+    font-size: 1.08rem;
+  }
+
+  .scroll-top-btn {
+    right: 1rem;
+    bottom: 1rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-inner {
+    padding: 0.55rem 0.65rem;
+  }
+
+  #mobile-nav-drawer {
+    grid-template-columns: 1fr;
+  }
+
+  .icon-btn {
+    padding: 0.44rem 0.65rem;
+    font-size: 0.82rem;
+  }
+
+  .site-footer {
+    padding: 1.5rem 0.85rem;
+    font-size: 0.82rem;
   }
 }
 
@@ -2740,18 +3177,155 @@ body[data-active-view="reader"] .site-header {
 }
 
 @media (max-width: 768px) {
+  .reader-wrapper {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 1.25rem;
+  }
+
+  .reader-sticky-header,
+  .reader-progress-track {
+    border-radius: 0;
+  }
+
   .reader-toolbar {
-    padding: 0.55rem 0.75rem;
+    padding: 0.5rem 0.65rem;
     gap: 0.45rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
+
+  .reader-title-group {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
   .reader-series-back-btn {
-    max-width: 170px;
+    max-width: 165px;
+    height: 32px;
+    padding: 0 0.65rem;
+    font-size: 0.76rem;
   }
+
+  .reader-type-badge {
+    height: 24px;
+    padding: 0 0.45rem;
+    font-size: 0.62rem;
+  }
+
+  .reader-chapter-switcher {
+    height: 32px;
+    flex-shrink: 0;
+  }
+
+  .reader-step-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 0.95rem;
+  }
+
+  .reader-chapter-select {
+    height: 26px !important;
+    min-width: 108px;
+    font-size: 0.76rem;
+    padding: 0 0.45rem !important;
+  }
+
+  .reader-controls {
+    width: 100%;
+    justify-content: space-between;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 0.1rem;
+  }
+
+  .reader-controls::-webkit-scrollbar {
+    display: none;
+  }
+
+  .reader-pill-group,
+  .reader-select,
+  .reader-btn {
+    height: 32px;
+    font-size: 0.74rem;
+  }
+
+  .reader-pill-btn {
+    height: 24px;
+    min-width: 24px;
+  }
+
+  .reader-pill-value {
+    min-width: 38px;
+    font-size: 0.72rem;
+  }
+
+  .translator-note-box {
+    margin: 0.65rem;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.82rem;
+  }
+
+  .reader-viewport {
+    min-height: 360px;
+    padding: 0.5rem 0;
+  }
+
+  .reader-viewport.mode-webtoon {
+    padding: 0;
+  }
+
+  .reader-viewport.mode-single .reader-logical-page {
+    border-radius: 0;
+  }
+
   .reader-viewport.mode-double .double-page-grid {
     grid-template-columns: 1fr;
   }
+
+  .reader-viewport.mode-novel {
+    padding: 0.85rem 0.65rem;
+  }
+
   .novel-content-box {
-    padding: 1.25rem;
+    padding: 1.15rem 0.95rem;
+    font-size: 0.98rem;
+    line-height: 1.75;
+  }
+
+  .reader-footer-bar {
+    border-radius: 0;
+    padding: 0.65rem 0.75rem;
+    gap: 0.55rem;
+    justify-content: space-between;
+  }
+
+  .reader-footer-page-nav {
+    width: 100%;
+    justify-content: space-between;
+    order: -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .reader-series-back-btn {
+    max-width: 138px;
+  }
+
+  .reader-type-badge {
+    display: none;
+  }
+
+  .reader-footer-bar .reader-btn {
+    padding: 0 0.55rem;
+    font-size: 0.72rem;
+  }
+
+  .page-counter-pill {
+    padding: 0.28rem 0.65rem;
+    font-size: 0.74rem;
   }
 }
 
@@ -2932,19 +3506,24 @@ body {
       <b:if cond='!data:view.isLayoutMode'>
         <!-- UST KONTROL VE NAVIGASYON CUBUGU -->
 <div class="filter-toolbar" id="top-app-bar">
-  <div class="nav-links">
-    <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Katalog &amp; Vitrin</a>
-    <button class="nav-btn" id="nav-bookmarks" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Kitaplığım <span id="bookmarks-count-badge"></span></button>
-    <button class="nav-btn" id="nav-history" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Geçmiş</button>
-    <button class="nav-btn" id="nav-random" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg> Rastgele Seri</button>
+  <div class="nav-links" id="mobile-nav-drawer">
+    <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span>Katalog &amp; Vitrin</span></a>
+    <button class="nav-btn" id="nav-bookmarks" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Kitaplığım</span> <span id="bookmarks-count-badge"></span></button>
+    <button class="nav-btn" id="nav-history" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span>Geçmiş</span></button>
+    <button class="nav-btn" id="nav-random" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg> <span>Rastgele Seri</span></button>
     
   </div>
   <div class="header-controls">
     
-    <div class="search-box">
+    <div class="search-box" id="header-search-box">
       <input class="search-input" id="input-search" placeholder="Seri, tür veya durum ara..." type="search" />
     </div>
-    <button class="icon-btn" id="btn-theme-toggle" type="button" title="Koyu / Açık Tema Değiştir"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Tema</button>
+    <button aria-controls="header-search-box" aria-expanded="false" aria-label="Arama Çubuğunu Aç/Kapat" class="icon-btn mobile-only-btn" id="btn-mobile-search" title="Ara" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+    <button aria-label="Koyu / Açık Tema Değiştir" class="icon-btn" id="btn-theme-toggle" type="button" title="Koyu / Açık Tema Değiştir"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> <span class="btn-label">Tema</span></button>
+    <button aria-controls="mobile-nav-drawer" aria-expanded="false" aria-label="Menüyü Aç/Kapat" class="icon-btn mobile-only-btn hamburger-btn" id="btn-mobile-menu" title="Menü" type="button">
+      <svg aria-hidden="true" class="ui-icon icon-menu-open" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg aria-hidden="true" class="ui-icon icon-menu-close hidden" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
   </div>
 </div>
 
@@ -2982,7 +3561,7 @@ body {
       <div class="continue-reading-box hidden" id="continue-reading-section">
         <div class="section-header">
           <h2 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Kaldığın Yerden Devam Et</h2>
-          <button class="icon-btn" id="btn-view-all-history" type="button">Tüm Geçmiş →</button>
+          <button class="icon-btn" id="btn-view-all-history" title="Tüm Geçmiş" type="button"><span class="btn-label">Tüm Geçmiş</span> →</button>
         </div>
         <div class="continue-reading-grid" id="continue-reading-grid"></div>
       </div>
@@ -2999,10 +3578,10 @@ body {
       <div class="filter-toolbar">
         <div class="lang-filters" id="lang-filter-group">
           <button class="filter-pill active" data-lang="ALL" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Tümü</button>
-          <button class="filter-pill" data-lang="Manhwa" type="button">KR Manhwa (Korece)</button>
-          <button class="filter-pill" data-lang="Manga" type="button">JP Manga (Japonca)</button>
-          <button class="filter-pill" data-lang="Manhua" type="button">CN Manhua (Çince)</button>
-          <button class="filter-pill" data-lang="Novel" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Novel (Roman)</button>
+          <button class="filter-pill" data-lang="Manhwa" type="button">KR Manhwa <span class="btn-label-sub">(Korece)</span></button>
+          <button class="filter-pill" data-lang="Manga" type="button">JP Manga <span class="btn-label-sub">(Japonca)</span></button>
+          <button class="filter-pill" data-lang="Manhua" type="button">CN Manhua <span class="btn-label-sub">(Çince)</span></button>
+          <button class="filter-pill" data-lang="Novel" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Novel <span class="btn-label-sub">(Roman)</span></button>
         </div>
         <div class="catalog-toolbar-right">
           <select class="reader-select" id="select-catalog-sort" title="Katalog Sıralaması">
@@ -3079,9 +3658,9 @@ body {
 <!-- GORUNUM 2: SERI TANITIM VE BOLUM LISTESI SAYFASI -->
 <section class="hidden" id="view-series">
   <div class="series-nav-bar">
-    <a class="icon-btn" data-action="catalog" href="/" id="btn-series-back"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Kataloğa Dön</a>
+    <a class="icon-btn" data-action="catalog" href="/" id="btn-series-back" title="Kataloğa Dön"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span class="btn-label">Kataloğa Dön</span></a>
     <nav aria-label="Sayfa Konumu" class="breadcrumb-trail">
-      <a class="breadcrumb-link" data-action="catalog" href="/"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Ana Sayfa</a>
+      <a class="breadcrumb-link" data-action="catalog" href="/"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> <span class="btn-label">Ana Sayfa</span></a>
       <span>›</span>
       <span id="series-breadcrumb-title">Seri Detayı</span>
     </nav>
@@ -3099,7 +3678,7 @@ body {
           <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input class="chapter-search-input" id="input-chapter-search" placeholder="Bölüm no veya başlık ara..." type="search" />
         </div>
-        <button class="icon-btn" id="btn-sort-chapters" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg> Sıralama: Yeni → Eski</button>
+        <button class="icon-btn" id="btn-sort-chapters" title="Sıralama Yönünü Değiştir" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg> <span class="btn-label">Sıralama: Yeni → Eski</span></button>
       </div>
     </div>
     <div class="chapter-grid" id="chapter-list-grid"></div>
@@ -3153,7 +3732,7 @@ body {
               <span class="reader-pill-value" id="zoom-label">100%</span>
               <button class="reader-pill-btn" id="btn-zoom-in" title="Büyüt" type="button">+</button>
             </div>
-            <button class="reader-btn" id="btn-autoscroll" title="Otomatik Kaydırma" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> Oto-Kaydır</button>
+            <button class="reader-btn" id="btn-autoscroll" title="Otomatik Kaydırma" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> <span class="btn-label">Oto-Kaydır</span></button>
           </div>
 
           <div class="reader-control-cluster hidden" id="reader-group-novel">
@@ -3165,7 +3744,7 @@ body {
             <button class="reader-btn" id="btn-font-family" title="Yazı Tipini Değiştir" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> <span id="font-family-label">Sans</span></button>
           </div>
 
-          <button class="reader-btn reader-fullscreen-btn" id="btn-fullscreen" title="Tam Ekran (F)" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> Tam Ekran</button>
+          <button class="reader-btn reader-fullscreen-btn" id="btn-fullscreen" title="Tam Ekran (F)" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> <span class="btn-label">Tam Ekran</span></button>
         </div>
       </div>
     </div>
@@ -3176,16 +3755,16 @@ body {
 
     <div class="reader-footer-bar">
       <div class="reader-controls">
-        <button class="reader-btn" id="btn-prev-chapter" type="button">« Önceki Bölüm</button>
-        <a class="reader-btn" href="#" id="btn-footer-series">← Seri Sayfası</a>
+        <button class="reader-btn" id="btn-prev-chapter" title="Önceki Bölüm" type="button">« <span class="btn-label">Önceki Bölüm</span></button>
+        <a class="reader-btn" href="#" id="btn-footer-series" title="Seri Sayfası"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> <span class="btn-label">Seri Sayfası</span></a>
       </div>
       <div class="reader-footer-page-nav hidden" id="reader-footer-page-nav">
-        <button class="reader-btn" id="btn-prev-page" type="button">‹ Önceki Sayfa</button>
+        <button class="reader-btn" id="btn-prev-page" title="Önceki Sayfa" type="button">‹ <span class="btn-label">Önceki Sayfa</span></button>
         <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
-        <button class="reader-btn" id="btn-next-page" type="button">Sonraki Sayfa ›</button>
+        <button class="reader-btn" id="btn-next-page" title="Sonraki Sayfa" type="button"><span class="btn-label">Sonraki Sayfa</span> ›</button>
       </div>
       <div class="reader-controls">
-        <button class="reader-btn" id="btn-next-chapter" type="button">Sonraki Bölüm »</button>
+        <button class="reader-btn" id="btn-next-chapter" title="Sonraki Bölüm" type="button"><span class="btn-label">Sonraki Bölüm</span> »</button>
       </div>
     </div>
   </div>
@@ -3195,7 +3774,7 @@ body {
 <section class="hidden" id="view-bookmarks">
   <div class="section-header">
     <h2 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="currentColor" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Kitaplığım (Favori Serilerim)</h2>
-    <a class="icon-btn" data-action="catalog" href="/" id="btn-bookmarks-back">← Kataloğa Dön</a>
+    <a class="icon-btn" data-action="catalog" href="/" id="btn-bookmarks-back" title="Kataloğa Dön"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span class="btn-label">Kataloğa Dön</span></a>
   </div>
   <div class="catalog-grid" id="bookmarks-grid"></div>
 </section>
@@ -3205,8 +3784,8 @@ body {
   <div class="section-header">
     <h2 class="section-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Okuma Geçmişim</h2>
     <div class="detail-actions">
-      <button class="icon-btn" id="btn-clear-history" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Geçmişi Temizle</button>
-      <a class="icon-btn" data-action="catalog" href="/" id="btn-history-back">← Kataloğa Dön</a>
+      <button class="icon-btn" id="btn-clear-history" title="Geçmişi Temizle" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> <span class="btn-label">Geçmişi Temizle</span></button>
+      <a class="icon-btn" data-action="catalog" href="/" id="btn-history-back" title="Kataloğa Dön"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span class="btn-label">Kataloğa Dön</span></a>
     </div>
   </div>
   <div class="chapter-grid" id="history-list-grid"></div>
@@ -5822,8 +6401,8 @@ body {
       if (sortBtn) {
         sortBtn.innerHTML =
           this.chapterSortOrder === 'desc'
-            ? `${this._icon('sort')} Sıralama: Yeni → Eski`
-            : `${this._icon('sort')} Sıralama: Eski → Yeni`;
+            ? `${this._icon('sort')} <span class="btn-label">Sıralama: Yeni → Eski</span>`
+            : `${this._icon('sort')} <span class="btn-label">Sıralama: Eski → Yeni</span>`;
       }
       if (listGrid) {
         const saved =
@@ -6768,23 +7347,29 @@ body {
      * @returns {string|null} Mantiksal sayfa grup anahtari (orn: "page:1") veya null.
      */
     extractSliceGroupKey(rawUrl) {
-      const cleanPath = String(rawUrl || '').split(/[?#]/)[0];
-      const lastSegMatch = cleanPath.match(/([^/]+)$/);
-      if (!lastSegMatch) return null;
-      let fileName = lastSegMatch[1];
-      try {
-        fileName = decodeURIComponent(fileName);
-      } catch (_err) {
-        // Decode hatasini yoksay
+      const rawStr = String(rawUrl || '');
+      const cleanPath = rawStr.split(/[?#]/)[0];
+      const hashPath = rawStr.includes('#') ? rawStr.split('#').pop() : '';
+      const candidates = [cleanPath, hashPath, rawStr];
+
+      for (const candidate of candidates) {
+        const lastSegMatch = String(candidate || '').match(/([^/?#&]+)$/);
+        if (!lastSegMatch) continue;
+        let fileName = lastSegMatch[1];
+        try {
+          fileName = decodeURIComponent(fileName);
+        } catch (_err) {
+          // Decode hatasini yoksay
+        }
+        const baseName = fileName.replace(/\.(?:webp|jpe?g|png|gif|avif|bmp|svg)$/i, '').trim();
+        const sliceMatch =
+          baseName.match(/^(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)$/i) ||
+          baseName.match(/^(\d{2,})[-_](\d{2,})$/);
+        if (sliceMatch) {
+          return `page:${Number(sliceMatch[1])}`;
+        }
       }
-      const baseName = fileName.replace(/\.(?:webp|jpe?g|png|gif|avif|bmp|svg)$/i, '').trim();
-      const sliceMatch =
-        baseName.match(/^(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)$/i) ||
-        baseName.match(/^(\d{2,})[-_](\d{2,})$/);
-      if (!sliceMatch) {
-        return null;
-      }
-      return `page:${Number(sliceMatch[1])}`;
+      return null;
     }
 
     /**
@@ -7287,6 +7872,34 @@ body {
     }
 
     /**
+     * Mobil dokunmatik ekranlarda yatay kaydirma (swipe) hareketiyle sayfa degistirir.
+     * @param {number} startX - Dokunma baslangic X koordinati.
+     * @param {number} endX - Dokunma bitis X koordinati.
+     * @param {number} [startY=0] - Dokunma baslangic Y koordinati.
+     * @param {number} [endY=0] - Dokunma bitis Y koordinati.
+     * @returns {'next'|'prev'|'none'} Yapilan sayfa gecisi.
+     */
+    handleTouchSwipe(startX, endX, startY = 0, endY = 0) {
+      if (this.mode !== 'single' && this.mode !== 'double') {
+        return 'none';
+      }
+      const deltaX = Number(endX) - Number(startX);
+      const deltaY = Number(endY) - Number(startY);
+      if (Number.isNaN(deltaX) || Math.abs(deltaX) < 45) {
+        return 'none';
+      }
+      if (!Number.isNaN(deltaY) && Math.abs(deltaY) > Math.abs(deltaX) * 0.85) {
+        return 'none';
+      }
+      if (deltaX < 0) {
+        const moved = this.direction === 'rtl' ? this.prevPage() : this.nextPage();
+        return moved ? (this.direction === 'rtl' ? 'prev' : 'next') : 'none';
+      }
+      const moved = this.direction === 'rtl' ? this.nextPage() : this.prevPage();
+      return moved ? (this.direction === 'rtl' ? 'next' : 'prev') : 'none';
+    }
+
+    /**
      * Motorun anlik durum özetini dondurur.
      * @returns {Object} Motor durum nesnesi.
      */
@@ -7384,6 +7997,44 @@ body {
       const progressBar = targetDoc.getElementById('reader-progress-bar');
       const pageCounter = targetDoc.getElementById('page-counter');
       if (!viewport) return;
+      if (!viewport._manowaTouchBound && typeof viewport.addEventListener === 'function') {
+        viewport._manowaTouchBound = true;
+        viewport.addEventListener(
+          'touchstart',
+          (ev) => {
+            if (ev.touches && ev.touches[0]) {
+              this._touchStartX = ev.touches[0].clientX;
+              this._touchStartY = ev.touches[0].clientY;
+            }
+          },
+          { passive: true }
+        );
+        viewport.addEventListener(
+          'touchend',
+          (ev) => {
+            if (
+              this._touchStartX !== null &&
+              this._touchStartX !== undefined &&
+              ev.changedTouches &&
+              ev.changedTouches[0]
+            ) {
+              const res = this.handleTouchSwipe(
+                this._touchStartX,
+                ev.changedTouches[0].clientX,
+                this._touchStartY || 0,
+                ev.changedTouches[0].clientY || 0
+              );
+              this._touchStartX = null;
+              this._touchStartY = null;
+              if (res !== 'none') {
+                this.syncControlsIntoDom(targetDoc);
+                this.renderViewportIntoDom(targetDoc);
+              }
+            }
+          },
+          { passive: true }
+        );
+      }
       const state = this.getState();
       viewport.className = `reader-viewport mode-${state.mode} ${state.protectImages ? 'protect-images' : ''}`;
       if (viewport.style && typeof viewport.style.setProperty === 'function') {
@@ -7963,6 +8614,120 @@ body {
     }
 
     /**
+     * Mobil hamburger menuyu (#mobile-nav-drawer) acar veya kapatir.
+     * @param {boolean} [force] - Zorunlu acik/kapali durumu.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {boolean} Menunun yeni acik/kapali durumu.
+     */
+    toggleMobileMenu(force, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return false;
+      const topBar = targetDoc.getElementById('top-app-bar');
+      const drawer = targetDoc.getElementById('mobile-nav-drawer');
+      const btn = targetDoc.getElementById('btn-mobile-menu');
+      if (!drawer) return false;
+      const isOpen =
+        typeof force === 'boolean'
+          ? force
+          : !(drawer.classList && drawer.classList.contains('is-mobile-open'));
+      if (drawer.classList) drawer.classList.toggle('is-mobile-open', isOpen);
+      if (topBar && topBar.classList) topBar.classList.toggle('is-menu-open', isOpen);
+      if (btn) {
+        if (typeof btn.setAttribute === 'function') {
+          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+        if (btn.classList) btn.classList.toggle('active', isOpen);
+        if (typeof btn.querySelector === 'function') {
+          const openIcon = btn.querySelector('.icon-menu-open');
+          const closeIcon = btn.querySelector('.icon-menu-close');
+          if (openIcon && openIcon.classList) openIcon.classList.toggle('hidden', isOpen);
+          if (closeIcon && closeIcon.classList) closeIcon.classList.toggle('hidden', !isOpen);
+        }
+      }
+      if (isOpen) {
+        this.toggleMobileSearch(false, targetDoc);
+      }
+      return isOpen;
+    }
+
+    /**
+     * Mobil arama cubugunu (#header-search-box) acar veya kapatir.
+     * @param {boolean} [force] - Zorunlu acik/kapali durumu.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {boolean} Arama cubugunun yeni acik/kapali durumu.
+     */
+    toggleMobileSearch(force, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return false;
+      const topBar = targetDoc.getElementById('top-app-bar');
+      const searchBox = targetDoc.getElementById('header-search-box');
+      const btn = targetDoc.getElementById('btn-mobile-search');
+      const input = targetDoc.getElementById('input-search');
+      if (!searchBox) return false;
+      const isOpen =
+        typeof force === 'boolean'
+          ? force
+          : !(searchBox.classList && searchBox.classList.contains('is-mobile-open'));
+      if (searchBox.classList) searchBox.classList.toggle('is-mobile-open', isOpen);
+      if (topBar && topBar.classList) topBar.classList.toggle('is-search-open', isOpen);
+      if (btn) {
+        if (typeof btn.setAttribute === 'function') {
+          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+        if (btn.classList) btn.classList.toggle('active', isOpen);
+      }
+      if (isOpen) {
+        this.toggleMobileMenu(false, targetDoc);
+        if (input && typeof input.focus === 'function') {
+          input.focus();
+        }
+      }
+      return isOpen;
+    }
+
+    /**
+     * Acik olan mobil hamburger menuyu ve mobil arama panelini kapatir.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    closeMobilePanels(doc) {
+      this.toggleMobileMenu(false, doc);
+      this.toggleMobileSearch(false, doc);
+    }
+
+    /**
+     * Mobil hamburger menu ve mobil arama dugmesi olay dinleyicilerini baglar.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    bindMobileHeaderEvents(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
+      const menuBtn = targetDoc.getElementById('btn-mobile-menu');
+      const searchBtn = targetDoc.getElementById('btn-mobile-search');
+      const drawer = targetDoc.getElementById('mobile-nav-drawer');
+
+      if (menuBtn && !menuBtn._manowaBound && typeof menuBtn.addEventListener === 'function') {
+        menuBtn._manowaBound = true;
+        menuBtn.addEventListener('click', () => this.toggleMobileMenu(undefined, targetDoc));
+      }
+      if (searchBtn && !searchBtn._manowaBound && typeof searchBtn.addEventListener === 'function') {
+        searchBtn._manowaBound = true;
+        searchBtn.addEventListener('click', () => this.toggleMobileSearch(undefined, targetDoc));
+      }
+      if (drawer && !drawer._manowaBound && typeof drawer.addEventListener === 'function') {
+        drawer._manowaBound = true;
+        drawer.addEventListener('click', (ev) => {
+          if (ev && ev.target && typeof ev.target.closest === 'function') {
+            if (ev.target.closest('.nav-btn')) {
+              this.toggleMobileMenu(false, targetDoc);
+            }
+          }
+        });
+      }
+    }
+
+    /**
      * Ust kontrol cubugunu (#top-app-bar) Blogger site basliginin (#site-header-inner) icine tasir.
      * @param {Document} [doc] - Hedef DOM belgesi.
      * @returns {boolean} Tasima islemi yapildiysa true.
@@ -7970,6 +8735,7 @@ body {
     integrateHeaderBar(doc) {
       const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
       if (!targetDoc) return false;
+      this.bindMobileHeaderEvents(targetDoc);
       const headerInner =
         targetDoc.getElementById('site-header-inner') ||
         (typeof targetDoc.querySelector === 'function'
@@ -8908,8 +9674,8 @@ body {
         const active = this.reader.toggleAutoScroll();
         e.currentTarget.classList.toggle('active', active);
         e.currentTarget.innerHTML = active
-          ? `${iconFn('pause')} Durdur`
-          : `${iconFn('play')} Oto-Kaydır`;
+          ? `${iconFn('pause')} <span class="btn-label">Durdur</span>`
+          : `${iconFn('play')} <span class="btn-label">Oto-Kaydır</span>`;
       });
       on('btn-fullscreen', 'click', () => {
         const wrap = document.getElementById('reader-wrapper');

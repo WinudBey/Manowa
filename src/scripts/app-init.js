@@ -799,8 +799,8 @@
         const active = this.reader.toggleAutoScroll();
         e.currentTarget.classList.toggle('active', active);
         e.currentTarget.innerHTML = active
-          ? `${iconFn('pause')} Durdur`
-          : `${iconFn('play')} Oto-Kaydır`;
+          ? `${iconFn('pause')} <span class="btn-label">Durdur</span>`
+          : `${iconFn('play')} <span class="btn-label">Oto-Kaydır</span>`;
       });
       on('btn-fullscreen', 'click', () => {
         const wrap = document.getElementById('reader-wrapper');

@@ -444,3 +444,19 @@
     position: static;
   }
 }
+
+@media (max-width: 768px) {
+  .sidebar-cta-banners {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.65rem;
+  }
+
+  .sidebar-widget {
+    padding: 0.95rem;
+  }
+
+  .blogger-footer-gadgets {
+    grid-template-columns: 1fr;
+  }
+}

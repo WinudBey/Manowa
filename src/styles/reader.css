@@ -471,17 +471,154 @@
 }
 
 @media (max-width: 768px) {
+  .reader-wrapper {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 1.25rem;
+  }
+
+  .reader-sticky-header,
+  .reader-progress-track {
+    border-radius: 0;
+  }
+
   .reader-toolbar {
-    padding: 0.55rem 0.75rem;
+    padding: 0.5rem 0.65rem;
     gap: 0.45rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
+
+  .reader-title-group {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
   .reader-series-back-btn {
-    max-width: 170px;
+    max-width: 165px;
+    height: 32px;
+    padding: 0 0.65rem;
+    font-size: 0.76rem;
   }
+
+  .reader-type-badge {
+    height: 24px;
+    padding: 0 0.45rem;
+    font-size: 0.62rem;
+  }
+
+  .reader-chapter-switcher {
+    height: 32px;
+    flex-shrink: 0;
+  }
+
+  .reader-step-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 0.95rem;
+  }
+
+  .reader-chapter-select {
+    height: 26px !important;
+    min-width: 108px;
+    font-size: 0.76rem;
+    padding: 0 0.45rem !important;
+  }
+
+  .reader-controls {
+    width: 100%;
+    justify-content: space-between;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 0.1rem;
+  }
+
+  .reader-controls::-webkit-scrollbar {
+    display: none;
+  }
+
+  .reader-pill-group,
+  .reader-select,
+  .reader-btn {
+    height: 32px;
+    font-size: 0.74rem;
+  }
+
+  .reader-pill-btn {
+    height: 24px;
+    min-width: 24px;
+  }
+
+  .reader-pill-value {
+    min-width: 38px;
+    font-size: 0.72rem;
+  }
+
+  .translator-note-box {
+    margin: 0.65rem;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.82rem;
+  }
+
+  .reader-viewport {
+    min-height: 360px;
+    padding: 0.5rem 0;
+  }
+
+  .reader-viewport.mode-webtoon {
+    padding: 0;
+  }
+
+  .reader-viewport.mode-single .reader-logical-page {
+    border-radius: 0;
+  }
+
   .reader-viewport.mode-double .double-page-grid {
     grid-template-columns: 1fr;
   }
+
+  .reader-viewport.mode-novel {
+    padding: 0.85rem 0.65rem;
+  }
+
   .novel-content-box {
-    padding: 1.25rem;
+    padding: 1.15rem 0.95rem;
+    font-size: 0.98rem;
+    line-height: 1.75;
+  }
+
+  .reader-footer-bar {
+    border-radius: 0;
+    padding: 0.65rem 0.75rem;
+    gap: 0.55rem;
+    justify-content: space-between;
+  }
+
+  .reader-footer-page-nav {
+    width: 100%;
+    justify-content: space-between;
+    order: -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .reader-series-back-btn {
+    max-width: 138px;
+  }
+
+  .reader-type-badge {
+    display: none;
+  }
+
+  .reader-footer-bar .reader-btn {
+    padding: 0 0.55rem;
+    font-size: 0.72rem;
+  }
+
+  .page-counter-pill {
+    padding: 0.28rem 0.65rem;
+    font-size: 0.74rem;
   }
 }

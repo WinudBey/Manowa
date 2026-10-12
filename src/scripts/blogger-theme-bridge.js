@@ -246,6 +246,120 @@
     }
 
     /**
+     * Mobil hamburger menuyu (#mobile-nav-drawer) acar veya kapatir.
+     * @param {boolean} [force] - Zorunlu acik/kapali durumu.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {boolean} Menunun yeni acik/kapali durumu.
+     */
+    toggleMobileMenu(force, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return false;
+      const topBar = targetDoc.getElementById('top-app-bar');
+      const drawer = targetDoc.getElementById('mobile-nav-drawer');
+      const btn = targetDoc.getElementById('btn-mobile-menu');
+      if (!drawer) return false;
+      const isOpen =
+        typeof force === 'boolean'
+          ? force
+          : !(drawer.classList && drawer.classList.contains('is-mobile-open'));
+      if (drawer.classList) drawer.classList.toggle('is-mobile-open', isOpen);
+      if (topBar && topBar.classList) topBar.classList.toggle('is-menu-open', isOpen);
+      if (btn) {
+        if (typeof btn.setAttribute === 'function') {
+          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+        if (btn.classList) btn.classList.toggle('active', isOpen);
+        if (typeof btn.querySelector === 'function') {
+          const openIcon = btn.querySelector('.icon-menu-open');
+          const closeIcon = btn.querySelector('.icon-menu-close');
+          if (openIcon && openIcon.classList) openIcon.classList.toggle('hidden', isOpen);
+          if (closeIcon && closeIcon.classList) closeIcon.classList.toggle('hidden', !isOpen);
+        }
+      }
+      if (isOpen) {
+        this.toggleMobileSearch(false, targetDoc);
+      }
+      return isOpen;
+    }
+
+    /**
+     * Mobil arama cubugunu (#header-search-box) acar veya kapatir.
+     * @param {boolean} [force] - Zorunlu acik/kapali durumu.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {boolean} Arama cubugunun yeni acik/kapali durumu.
+     */
+    toggleMobileSearch(force, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return false;
+      const topBar = targetDoc.getElementById('top-app-bar');
+      const searchBox = targetDoc.getElementById('header-search-box');
+      const btn = targetDoc.getElementById('btn-mobile-search');
+      const input = targetDoc.getElementById('input-search');
+      if (!searchBox) return false;
+      const isOpen =
+        typeof force === 'boolean'
+          ? force
+          : !(searchBox.classList && searchBox.classList.contains('is-mobile-open'));
+      if (searchBox.classList) searchBox.classList.toggle('is-mobile-open', isOpen);
+      if (topBar && topBar.classList) topBar.classList.toggle('is-search-open', isOpen);
+      if (btn) {
+        if (typeof btn.setAttribute === 'function') {
+          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+        if (btn.classList) btn.classList.toggle('active', isOpen);
+      }
+      if (isOpen) {
+        this.toggleMobileMenu(false, targetDoc);
+        if (input && typeof input.focus === 'function') {
+          input.focus();
+        }
+      }
+      return isOpen;
+    }
+
+    /**
+     * Acik olan mobil hamburger menuyu ve mobil arama panelini kapatir.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    closeMobilePanels(doc) {
+      this.toggleMobileMenu(false, doc);
+      this.toggleMobileSearch(false, doc);
+    }
+
+    /**
+     * Mobil hamburger menu ve mobil arama dugmesi olay dinleyicilerini baglar.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    bindMobileHeaderEvents(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
+      const menuBtn = targetDoc.getElementById('btn-mobile-menu');
+      const searchBtn = targetDoc.getElementById('btn-mobile-search');
+      const drawer = targetDoc.getElementById('mobile-nav-drawer');
+
+      if (menuBtn && !menuBtn._manowaBound && typeof menuBtn.addEventListener === 'function') {
+        menuBtn._manowaBound = true;
+        menuBtn.addEventListener('click', () => this.toggleMobileMenu(undefined, targetDoc));
+      }
+      if (searchBtn && !searchBtn._manowaBound && typeof searchBtn.addEventListener === 'function') {
+        searchBtn._manowaBound = true;
+        searchBtn.addEventListener('click', () => this.toggleMobileSearch(undefined, targetDoc));
+      }
+      if (drawer && !drawer._manowaBound && typeof drawer.addEventListener === 'function') {
+        drawer._manowaBound = true;
+        drawer.addEventListener('click', (ev) => {
+          if (ev && ev.target && typeof ev.target.closest === 'function') {
+            if (ev.target.closest('.nav-btn')) {
+              this.toggleMobileMenu(false, targetDoc);
+            }
+          }
+        });
+      }
+    }
+
+    /**
      * Ust kontrol cubugunu (#top-app-bar) Blogger site basliginin (#site-header-inner) icine tasir.
      * @param {Document} [doc] - Hedef DOM belgesi.
      * @returns {boolean} Tasima islemi yapildiysa true.
@@ -253,6 +367,7 @@
     integrateHeaderBar(doc) {
       const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
       if (!targetDoc) return false;
+      this.bindMobileHeaderEvents(targetDoc);
       const headerInner =
         targetDoc.getElementById('site-header-inner') ||
         (typeof targetDoc.querySelector === 'function'

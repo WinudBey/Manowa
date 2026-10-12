@@ -632,8 +632,8 @@
       if (sortBtn) {
         sortBtn.innerHTML =
           this.chapterSortOrder === 'desc'
-            ? `${this._icon('sort')} Sıralama: Yeni → Eski`
-            : `${this._icon('sort')} Sıralama: Eski → Yeni`;
+            ? `${this._icon('sort')} <span class="btn-label">Sıralama: Yeni → Eski</span>`
+            : `${this._icon('sort')} <span class="btn-label">Sıralama: Eski → Yeni</span>`;
       }
       if (listGrid) {
         const saved =
