@@ -2436,28 +2436,15 @@ html[data-theme="light"] .hero-dot {
   border: 1px solid var(--border-color);
 }
 
-/* Eslesen metin vurgulama (Highlighter) */
+/* Eslesen metin vurgulama (Arka plan degismez, yalnizca vurgu yazi rengi ve kalinlik) */
 mark.search-highlight {
-  background: rgba(234, 179, 8, 0.22);
-  color: #eab308;
+  background: transparent !important;
+  color: var(--accent-primary) !important;
   font-weight: 700;
-  border-radius: 2px;
-  padding: 0 0.15rem;
-  border-bottom: 2px solid #eab308;
-}
-
-[data-theme="dark"] mark.search-highlight,
-body.theme-dark mark.search-highlight {
-  background: rgba(250, 204, 21, 0.24);
-  color: #fef08a;
-  border-bottom-color: #facc15;
-}
-
-[data-theme="light"] mark.search-highlight,
-body.theme-light mark.search-highlight {
-  background: rgba(217, 119, 6, 0.16);
-  color: #b45309;
-  border-bottom-color: #d97706;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  text-decoration: none;
 }
 
 /* Eslesen kategori etiketi vurgusu */
