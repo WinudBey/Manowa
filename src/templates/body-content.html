@@ -17,7 +17,8 @@
     </div>
     <!-- DEV_ONLY_END -->
     <div class="search-box" id="header-search-box">
-      <input class="search-input" id="input-search" placeholder="Seri, tür veya durum ara..." type="search" />
+      <input aria-autocomplete="list" aria-controls="search-results-listbox" aria-expanded="false" autocomplete="off" class="search-input" id="input-search" placeholder="Seri, tür veya durum ara..." role="combobox" type="search" />
+      <div aria-label="Arama Sonuçları" class="search-results-listbox hidden" id="search-results-listbox" role="listbox" tabindex="-1"></div>
     </div>
     <button aria-controls="header-search-box" aria-expanded="false" aria-label="Arama Çubuğunu Aç/Kapat" class="icon-btn mobile-only-btn" id="btn-mobile-search" title="Ara" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
     <button aria-label="Koyu / Açık Tema Değiştir" class="icon-btn" id="btn-theme-toggle" type="button" title="Koyu / Açık Tema Değiştir"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> <span class="btn-label">Tema</span></button>

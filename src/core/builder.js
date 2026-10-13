@@ -140,6 +140,7 @@ class ThemeBuilder {
       'series-page.css',
       'hero-slider.css',
       'sidebar.css',
+      'search.css',
       'generator.css',
       'layout.css',
       'reader.css'
@@ -158,6 +159,7 @@ class ThemeBuilder {
       'post-generator.js',
       'router-controller.js',
       'blogger-theme-bridge.js',
+      'search-controller.js',
       'app-init.js'
     ];
 

@@ -2252,6 +2252,332 @@ html[data-theme="light"] .hero-dot {
   }
 }
 
+/* === MODULE: styles/search.css === */
+/**
+ * @fileoverview Arama cubugu acilir liste kutusu (Listbox / Combobox) stilleri.
+ * Acilir pencere yerlesimi, kartlar, kapak resimleri, rozetler ve mobil uyum.
+ */
+
+.search-results-listbox {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 380px;
+  max-width: min(420px, calc(100vw - 1.5rem));
+  max-height: 480px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 4px 14px rgba(0, 0, 0, 0.25);
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: searchFadeDown 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.search-results-listbox.hidden {
+  display: none !important;
+}
+
+@keyframes searchFadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-results-list {
+  overflow-y: auto;
+  max-height: 400px;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-results-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-results-list::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 999px;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color);
+  background: transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  user-select: none;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover,
+.search-result-item.is-active {
+  background: var(--bg-secondary);
+}
+
+.search-result-item:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: -2px;
+}
+
+.search-result-thumb {
+  width: 44px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-result-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.search-thumb-fallback {
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.search-result-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.search-result-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-result-alt {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-result-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-top: 0.15rem;
+}
+
+.search-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  line-height: 1.2;
+}
+
+.search-badge.badge-type {
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  border: 1px solid rgba(var(--accent-rgb, 124, 58, 237), 0.3);
+}
+
+.search-badge.badge-status {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.search-badge.badge-chapter {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  padding: 0;
+}
+
+.search-result-genres {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  margin-top: 0.15rem;
+}
+
+.search-genre-tag {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  padding: 0.08rem 0.32rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+/* Eslesen metin vurgulama (Highlighter) */
+mark.search-highlight {
+  background: rgba(234, 179, 8, 0.22);
+  color: #eab308;
+  font-weight: 700;
+  border-radius: 2px;
+  padding: 0 0.15rem;
+  border-bottom: 2px solid #eab308;
+}
+
+[data-theme="dark"] mark.search-highlight,
+body.theme-dark mark.search-highlight {
+  background: rgba(250, 204, 21, 0.24);
+  color: #fef08a;
+  border-bottom-color: #facc15;
+}
+
+[data-theme="light"] mark.search-highlight,
+body.theme-light mark.search-highlight {
+  background: rgba(217, 119, 6, 0.16);
+  color: #b45309;
+  border-bottom-color: #d97706;
+}
+
+/* Eslesen kategori etiketi vurgusu */
+.search-genre-tag.is-matched {
+  border-color: var(--accent-primary);
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+/* Eslesen rozetler (Tur, Durum) */
+.search-badge.is-matched {
+  border-color: var(--accent-primary);
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+}
+
+/* Eslesme kaynagi bildirimi (Alternatif ad veya Kategori) */
+.search-match-source {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.1rem;
+}
+
+.search-match-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  background: var(--accent-glow);
+  padding: 0.05rem 0.3rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(var(--accent-rgb, 124, 58, 237), 0.25);
+  flex-shrink: 0;
+}
+
+.search-result-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  color: var(--accent-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.search-result-footer:hover,
+.search-result-footer.is-active {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+.search-result-footer .ui-icon {
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.search-result-footer:hover .ui-icon,
+.search-result-footer.is-active .ui-icon {
+  transform: translateX(3px);
+}
+
+.search-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.75rem 1.25rem;
+  text-align: center;
+  color: var(--text-secondary);
+  gap: 0.45rem;
+}
+
+.search-empty-icon {
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
+}
+
+.search-empty-text {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.search-empty-hint {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .search-results-listbox {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: calc(85vh - 70px);
+    border-radius: var(--radius-md);
+  }
+
+  .search-result-item {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .search-result-thumb {
+    width: 48px;
+    height: 64px;
+  }
+}
+
 /* === MODULE: styles/layout.css === */
 /**
  * @fileoverview Ana yerlesim (layout), ust baslik, vitrin (hero) ve filtre cubugu stilleri.
@@ -3516,7 +3842,8 @@ body {
   <div class="header-controls">
     
     <div class="search-box" id="header-search-box">
-      <input class="search-input" id="input-search" placeholder="Seri, tür veya durum ara..." type="search" />
+      <input aria-autocomplete="list" aria-controls="search-results-listbox" aria-expanded="false" autocomplete="off" class="search-input" id="input-search" placeholder="Seri, tür veya durum ara..." role="combobox" type="search" />
+      <div aria-label="Arama Sonuçları" class="search-results-listbox hidden" id="search-results-listbox" role="listbox" tabindex="-1"></div>
     </div>
     <button aria-controls="header-search-box" aria-expanded="false" aria-label="Arama Çubuğunu Aç/Kapat" class="icon-btn mobile-only-btn" id="btn-mobile-search" title="Ara" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
     <button aria-label="Koyu / Açık Tema Değiştir" class="icon-btn" id="btn-theme-toggle" type="button" title="Koyu / Açık Tema Değiştir"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> <span class="btn-label">Tema</span></button>
@@ -8872,6 +9199,712 @@ body {
   }
 })(typeof window !== 'undefined' ? window : globalThis);
 
+/* === MODULE: scripts/search-controller.js === */
+/**
+ * @fileoverview Arama cubuguna yazilan girdileri dinleyerek canli, erisilebilir ve klavye destekli
+ * bir acilir liste kutusu (Listbox / Combobox) uretip yoneten moduler arama denetleyicisi (SearchController).
+ * W3C WAI-ARIA Combobox standartlarina, Turkce karakter normalizasyonuna ve otomatik DEBUG loglamasina tam uyumludur.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  /**
+   * HTML karakterlerini XSS guvenligi icin kacis dizilerine donusturur.
+   * @param {string} str - Temizlenecek metin.
+   * @returns {string} Guvenli HTML metni.
+   */
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  /**
+   * Turkce karakterleri kucuk harfe donusturup aksanlardan arindirarak arama icin normallestirir.
+   * @param {string} str - Ham metin.
+   * @returns {string} Normallestirilmis kucuk harfli metin.
+   */
+  function normalizeSearchText(str) {
+    return String(str || '')
+      .toLocaleLowerCase('tr')
+      .replace(/ı/g, 'i')
+      .replace(/ğ/g, 'g')
+      .replace(/ü/g, 'u')
+      .replace(/ş/g, 's')
+      .replace(/ö/g, 'o')
+      .replace(/ç/g, 'c')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
+  }
+
+  /**
+   * Karakteri arama normalizasyonu icin 1'e 1 karsiligina donusturur.
+   * @param {string} ch - Tek bir karakter.
+   * @returns {string} Normallestirilmis tek karakter.
+   */
+  function toNormalizedChar(ch) {
+    const lower = String(ch || '').toLocaleLowerCase('tr');
+    const map = {
+      'ı': 'i', 'i': 'i',
+      'ğ': 'g', 'g': 'g',
+      'ü': 'u', 'u': 'u',
+      'ş': 's', 's': 's',
+      'ö': 'o', 'o': 'o',
+      'ç': 'c', 'c': 'c',
+      'â': 'a', 'î': 'i', 'û': 'u',
+      'é': 'e', 'è': 'e'
+    };
+    return map[lower] || lower;
+  }
+
+  /**
+   * Metin icinde sorgu ile eslesen kisimlari guvenli sekilde <mark class="search-highlight"> ile sarar.
+   * Orijinal harf buyuklugunu ve ozel karakterleri (XSS) korur.
+   * @param {string} text - Orijinal kaynak metin.
+   * @param {string} query - Arama sorgusu.
+   * @returns {string} Vurgulanmis HTML dizgesi.
+   */
+  function highlightMatch(text, query) {
+    if (!text) return '';
+    const cleanText = String(text);
+    const cleanQuery = normalizeSearchText(query);
+    if (!cleanQuery) return escapeHtml(cleanText);
+
+    let normText = '';
+    for (let i = 0; i < cleanText.length; i++) {
+      normText += toNormalizedChar(cleanText[i]);
+    }
+
+    const matchIdx = normText.indexOf(cleanQuery);
+    if (matchIdx === -1) {
+      return escapeHtml(cleanText);
+    }
+
+    const before = cleanText.slice(0, matchIdx);
+    const matched = cleanText.slice(matchIdx, matchIdx + cleanQuery.length);
+    const after = cleanText.slice(matchIdx + cleanQuery.length);
+
+    return `${escapeHtml(before)}<mark class="search-highlight">${escapeHtml(matched)}</mark>${highlightMatch(after, query)}`;
+  }
+
+  /**
+   * Arama sonuclari acilir liste kutusunu yoneten sinif.
+   */
+  class SearchController {
+    /**
+     * SearchController nesnesini yapilandirir.
+     * @param {Object} [options={}] - Yapilandirma ayarlari.
+     * @param {HTMLInputElement|string} [options.input='input-search'] - Arama input ogesi veya id degeri.
+     * @param {HTMLElement|string} [options.listbox='search-results-listbox'] - Listbox kapsayici ogesi veya id degeri.
+     * @param {HTMLElement|string} [options.container='header-search-box'] - Ust arama kapsayici ogesi veya id degeri.
+     * @param {Function} [options.getSeriesList] - Katalogdaki serileri donduren fonksiyon.
+     * @param {Function} [options.onSelect] - Bir seri secildiginde calisacak geri cagirim.
+     * @param {Function} [options.onViewAll] - Tum sonuclar goruntulenmek istendiginde calisacak geri cagirim.
+     * @param {Object} [options.logger=null] - Loglama nesnesi.
+     * @param {number} [options.maxResults=8] - Acilir listede gosterilecek azami seri sayisi.
+     * @param {number} [options.minQueryLength=1] - Aramanin tetiklenmesi icin gereken asgari karakter sayisi.
+     */
+    constructor(options = {}) {
+      this.options = options;
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.getSeriesList =
+        typeof options.getSeriesList === 'function' ? options.getSeriesList : () => [];
+      this.onSelect = typeof options.onSelect === 'function' ? options.onSelect : null;
+      this.onViewAll = typeof options.onViewAll === 'function' ? options.onViewAll : null;
+      this.maxResults = typeof options.maxResults === 'number' ? options.maxResults : 8;
+      this.minQueryLength =
+        typeof options.minQueryLength === 'number' ? options.minQueryLength : 1;
+
+      this.inputEl = null;
+      this.listboxEl = null;
+      this.containerEl = null;
+
+      this.isOpen = false;
+      this.activeIndex = -1;
+      this.currentResults = [];
+      this.currentQuery = '';
+
+      this._boundInput = this._handleInput.bind(this);
+      this._boundKeyDown = this._handleKeyDown.bind(this);
+      this._boundFocus = this._handleFocus.bind(this);
+      this._boundDocumentClick = this._handleDocumentClick.bind(this);
+      this._boundListboxClick = this._handleListboxClick.bind(this);
+
+      this._initElements();
+      this._log('debug', 'SearchController baslatildi.', {
+        maxResults: this.maxResults,
+        minQueryLength: this.minQueryLength
+      });
+    }
+
+    /**
+     * Ic loglama yardimcisi.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Mesaj.
+     * @param {Object|null} [meta=null] - Ek veri nesnesi.
+     * @returns {void}
+     */
+    _log(level, msg, meta = null) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+
+    /**
+     * DOM ogelerini cozumler ve baglantilari kurar.
+     * @returns {boolean} Ogeler basariyla baglandiysa true.
+     */
+    _initElements() {
+      const resolveEl = (elOrId) => {
+        if (!elOrId) return null;
+        if (typeof elOrId === 'string') {
+          if (typeof document !== 'undefined' && typeof document.getElementById === 'function') {
+            return document.getElementById(elOrId);
+          }
+          return null;
+        }
+        if (typeof elOrId === 'object') return elOrId;
+        return null;
+      };
+
+      this.inputEl = resolveEl(this.options.input || 'input-search');
+      this.listboxEl = resolveEl(this.options.listbox || 'search-results-listbox');
+      this.containerEl = resolveEl(this.options.container || 'header-search-box');
+
+      if (!this.listboxEl && this.containerEl && typeof document !== 'undefined' && typeof document.createElement === 'function') {
+        // Listbox DOM'da yoksa dinamik olarak olustur
+        this.listboxEl = document.createElement('div');
+        this.listboxEl.id = 'search-results-listbox';
+        this.listboxEl.className = 'search-results-listbox hidden';
+        this.listboxEl.setAttribute('role', 'listbox');
+        this.listboxEl.setAttribute('aria-label', 'Arama Sonuçları');
+        this.containerEl.appendChild(this.listboxEl);
+      }
+
+      if (this.inputEl) {
+        if (typeof this.inputEl.setAttribute === 'function') {
+          this.inputEl.setAttribute('role', 'combobox');
+          this.inputEl.setAttribute('aria-autocomplete', 'list');
+          this.inputEl.setAttribute('aria-expanded', 'false');
+          this.inputEl.setAttribute('autocomplete', 'off');
+          if (this.listboxEl && this.listboxEl.id) {
+            this.inputEl.setAttribute('aria-controls', this.listboxEl.id);
+          }
+        }
+
+        if (typeof this.inputEl.removeEventListener === 'function') {
+          this.inputEl.removeEventListener('input', this._boundInput);
+          this.inputEl.removeEventListener('keydown', this._boundKeyDown);
+          this.inputEl.removeEventListener('focus', this._boundFocus);
+        }
+
+        if (typeof this.inputEl.addEventListener === 'function') {
+          this.inputEl.addEventListener('input', this._boundInput);
+          this.inputEl.addEventListener('keydown', this._boundKeyDown);
+          this.inputEl.addEventListener('focus', this._boundFocus);
+        }
+      }
+
+      if (this.listboxEl) {
+        if (typeof this.listboxEl.removeEventListener === 'function') {
+          this.listboxEl.removeEventListener('click', this._boundListboxClick);
+        }
+        if (typeof this.listboxEl.addEventListener === 'function') {
+          this.listboxEl.addEventListener('click', this._boundListboxClick);
+        }
+      }
+
+      if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+        document.removeEventListener('pointerdown', this._boundDocumentClick);
+        document.addEventListener('pointerdown', this._boundDocumentClick);
+      }
+
+      return Boolean(this.inputEl && this.listboxEl);
+    }
+
+    /**
+     * Verilen sorguya gore serileri filtreler ve uygunluk sirasina gore dizer.
+     * @param {string} query - Arama sorgusu.
+     * @returns {Array<Object>} Filtrelenmis ve puanlanmis seri listesi.
+     */
+    searchSeries(query) {
+      const clean = normalizeSearchText(query);
+      if (!clean) return [];
+
+      const list = this.getSeriesList();
+      if (!Array.isArray(list) || list.length === 0) return [];
+
+      const matches = [];
+
+      for (let i = 0; i < list.length; i++) {
+        const item = list[i];
+        const titleNorm = normalizeSearchText(item.title);
+        const altNorm = normalizeSearchText(item.altTitle);
+        const typeNorm = normalizeSearchText(item.type);
+        const statusNorm = normalizeSearchText(item.status);
+        const genresNorm = normalizeSearchText((item.genres || []).join(' '));
+
+        let score = 0;
+
+        if (titleNorm === clean) {
+          score = 100;
+        } else if (titleNorm.startsWith(clean)) {
+          score = 80;
+        } else if (titleNorm.includes(clean)) {
+          score = 60;
+        } else if (altNorm && (altNorm.startsWith(clean) || altNorm.includes(clean))) {
+          score = 40;
+        } else if (genresNorm.includes(clean)) {
+          score = 30;
+        } else if (typeNorm.includes(clean) || statusNorm.includes(clean)) {
+          score = 20;
+        }
+
+        if (score > 0) {
+          matches.push({ item, score });
+        }
+      }
+
+      matches.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return String(a.item.title || '').localeCompare(String(b.item.title || ''), 'tr');
+      });
+
+      return matches.map((m) => m.item);
+    }
+
+    /**
+     * Arama girdi olayini (input) isler.
+     * @param {Event} e - Girdi olayi.
+     * @returns {void}
+     */
+    _handleInput(e) {
+      const val = e && e.target ? e.target.value : '';
+      this.executeSearch(val);
+    }
+
+    /**
+     * Arama islemini baslatir ve listbox bilesenini gunceller.
+     * @param {string} query - Arama sorgusu.
+     * @returns {void}
+     */
+    executeSearch(query) {
+      this.currentQuery = String(query || '').trim();
+
+      if (this.currentQuery.length < this.minQueryLength) {
+        this.close();
+        this.currentResults = [];
+        return;
+      }
+
+      this.currentResults = this.searchSeries(this.currentQuery);
+      this._log('debug', 'Canli arama calistirildi.', {
+        query: this.currentQuery,
+        foundCount: this.currentResults.length
+      });
+
+      this.render();
+      this.open();
+    }
+
+    /**
+     * Odaklanma (focus) olayini isler.
+     * @returns {void}
+     */
+    _handleFocus() {
+      if (this.inputEl && this.inputEl.value.trim().length >= this.minQueryLength) {
+        this.executeSearch(this.inputEl.value);
+      }
+    }
+
+    /**
+     * Klavye tuslarini (ArrowDown, ArrowUp, Enter, Escape) dinler ve yonetir.
+     * @param {KeyboardEvent} e - Klavye olayi.
+     * @returns {void}
+     */
+    _handleKeyDown(e) {
+      if (!this.isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+        if (this.inputEl && this.inputEl.value.trim().length >= this.minQueryLength) {
+          e.preventDefault();
+          this.executeSearch(this.inputEl.value);
+          return;
+        }
+      }
+
+      if (!this.isOpen) return;
+
+      const totalItems = this._getTotalInteractiveItemsCount();
+      if (totalItems === 0 && e.key !== 'Escape') return;
+
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          this.setActiveIndex(this.activeIndex < totalItems - 1 ? this.activeIndex + 1 : 0);
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          this.setActiveIndex(this.activeIndex > 0 ? this.activeIndex - 1 : totalItems - 1);
+          break;
+        case 'Enter':
+          e.preventDefault();
+          this._selectCurrentActive();
+          break;
+        case 'Escape':
+          e.preventDefault();
+          this.close();
+          break;
+        case 'Tab':
+          this.close();
+          break;
+        default:
+          break;
+      }
+    }
+
+    /**
+     * Etkilesimli secenek sayisini (sonuclar + varsa "tumunu gor" satiri) dondurur.
+     * @returns {number} Toplam etkilesimli secenek sayisi.
+     */
+    _getTotalInteractiveItemsCount() {
+      if (!this.currentResults || this.currentResults.length === 0) return 0;
+      const count = Math.min(this.currentResults.length, this.maxResults);
+      // Sonuclar varsa en altta "Tum sonuclari katalogda gor" butonu da 1 secenektir
+      return count + 1;
+    }
+
+    /**
+     * Aktif secenek indeksini gunceller ve ekranda odaklanmasini saglar.
+     * @param {number} newIndex - Yeni aktif indeks.
+     * @returns {void}
+     */
+    setActiveIndex(newIndex) {
+      this.activeIndex = newIndex;
+      if (!this.listboxEl) return;
+
+      const items = this.listboxEl.querySelectorAll('[role="option"]');
+      items.forEach((item, idx) => {
+        const isActive = idx === this.activeIndex;
+        item.classList.toggle('is-active', isActive);
+        item.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        if (isActive) {
+          if (this.inputEl) {
+            this.inputEl.setAttribute('aria-activedescendant', item.id);
+          }
+          if (typeof item.scrollIntoView === 'function') {
+            item.scrollIntoView({ block: 'nearest' });
+          }
+        }
+      });
+
+      if (this.activeIndex === -1 && this.inputEl) {
+        this.inputEl.removeAttribute('aria-activedescendant');
+      }
+    }
+
+    /**
+     * O an aktif olan secenegi calistirir.
+     * @returns {void}
+     */
+    _selectCurrentActive() {
+      if (this.activeIndex === -1) {
+        // Hicbir oge secilmemisse ilk ogeyi sec veya tumunu gor calistir
+        if (this.currentResults.length > 0) {
+          this.selectSeries(this.currentResults[0].id);
+        } else if (this.onViewAll) {
+          this.triggerViewAll();
+        }
+        return;
+      }
+
+      const totalResults = Math.min(this.currentResults.length, this.maxResults);
+      if (this.activeIndex < totalResults) {
+        const chosen = this.currentResults[this.activeIndex];
+        if (chosen) {
+          this.selectSeries(chosen.id);
+        }
+      } else {
+        // En alttaki "Tum sonuclari katalogda gor" satiri secildi
+        this.triggerViewAll();
+      }
+    }
+
+    /**
+     * Bir seriyi secer, ayrinti sayfasina yonlendirir ve listbox'i kapatir.
+     * @param {string} seriesId - Seri kimligi.
+     * @returns {void}
+     */
+    selectSeries(seriesId) {
+      this._log('info', 'Listbox uzerinden seri secildi.', { seriesId });
+      const targetSeries = (this.getSeriesList() || []).find((s) => s.id === seriesId);
+      this.close();
+
+      if (this.inputEl) {
+        this.inputEl.value = '';
+      }
+
+      if (typeof this.onSelect === 'function') {
+        this.onSelect(seriesId, targetSeries);
+      }
+    }
+
+    /**
+     * "Tum sonuclari katalogda gor" aksiyonunu tetikler.
+     * @returns {void}
+     */
+    triggerViewAll() {
+      const q = this.currentQuery;
+      this._log('info', 'Tum sonuclari katalogda gor secildi.', { query: q });
+      this.close();
+
+      if (typeof this.onViewAll === 'function') {
+        this.onViewAll(q, this.currentResults.length);
+      }
+    }
+
+    /**
+     * Listbox ici tiklamalari delegasyon ile dinler.
+     * @param {MouseEvent} e - Tiklama olayi.
+     * @returns {void}
+     */
+    _handleListboxClick(e) {
+      if (!e || !e.target) return;
+
+      const viewAllBtn = e.target.closest('[data-action="view-all"]');
+      if (viewAllBtn) {
+        e.preventDefault();
+        this.triggerViewAll();
+        return;
+      }
+
+      const itemEl = e.target.closest('[data-series-id]');
+      if (itemEl) {
+        e.preventDefault();
+        const id = itemEl.getAttribute('data-series-id');
+        if (id) {
+          this.selectSeries(id);
+        }
+      }
+    }
+
+    /**
+     * Arama kutusu disina tiklandiginda listbox'i kapatir.
+     * @param {PointerEvent|MouseEvent} e - Tiklama olayi.
+     * @returns {void}
+     */
+    _handleDocumentClick(e) {
+      if (!this.isOpen) return;
+      if (this.containerEl && this.containerEl.contains(e.target)) return;
+      if (this.listboxEl && this.listboxEl.contains(e.target)) return;
+      this.close();
+    }
+
+    /**
+     * Listbox acilir kutusunu acar.
+     * @returns {void}
+     */
+    open() {
+      if (!this.listboxEl) return;
+      this.isOpen = true;
+      this.listboxEl.classList.remove('hidden');
+      if (this.inputEl) {
+        this.inputEl.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    /**
+     * Listbox acilir kutusunu kapatir.
+     * @returns {void}
+     */
+    close() {
+      if (!this.listboxEl) return;
+      this.isOpen = false;
+      this.activeIndex = -1;
+      this.listboxEl.classList.add('hidden');
+      if (this.inputEl) {
+        this.inputEl.setAttribute('aria-expanded', 'false');
+        this.inputEl.removeAttribute('aria-activedescendant');
+      }
+    }
+
+    /**
+     * Listbox icerigini DOM icinde olusturur ve cizer.
+     * @returns {void}
+     */
+    render() {
+      if (!this.listboxEl) return;
+
+      const results = this.currentResults;
+      const query = this.currentQuery;
+
+      if (results.length === 0) {
+        this.listboxEl.innerHTML = `
+          <div class="search-empty-state" role="status">
+            <svg aria-hidden="true" class="ui-icon search-empty-icon" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+            <div class="search-empty-text">
+              <strong>"${escapeHtml(query)}"</strong> için sonuç bulunamadı.
+            </div>
+            <div class="search-empty-hint">Farklı anahtar kelimeler veya tür isimleri deneyebilirsiniz.</div>
+          </div>
+        `;
+        return;
+      }
+
+      const visibleList = results.slice(0, this.maxResults);
+      const totalCount = results.length;
+      const cleanQuery = normalizeSearchText(query);
+
+      const itemsHtml = visibleList
+        .map((series, idx) => {
+          const optId = `search-opt-${series.id || idx}`;
+          const cover = series.cover || '';
+          const chaptersCount = Array.isArray(series.chapters) ? series.chapters.length : 0;
+          const type = series.type || 'Manhwa';
+          const status = series.status || 'Devam Ediyor';
+
+          const hasTitleMatch = normalizeSearchText(series.title).includes(cleanQuery);
+          const hasAltMatch =
+            Boolean(series.altTitle) && normalizeSearchText(series.altTitle).includes(cleanQuery);
+          const hasTypeMatch = normalizeSearchText(type).includes(cleanQuery);
+          const hasStatusMatch = normalizeSearchText(status).includes(cleanQuery);
+          const hasGenreMatch = (series.genres || []).some((g) =>
+            normalizeSearchText(g).includes(cleanQuery)
+          );
+
+          // Baslik vurgulama
+          const titleHtml = highlightMatch(series.title, query);
+
+          // Alternatif ad vurgulama
+          const altHtml = series.altTitle ? highlightMatch(series.altTitle, query) : '';
+
+          // Tur etiketleri siralamasi ve vurgusu
+          let displayGenres = (series.genres || []).slice();
+          if (hasGenreMatch) {
+            displayGenres.sort((a, b) => {
+              const aM = normalizeSearchText(a).includes(cleanQuery);
+              const bM = normalizeSearchText(b).includes(cleanQuery);
+              if (aM && !bM) return -1;
+              if (!aM && bM) return 1;
+              return 0;
+            });
+          }
+          displayGenres = displayGenres.slice(0, 3);
+
+          const genresHtml = displayGenres
+            .map((g) => {
+              const isGMatch = normalizeSearchText(g).includes(cleanQuery);
+              return `<span class="search-genre-tag ${isGMatch ? 'is-matched' : ''}">${highlightMatch(g, query)}</span>`;
+            })
+            .join('');
+
+          // Tur ve durum rozetleri
+          const typeHtml = hasTypeMatch
+            ? `<span class="search-badge badge-type is-matched">${highlightMatch(type, query)}</span>`
+            : `<span class="search-badge badge-type">${escapeHtml(type)}</span>`;
+
+          const statusHtml = hasStatusMatch
+            ? `<span class="search-badge badge-status is-matched">${highlightMatch(status, query)}</span>`
+            : `<span class="search-badge badge-status">${escapeHtml(status)}</span>`;
+
+          // Eslesme ana baslikta degilse nereden eslestigini acikca goster
+          let matchContextHtml = '';
+          if (!hasTitleMatch) {
+            if (hasAltMatch) {
+              matchContextHtml = `<div class="search-match-source"><span class="search-match-label">Alternatif Ad:</span>${altHtml}</div>`;
+            } else if (hasGenreMatch) {
+              matchContextHtml = `<div class="search-match-source"><span class="search-match-label">Kategori Eşleşmesi</span></div>`;
+            }
+          }
+
+          return `
+            <div class="search-result-item" role="option" id="${escapeHtml(optId)}" data-series-id="${escapeHtml(series.id)}" aria-selected="false">
+              <div class="search-result-thumb">
+                ${
+                  cover
+                    ? `<img src="${escapeHtml(cover)}" alt="${escapeHtml(series.title)}" loading="lazy" onerror="this.style.display='none';" />`
+                    : `<div class="search-thumb-fallback">#</div>`
+                }
+              </div>
+              <div class="search-result-info">
+                <div class="search-result-title">${titleHtml}</div>
+                ${series.altTitle && !matchContextHtml ? `<div class="search-result-alt">${altHtml}</div>` : ''}
+                ${matchContextHtml}
+                <div class="search-result-meta">
+                  ${typeHtml}
+                  ${statusHtml}
+                  <span class="search-badge badge-chapter">${chaptersCount} Bölüm</span>
+                </div>
+                ${
+                  genresHtml
+                    ? `<div class="search-result-genres">${genresHtml}</div>`
+                    : ''
+                }
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+
+      const footerHtml = `
+        <div class="search-result-footer" role="option" id="search-opt-view-all" data-action="view-all" aria-selected="false">
+          <span class="search-footer-label">Tüm sonuçları katalogda gör (${totalCount} seri)</span>
+          <svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
+      `;
+
+      this.listboxEl.innerHTML = `
+        <div class="search-results-list" role="presentation">
+          ${itemsHtml}
+        </div>
+        ${footerHtml}
+      `;
+    }
+
+    /**
+     * Tum olay dinleyicilerini temizler ve bellek sizintisini onler.
+     * @returns {void}
+     */
+    destroy() {
+      if (this.inputEl) {
+        this.inputEl.removeEventListener('input', this._boundInput);
+        this.inputEl.removeEventListener('keydown', this._boundKeyDown);
+        this.inputEl.removeEventListener('focus', this._boundFocus);
+      }
+      if (this.listboxEl) {
+        this.listboxEl.removeEventListener('click', this._boundListboxClick);
+      }
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('pointerdown', this._boundDocumentClick);
+      }
+      this.close();
+      this._log('debug', 'SearchController yok edildi.');
+    }
+  }
+
+  globalScope.SearchController = SearchController;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      SearchController,
+      normalizeSearchText,
+      escapeHtml,
+      highlightMatch,
+      toNormalizedChar
+    };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
 /* === MODULE: scripts/app-init.js === */
 /**
  * @fileoverview Ana uygulama denetleyicisi (AppController).
@@ -8899,6 +9932,11 @@ body {
     globalScope.BloggerThemeBridge ||
     (typeof require === 'function'
       ? require('./blogger-theme-bridge').BloggerThemeBridge
+      : null);
+  const SearchControllerClass =
+    globalScope.SearchController ||
+    (typeof require === 'function'
+      ? require('./search-controller').SearchController
       : null);
   const iconFn =
     (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
@@ -8956,6 +9994,27 @@ body {
       this.activeSeriesId = '';
       this.activeChapterId = '';
       this.chapterSortOrder = 'desc';
+      const ResolvedSearchClass = globalScope.SearchController || SearchControllerClass;
+      this.searchController =
+        deps.searchController ||
+        (ResolvedSearchClass
+          ? new ResolvedSearchClass({
+              logger: this.logger,
+              getSeriesList: () => (this.catalog ? this.catalog.seriesList : []),
+              onSelect: (seriesId) => {
+                if (this.themeBridge) this.themeBridge.closeMobilePanels();
+                this.openSeriesDetail(seriesId);
+              },
+              onViewAll: (query) => {
+                if (this.themeBridge) this.themeBridge.closeMobilePanels();
+                if (this.catalog) {
+                  this.catalog.setSearchQuery(query);
+                }
+                this.switchToCatalogIfNeeded();
+                this.renderCatalogView();
+              }
+            })
+          : null);
     }
     /**
      * Tarayici DOM baslatmasini, ust baslik entegrasyonunu ve dinamik Blogger veri cekimini calistirir.
@@ -8983,6 +10042,9 @@ body {
         this.themeBridge.integrateSidebarGadgets();
       }
       this.integrateHeaderBar();
+      if (this.searchController && typeof this.searchController._initElements === 'function') {
+        this.searchController._initElements();
+      }
       this.bindEvents();
       await this.loadDynamicData();
       this.renderDebugLogs();
@@ -9608,11 +10670,13 @@ body {
         const pick = all[Math.floor(Math.random() * all.length)];
         if (pick) this.openSeriesDetail(pick.id);
       });
-      on('input-search', 'input', (e) => {
-        this.catalog.setSearchQuery(e.target.value);
-        this.SwitchToCatalogIfNeeded();
-        this.renderCatalogView();
-      });
+      if (!this.searchController) {
+        on('input-search', 'input', (e) => {
+          this.catalog.setSearchQuery(e.target.value);
+          this.switchToCatalogIfNeeded();
+          this.renderCatalogView();
+        });
+      }
       on('select-catalog-sort', 'change', (e) => {
         this.catalog.setSortOrder(e.target.value);
         this.renderCatalogView();

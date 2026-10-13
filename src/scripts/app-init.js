@@ -25,6 +25,11 @@
     (typeof require === 'function'
       ? require('./blogger-theme-bridge').BloggerThemeBridge
       : null);
+  const SearchControllerClass =
+    globalScope.SearchController ||
+    (typeof require === 'function'
+      ? require('./search-controller').SearchController
+      : null);
   const iconFn =
     (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
     (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
@@ -81,6 +86,27 @@
       this.activeSeriesId = '';
       this.activeChapterId = '';
       this.chapterSortOrder = 'desc';
+      const ResolvedSearchClass = globalScope.SearchController || SearchControllerClass;
+      this.searchController =
+        deps.searchController ||
+        (ResolvedSearchClass
+          ? new ResolvedSearchClass({
+              logger: this.logger,
+              getSeriesList: () => (this.catalog ? this.catalog.seriesList : []),
+              onSelect: (seriesId) => {
+                if (this.themeBridge) this.themeBridge.closeMobilePanels();
+                this.openSeriesDetail(seriesId);
+              },
+              onViewAll: (query) => {
+                if (this.themeBridge) this.themeBridge.closeMobilePanels();
+                if (this.catalog) {
+                  this.catalog.setSearchQuery(query);
+                }
+                this.switchToCatalogIfNeeded();
+                this.renderCatalogView();
+              }
+            })
+          : null);
     }
     /**
      * Tarayici DOM baslatmasini, ust baslik entegrasyonunu ve dinamik Blogger veri cekimini calistirir.
@@ -108,6 +134,9 @@
         this.themeBridge.integrateSidebarGadgets();
       }
       this.integrateHeaderBar();
+      if (this.searchController && typeof this.searchController._initElements === 'function') {
+        this.searchController._initElements();
+      }
       this.bindEvents();
       await this.loadDynamicData();
       this.renderDebugLogs();
@@ -733,11 +762,13 @@
         const pick = all[Math.floor(Math.random() * all.length)];
         if (pick) this.openSeriesDetail(pick.id);
       });
-      on('input-search', 'input', (e) => {
-        this.catalog.setSearchQuery(e.target.value);
-        this.SwitchToCatalogIfNeeded();
-        this.renderCatalogView();
-      });
+      if (!this.searchController) {
+        on('input-search', 'input', (e) => {
+          this.catalog.setSearchQuery(e.target.value);
+          this.switchToCatalogIfNeeded();
+          this.renderCatalogView();
+        });
+      }
       on('select-catalog-sort', 'change', (e) => {
         this.catalog.setSortOrder(e.target.value);
         this.renderCatalogView();
