@@ -506,6 +506,8 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
     'btn-end-prev-chapter': makeHudEl(),
     'btn-end-next-chapter': makeHudEl(),
     'btn-end-series': makeHudEl(),
+    'btn-prev-chapter': makeHudEl(),
+    'btn-next-chapter': makeHudEl(),
     'reader-viewport': makeHudEl(),
     'seekbar-current-page': makeHudEl(),
     'seekbar-total-pages': makeHudEl(),
@@ -543,6 +545,8 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(domMap['reader-end-chapter-label'].textContent, 'Bölüm 279 Tamamlandı');
   assert.equal(domMap['btn-end-prev-chapter'].disabled, false);
   assert.equal(domMap['btn-end-next-chapter'].disabled, true);
+  assert.equal(domMap['btn-prev-chapter'].disabled, false);
+  assert.equal(domMap['btn-next-chapter'].disabled, true);
   // Manhwa (Webtoon) serisinde Okuma Modu ve Okuma Yonu gizli olmali
   assert.equal(domMap['mihon-setting-mode-group'].classes.has('hidden'), true);
   assert.equal(domMap['mihon-setting-dir-group'].classes.has('hidden'), true);
@@ -682,4 +686,15 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
     /\.reader-chapter-switcher\s*\{[^}]*height:\s*42px;[^}]*margin:\s*0\s+auto;/s.test(readerCss),
     true
   );
+  assert.equal(
+    bodyHtml.indexOf('id="reader-group-novel"') > bodyHtml.indexOf('id="reader-footer-bar"'),
+    true
+  );
+  assert.equal(
+    /\.reader-toolbar\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*1fr\s+auto\s+1fr;/s.test(
+      readerCss
+    ),
+    true
+  );
+  assert.equal(readerCss.includes('.reader-novel-bottom-group'), true);
 });

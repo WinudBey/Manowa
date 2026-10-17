@@ -166,12 +166,16 @@
         const endPrevBtn = targetDoc.getElementById('btn-end-prev-chapter');
         const endNextBtn = targetDoc.getElementById('btn-end-next-chapter');
         const endSeriesBtn = targetDoc.getElementById('btn-end-series');
+        const dockPrevBtn = targetDoc.getElementById('btn-prev-chapter');
+        const dockNextBtn = targetDoc.getElementById('btn-next-chapter');
 
         if (endLabel && chapterMeta.chapterLabel) {
           endLabel.textContent = `${chapterMeta.chapterLabel} Tamamlandı`;
         }
         if (endPrevBtn) endPrevBtn.disabled = !chapterMeta.hasPrevChapter;
         if (endNextBtn) endNextBtn.disabled = !chapterMeta.hasNextChapter;
+        if (dockPrevBtn) dockPrevBtn.disabled = !chapterMeta.hasPrevChapter;
+        if (dockNextBtn) dockNextBtn.disabled = !chapterMeta.hasNextChapter;
         if (endSeriesBtn && chapterMeta.seriesHref && chapterMeta.seriesId) {
           endSeriesBtn.setAttribute('href', chapterMeta.seriesHref);
           endSeriesBtn.setAttribute('data-action', 'detail');

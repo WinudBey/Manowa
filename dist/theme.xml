@@ -3110,17 +3110,11 @@ body[data-active-view="reader"] .scroll-top-btn {
 
 .reader-toolbar {
   padding: 0.65rem 1rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 0.65rem;
   flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.reader-toolbar::-webkit-scrollbar {
-  display: none;
 }
 
 .reader-title-group {
@@ -3128,7 +3122,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   flex-direction: row;
   align-items: center;
   gap: 0.45rem;
-  flex: 0 1 auto;
+  justify-self: start;
   min-width: 0;
 }
 
@@ -3168,6 +3162,7 @@ body[data-active-view="reader"] .scroll-top-btn {
 .reader-chapter-switcher {
   display: inline-flex;
   align-items: center;
+  justify-self: center;
   height: 36px;
   background: #141824;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -3228,6 +3223,7 @@ body[data-active-view="reader"] .scroll-top-btn {
 .reader-controls {
   display: flex;
   align-items: center;
+  justify-self: end;
   justify-content: flex-end;
   gap: 0.45rem;
   flex: 0 0 auto;
@@ -3241,6 +3237,15 @@ body[data-active-view="reader"] .scroll-top-btn {
   gap: 0.45rem;
   flex-wrap: nowrap;
   flex-shrink: 0;
+}
+
+.reader-novel-bottom-group {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  flex: 0 1 auto;
+  margin: 0 auto;
 }
 
 .reader-control-cluster.hidden,
@@ -3724,7 +3729,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   gap: 0.5rem;
   flex: 1 1 auto;
   min-width: 0;
-  width: auto;
+  max-width: 650px;
+  margin: 0 auto;
 }
 .mihon-seekbar-pill {
   flex: 1 1 auto;
@@ -3823,11 +3829,13 @@ body[data-active-view="reader"] .scroll-top-btn {
   .reader-toolbar {
     padding: 0.55rem 0.65rem;
     gap: 0.45rem;
-    flex-wrap: nowrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
   }
   .reader-title-group {
     flex: 0 0 auto;
+    justify-self: start;
   }
   .reader-series-back-btn {
     width: 42px;
@@ -3842,6 +3850,7 @@ body[data-active-view="reader"] .scroll-top-btn {
     height: 42px;
     flex-shrink: 0;
     margin: 0 auto;
+    justify-self: center;
     padding: 0.18rem;
     gap: 0.15rem;
     border-radius: 10px;
@@ -3860,6 +3869,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   .reader-controls {
     width: auto;
     flex: 0 0 auto;
+    justify-self: end;
     justify-content: flex-end;
     gap: 0.4rem;
     padding-top: 0;
@@ -3935,6 +3945,10 @@ body[data-active-view="reader"] .scroll-top-btn {
     padding: 0.6rem 0.65rem;
     gap: 0.45rem;
   }
+  .reader-novel-bottom-group {
+    gap: 0.35rem;
+    margin: 0 auto;
+  }
   .mihon-seekbar-row {
     gap: 0.45rem;
   }
@@ -3996,6 +4010,18 @@ body[data-active-view="reader"] .scroll-top-btn {
   .page-counter-pill {
     padding: 0 0.65rem;
     font-size: 0.84rem;
+  }
+  .reader-novel-bottom-group {
+    gap: 0.25rem;
+  }
+  .reader-novel-bottom-group .reader-pill-btn {
+    height: 32px;
+    min-width: 26px;
+    padding: 0 0.35rem;
+  }
+  .reader-novel-bottom-group .reader-pill-value {
+    min-width: 36px;
+    font-size: 0.78rem;
   }
 }
 
@@ -4358,15 +4384,6 @@ body {
         </div>
 
         <div class="reader-controls">
-          <div class="reader-control-cluster hidden" id="reader-group-novel">
-            <div class="reader-pill-group">
-              <button class="reader-pill-btn" id="btn-font-decrease" title="Yazı Boyutunu Küçült" type="button">A−</button>
-              <span class="reader-pill-value" id="font-size-label">105%</span>
-              <button class="reader-pill-btn" id="btn-font-increase" title="Yazı Boyutunu Büyüt" type="button">A+</button>
-            </div>
-            <button class="reader-btn" id="btn-font-family" title="Yazı Tipini Değiştir" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> <span id="font-family-label">Sans</span></button>
-          </div>
-
           <button aria-controls="reader-settings-sheet" aria-expanded="false" aria-label="Okuyucu Ayarları" class="reader-btn mihon-settings-btn" id="btn-reader-settings" title="Okuyucu Ayarları" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg> <span class="btn-label">Ayarlar</span></button>
         </div>
       </div>
@@ -4460,22 +4477,33 @@ body {
 
     <!-- MIHON ALT HUD: YUZEN SEEKBAR VE EYLEM DOCK CUBUGU -->
     <div class="reader-footer-bar mihon-bottom-hud" id="reader-footer-bar">
+      <button aria-label="Önceki Bölüm" class="reader-btn mihon-skip-btn" id="btn-prev-chapter" title="Önceki Bölüm" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" x2="5" y1="19" y2="5"/></svg> <span class="btn-label">Önceki Bölüm</span></button>
+
       <div class="mihon-seekbar-row" id="reader-seekbar-row">
-        <button aria-label="Önceki Bölüm" class="reader-btn mihon-skip-btn" id="btn-prev-chapter" title="Önceki Bölüm" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" x2="5" y1="19" y2="5"/></svg> <span class="btn-label">Önceki Bölüm</span></button>
         <div class="mihon-seekbar-pill">
           <span class="mihon-seekbar-num" id="seekbar-current-page">1</span>
           <input aria-label="Sayfa Kaydırıcısı" class="mihon-page-slider" id="reader-page-slider" max="1" min="1" step="1" type="range" value="1" />
           <span class="mihon-seekbar-num" id="seekbar-total-pages">1</span>
         </div>
-        <button aria-label="Sonraki Bölüm" class="reader-btn mihon-skip-btn" id="btn-next-chapter" title="Sonraki Bölüm" type="button"><span class="btn-label">Sonraki Bölüm</span> <svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" x2="19" y1="5" y2="19"/></svg></button>
       </div>
 
-      <div class="mihon-action-dock">
+      <div class="reader-control-cluster reader-novel-bottom-group hidden" id="reader-group-novel">
+        <div class="reader-pill-group">
+          <button class="reader-pill-btn" id="btn-font-decrease" title="Yazı Boyutunu Küçült" type="button">A−</button>
+          <span class="reader-pill-value" id="font-size-label">105%</span>
+          <button class="reader-pill-btn" id="btn-font-increase" title="Yazı Boyutunu Büyüt" type="button">A+</button>
+        </div>
+        <button class="reader-btn" id="btn-font-family" title="Yazı Tipini Değiştir" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> <span id="font-family-label">Sans</span></button>
+      </div>
+
+      <div class="mihon-action-dock" id="reader-action-dock">
         <div class="reader-footer-page-nav hidden" id="reader-footer-page-nav">
           <button class="reader-btn" id="btn-prev-page" title="Önceki Sayfa" type="button">‹ <span class="btn-label">Önceki Sayfa</span></button>
           <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
           <button class="reader-btn" id="btn-next-page" title="Sonraki Sayfa" type="button"><span class="btn-label">Sonraki Sayfa</span> ›</button>
         </div>
+
+        <button aria-label="Sonraki Bölüm" class="reader-btn mihon-skip-btn" id="btn-next-chapter" title="Sonraki Bölüm" type="button"><span class="btn-label">Sonraki Bölüm</span> <svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" x2="19" y1="5" y2="19"/></svg></button>
 
         <div class="reader-controls">
           <button class="reader-btn" id="btn-dock-comments" title="Bölüm Yorumlarına Git" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span class="btn-label">Yorumlar</span></button>
@@ -9109,12 +9137,16 @@ body {
         const endPrevBtn = targetDoc.getElementById('btn-end-prev-chapter');
         const endNextBtn = targetDoc.getElementById('btn-end-next-chapter');
         const endSeriesBtn = targetDoc.getElementById('btn-end-series');
+        const dockPrevBtn = targetDoc.getElementById('btn-prev-chapter');
+        const dockNextBtn = targetDoc.getElementById('btn-next-chapter');
 
         if (endLabel && chapterMeta.chapterLabel) {
           endLabel.textContent = `${chapterMeta.chapterLabel} Tamamlandı`;
         }
         if (endPrevBtn) endPrevBtn.disabled = !chapterMeta.hasPrevChapter;
         if (endNextBtn) endNextBtn.disabled = !chapterMeta.hasNextChapter;
+        if (dockPrevBtn) dockPrevBtn.disabled = !chapterMeta.hasPrevChapter;
+        if (dockNextBtn) dockNextBtn.disabled = !chapterMeta.hasNextChapter;
         if (endSeriesBtn && chapterMeta.seriesHref && chapterMeta.seriesId) {
           endSeriesBtn.setAttribute('href', chapterMeta.seriesHref);
           endSeriesBtn.setAttribute('data-action', 'detail');
