@@ -493,7 +493,12 @@ test('SVG Ikon Sistemi ve SidebarController: Temada emoji kullanilmamali, SVG ik
   assert.equal(themeXml.includes('id="home-sidebar"'), true);
   assert.equal(themeXml.includes('id="sidebar-top-series"'), true);
   assert.equal(themeXml.includes('id="sidebar-genres"'), true);
-  assert.equal(themeXml.includes('id="sidebar-quick-library"'), true);
+  assert.equal(themeXml.includes('id="sidebar-quick-library"'), false);
+  assert.equal(previewHtml.includes('id="sidebar-quick-library"'), false);
+  assert.equal(themeXml.includes('id="lang-filter-group"'), false);
+  assert.equal(previewHtml.includes('id="lang-filter-group"'), false);
+  assert.equal(themeXml.includes('id="select-catalog-sort"'), false);
+  assert.equal(themeXml.includes('id="catalog-count-label"'), false);
 });
 
 test('SeriesPageController: Seri bilgileri sayfasi meta veri izgarasi, bolum arama, siralama ve benzer seriler dogru calismali', () => {
