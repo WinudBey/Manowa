@@ -115,42 +115,6 @@
   color: #ffffff;
 }
 
-.reader-type-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 28px;
-  padding: 0 0.6rem;
-  border-radius: 7px;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  background: rgba(255, 255, 255, 0.08);
-  color: #e2e8f0;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  flex-shrink: 0;
-}
-
-.reader-type-badge[data-type='manhwa'],
-.reader-type-badge[data-type='manhua'] {
-  background: rgba(249, 115, 22, 0.22);
-  border-color: rgba(249, 115, 22, 0.45);
-  color: #fdba74;
-}
-
-.reader-type-badge[data-type='manga'] {
-  background: rgba(225, 29, 72, 0.22);
-  border-color: rgba(244, 63, 94, 0.45);
-  color: #fecdd3;
-}
-
-.reader-type-badge[data-type='novel'] {
-  background: rgba(13, 148, 136, 0.22);
-  border-color: rgba(20, 184, 166, 0.45);
-  color: #99f6e4;
-}
-
 .reader-chapter-name {
   font-size: 0.88rem;
   font-weight: 700;
@@ -791,24 +755,12 @@
     justify-content: space-between;
   }
   .reader-title-group {
-    flex: 1 1 auto;
-    min-width: 0;
-    gap: 0.35rem;
-  }
-  .reader-series-back-btn {
-    max-width: 190px;
-    min-width: 0;
-    height: 42px;
-    padding: 0 0.75rem;
-    font-size: 0.88rem;
-    border-radius: 10px;
-  }
-  .reader-type-badge {
-    display: none;
+    display: none !important;
   }
   .reader-chapter-switcher {
     height: 42px;
     flex-shrink: 0;
+    margin: 0 auto;
     padding: 0.18rem;
     gap: 0.15rem;
     border-radius: 10px;

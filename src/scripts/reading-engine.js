@@ -745,7 +745,6 @@
       const zoomLabel = targetDoc.getElementById('zoom-label');
       const fontSizeLabel = targetDoc.getElementById('font-size-label');
       const fontFamilyLabel = targetDoc.getElementById('font-family-label');
-      const typeBadge = targetDoc.getElementById('reader-type-badge');
       const mangaGroup = targetDoc.getElementById('reader-group-manga');
       const imageGroup = targetDoc.getElementById('reader-group-image');
       const novelGroup = targetDoc.getElementById('reader-group-novel');
@@ -760,12 +759,6 @@
       if (fontSizeLabel) fontSizeLabel.textContent = `${state.novelFontSize}%`;
       if (fontFamilyLabel) {
         fontFamilyLabel.textContent = state.novelFontFamily === 'serif' ? 'Serif' : 'Sans';
-      }
-      if (typeBadge) {
-        typeBadge.textContent = state.seriesTypeLabel;
-        if (typeof typeBadge.setAttribute === 'function') {
-          typeBadge.setAttribute('data-type', state.seriesType);
-        }
       }
       if (mangaGroup && mangaGroup.classList) {
         mangaGroup.classList.toggle('hidden', !state.showMangaControls);

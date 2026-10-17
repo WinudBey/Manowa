@@ -182,7 +182,6 @@ test('ReadingEngine: Seri turune gore (Manhwa, Manga, Novel) gereksiz secenekler
     'zoom-label': makeToggleEl(),
     'font-size-label': makeToggleEl(),
     'font-family-label': makeToggleEl(),
-    'reader-type-badge': makeToggleEl(),
     'reader-group-manga': makeToggleEl(),
     'reader-group-image': makeToggleEl(),
     'reader-group-novel': makeToggleEl(),
@@ -198,8 +197,6 @@ test('ReadingEngine: Seri turune gore (Manhwa, Manga, Novel) gereksiz secenekler
   };
 
   engine.syncControlsIntoDom(mockDoc);
-  assert.equal(domMap['reader-type-badge'].textContent, 'Novel');
-  assert.equal(domMap['reader-type-badge'].attrs['data-type'], 'novel');
   assert.equal(domMap['reader-group-manga'].classList.hiddenState, true);
   assert.equal(domMap['reader-group-image'].classList.hiddenState, true);
   assert.equal(domMap['reader-group-novel'].classList.hiddenState, false);
@@ -598,6 +595,8 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(bodyHtml.includes('id="btn-footer-series"'), false);
   assert.equal(bodyHtml.includes('id="btn-dock-mode"'), false);
   assert.equal(bodyHtml.includes('id="btn-dock-direction"'), false);
+  assert.equal(bodyHtml.includes('id="reader-type-badge"'), false);
+  assert.equal(readerCss.includes('.reader-type-badge'), false);
   assert.equal(
     bodyHtml.includes('class="reader-btn reader-floating-autoscroll" id="btn-autoscroll"'),
     true
@@ -629,4 +628,12 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(/\.mihon-action-dock\s*\{\s*flex-wrap:\s*nowrap;/s.test(readerCss), true);
   assert.equal(/\.mihon-choice-pill\s*\{[^}]*min-height:\s*42px;/s.test(readerCss), true);
   assert.equal(/\.mihon-seekbar-pill\s*\{\s*height:\s*44px;/s.test(readerCss), true);
+  assert.equal(
+    /\.reader-title-group\s*\{\s*display:\s*none\s*!important;\s*\}/s.test(readerCss),
+    true
+  );
+  assert.equal(
+    /\.reader-chapter-switcher\s*\{[^}]*height:\s*42px;[^}]*margin:\s*0\s+auto;/s.test(readerCss),
+    true
+  );
 });

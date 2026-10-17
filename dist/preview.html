@@ -3138,10 +3138,10 @@ body[data-active-view="reader"] .scroll-top-btn {
   position: sticky;
   top: 0;
   z-index: 110;
-  background: rgba(11, 13, 19, 0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(11, 13, 19, 0.62);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
   transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
@@ -3202,8 +3202,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   font-weight: 700;
   color: #e2e8f0;
   text-decoration: none;
-  background: #141824;
-  border: 1px solid rgba(249, 115, 22, 0.35);
+  background: rgba(20, 24, 36, 0.58);
+  border: 1px solid rgba(249, 115, 22, 0.38);
   border-radius: 9px;
   white-space: nowrap;
   overflow: hidden;
@@ -3218,42 +3218,6 @@ body[data-active-view="reader"] .scroll-top-btn {
   color: #ffffff;
 }
 
-.reader-type-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 28px;
-  padding: 0 0.6rem;
-  border-radius: 7px;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  background: rgba(255, 255, 255, 0.08);
-  color: #e2e8f0;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  flex-shrink: 0;
-}
-
-.reader-type-badge[data-type='manhwa'],
-.reader-type-badge[data-type='manhua'] {
-  background: rgba(249, 115, 22, 0.22);
-  border-color: rgba(249, 115, 22, 0.45);
-  color: #fdba74;
-}
-
-.reader-type-badge[data-type='manga'] {
-  background: rgba(225, 29, 72, 0.22);
-  border-color: rgba(244, 63, 94, 0.45);
-  color: #fecdd3;
-}
-
-.reader-type-badge[data-type='novel'] {
-  background: rgba(13, 148, 136, 0.22);
-  border-color: rgba(20, 184, 166, 0.45);
-  color: #99f6e4;
-}
-
 .reader-chapter-name {
   font-size: 0.88rem;
   font-weight: 700;
@@ -3265,8 +3229,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   display: inline-flex;
   align-items: center;
   height: 36px;
-  background: #141824;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(20, 24, 36, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 10px;
   padding: 0.18rem;
   gap: 0.18rem;
@@ -3348,8 +3312,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   display: inline-flex;
   align-items: center;
   height: 36px;
-  background: #141824;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(20, 24, 36, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 9px;
   padding: 0.18rem;
   gap: 0.15rem;
@@ -3387,9 +3351,9 @@ body[data-active-view="reader"] .scroll-top-btn {
 
 .reader-select,
 .reader-btn {
-  background: #141824;
+  background: rgba(20, 24, 36, 0.58);
   color: #f1f5f9;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   height: 36px;
   padding: 0 0.65rem;
   border-radius: 9px;
@@ -3766,10 +3730,10 @@ body[data-active-view="reader"] .scroll-top-btn {
   position: sticky;
   bottom: 0;
   z-index: 108;
-  background: rgba(11, 13, 19, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(11, 13, 19, 0.62);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   padding: 0.6rem 1rem;
   display: flex;
@@ -3802,8 +3766,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   gap: 0.65rem;
   height: 40px;
   padding: 0 0.85rem;
-  background: #141824;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(20, 24, 36, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
 }
 .mihon-seekbar-num {
@@ -3855,13 +3819,13 @@ body[data-active-view="reader"] .scroll-top-btn {
   display: none !important;
 }
 .page-counter-pill {
-  background: #1f2330;
+  background: rgba(31, 35, 48, 0.62);
   color: #f8fafc;
   padding: 0.4rem 0.9rem;
   border-radius: 999px;
   font-size: 0.86rem;
   font-weight: 700;
-  border: 1px solid #2e3446;
+  border: 1px solid rgba(255, 255, 255, 0.14);
 }
 .novel-content-box.font-serif {
   font-family: Georgia, 'Times New Roman', Times, serif;
@@ -3894,24 +3858,21 @@ body[data-active-view="reader"] .scroll-top-btn {
     justify-content: space-between;
   }
   .reader-title-group {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     min-width: 0;
-    gap: 0.35rem;
   }
   .reader-series-back-btn {
-    max-width: 190px;
-    min-width: 0;
+    width: 42px;
     height: 42px;
-    padding: 0 0.75rem;
-    font-size: 0.88rem;
+    padding: 0;
+    justify-content: center;
+    font-size: 1.05rem;
     border-radius: 10px;
-  }
-  .reader-type-badge {
-    display: none;
   }
   .reader-chapter-switcher {
     height: 42px;
     flex-shrink: 0;
+    margin: 0 auto;
     padding: 0.18rem;
     gap: 0.15rem;
     border-radius: 10px;
@@ -4048,11 +4009,6 @@ body[data-active-view="reader"] .scroll-top-btn {
 }
 
 @media (max-width: 480px) {
-  .reader-series-back-btn {
-    max-width: 145px;
-    padding: 0 0.6rem;
-    font-size: 0.84rem;
-  }
   .reader-chapter-select {
     min-width: 92px;
     font-size: 0.84rem;
@@ -4262,8 +4218,7 @@ body[data-active-view="reader"] .scroll-top-btn {
 
       <div class="reader-toolbar">
         <div class="reader-title-group">
-          <a class="reader-series-back-btn" href="#" id="reader-series-title" title="Seri Sayfasına Dön">← Seri Sayfasına Dön</a>
-          <span class="reader-type-badge" id="reader-type-badge">Manhwa</span>
+          <a aria-label="Seri Sayfasına Dön" class="reader-series-back-btn" href="#" id="reader-series-title" title="Seri Sayfasına Dön"><span aria-hidden="true">←</span> <span class="btn-label" id="reader-series-name">Seri Sayfasına Dön</span></a>
           <span class="reader-chapter-name hidden" id="reader-chapter-title">Bölüm</span>
         </div>
 
@@ -8665,7 +8620,6 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       const zoomLabel = targetDoc.getElementById('zoom-label');
       const fontSizeLabel = targetDoc.getElementById('font-size-label');
       const fontFamilyLabel = targetDoc.getElementById('font-family-label');
-      const typeBadge = targetDoc.getElementById('reader-type-badge');
       const mangaGroup = targetDoc.getElementById('reader-group-manga');
       const imageGroup = targetDoc.getElementById('reader-group-image');
       const novelGroup = targetDoc.getElementById('reader-group-novel');
@@ -8680,12 +8634,6 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       if (fontSizeLabel) fontSizeLabel.textContent = `${state.novelFontSize}%`;
       if (fontFamilyLabel) {
         fontFamilyLabel.textContent = state.novelFontFamily === 'serif' ? 'Serif' : 'Sans';
-      }
-      if (typeBadge) {
-        typeBadge.textContent = state.seriesTypeLabel;
-        if (typeof typeBadge.setAttribute === 'function') {
-          typeBadge.setAttribute('data-type', state.seriesType);
-        }
       }
       if (mangaGroup && mangaGroup.classList) {
         mangaGroup.classList.toggle('hidden', !state.showMangaControls);
@@ -11550,12 +11498,17 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       if (typeof document === 'undefined') return;
       const seriesHref = this.computeTargetUrl('series', series.id);
       const seriesTitleEl = document.getElementById('reader-series-title');
+      const seriesNameEl = document.getElementById('reader-series-name');
       const footerSeriesBtn = document.getElementById('btn-footer-series');
       const chapterTitleEl = document.getElementById('reader-chapter-title');
       const noteBox = document.getElementById('translator-note-box');
       const selectChapter = document.getElementById('select-chapter');
       if (seriesTitleEl) {
-        seriesTitleEl.textContent = `← ${series.title}`;
+        if (seriesNameEl) {
+          seriesNameEl.textContent = series.title;
+        } else {
+          seriesTitleEl.textContent = `← ${series.title}`;
+        }
         seriesTitleEl.setAttribute('href', seriesHref);
         seriesTitleEl.setAttribute('data-action', 'detail');
         seriesTitleEl.setAttribute('data-series', series.id);
