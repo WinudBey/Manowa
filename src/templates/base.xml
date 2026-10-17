@@ -13,7 +13,7 @@ Name:     Manowa Manga, Manhwa & Novel Teması
 Version:  1.1.0
 -----------------------------------------------
 
-<Variable name="keycolor" description="Ana Renk Teması" type="color" default="#6366f1" value="#6366f1"/>
+<Variable name="keycolor" description="Ana Renk Teması" type="color" default="#f97316" value="#f97316"/>
 <Variable name="body.background" description="Arka Plan Resmi" color="$(body.background.color)" type="background" default="$(color) none repeat scroll top left" value="$(color) none repeat scroll top left"/>
 
 <Group description="1. Koyu Tema Arka Plan Renkleri" selector="body">
@@ -26,8 +26,8 @@ Version:  1.1.0
 <Group description="2. Metin ve Vurgu Renkleri" selector=".site-main">
   <Variable name="theme.text.primary" description="Birincil Metin Rengi (--text-primary)" type="color" default="#f1f5f9" value="#f1f5f9"/>
   <Variable name="theme.text.secondary" description="İkincil Açıklama Metni (--text-secondary)" type="color" default="#94a3b8" value="#94a3b8"/>
-  <Variable name="theme.accent.primary" description="Ana Vurgu Rengi (--accent-primary)" type="color" default="#6366f1" value="#6366f1"/>
-  <Variable name="theme.accent.hover" description="Vurgu Üzerine Gelme Rengi (--accent-hover)" type="color" default="#818cf8" value="#818cf8"/>
+  <Variable name="theme.accent.primary" description="Ana Vurgu Rengi (--accent-primary)" type="color" default="#f97316" value="#f97316"/>
+  <Variable name="theme.accent.hover" description="Vurgu Üzerine Gelme Rengi (--accent-hover)" type="color" default="#fb923c" value="#fb923c"/>
 </Group>
 
 <Group description="3. Açık (Light) Tema Renkleri" selector="[data-theme='light']">
@@ -36,8 +36,8 @@ Version:  1.1.0
   <Variable name="light.bg.card" description="Açık Tema Kart Arka Planı" type="color" default="#f1f5f9" value="#f1f5f9"/>
   <Variable name="light.text.primary" description="Açık Tema Birincil Metin" type="color" default="#0f172a" value="#0f172a"/>
   <Variable name="light.text.secondary" description="Açık Tema İkincil Metin" type="color" default="#475569" value="#475569"/>
-  <Variable name="light.accent.primary" description="Açık Tema Vurgu Rengi" type="color" default="#4f46e5" value="#4f46e5"/>
-  <Variable name="light.accent.hover" description="Açık Tema Vurgu Hover" type="color" default="#4338ca" value="#4338ca"/>
+  <Variable name="light.accent.primary" description="Açık Tema Vurgu Rengi" type="color" default="#ea580c" value="#ea580c"/>
+  <Variable name="light.accent.hover" description="Açık Tema Vurgu Hover" type="color" default="#c2410c" value="#c2410c"/>
   <Variable name="light.border.color" description="Açık Tema Kenarlık Rengi" type="color" default="#e2e8f0" value="#e2e8f0"/>
 </Group>
 
@@ -126,7 +126,7 @@ body {
       }
       body#layout div.section {
         background: #ffffff;
-        border: 1px dashed #6366f1;
+        border: 1px dashed #f97316;
         border-radius: 10px;
         padding: 14px;
         margin: 0 0 14px 0;
@@ -134,8 +134,8 @@ body {
       }
       body#layout #theme-config-section {
         display: block !important;
-        background: #eef2ff;
-        border: 2px solid #6366f1;
+        background: #fff7ed;
+        border: 2px solid #f97316;
       }
       body#layout #theme-config-section .widget {
         width: 48.5%;

@@ -9,13 +9,17 @@
   --bg-card: #1f2330;
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
-  --accent-primary: #6366f1;
-  --accent-hover: #818cf8;
+  --text-muted: #64748b;
+  --accent-primary: #f97316;
+  --accent-hover: #fb923c;
+  --accent-rgb: 249, 115, 22;
+  --accent-glow: rgba(249, 115, 22, 0.16);
   --badge-kr: #ef4444;
   --badge-jp: #ec4899;
   --badge-cn: #f59e0b;
   --badge-en: #3b82f6;
   --border-color: #2e3446;
+  --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
   --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -27,8 +31,11 @@
   --bg-card: #f1f5f9;
   --text-primary: #0f172a;
   --text-secondary: #475569;
-  --accent-primary: #4f46e5;
-  --accent-hover: #4338ca;
+  --text-muted: #64748b;
+  --accent-primary: #ea580c;
+  --accent-hover: #c2410c;
+  --accent-rgb: 234, 88, 12;
+  --accent-glow: rgba(234, 88, 12, 0.14);
   --border-color: #e2e8f0;
 }
 

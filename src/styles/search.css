@@ -150,7 +150,7 @@
 .search-badge.badge-type {
   background: var(--accent-glow);
   color: var(--accent-primary);
-  border: 1px solid rgba(var(--accent-rgb, 124, 58, 237), 0.3);
+  border: 1px solid rgba(var(--accent-rgb, 249, 115, 22), 0.3);
 }
 
 .search-badge.badge-status {
@@ -227,7 +227,7 @@ mark.search-highlight {
   background: var(--accent-glow);
   padding: 0.05rem 0.3rem;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(var(--accent-rgb, 124, 58, 237), 0.25);
+  border: 1px solid rgba(var(--accent-rgb, 249, 115, 22), 0.25);
   flex-shrink: 0;
 }
 

@@ -31,7 +31,7 @@
       <rect x="40" y="40" width="720" height="340" rx="12" fill="#0f1117" stroke="#ffffff" stroke-width="4" opacity="0.85"/>
       <text x="400" y="180" fill="#ffffff" font-family="sans-serif" font-size="34" font-weight="bold" text-anchor="middle">${title}</text>
       <text x="400" y="240" fill="#94a3b8" font-family="sans-serif" font-size="24" text-anchor="middle">PANEL 1 - Çeviri Önizleme</text>
-      <rect x="40" y="800" width="720" height="350" rx="12" fill="#0f1117" stroke="#6366f1" stroke-width="4" opacity="0.9"/>
+      <rect x="40" y="800" width="720" height="350" rx="12" fill="#0f1117" stroke="#f97316" stroke-width="4" opacity="0.9"/>
       <text x="400" y="960" fill="#f8fafc" font-family="sans-serif" font-size="48" font-weight="bold" text-anchor="middle">SAYFA ${pageNo}</text>
     </svg>`;
     return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
@@ -87,7 +87,7 @@
         editor: 'Manowa Editör',
         rating: '9.6',
         genres: ['Aksiyon', 'Sistem'],
-        cover: createSamplePageSvg('Gölge Hükümdarı', 1, '#4f46e5'),
+        cover: createSamplePageSvg('Gölge Hükümdarı', 1, '#ea580c'),
         synopsis: 'Gizemli zindanların kapıları açıldığında en zayıf avcının adım adım zirveye yükselişi.',
         chapters: [
           {
@@ -97,8 +97,8 @@
             date: '2026-09-26',
             translatorNote: '',
             pages: [
-              createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 1, '#4f46e5'),
-              createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 2, '#4338ca')
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 1, '#ea580c'),
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 2, '#c2410c')
             ]
           }
         ]

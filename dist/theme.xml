@@ -13,7 +13,7 @@ Name:     Manowa Manga, Manhwa & Novel Teması
 Version:  1.1.0
 -----------------------------------------------
 
-<Variable name="keycolor" description="Ana Renk Teması" type="color" default="#6366f1" value="#6366f1"/>
+<Variable name="keycolor" description="Ana Renk Teması" type="color" default="#f97316" value="#f97316"/>
 <Variable name="body.background" description="Arka Plan Resmi" color="$(body.background.color)" type="background" default="$(color) none repeat scroll top left" value="$(color) none repeat scroll top left"/>
 
 <Group description="1. Koyu Tema Arka Plan Renkleri" selector="body">
@@ -26,8 +26,8 @@ Version:  1.1.0
 <Group description="2. Metin ve Vurgu Renkleri" selector=".site-main">
   <Variable name="theme.text.primary" description="Birincil Metin Rengi (--text-primary)" type="color" default="#f1f5f9" value="#f1f5f9"/>
   <Variable name="theme.text.secondary" description="İkincil Açıklama Metni (--text-secondary)" type="color" default="#94a3b8" value="#94a3b8"/>
-  <Variable name="theme.accent.primary" description="Ana Vurgu Rengi (--accent-primary)" type="color" default="#6366f1" value="#6366f1"/>
-  <Variable name="theme.accent.hover" description="Vurgu Üzerine Gelme Rengi (--accent-hover)" type="color" default="#818cf8" value="#818cf8"/>
+  <Variable name="theme.accent.primary" description="Ana Vurgu Rengi (--accent-primary)" type="color" default="#f97316" value="#f97316"/>
+  <Variable name="theme.accent.hover" description="Vurgu Üzerine Gelme Rengi (--accent-hover)" type="color" default="#fb923c" value="#fb923c"/>
 </Group>
 
 <Group description="3. Açık (Light) Tema Renkleri" selector="[data-theme='light']">
@@ -36,8 +36,8 @@ Version:  1.1.0
   <Variable name="light.bg.card" description="Açık Tema Kart Arka Planı" type="color" default="#f1f5f9" value="#f1f5f9"/>
   <Variable name="light.text.primary" description="Açık Tema Birincil Metin" type="color" default="#0f172a" value="#0f172a"/>
   <Variable name="light.text.secondary" description="Açık Tema İkincil Metin" type="color" default="#475569" value="#475569"/>
-  <Variable name="light.accent.primary" description="Açık Tema Vurgu Rengi" type="color" default="#4f46e5" value="#4f46e5"/>
-  <Variable name="light.accent.hover" description="Açık Tema Vurgu Hover" type="color" default="#4338ca" value="#4338ca"/>
+  <Variable name="light.accent.primary" description="Açık Tema Vurgu Rengi" type="color" default="#ea580c" value="#ea580c"/>
+  <Variable name="light.accent.hover" description="Açık Tema Vurgu Hover" type="color" default="#c2410c" value="#c2410c"/>
   <Variable name="light.border.color" description="Açık Tema Kenarlık Rengi" type="color" default="#e2e8f0" value="#e2e8f0"/>
 </Group>
 
@@ -67,13 +67,17 @@ Version:  1.1.0
   --bg-card: #1f2330;
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
-  --accent-primary: #6366f1;
-  --accent-hover: #818cf8;
+  --text-muted: #64748b;
+  --accent-primary: #f97316;
+  --accent-hover: #fb923c;
+  --accent-rgb: 249, 115, 22;
+  --accent-glow: rgba(249, 115, 22, 0.16);
   --badge-kr: #ef4444;
   --badge-jp: #ec4899;
   --badge-cn: #f59e0b;
   --badge-en: #3b82f6;
   --border-color: #2e3446;
+  --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
   --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -85,8 +89,11 @@ Version:  1.1.0
   --bg-card: #f1f5f9;
   --text-primary: #0f172a;
   --text-secondary: #475569;
-  --accent-primary: #4f46e5;
-  --accent-hover: #4338ca;
+  --text-muted: #64748b;
+  --accent-primary: #ea580c;
+  --accent-hover: #c2410c;
+  --accent-rgb: 234, 88, 12;
+  --accent-glow: rgba(234, 88, 12, 0.14);
   --border-color: #e2e8f0;
 }
 
@@ -535,7 +542,7 @@ body {
 .latest-chapter-badge {
   display: inline-block;
   align-self: flex-start;
-  background: rgba(99, 102, 241, 0.16);
+  background: rgba(249, 115, 22, 0.16);
   color: var(--accent-hover);
   font-size: 0.74rem;
   font-weight: 700;
@@ -786,8 +793,8 @@ html[data-theme="light"] .series-status-pill {
 }
 
 .series-format-pill {
-  background: rgba(99, 102, 241, 0.18);
-  border-color: rgba(99, 102, 241, 0.4);
+  background: rgba(249, 115, 22, 0.18);
+  border-color: rgba(249, 115, 22, 0.4);
   color: var(--accent-hover);
 }
 
@@ -990,11 +997,11 @@ html[data-theme="light"] .series-synopsis-toggle {
 }
 
 .series-cta-btn {
-  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 6px 18px rgba(249, 115, 22, 0.3);
 }
 
 .series-cta-resume {
-  border-color: rgba(99, 102, 241, 0.5);
+  border-color: rgba(249, 115, 22, 0.5);
   color: var(--accent-hover);
 }
 
@@ -1017,9 +1024,9 @@ html[data-theme="light"] .series-synopsis-toggle {
 }
 
 .series-chapter-count-pill {
-  background: rgba(99, 102, 241, 0.16);
+  background: rgba(249, 115, 22, 0.16);
   color: var(--accent-hover);
-  border: 1px solid rgba(99, 102, 241, 0.35);
+  border: 1px solid rgba(249, 115, 22, 0.35);
   font-size: 0.76rem;
   font-weight: 700;
   padding: 0.2rem 0.6rem;
@@ -1544,9 +1551,9 @@ html[data-theme="light"] .hero-detail-item {
 }
 
 .hero-detail-type {
-  background: rgba(99, 102, 241, 0.2);
-  border-color: rgba(99, 102, 241, 0.45);
-  color: #a5b4fc;
+  background: rgba(249, 115, 22, 0.2);
+  border-color: rgba(249, 115, 22, 0.45);
+  color: #fdba74;
 }
 
 html[data-theme="light"] .hero-detail-type {
@@ -1585,7 +1592,7 @@ html[data-theme="light"] .hero-detail-type {
   padding: 0.65rem 1.35rem;
   border-radius: 999px;
   font-size: 0.9rem;
-  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 6px 18px rgba(249, 115, 22, 0.35);
 }
 
 .hero-detail-btn {
@@ -1839,7 +1846,7 @@ html[data-theme="light"] .hero-dot {
 }
 
 .sidebar-cta-card.cta-join-team {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 55%, #db2777 100%);
+  background: linear-gradient(135deg, #ea580c 0%, #f97316 55%, #f59e0b 100%);
 }
 
 .sidebar-cta-card.cta-join-discord {
@@ -2002,14 +2009,14 @@ html[data-theme="light"] .hero-dot {
 }
 
 .sidebar-rank-badge.rank-top-1 {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, #f97316, #ea580c);
   color: #ffffff;
 }
 
 .sidebar-rank-badge.rank-top-2 {
-  background: rgba(99, 102, 241, 0.22);
+  background: rgba(249, 115, 22, 0.22);
   color: var(--accent-hover);
-  border: 1px solid rgba(99, 102, 241, 0.4);
+  border: 1px solid rgba(249, 115, 22, 0.4);
 }
 
 .sidebar-rank-badge.rank-top-3 {
@@ -2052,7 +2059,7 @@ html[data-theme="light"] .hero-dot {
 }
 
 .sidebar-rank-type {
-  background: rgba(99, 102, 241, 0.14);
+  background: rgba(249, 115, 22, 0.14);
   color: var(--accent-hover);
   padding: 0.08rem 0.42rem;
   border-radius: 4px;
@@ -2405,7 +2412,7 @@ html[data-theme="light"] .hero-dot {
 .search-badge.badge-type {
   background: var(--accent-glow);
   color: var(--accent-primary);
-  border: 1px solid rgba(var(--accent-rgb, 124, 58, 237), 0.3);
+  border: 1px solid rgba(var(--accent-rgb, 249, 115, 22), 0.3);
 }
 
 .search-badge.badge-status {
@@ -2482,7 +2489,7 @@ mark.search-highlight {
   background: var(--accent-glow);
   padding: 0.05rem 0.3rem;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(var(--accent-rgb, 124, 58, 237), 0.25);
+  border: 1px solid rgba(var(--accent-rgb, 249, 115, 22), 0.25);
   flex-shrink: 0;
 }
 
@@ -3053,7 +3060,7 @@ body[data-active-view="reader"] .site-header {
 .reader-progress-bar {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--accent-primary), #ec4899);
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-hover));
   transition: width 0.2s ease;
 }
 
@@ -3092,7 +3099,7 @@ body[data-active-view="reader"] .site-header {
   color: #e2e8f0;
   text-decoration: none;
   background: #141824;
-  border: 1px solid rgba(99, 102, 241, 0.32);
+  border: 1px solid rgba(249, 115, 22, 0.35);
   border-radius: 9px;
   white-space: nowrap;
   overflow: hidden;
@@ -3126,9 +3133,9 @@ body[data-active-view="reader"] .site-header {
 
 .reader-type-badge[data-type='manhwa'],
 .reader-type-badge[data-type='manhua'] {
-  background: rgba(79, 70, 229, 0.22);
-  border-color: rgba(99, 102, 241, 0.45);
-  color: #c7d2fe;
+  background: rgba(249, 115, 22, 0.22);
+  border-color: rgba(249, 115, 22, 0.45);
+  color: #fdba74;
 }
 
 .reader-type-badge[data-type='manga'] {
@@ -3307,7 +3314,7 @@ body[data-active-view="reader"] .site-header {
   max-width: 820px;
   margin: 1rem auto;
   padding: 0.85rem 1.15rem;
-  background: rgba(99, 102, 241, 0.12);
+  background: rgba(249, 115, 22, 0.12);
   border-left: 4px solid var(--accent-primary);
   border-radius: 8px;
   color: #e2e8f0;
@@ -3424,7 +3431,7 @@ body[data-active-view="reader"] .site-header {
 
 .novel-content-box .orv_quote,
 .novel-content-box .orv_notice {
-  background: rgba(99, 102, 241, 0.12);
+  background: rgba(249, 115, 22, 0.12);
   border-left: 4px solid var(--accent-primary);
   padding: 0.85rem 1.1rem;
   border-radius: 8px;
@@ -3711,7 +3718,7 @@ body {
       }
       body#layout div.section {
         background: #ffffff;
-        border: 1px dashed #6366f1;
+        border: 1px dashed #f97316;
         border-radius: 10px;
         padding: 14px;
         margin: 0 0 14px 0;
@@ -3719,8 +3726,8 @@ body {
       }
       body#layout #theme-config-section {
         display: block !important;
-        background: #eef2ff;
-        border: 2px solid #6366f1;
+        background: #fff7ed;
+        border: 2px solid #f97316;
       }
       body#layout #theme-config-section .widget {
         width: 48.5%;
@@ -5348,7 +5355,7 @@ body {
       <rect x="40" y="40" width="720" height="340" rx="12" fill="#0f1117" stroke="#ffffff" stroke-width="4" opacity="0.85"/>
       <text x="400" y="180" fill="#ffffff" font-family="sans-serif" font-size="34" font-weight="bold" text-anchor="middle">${title}</text>
       <text x="400" y="240" fill="#94a3b8" font-family="sans-serif" font-size="24" text-anchor="middle">PANEL 1 - Çeviri Önizleme</text>
-      <rect x="40" y="800" width="720" height="350" rx="12" fill="#0f1117" stroke="#6366f1" stroke-width="4" opacity="0.9"/>
+      <rect x="40" y="800" width="720" height="350" rx="12" fill="#0f1117" stroke="#f97316" stroke-width="4" opacity="0.9"/>
       <text x="400" y="960" fill="#f8fafc" font-family="sans-serif" font-size="48" font-weight="bold" text-anchor="middle">SAYFA ${pageNo}</text>
     </svg>`;
     return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
@@ -5404,7 +5411,7 @@ body {
         editor: 'Manowa Editör',
         rating: '9.6',
         genres: ['Aksiyon', 'Sistem'],
-        cover: createSamplePageSvg('Gölge Hükümdarı', 1, '#4f46e5'),
+        cover: createSamplePageSvg('Gölge Hükümdarı', 1, '#ea580c'),
         synopsis: 'Gizemli zindanların kapıları açıldığında en zayıf avcının adım adım zirveye yükselişi.',
         chapters: [
           {
@@ -5414,8 +5421,8 @@ body {
             date: '2026-09-26',
             translatorNote: '',
             pages: [
-              createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 1, '#4f46e5'),
-              createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 2, '#4338ca')
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 1, '#ea580c'),
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 2, '#c2410c')
             ]
           }
         ]

@@ -147,8 +147,8 @@ html[data-theme="light"] .series-status-pill {
 }
 
 .series-format-pill {
-  background: rgba(99, 102, 241, 0.18);
-  border-color: rgba(99, 102, 241, 0.4);
+  background: rgba(249, 115, 22, 0.18);
+  border-color: rgba(249, 115, 22, 0.4);
   color: var(--accent-hover);
 }
 
@@ -351,11 +351,11 @@ html[data-theme="light"] .series-synopsis-toggle {
 }
 
 .series-cta-btn {
-  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 6px 18px rgba(249, 115, 22, 0.3);
 }
 
 .series-cta-resume {
-  border-color: rgba(99, 102, 241, 0.5);
+  border-color: rgba(249, 115, 22, 0.5);
   color: var(--accent-hover);
 }
 
@@ -378,9 +378,9 @@ html[data-theme="light"] .series-synopsis-toggle {
 }
 
 .series-chapter-count-pill {
-  background: rgba(99, 102, 241, 0.16);
+  background: rgba(249, 115, 22, 0.16);
   color: var(--accent-hover);
-  border: 1px solid rgba(99, 102, 241, 0.35);
+  border: 1px solid rgba(249, 115, 22, 0.35);
   font-size: 0.76rem;
   font-weight: 700;
   padding: 0.2rem 0.6rem;

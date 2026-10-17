@@ -427,7 +427,7 @@
 .latest-chapter-badge {
   display: inline-block;
   align-self: flex-start;
-  background: rgba(99, 102, 241, 0.16);
+  background: rgba(249, 115, 22, 0.16);
   color: var(--accent-hover);
   font-size: 0.74rem;
   font-weight: 700;

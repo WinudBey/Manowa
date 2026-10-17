@@ -812,10 +812,20 @@ test('BloggerThemeBridge ve Blogger Tema Ozellestiricisi (b:skin Group/Variable 
 
   // Derlenen theme.xml icinde Blogger Ozellestirici degiskenleri, Yerlesim degiskenleri ve Gadget bolumleri bulunmali
   const builder = new ThemeBuilder();
-  const { themeXmlPath } = builder.build();
+  const { themeXmlPath, previewHtmlPath } = builder.build();
   const themeXml = fs.readFileSync(themeXmlPath, 'utf8');
+  const previewHtml = fs.readFileSync(previewHtmlPath, 'utf8');
 
   assert.equal(themeXml.includes('<Variable name="keycolor"'), true);
+  assert.equal(themeXml.includes('default="#f97316" value="#f97316"'), true);
+  assert.equal(themeXml.includes('default="#fb923c" value="#fb923c"'), true);
+  assert.equal(themeXml.includes('default="#ea580c" value="#ea580c"'), true);
+  assert.equal(themeXml.includes('default="#c2410c" value="#c2410c"'), true);
+  assert.equal(themeXml.includes('--accent-primary: #f97316;'), true);
+  assert.equal(themeXml.includes('--accent-hover: #fb923c;'), true);
+  assert.equal(previewHtml.includes('--accent-primary: #f97316;'), true);
+  assert.equal(themeXml.includes('#6366f1'), false);
+  assert.equal(previewHtml.includes('#6366f1'), false);
   assert.equal(themeXml.includes('<Variable name="body.background"'), true);
   assert.equal(themeXml.includes('<Group description="1. Koyu Tema Arka Plan Renkleri"'), true);
   assert.equal(themeXml.includes('<Group description="2. Metin ve Vurgu Renkleri"'), true);

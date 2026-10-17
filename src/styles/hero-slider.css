@@ -124,9 +124,9 @@ html[data-theme="light"] .hero-detail-item {
 }
 
 .hero-detail-type {
-  background: rgba(99, 102, 241, 0.2);
-  border-color: rgba(99, 102, 241, 0.45);
-  color: #a5b4fc;
+  background: rgba(249, 115, 22, 0.2);
+  border-color: rgba(249, 115, 22, 0.45);
+  color: #fdba74;
 }
 
 html[data-theme="light"] .hero-detail-type {
@@ -165,7 +165,7 @@ html[data-theme="light"] .hero-detail-type {
   padding: 0.65rem 1.35rem;
   border-radius: 999px;
   font-size: 0.9rem;
-  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 6px 18px rgba(249, 115, 22, 0.35);
 }
 
 .hero-detail-btn {
