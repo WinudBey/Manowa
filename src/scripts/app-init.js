@@ -371,6 +371,10 @@
         if (navMap[key]) navMap[key].classList.toggle('active', key === viewName);
       });
       if (viewName !== 'reader' && this.reader) this.reader.stopAutoScroll();
+      const scrollBtn = document.getElementById('btn-scroll-top');
+      if (scrollBtn && scrollBtn.classList && viewName === 'reader') {
+        scrollBtn.classList.add('hidden');
+      }
       if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -707,7 +711,9 @@
         globalScope.addEventListener('scroll', () => {
           const scrollBtn = document.getElementById('btn-scroll-top');
           if (scrollBtn) {
-            scrollBtn.classList.toggle('hidden', (globalScope.scrollY || 0) < 350);
+            const hideScrollTop =
+              this.currentView === 'reader' || (globalScope.scrollY || 0) < 350;
+            scrollBtn.classList.toggle('hidden', hideScrollTop);
           }
         });
       }

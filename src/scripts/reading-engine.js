@@ -294,6 +294,7 @@
     setMode(newMode) {
       if (VALID_MODES.includes(newMode)) {
         this.mode = newMode;
+        if (this.mode !== 'webtoon') this.stopAutoScroll();
         this._log('info', 'Okuma modu degistirildi.', { mode: this.mode });
       } else {
         this._log('warn', 'Gecersiz okuma modu reddedildi.', { attempted: newMode });

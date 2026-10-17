@@ -593,48 +593,49 @@ body {
 @media (max-width: 540px) {
   .catalog-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.65rem;
+    gap: 0.7rem;
   }
 
   .card-body {
-    padding: 0.6rem;
-    gap: 0.38rem;
+    padding: 0.75rem;
+    gap: 0.45rem;
   }
 
   .card-title {
-    font-size: 0.86rem;
+    font-size: 0.95rem;
   }
 
   .card-meta {
-    font-size: 0.72rem;
+    font-size: 0.8rem;
   }
 
   .chapter-mini-btn {
-    padding: 0.3rem 0.45rem;
-    font-size: 0.72rem;
+    min-height: 36px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.82rem;
   }
 
   .lang-badge,
   .type-badge {
-    font-size: 0.64rem;
-    padding: 0.15rem 0.42rem;
-    top: 0.4rem;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    top: 0.45rem;
   }
 
   .lang-badge {
-    left: 0.4rem;
+    left: 0.45rem;
   }
 
   .type-badge {
-    right: 0.4rem;
+    right: 0.45rem;
   }
 
   .fav-card-btn {
-    width: 30px;
-    height: 30px;
-    bottom: 0.4rem;
-    right: 0.4rem;
-    font-size: 0.82rem;
+    width: 36px;
+    height: 36px;
+    bottom: 0.45rem;
+    right: 0.45rem;
+    font-size: 0.95rem;
   }
 
   .continue-reading-grid,
@@ -1404,19 +1405,19 @@ html[data-theme="light"] .chapter-read-badge {
   }
 
   .chapter-toolbar-right .icon-btn {
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     padding: 0;
     justify-content: center;
     flex-shrink: 0;
   }
 
   .chapter-card-item {
-    padding: 0.6rem 0.7rem;
+    padding: 0.75rem 0.85rem;
   }
 
   .chapter-title-text {
-    font-size: 0.84rem;
+    font-size: 0.92rem;
   }
 
   .series-related-grid {
@@ -2818,7 +2819,7 @@ body[data-active-view="reader"] .site-header {
 }
 
 body[data-active-view="reader"] .scroll-top-btn {
-  bottom: 4.25rem;
+  display: none !important;
 }
 
 .hidden,
@@ -2860,8 +2861,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   }
 
   .header-inner {
-    padding: 0.6rem 0.85rem;
-    gap: 0.45rem;
+    padding: 0.7rem 0.9rem;
+    gap: 0.55rem;
     align-items: center;
   }
 
@@ -2872,7 +2873,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   }
 
   .brand-logo {
-    font-size: 1.2rem;
+    font-size: 1.38rem;
   }
 
   .filter-toolbar.in-header,
@@ -2884,11 +2885,18 @@ body[data-active-view="reader"] .scroll-top-btn {
   #btn-theme-toggle,
   #btn-mobile-menu {
     order: 2;
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     padding: 0;
     justify-content: center;
     flex-shrink: 0;
+  }
+
+  #btn-mobile-search .ui-icon,
+  #btn-theme-toggle .ui-icon,
+  #btn-mobile-menu .ui-icon {
+    width: 19px;
+    height: 19px;
   }
 
   #btn-mobile-search.active,
@@ -2908,7 +2916,7 @@ body[data-active-view="reader"] .scroll-top-btn {
     flex: 0 0 100%;
     max-width: none;
     display: none;
-    margin-top: 0.25rem;
+    margin-top: 0.35rem;
   }
 
   #header-search-box.is-mobile-open {
@@ -2921,9 +2929,9 @@ body[data-active-view="reader"] .scroll-top-btn {
     flex: 0 0 100%;
     display: none;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.45rem;
-    padding: 0.6rem;
-    margin-top: 0.25rem;
+    gap: 0.5rem;
+    padding: 0.7rem;
+    margin-top: 0.35rem;
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
@@ -2936,9 +2944,10 @@ body[data-active-view="reader"] .scroll-top-btn {
 
   #mobile-nav-drawer .nav-btn {
     width: 100%;
+    min-height: 44px;
     justify-content: flex-start;
-    padding: 0.55rem 0.75rem;
-    font-size: 0.84rem;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.92rem;
     background: var(--bg-card);
     border-color: var(--border-color);
   }
@@ -2980,8 +2989,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   .filter-pill {
     white-space: nowrap;
     flex-shrink: 0;
-    padding: 0.36rem 0.75rem;
-    font-size: 0.78rem;
+    padding: 0.42rem 0.85rem;
+    font-size: 0.84rem;
   }
 
   .catalog-toolbar-right {
@@ -2995,21 +3004,25 @@ body[data-active-view="reader"] .scroll-top-btn {
   }
 
   .section-title {
-    font-size: 1.08rem;
+    font-size: 1.15rem;
   }
 
   .scroll-top-btn {
     right: 1rem;
     bottom: 1rem;
-    width: 40px;
-    height: 40px;
-    font-size: 1.05rem;
+    width: 44px;
+    height: 44px;
+    font-size: 1.15rem;
+  }
+
+  body[data-active-view="reader"] .scroll-top-btn {
+    bottom: 4.8rem;
   }
 }
 
 @media (max-width: 480px) {
   .header-inner {
-    padding: 0.55rem 0.65rem;
+    padding: 0.65rem 0.75rem;
   }
 
   #mobile-nav-drawer {
@@ -3017,13 +3030,13 @@ body[data-active-view="reader"] .scroll-top-btn {
   }
 
   .icon-btn {
-    padding: 0.44rem 0.65rem;
-    font-size: 0.82rem;
+    padding: 0.52rem 0.75rem;
+    font-size: 0.88rem;
   }
 
   .site-footer {
     padding: 1.5rem 0.85rem;
-    font-size: 0.82rem;
+    font-size: 0.86rem;
   }
 }
 
@@ -3523,32 +3536,40 @@ body[data-active-view="reader"] .scroll-top-btn {
 .mihon-sheet-title {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  font-size: 0.92rem;
+  gap: 0.5rem;
+  font-size: 1.08rem;
   color: #f8fafc;
 }
 
 .mihon-sheet-title .ui-icon {
   color: var(--accent-primary);
+  width: 19px;
+  height: 19px;
+}
+
+#btn-close-reader-settings {
+  width: 36px;
+  height: 36px;
+  font-size: 1.35rem;
 }
 
 .mihon-sheet-grid {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.95rem;
+  gap: 1.05rem;
 }
 
 .mihon-setting-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
   width: 100%;
 }
 
 .mihon-setting-label {
-  font-size: 0.75rem;
+  font-size: 0.84rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -3559,16 +3580,17 @@ body[data-active-view="reader"] .scroll-top-btn {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 .mihon-choice-pill {
   background: #141824;
   color: #cbd5e1;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
-  padding: 0.35rem 0.78rem;
-  font-size: 0.76rem;
+  min-height: 42px;
+  padding: 0.55rem 1.05rem;
+  font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.16s ease;
@@ -3582,10 +3604,11 @@ body[data-active-view="reader"] .scroll-top-btn {
 }
 
 .mihon-sheet-hint {
-  margin-top: 0.85rem;
-  padding-top: 0.55rem;
+  margin-top: 0.95rem;
+  padding-top: 0.65rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 0.76rem;
+  font-size: 0.84rem;
+  line-height: 1.45;
   color: #94a3b8;
   text-align: center;
 }
@@ -3596,22 +3619,46 @@ body[data-active-view="reader"] .scroll-top-btn {
   z-index: 105;
   width: fit-content;
   margin: 0 auto 0.5rem;
-  padding: 0.24rem 0.75rem;
+  padding: 0.32rem 0.85rem;
   border-radius: 999px;
-  background: rgba(11, 13, 19, 0.82);
+  background: rgba(11, 13, 19, 0.85);
   color: #e2e8f0;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  font-size: 0.74rem;
+  font-size: 0.84rem;
   font-weight: 700;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
 }
-
 .reader-wrapper.hud-hidden .mihon-mini-page-pill {
   opacity: 0.9;
 }
-
+.reader-floating-autoscroll {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 4.5rem;
+  z-index: 120;
+  height: 44px;
+  min-width: 44px;
+  padding: 0 1rem;
+  border-radius: 999px;
+  background: var(--accent-primary);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 0.86rem;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.38);
+  transition: transform 0.2s ease, bottom 0.24s ease, background 0.2s ease;
+}
+.reader-floating-autoscroll:hover,
+.reader-floating-autoscroll.active {
+  transform: translateY(-2px);
+  background: var(--accent-hover);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+.reader-wrapper.hud-hidden .reader-floating-autoscroll {
+  bottom: 1.5rem;
+}
 .mihon-chapter-end-card {
   max-width: 760px;
   margin: 1.25rem auto;
@@ -3625,43 +3672,36 @@ body[data-active-view="reader"] .scroll-top-btn {
   gap: 1rem;
   flex-wrap: wrap;
 }
-
 .mihon-end-info {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
-
 .mihon-end-badge {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--accent-primary);
 }
-
 .mihon-end-title {
-  font-size: 0.98rem;
+  font-size: 1.02rem;
   color: #f8fafc;
 }
-
 .mihon-end-actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
-
 .mihon-end-next-cta {
   background: var(--accent-primary) !important;
   border-color: var(--accent-primary) !important;
   color: #ffffff !important;
 }
-
 .mihon-end-next-cta:hover {
   background: var(--accent-hover) !important;
 }
-
 .reader-footer-bar {
   position: sticky;
   bottom: 0;
@@ -3671,7 +3711,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  padding: 0.55rem 1rem;
+  padding: 0.6rem 1rem;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -3681,13 +3721,11 @@ body[data-active-view="reader"] .scroll-top-btn {
   box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.45);
   transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
 }
-
 .reader-wrapper.hud-hidden .reader-footer-bar {
   transform: translateY(105%);
   opacity: 0;
   pointer-events: none;
 }
-
 .mihon-seekbar-row {
   display: flex;
   align-items: center;
@@ -3696,53 +3734,48 @@ body[data-active-view="reader"] .scroll-top-btn {
   min-width: 0;
   width: auto;
 }
-
 .mihon-seekbar-pill {
   flex: 1 1 auto;
   min-width: 0;
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  height: 36px;
+  height: 40px;
   padding: 0 0.85rem;
   background: #141824;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 999px;
 }
-
 .mihon-seekbar-num {
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   font-weight: 800;
   color: #e2e8f0;
-  min-width: 22px;
+  min-width: 24px;
   text-align: center;
 }
-
 .mihon-page-slider {
   flex: 1 1 auto;
   min-width: 0;
   appearance: none;
   -webkit-appearance: none;
-  height: 6px;
+  height: 7px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.16);
   outline: none;
   cursor: pointer;
   accent-color: var(--accent-primary);
 }
-
 .mihon-page-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: var(--accent-primary);
   border: 2px solid #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
   cursor: pointer;
 }
-
 .mihon-action-dock {
   display: flex;
   align-items: center;
@@ -3753,27 +3786,23 @@ body[data-active-view="reader"] .scroll-top-btn {
   flex-wrap: nowrap;
   margin-left: auto;
 }
-
 .reader-footer-bar .reader-controls {
   flex: 0 0 auto;
   margin-left: auto;
   justify-content: flex-end;
 }
-
 .reader-footer-page-nav {
   display: none !important;
 }
-
 .page-counter-pill {
   background: #1f2330;
   color: #f8fafc;
-  padding: 0.35rem 0.85rem;
+  padding: 0.4rem 0.9rem;
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 0.86rem;
   font-weight: 700;
   border: 1px solid #2e3446;
 }
-
 .novel-content-box.font-serif {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
@@ -3786,197 +3815,201 @@ body[data-active-view="reader"] .scroll-top-btn {
     border-right: none;
     margin-bottom: 0.75rem;
   }
-
   .reader-sticky-header,
   .reader-progress-track {
     border-radius: 0;
   }
-
   .reader-settings-sheet {
-    width: min(92vw, 420px);
+    width: min(94vw, 440px);
     margin: 0;
-    padding: 1rem;
+    padding: 1.2rem 1.1rem;
   }
-
   .mihon-sheet-grid {
-    gap: 0.8rem;
+    gap: 0.95rem;
   }
-
   .reader-toolbar {
-    padding: 0.4rem 0.55rem;
-    gap: 0.35rem;
+    padding: 0.55rem 0.65rem;
+    gap: 0.45rem;
     flex-wrap: nowrap;
     justify-content: space-between;
   }
-
   .reader-title-group {
     flex: 1 1 auto;
     min-width: 0;
-    gap: 0.3rem;
+    gap: 0.35rem;
   }
-
   .reader-series-back-btn {
-    max-width: 175px;
+    max-width: 190px;
     min-width: 0;
-    height: 32px;
-    padding: 0 0.55rem;
-    font-size: 0.75rem;
+    height: 42px;
+    padding: 0 0.75rem;
+    font-size: 0.88rem;
+    border-radius: 10px;
   }
-
   .reader-type-badge {
     display: none;
   }
-
   .reader-chapter-switcher {
-    height: 32px;
+    height: 42px;
     flex-shrink: 0;
-    padding: 0.12rem;
-    gap: 0.1rem;
+    padding: 0.18rem;
+    gap: 0.15rem;
+    border-radius: 10px;
   }
-
   .reader-step-btn {
-    width: 26px;
-    height: 26px;
-    font-size: 0.95rem;
+    width: 34px;
+    height: 34px;
+    font-size: 1.2rem;
   }
-
   .reader-chapter-select {
-    height: 26px !important;
-    min-width: 92px;
-    font-size: 0.75rem;
-    padding: 0 0.35rem !important;
+    height: 34px !important;
+    min-width: 104px;
+    font-size: 0.88rem;
+    padding: 0 0.45rem !important;
   }
-
   .reader-controls {
     width: auto;
     flex: 0 0 auto;
     justify-content: flex-end;
-    gap: 0.3rem;
+    gap: 0.4rem;
     padding-top: 0;
   }
-
   .reader-pill-group,
   .reader-select,
   .reader-btn {
-    height: 32px;
-    padding: 0 0.55rem;
-    font-size: 0.74rem;
+    height: 42px;
+    min-width: 42px;
+    padding: 0 0.7rem;
+    font-size: 0.88rem;
+    border-radius: 10px;
     justify-content: center;
   }
-
+  .reader-btn .ui-icon {
+    width: 19px;
+    height: 19px;
+  }
+  .reader-floating-autoscroll {
+    right: 1rem;
+    bottom: 4.8rem;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 999px;
+  }
+  .reader-wrapper.hud-hidden .reader-floating-autoscroll {
+    bottom: 1rem;
+  }
   .reader-pill-btn {
-    height: 24px;
-    min-width: 24px;
+    height: 34px;
+    min-width: 34px;
+    font-size: 0.9rem;
   }
-
   .reader-pill-value {
-    min-width: 38px;
-    font-size: 0.72rem;
+    min-width: 44px;
+    font-size: 0.84rem;
   }
-
   .translator-note-box {
     margin: 0.5rem;
-    padding: 0.65rem 0.85rem;
-    font-size: 0.82rem;
+    padding: 0.75rem 0.95rem;
+    font-size: 0.9rem;
   }
-
   .reader-viewport {
     min-height: 0;
     padding: 0;
     justify-content: flex-start;
   }
-
   .reader-viewport.mode-webtoon {
     padding: 0;
   }
-
   .reader-viewport.mode-single .reader-logical-page {
     border-radius: 0;
   }
-
   .reader-viewport.mode-double .double-page-grid {
     grid-template-columns: 1fr;
   }
-
   .reader-viewport.mode-novel {
-    padding: 0.75rem 0.6rem;
+    padding: 0.85rem 0.65rem;
   }
-
   .novel-content-box {
-    padding: 1.15rem 0.95rem;
-    font-size: 0.98rem;
-    line-height: 1.75;
+    padding: 1.2rem 1rem;
+    font-size: 1.02rem;
+    line-height: 1.8;
   }
-
   .mihon-chapter-end-card {
-    margin: 0.65rem 0.55rem;
-    padding: 0.85rem;
+    margin: 0.75rem 0.6rem;
+    padding: 1rem;
   }
-
   .reader-footer-bar {
     border-radius: 0;
-    padding: 0.45rem 0.55rem;
-    gap: 0.4rem;
-  }
-
-  .mihon-seekbar-row {
-    gap: 0.4rem;
-  }
-
-  .mihon-seekbar-pill {
-    height: 32px;
-    padding: 0 0.6rem;
+    padding: 0.6rem 0.65rem;
     gap: 0.45rem;
   }
-
+  .mihon-seekbar-row {
+    gap: 0.45rem;
+  }
+  .mihon-seekbar-pill {
+    height: 44px;
+    padding: 0 0.75rem;
+    gap: 0.55rem;
+  }
+  .mihon-seekbar-num {
+    font-size: 0.9rem;
+    min-width: 24px;
+  }
+  .mihon-page-slider {
+    height: 8px;
+  }
+  .mihon-page-slider::-webkit-slider-thumb {
+    width: 22px;
+    height: 22px;
+  }
   .mihon-action-dock {
     flex-wrap: nowrap;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 0.4rem;
   }
-
   .mihon-action-dock .reader-controls {
     width: auto;
     margin-left: auto;
-    gap: 0.35rem;
+    gap: 0.4rem;
   }
-
-  .reader-footer-page-nav {
-    width: auto;
-    justify-content: flex-start;
-    gap: 0.35rem;
-    order: 0;
+  .reader-footer-bar .reader-btn {
+    height: 44px;
+    min-width: 44px;
+    padding: 0 0.7rem;
   }
-
   .page-counter-pill {
-    height: 32px;
+    height: 40px;
     display: inline-flex;
     align-items: center;
-    padding: 0 0.65rem;
-    font-size: 0.75rem;
+    padding: 0 0.75rem;
+    font-size: 0.86rem;
   }
 }
 
 @media (max-width: 480px) {
   .reader-series-back-btn {
-    max-width: 128px;
-    padding: 0 0.45rem;
-    font-size: 0.72rem;
+    max-width: 145px;
+    padding: 0 0.6rem;
+    font-size: 0.84rem;
   }
-
   .reader-chapter-select {
-    min-width: 82px;
-    font-size: 0.72rem;
+    min-width: 92px;
+    font-size: 0.84rem;
   }
-
   .reader-footer-bar .reader-btn {
-    padding: 0 0.5rem;
-    font-size: 0.72rem;
+    height: 42px;
+    min-width: 42px;
+    padding: 0 0.65rem;
+    font-size: 0.84rem;
   }
-
+  .mihon-seekbar-pill {
+    height: 42px;
+    padding: 0 0.65rem;
+  }
   .page-counter-pill {
-    padding: 0 0.55rem;
-    font-size: 0.72rem;
+    padding: 0 0.65rem;
+    font-size: 0.84rem;
   }
 }
 
@@ -4340,10 +4373,6 @@ body {
         </div>
 
         <div class="reader-controls">
-          <div class="reader-control-cluster" id="reader-group-image">
-            <button class="reader-btn" id="btn-autoscroll" title="Otomatik Kaydırma" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> <span class="btn-label">Oto-Kaydır</span></button>
-          </div>
-
           <div class="reader-control-cluster hidden" id="reader-group-novel">
             <div class="reader-pill-group">
               <button class="reader-pill-btn" id="btn-font-decrease" title="Yazı Boyutunu Küçült" type="button">A−</button>
@@ -4408,6 +4437,11 @@ body {
 
     <!-- HUD GIZLIYKEN GORUNEN MIHON MINI SAYFA GOSTERGESI -->
     <div class="mihon-mini-page-pill" id="reader-mini-page-pill">1 / 1</div>
+
+    <!-- SAG ALT YUZEN OTOMATIK KAYDIRMA DUGMESI -->
+    <div class="reader-control-cluster reader-floating-autoscroll-wrap" id="reader-group-image">
+      <button aria-label="Otomatik Kaydırma" class="reader-btn reader-floating-autoscroll" id="btn-autoscroll" title="Otomatik Kaydırma" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> <span class="btn-label">Oto-Kaydır</span></button>
+    </div>
 
     <!-- BOLUM SONU GECIS KARTI -->
     <div class="mihon-chapter-end-card" id="reader-chapter-end-card">
@@ -8220,6 +8254,7 @@ body {
     setMode(newMode) {
       if (VALID_MODES.includes(newMode)) {
         this.mode = newMode;
+        if (this.mode !== 'webtoon') this.stopAutoScroll();
         this._log('info', 'Okuma modu degistirildi.', { mode: this.mode });
       } else {
         this._log('warn', 'Gecersiz okuma modu reddedildi.', { attempted: newMode });
@@ -8992,6 +9027,17 @@ body {
       }
       if (dirGroup && dirGroup.classList) {
         dirGroup.classList.toggle('hidden', !isManga || state.mode === 'webtoon');
+      }
+
+      const autoScrollBtn = targetDoc.getElementById('btn-autoscroll');
+      if (autoScrollBtn) {
+        if (autoScrollBtn.classList) {
+          autoScrollBtn.classList.toggle('hidden', !state.showAutoScroll);
+          autoScrollBtn.classList.toggle('active', Boolean(state.autoScrollActive));
+        }
+        autoScrollBtn.innerHTML = state.autoScrollActive
+          ? `${iconFn('pause')} <span class="btn-label">Durdur</span>`
+          : `${iconFn('play')} <span class="btn-label">Oto-Kaydır</span>`;
       }
 
       const syncPillGroup = (containerId, attrName, activeValue) => {
@@ -11119,6 +11165,10 @@ body {
         if (navMap[key]) navMap[key].classList.toggle('active', key === viewName);
       });
       if (viewName !== 'reader' && this.reader) this.reader.stopAutoScroll();
+      const scrollBtn = document.getElementById('btn-scroll-top');
+      if (scrollBtn && scrollBtn.classList && viewName === 'reader') {
+        scrollBtn.classList.add('hidden');
+      }
       if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -11455,7 +11505,9 @@ body {
         globalScope.addEventListener('scroll', () => {
           const scrollBtn = document.getElementById('btn-scroll-top');
           if (scrollBtn) {
-            scrollBtn.classList.toggle('hidden', (globalScope.scrollY || 0) < 350);
+            const hideScrollTop =
+              this.currentView === 'reader' || (globalScope.scrollY || 0) < 350;
+            scrollBtn.classList.toggle('hidden', hideScrollTop);
           }
         });
       }

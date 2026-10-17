@@ -190,10 +190,6 @@
         </div>
 
         <div class="reader-controls">
-          <div class="reader-control-cluster" id="reader-group-image">
-            <button class="reader-btn" id="btn-autoscroll" title="Otomatik Kaydırma" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> <span class="btn-label">Oto-Kaydır</span></button>
-          </div>
-
           <div class="reader-control-cluster hidden" id="reader-group-novel">
             <div class="reader-pill-group">
               <button class="reader-pill-btn" id="btn-font-decrease" title="Yazı Boyutunu Küçült" type="button">A−</button>
@@ -258,6 +254,11 @@
 
     <!-- HUD GIZLIYKEN GORUNEN MIHON MINI SAYFA GOSTERGESI -->
     <div class="mihon-mini-page-pill" id="reader-mini-page-pill">1 / 1</div>
+
+    <!-- SAG ALT YUZEN OTOMATIK KAYDIRMA DUGMESI -->
+    <div class="reader-control-cluster reader-floating-autoscroll-wrap" id="reader-group-image">
+      <button aria-label="Otomatik Kaydırma" class="reader-btn reader-floating-autoscroll" id="btn-autoscroll" title="Otomatik Kaydırma" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> <span class="btn-label">Oto-Kaydır</span></button>
+    </div>
 
     <!-- BOLUM SONU GECIS KARTI -->
     <div class="mihon-chapter-end-card" id="reader-chapter-end-card">

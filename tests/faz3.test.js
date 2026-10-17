@@ -586,6 +586,10 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
     path.join(path.resolve(__dirname, '..'), 'src/styles/reader.css'),
     'utf8'
   );
+  const layoutCss = fs.readFileSync(
+    path.join(path.resolve(__dirname, '..'), 'src/styles/layout.css'),
+    'utf8'
+  );
   assert.equal(bodyHtml.includes('Mihon Okuyucu Ayarları'), false);
   assert.equal(bodyHtml.includes('Okuyucu Ayarları</strong>'), true);
   assert.equal(bodyHtml.includes('id="reader-group-manga"'), false);
@@ -595,6 +599,26 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(bodyHtml.includes('id="btn-dock-mode"'), false);
   assert.equal(bodyHtml.includes('id="btn-dock-direction"'), false);
   assert.equal(
+    bodyHtml.includes('class="reader-btn reader-floating-autoscroll" id="btn-autoscroll"'),
+    true
+  );
+  assert.equal(
+    bodyHtml.indexOf('id="reader-viewport"') < bodyHtml.indexOf('id="btn-autoscroll"'),
+    true
+  );
+  assert.equal(
+    /body\[data-active-view="reader"\]\s+\.scroll-top-btn\s*\{\s*display:\s*none\s*!important;/s.test(
+      layoutCss
+    ),
+    true
+  );
+  assert.equal(
+    /\.reader-floating-autoscroll\s*\{[^}]*position:\s*fixed;[^}]*right:\s*1\.5rem;[^}]*bottom:\s*4\.5rem;/s.test(
+      readerCss
+    ),
+    true
+  );
+  assert.equal(
     /\.reader-settings-sheet\s*\{[^}]*position:\s*fixed;[^}]*top:\s*50%;[^}]*left:\s*50%;[^}]*transform:\s*translate\(-50%,\s*-50%\);/s.test(
       readerCss
     ),
@@ -603,7 +627,6 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(/\.reader-viewport\s*\{\s*min-height:\s*0;\s*padding:\s*0;/s.test(readerCss), true);
   assert.equal(/\.reader-footer-bar\s*\{[^}]*flex-direction:\s*row;[^}]*flex-wrap:\s*nowrap;/s.test(readerCss), true);
   assert.equal(/\.mihon-action-dock\s*\{\s*flex-wrap:\s*nowrap;/s.test(readerCss), true);
+  assert.equal(/\.mihon-choice-pill\s*\{[^}]*min-height:\s*42px;/s.test(readerCss), true);
+  assert.equal(/\.mihon-seekbar-pill\s*\{\s*height:\s*44px;/s.test(readerCss), true);
 });
-
-
-

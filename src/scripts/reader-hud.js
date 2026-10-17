@@ -130,6 +130,17 @@
         dirGroup.classList.toggle('hidden', !isManga || state.mode === 'webtoon');
       }
 
+      const autoScrollBtn = targetDoc.getElementById('btn-autoscroll');
+      if (autoScrollBtn) {
+        if (autoScrollBtn.classList) {
+          autoScrollBtn.classList.toggle('hidden', !state.showAutoScroll);
+          autoScrollBtn.classList.toggle('active', Boolean(state.autoScrollActive));
+        }
+        autoScrollBtn.innerHTML = state.autoScrollActive
+          ? `${iconFn('pause')} <span class="btn-label">Durdur</span>`
+          : `${iconFn('play')} <span class="btn-label">Oto-Kaydır</span>`;
+      }
+
       const syncPillGroup = (containerId, attrName, activeValue) => {
         const container = targetDoc.getElementById(containerId);
         if (!container || typeof container.querySelectorAll !== 'function') return;
