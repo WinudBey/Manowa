@@ -56,7 +56,6 @@
       if (targetDoc && typeof targetDoc.getElementById === 'function') {
         const sheet = targetDoc.getElementById('reader-settings-sheet');
         const topBtn = targetDoc.getElementById('btn-reader-settings');
-        const dockBtn = targetDoc.getElementById('btn-dock-settings');
         if (sheet && sheet.classList) {
           sheet.classList.toggle('hidden', !this.settingsOpen);
         }
@@ -65,9 +64,6 @@
           if (typeof topBtn.setAttribute === 'function') {
             topBtn.setAttribute('aria-expanded', String(this.settingsOpen));
           }
-        }
-        if (dockBtn && dockBtn.classList) {
-          dockBtn.classList.toggle('active', this.settingsOpen);
         }
       }
       this._log('debug', 'Mihon ayarlar cekmecesi durumu degisti.', {
@@ -362,7 +358,6 @@
       on('btn-end-prev-chapter', 'click', () => app.navigateChapter(-1));
 
       on('btn-reader-settings', 'click', () => this.toggleSettingsSheet(undefined, targetDoc));
-      on('btn-dock-settings', 'click', () => this.toggleSettingsSheet(undefined, targetDoc));
       on('btn-close-reader-settings', 'click', () => this.toggleSettingsSheet(false, targetDoc));
 
       on('btn-dock-mode', 'click', () => {

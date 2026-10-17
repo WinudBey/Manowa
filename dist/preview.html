@@ -4380,7 +4380,6 @@ body[data-active-view="reader"] .scroll-top-btn {
 
         <div class="reader-controls">
           <button class="reader-btn" id="btn-dock-comments" title="Bölüm Yorumlarına Git" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span class="btn-label">Yorumlar</span></button>
-          <button class="reader-btn" id="btn-dock-settings" title="Okuyucu Ayarları" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg> <span class="btn-label">Ayarlar</span></button>
         </div>
       </div>
     </div>
@@ -8960,7 +8959,6 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       if (targetDoc && typeof targetDoc.getElementById === 'function') {
         const sheet = targetDoc.getElementById('reader-settings-sheet');
         const topBtn = targetDoc.getElementById('btn-reader-settings');
-        const dockBtn = targetDoc.getElementById('btn-dock-settings');
         if (sheet && sheet.classList) {
           sheet.classList.toggle('hidden', !this.settingsOpen);
         }
@@ -8969,9 +8967,6 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
           if (typeof topBtn.setAttribute === 'function') {
             topBtn.setAttribute('aria-expanded', String(this.settingsOpen));
           }
-        }
-        if (dockBtn && dockBtn.classList) {
-          dockBtn.classList.toggle('active', this.settingsOpen);
         }
       }
       this._log('debug', 'Mihon ayarlar cekmecesi durumu degisti.', {
@@ -9266,7 +9261,6 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       on('btn-end-prev-chapter', 'click', () => app.navigateChapter(-1));
 
       on('btn-reader-settings', 'click', () => this.toggleSettingsSheet(undefined, targetDoc));
-      on('btn-dock-settings', 'click', () => this.toggleSettingsSheet(undefined, targetDoc));
       on('btn-close-reader-settings', 'click', () => this.toggleSettingsSheet(false, targetDoc));
 
       on('btn-dock-mode', 'click', () => {
