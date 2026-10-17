@@ -168,9 +168,9 @@
   </div>
 </section>
 
-<!-- GORUNUM 3: COK MODLU OKUMA MOTORU (READING ENGINE) -->
+<!-- GORUNUM 3: COK MODLU OKUMA MOTORU (MIHON READING ENGINE) -->
 <section class="hidden" id="view-reader">
-  <div class="reader-wrapper" id="reader-wrapper">
+  <div class="reader-wrapper reader-bg-dark" id="reader-wrapper">
     <div class="reader-sticky-header" id="reader-sticky-header">
       <div class="reader-progress-track">
         <div class="reader-progress-bar" id="reader-progress-bar"></div>
@@ -190,24 +190,7 @@
         </div>
 
         <div class="reader-controls">
-          <div class="reader-control-cluster hidden" id="reader-group-manga">
-            <select class="reader-select" id="select-mode" title="Okuma Görünümü">
-              <option value="single">Tek Sayfa</option>
-              <option value="double">Çift Sayfa</option>
-              <option value="webtoon">Dikey Şerit</option>
-            </select>
-            <select class="reader-select" id="select-direction" title="Okuma Yönü">
-              <option value="rtl">Sağdan Sola (RTL)</option>
-              <option value="ltr">Soldan Sağa (LTR)</option>
-            </select>
-          </div>
-
           <div class="reader-control-cluster" id="reader-group-image">
-            <div class="reader-pill-group">
-              <button class="reader-pill-btn" id="btn-zoom-out" title="Küçült" type="button">−</button>
-              <span class="reader-pill-value" id="zoom-label">100%</span>
-              <button class="reader-pill-btn" id="btn-zoom-in" title="Büyüt" type="button">+</button>
-            </div>
             <button class="reader-btn" id="btn-autoscroll" title="Otomatik Kaydırma" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> <span class="btn-label">Oto-Kaydır</span></button>
           </div>
 
@@ -220,27 +203,98 @@
             <button class="reader-btn" id="btn-font-family" title="Yazı Tipini Değiştir" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> <span id="font-family-label">Sans</span></button>
           </div>
 
+          <button aria-controls="reader-settings-sheet" aria-expanded="false" aria-label="Okuyucu Ayarları" class="reader-btn mihon-settings-btn" id="btn-reader-settings" title="Okuyucu Ayarları" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg> <span class="btn-label">Ayarlar</span></button>
           <button class="reader-btn reader-fullscreen-btn" id="btn-fullscreen" title="Tam Ekran (F)" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> <span class="btn-label">Tam Ekran</span></button>
         </div>
       </div>
+    </div>
+
+    <!-- ACILIR OKUYUCU AYARLARI PENCERESI -->
+    <div aria-label="Okuyucu Ayarları" class="reader-settings-sheet hidden" id="reader-settings-sheet" role="dialog">
+      <div class="mihon-sheet-header">
+        <strong class="mihon-sheet-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg> Okuyucu Ayarları</strong>
+        <button aria-label="Ayarları Kapat" class="reader-step-btn" id="btn-close-reader-settings" title="Kapat" type="button">×</button>
+      </div>
+      <div class="mihon-sheet-grid">
+        <div class="mihon-setting-group" id="mihon-setting-mode-group">
+          <span class="mihon-setting-label">Okuma Modu</span>
+          <div class="mihon-pill-row" id="mihon-mode-pills">
+            <button class="mihon-choice-pill active" data-mode-pill="webtoon" type="button">Dikey Şerit</button>
+            <button class="mihon-choice-pill" data-mode-pill="single" type="button">Tek Sayfa</button>
+            <button class="mihon-choice-pill" data-mode-pill="double" type="button">Çift Sayfa</button>
+          </div>
+        </div>
+        <div class="mihon-setting-group" id="mihon-setting-dir-group">
+          <span class="mihon-setting-label">Okuma Yönü</span>
+          <div class="mihon-pill-row" id="mihon-dir-pills">
+            <button class="mihon-choice-pill active" data-dir-pill="ltr" type="button">Soldan Sağa (LTR)</button>
+            <button class="mihon-choice-pill" data-dir-pill="rtl" type="button">Sağdan Sola (RTL)</button>
+          </div>
+        </div>
+        <div class="mihon-setting-group">
+          <span class="mihon-setting-label">Arka Plan Teması</span>
+          <div class="mihon-pill-row" id="mihon-bg-pills">
+            <button class="mihon-choice-pill" data-bg-pill="amoled" type="button">AMOLED Siyah</button>
+            <button class="mihon-choice-pill active" data-bg-pill="dark" type="button">Koyu</button>
+            <button class="mihon-choice-pill" data-bg-pill="sepia" type="button">Sepya</button>
+            <button class="mihon-choice-pill" data-bg-pill="light" type="button">Açık</button>
+          </div>
+        </div>
+        <div class="mihon-setting-group" id="mihon-setting-gap-group">
+          <span class="mihon-setting-label">Webtoon Sayfa Boşluğu</span>
+          <div class="mihon-pill-row" id="mihon-gap-pills">
+            <button class="mihon-choice-pill active" data-gap-pill="0" type="button">Yok (0px)</button>
+            <button class="mihon-choice-pill" data-gap-pill="8" type="button">İnce (8px)</button>
+            <button class="mihon-choice-pill" data-gap-pill="16" type="button">Geniş (16px)</button>
+          </div>
+        </div>
+      </div>
+      <div class="mihon-sheet-hint">İpucu: Okuma alanının ortasına tıklayarak üst ve alt kontrol çubuklarını gizleyip açabilirsiniz.</div>
     </div>
 
     <div class="translator-note-box hidden" id="translator-note-box"></div>
 
     <div class="reader-viewport mode-webtoon protect-images" id="reader-viewport"></div>
 
-    <div class="reader-footer-bar">
-      <div class="reader-controls">
-        <button class="reader-btn" id="btn-prev-chapter" title="Önceki Bölüm" type="button">« <span class="btn-label">Önceki Bölüm</span></button>
-        <a class="reader-btn" href="#" id="btn-footer-series" title="Seri Sayfası"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> <span class="btn-label">Seri Sayfası</span></a>
+    <!-- HUD GIZLIYKEN GORUNEN MIHON MINI SAYFA GOSTERGESI -->
+    <div class="mihon-mini-page-pill" id="reader-mini-page-pill">1 / 1</div>
+
+    <!-- BOLUM SONU GECIS KARTI -->
+    <div class="mihon-chapter-end-card" id="reader-chapter-end-card">
+      <div class="mihon-end-info">
+        <span class="mihon-end-badge">Bölüm Sonu</span>
+        <strong class="mihon-end-title" id="reader-end-chapter-label">Bölüm Tamamlandı</strong>
       </div>
-      <div class="reader-footer-page-nav hidden" id="reader-footer-page-nav">
-        <button class="reader-btn" id="btn-prev-page" title="Önceki Sayfa" type="button">‹ <span class="btn-label">Önceki Sayfa</span></button>
-        <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
-        <button class="reader-btn" id="btn-next-page" title="Sonraki Sayfa" type="button"><span class="btn-label">Sonraki Sayfa</span> ›</button>
+      <div class="mihon-end-actions">
+        <button class="reader-btn" id="btn-end-prev-chapter" type="button">‹ Önceki Bölüm</button>
+        <a class="reader-btn" href="#" id="btn-end-series">Seri Sayfası</a>
+        <button class="reader-btn mihon-end-next-cta" id="btn-end-next-chapter" type="button">Sonraki Bölüme Geç ›</button>
       </div>
-      <div class="reader-controls">
-        <button class="reader-btn" id="btn-next-chapter" title="Sonraki Bölüm" type="button"><span class="btn-label">Sonraki Bölüm</span> »</button>
+    </div>
+
+    <!-- MIHON ALT HUD: YUZEN SEEKBAR VE EYLEM DOCK CUBUGU -->
+    <div class="reader-footer-bar mihon-bottom-hud" id="reader-footer-bar">
+      <div class="mihon-seekbar-row" id="reader-seekbar-row">
+        <button aria-label="Önceki Bölüm" class="reader-btn mihon-skip-btn" id="btn-prev-chapter" title="Önceki Bölüm" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" x2="5" y1="19" y2="5"/></svg> <span class="btn-label">Önceki Bölüm</span></button>
+        <div class="mihon-seekbar-pill">
+          <span class="mihon-seekbar-num" id="seekbar-current-page">1</span>
+          <input aria-label="Sayfa Kaydırıcısı" class="mihon-page-slider" id="reader-page-slider" max="1" min="1" step="1" type="range" value="1" />
+          <span class="mihon-seekbar-num" id="seekbar-total-pages">1</span>
+        </div>
+        <button aria-label="Sonraki Bölüm" class="reader-btn mihon-skip-btn" id="btn-next-chapter" title="Sonraki Bölüm" type="button"><span class="btn-label">Sonraki Bölüm</span> <svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" x2="19" y1="5" y2="19"/></svg></button>
+      </div>
+
+      <div class="mihon-action-dock">
+        <div class="reader-footer-page-nav hidden" id="reader-footer-page-nav">
+          <button class="reader-btn" id="btn-prev-page" title="Önceki Sayfa" type="button">‹ <span class="btn-label">Önceki Sayfa</span></button>
+          <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
+          <button class="reader-btn" id="btn-next-page" title="Sonraki Sayfa" type="button"><span class="btn-label">Sonraki Sayfa</span> ›</button>
+        </div>
+
+        <div class="reader-controls">
+          <button class="reader-btn" id="btn-dock-comments" title="Bölüm Yorumlarına Git" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span class="btn-label">Yorumlar</span></button>
+          <button class="reader-btn" id="btn-dock-settings" title="Okuyucu Ayarları" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg> <span class="btn-label">Ayarlar</span></button>
+        </div>
       </div>
     </div>
   </div>

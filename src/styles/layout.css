@@ -242,6 +242,10 @@ body[data-active-view="reader"] .site-header {
   background: var(--accent-hover);
 }
 
+body[data-active-view="reader"] .scroll-top-btn {
+  bottom: 4.25rem;
+}
+
 .hidden,
 #main-blog-section,
 .posts-wrapper {
@@ -375,7 +379,7 @@ body[data-active-view="reader"] .site-header {
   }
 
   body[data-active-view="reader"] .site-main {
-    padding: 0.35rem 0 2.5rem;
+    padding: 0 0 1.5rem;
   }
 
   .filter-toolbar {

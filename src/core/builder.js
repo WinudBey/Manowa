@@ -156,6 +156,7 @@ class ThemeBuilder {
       'hero-slider.js',
       'sidebar-controller.js',
       'reading-engine.js',
+      'reader-hud.js',
       'post-generator.js',
       'router-controller.js',
       'blogger-theme-bridge.js',

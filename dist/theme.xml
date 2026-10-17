@@ -2817,6 +2817,10 @@ body[data-active-view="reader"] .site-header {
   background: var(--accent-hover);
 }
 
+body[data-active-view="reader"] .scroll-top-btn {
+  bottom: 4.25rem;
+}
+
 .hidden,
 #main-blog-section,
 .posts-wrapper {
@@ -2950,7 +2954,7 @@ body[data-active-view="reader"] .site-header {
   }
 
   body[data-active-view="reader"] .site-main {
-    padding: 0.35rem 0 2.5rem;
+    padding: 0 0 1.5rem;
   }
 
   .filter-toolbar {
@@ -3035,6 +3039,26 @@ body[data-active-view="reader"] .site-header {
   border-radius: var(--radius-lg);
   overflow: visible;
   margin-bottom: 2rem;
+  transition: background-color 0.25s ease;
+}
+
+.reader-wrapper.reader-bg-amoled {
+  background: #000000;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.reader-wrapper.reader-bg-dark {
+  background: #090b10;
+}
+
+.reader-wrapper.reader-bg-sepia {
+  background: #f4ecd8;
+  border-color: #d6c7a9;
+}
+
+.reader-wrapper.reader-bg-light {
+  background: #f8fafc;
+  border-color: #cbd5e1;
 }
 
 .reader-sticky-header {
@@ -3047,6 +3071,13 @@ body[data-active-view="reader"] .site-header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+}
+
+.reader-wrapper.hud-hidden .reader-sticky-header {
+  transform: translateY(-105%);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .reader-progress-track {
@@ -3459,27 +3490,278 @@ body[data-active-view="reader"] .site-header {
   user-select: none;
 }
 
-.reader-footer-bar {
-  background: rgba(15, 17, 23, 0.96);
-  border-top: 1px solid var(--border-color);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  padding: 0.8rem 1.15rem;
+.reader-settings-sheet {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 130;
+  width: min(92vw, 460px);
+  max-height: 85vh;
+  overflow-y: auto;
+  margin: 0;
+  padding: 1.15rem 1.25rem;
+  background: rgba(15, 18, 28, 0.97);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(249, 115, 22, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.78), 0 0 0 100vmax rgba(0, 0, 0, 0.55);
+  color: #f1f5f9;
+  text-align: center;
+}
+
+.mihon-sheet-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.85rem;
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mihon-sheet-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.92rem;
+  color: #f8fafc;
+}
+
+.mihon-sheet-title .ui-icon {
+  color: var(--accent-primary);
+}
+
+.mihon-sheet-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.95rem;
+}
+
+.mihon-setting-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+}
+
+.mihon-setting-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+}
+
+.mihon-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.mihon-choice-pill {
+  background: #141824;
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 0.35rem 0.78rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.mihon-choice-pill:hover,
+.mihon-choice-pill.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #ffffff;
+}
+
+.mihon-sheet-hint {
+  margin-top: 0.85rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.76rem;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.mihon-mini-page-pill {
+  position: sticky;
+  bottom: 0.65rem;
+  z-index: 105;
+  width: fit-content;
+  margin: 0 auto 0.5rem;
+  padding: 0.24rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(11, 13, 19, 0.82);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.74rem;
+  font-weight: 700;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.reader-wrapper.hud-hidden .mihon-mini-page-pill {
+  opacity: 0.9;
+}
+
+.mihon-chapter-end-card {
+  max-width: 760px;
+  margin: 1.25rem auto;
+  padding: 1.15rem 1.35rem;
+  background: rgba(20, 24, 36, 0.92);
+  border: 1px solid rgba(249, 115, 22, 0.28);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
+.mihon-end-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.mihon-end-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-primary);
+}
+
+.mihon-end-title {
+  font-size: 0.98rem;
+  color: #f8fafc;
+}
+
+.mihon-end-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mihon-end-next-cta {
+  background: var(--accent-primary) !important;
+  border-color: var(--accent-primary) !important;
+  color: #ffffff !important;
+}
+
+.mihon-end-next-cta:hover {
+  background: var(--accent-hover) !important;
+}
+
+.reader-footer-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 108;
+  background: rgba(11, 13, 19, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 0.55rem 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.45);
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+}
+
+.reader-wrapper.hud-hidden .reader-footer-bar {
+  transform: translateY(105%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mihon-seekbar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+}
+
+.mihon-seekbar-pill {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  height: 36px;
+  padding: 0 0.85rem;
+  background: #141824;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+
+.mihon-seekbar-num {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #e2e8f0;
+  min-width: 22px;
+  text-align: center;
+}
+
+.mihon-page-slider {
+  flex: 1 1 auto;
+  min-width: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  outline: none;
+  cursor: pointer;
+  accent-color: var(--accent-primary);
+}
+
+.mihon-page-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+}
+
+.mihon-action-dock {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  flex: 0 0 auto;
+  width: auto;
+  flex-wrap: nowrap;
+  margin-left: auto;
+}
+
 .reader-footer-bar .reader-controls {
-  flex: 0 1 auto;
-  justify-content: flex-start;
+  flex: 0 0 auto;
+  margin-left: auto;
+  justify-content: flex-end;
 }
 
 .reader-footer-page-nav {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
+  display: none !important;
 }
 
 .page-counter-pill {
@@ -3499,9 +3781,10 @@ body[data-active-view="reader"] .site-header {
 @media (max-width: 768px) {
   .reader-wrapper {
     border-radius: 0;
+    border-top: none;
     border-left: none;
     border-right: none;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.75rem;
   }
 
   .reader-sticky-header,
@@ -3509,34 +3792,46 @@ body[data-active-view="reader"] .site-header {
     border-radius: 0;
   }
 
+  .reader-settings-sheet {
+    width: min(92vw, 420px);
+    margin: 0;
+    padding: 1rem;
+  }
+
+  .mihon-sheet-grid {
+    gap: 0.8rem;
+  }
+
   .reader-toolbar {
-    padding: 0.5rem 0.65rem;
-    gap: 0.45rem;
-    flex-wrap: wrap;
+    padding: 0.4rem 0.55rem;
+    gap: 0.35rem;
+    flex-wrap: nowrap;
     justify-content: space-between;
   }
 
   .reader-title-group {
     flex: 1 1 auto;
     min-width: 0;
+    gap: 0.3rem;
   }
 
   .reader-series-back-btn {
-    max-width: 165px;
+    max-width: 175px;
+    min-width: 0;
     height: 32px;
-    padding: 0 0.65rem;
-    font-size: 0.76rem;
+    padding: 0 0.55rem;
+    font-size: 0.75rem;
   }
 
   .reader-type-badge {
-    height: 24px;
-    padding: 0 0.45rem;
-    font-size: 0.62rem;
+    display: none;
   }
 
   .reader-chapter-switcher {
     height: 32px;
     flex-shrink: 0;
+    padding: 0.12rem;
+    gap: 0.1rem;
   }
 
   .reader-step-btn {
@@ -3547,29 +3842,26 @@ body[data-active-view="reader"] .site-header {
 
   .reader-chapter-select {
     height: 26px !important;
-    min-width: 108px;
-    font-size: 0.76rem;
-    padding: 0 0.45rem !important;
+    min-width: 92px;
+    font-size: 0.75rem;
+    padding: 0 0.35rem !important;
   }
 
   .reader-controls {
-    width: 100%;
-    justify-content: space-between;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    padding-top: 0.1rem;
-  }
-
-  .reader-controls::-webkit-scrollbar {
-    display: none;
+    width: auto;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    gap: 0.3rem;
+    padding-top: 0;
   }
 
   .reader-pill-group,
   .reader-select,
   .reader-btn {
     height: 32px;
+    padding: 0 0.55rem;
     font-size: 0.74rem;
+    justify-content: center;
   }
 
   .reader-pill-btn {
@@ -3583,14 +3875,15 @@ body[data-active-view="reader"] .site-header {
   }
 
   .translator-note-box {
-    margin: 0.65rem;
-    padding: 0.7rem 0.9rem;
+    margin: 0.5rem;
+    padding: 0.65rem 0.85rem;
     font-size: 0.82rem;
   }
 
   .reader-viewport {
-    min-height: 360px;
-    padding: 0.5rem 0;
+    min-height: 0;
+    padding: 0;
+    justify-content: flex-start;
   }
 
   .reader-viewport.mode-webtoon {
@@ -3606,7 +3899,7 @@ body[data-active-view="reader"] .site-header {
   }
 
   .reader-viewport.mode-novel {
-    padding: 0.85rem 0.65rem;
+    padding: 0.75rem 0.6rem;
   }
 
   .novel-content-box {
@@ -3615,37 +3908,75 @@ body[data-active-view="reader"] .site-header {
     line-height: 1.75;
   }
 
+  .mihon-chapter-end-card {
+    margin: 0.65rem 0.55rem;
+    padding: 0.85rem;
+  }
+
   .reader-footer-bar {
     border-radius: 0;
-    padding: 0.65rem 0.75rem;
-    gap: 0.55rem;
+    padding: 0.45rem 0.55rem;
+    gap: 0.4rem;
+  }
+
+  .mihon-seekbar-row {
+    gap: 0.4rem;
+  }
+
+  .mihon-seekbar-pill {
+    height: 32px;
+    padding: 0 0.6rem;
+    gap: 0.45rem;
+  }
+
+  .mihon-action-dock {
+    flex-wrap: nowrap;
     justify-content: space-between;
+    gap: 0.4rem;
+  }
+
+  .mihon-action-dock .reader-controls {
+    width: auto;
+    margin-left: auto;
+    gap: 0.35rem;
   }
 
   .reader-footer-page-nav {
-    width: 100%;
-    justify-content: space-between;
-    order: -1;
+    width: auto;
+    justify-content: flex-start;
+    gap: 0.35rem;
+    order: 0;
+  }
+
+  .page-counter-pill {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 0.65rem;
+    font-size: 0.75rem;
   }
 }
 
 @media (max-width: 480px) {
   .reader-series-back-btn {
-    max-width: 138px;
+    max-width: 128px;
+    padding: 0 0.45rem;
+    font-size: 0.72rem;
   }
 
-  .reader-type-badge {
-    display: none;
+  .reader-chapter-select {
+    min-width: 82px;
+    font-size: 0.72rem;
   }
 
   .reader-footer-bar .reader-btn {
-    padding: 0 0.55rem;
+    padding: 0 0.5rem;
     font-size: 0.72rem;
   }
 
   .page-counter-pill {
-    padding: 0.28rem 0.65rem;
-    font-size: 0.74rem;
+    padding: 0 0.55rem;
+    font-size: 0.72rem;
   }
 }
 
@@ -3987,9 +4318,9 @@ body {
   </div>
 </section>
 
-<!-- GORUNUM 3: COK MODLU OKUMA MOTORU (READING ENGINE) -->
+<!-- GORUNUM 3: COK MODLU OKUMA MOTORU (MIHON READING ENGINE) -->
 <section class="hidden" id="view-reader">
-  <div class="reader-wrapper" id="reader-wrapper">
+  <div class="reader-wrapper reader-bg-dark" id="reader-wrapper">
     <div class="reader-sticky-header" id="reader-sticky-header">
       <div class="reader-progress-track">
         <div class="reader-progress-bar" id="reader-progress-bar"></div>
@@ -4009,24 +4340,7 @@ body {
         </div>
 
         <div class="reader-controls">
-          <div class="reader-control-cluster hidden" id="reader-group-manga">
-            <select class="reader-select" id="select-mode" title="Okuma Görünümü">
-              <option value="single">Tek Sayfa</option>
-              <option value="double">Çift Sayfa</option>
-              <option value="webtoon">Dikey Şerit</option>
-            </select>
-            <select class="reader-select" id="select-direction" title="Okuma Yönü">
-              <option value="rtl">Sağdan Sola (RTL)</option>
-              <option value="ltr">Soldan Sağa (LTR)</option>
-            </select>
-          </div>
-
           <div class="reader-control-cluster" id="reader-group-image">
-            <div class="reader-pill-group">
-              <button class="reader-pill-btn" id="btn-zoom-out" title="Küçült" type="button">−</button>
-              <span class="reader-pill-value" id="zoom-label">100%</span>
-              <button class="reader-pill-btn" id="btn-zoom-in" title="Büyüt" type="button">+</button>
-            </div>
             <button class="reader-btn" id="btn-autoscroll" title="Otomatik Kaydırma" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> <span class="btn-label">Oto-Kaydır</span></button>
           </div>
 
@@ -4039,27 +4353,98 @@ body {
             <button class="reader-btn" id="btn-font-family" title="Yazı Tipini Değiştir" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> <span id="font-family-label">Sans</span></button>
           </div>
 
+          <button aria-controls="reader-settings-sheet" aria-expanded="false" aria-label="Okuyucu Ayarları" class="reader-btn mihon-settings-btn" id="btn-reader-settings" title="Okuyucu Ayarları" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg> <span class="btn-label">Ayarlar</span></button>
           <button class="reader-btn reader-fullscreen-btn" id="btn-fullscreen" title="Tam Ekran (F)" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> <span class="btn-label">Tam Ekran</span></button>
         </div>
       </div>
+    </div>
+
+    <!-- ACILIR OKUYUCU AYARLARI PENCERESI -->
+    <div aria-label="Okuyucu Ayarları" class="reader-settings-sheet hidden" id="reader-settings-sheet" role="dialog">
+      <div class="mihon-sheet-header">
+        <strong class="mihon-sheet-title"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg> Okuyucu Ayarları</strong>
+        <button aria-label="Ayarları Kapat" class="reader-step-btn" id="btn-close-reader-settings" title="Kapat" type="button">×</button>
+      </div>
+      <div class="mihon-sheet-grid">
+        <div class="mihon-setting-group" id="mihon-setting-mode-group">
+          <span class="mihon-setting-label">Okuma Modu</span>
+          <div class="mihon-pill-row" id="mihon-mode-pills">
+            <button class="mihon-choice-pill active" data-mode-pill="webtoon" type="button">Dikey Şerit</button>
+            <button class="mihon-choice-pill" data-mode-pill="single" type="button">Tek Sayfa</button>
+            <button class="mihon-choice-pill" data-mode-pill="double" type="button">Çift Sayfa</button>
+          </div>
+        </div>
+        <div class="mihon-setting-group" id="mihon-setting-dir-group">
+          <span class="mihon-setting-label">Okuma Yönü</span>
+          <div class="mihon-pill-row" id="mihon-dir-pills">
+            <button class="mihon-choice-pill active" data-dir-pill="ltr" type="button">Soldan Sağa (LTR)</button>
+            <button class="mihon-choice-pill" data-dir-pill="rtl" type="button">Sağdan Sola (RTL)</button>
+          </div>
+        </div>
+        <div class="mihon-setting-group">
+          <span class="mihon-setting-label">Arka Plan Teması</span>
+          <div class="mihon-pill-row" id="mihon-bg-pills">
+            <button class="mihon-choice-pill" data-bg-pill="amoled" type="button">AMOLED Siyah</button>
+            <button class="mihon-choice-pill active" data-bg-pill="dark" type="button">Koyu</button>
+            <button class="mihon-choice-pill" data-bg-pill="sepia" type="button">Sepya</button>
+            <button class="mihon-choice-pill" data-bg-pill="light" type="button">Açık</button>
+          </div>
+        </div>
+        <div class="mihon-setting-group" id="mihon-setting-gap-group">
+          <span class="mihon-setting-label">Webtoon Sayfa Boşluğu</span>
+          <div class="mihon-pill-row" id="mihon-gap-pills">
+            <button class="mihon-choice-pill active" data-gap-pill="0" type="button">Yok (0px)</button>
+            <button class="mihon-choice-pill" data-gap-pill="8" type="button">İnce (8px)</button>
+            <button class="mihon-choice-pill" data-gap-pill="16" type="button">Geniş (16px)</button>
+          </div>
+        </div>
+      </div>
+      <div class="mihon-sheet-hint">İpucu: Okuma alanının ortasına tıklayarak üst ve alt kontrol çubuklarını gizleyip açabilirsiniz.</div>
     </div>
 
     <div class="translator-note-box hidden" id="translator-note-box"></div>
 
     <div class="reader-viewport mode-webtoon protect-images" id="reader-viewport"></div>
 
-    <div class="reader-footer-bar">
-      <div class="reader-controls">
-        <button class="reader-btn" id="btn-prev-chapter" title="Önceki Bölüm" type="button">« <span class="btn-label">Önceki Bölüm</span></button>
-        <a class="reader-btn" href="#" id="btn-footer-series" title="Seri Sayfası"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> <span class="btn-label">Seri Sayfası</span></a>
+    <!-- HUD GIZLIYKEN GORUNEN MIHON MINI SAYFA GOSTERGESI -->
+    <div class="mihon-mini-page-pill" id="reader-mini-page-pill">1 / 1</div>
+
+    <!-- BOLUM SONU GECIS KARTI -->
+    <div class="mihon-chapter-end-card" id="reader-chapter-end-card">
+      <div class="mihon-end-info">
+        <span class="mihon-end-badge">Bölüm Sonu</span>
+        <strong class="mihon-end-title" id="reader-end-chapter-label">Bölüm Tamamlandı</strong>
       </div>
-      <div class="reader-footer-page-nav hidden" id="reader-footer-page-nav">
-        <button class="reader-btn" id="btn-prev-page" title="Önceki Sayfa" type="button">‹ <span class="btn-label">Önceki Sayfa</span></button>
-        <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
-        <button class="reader-btn" id="btn-next-page" title="Sonraki Sayfa" type="button"><span class="btn-label">Sonraki Sayfa</span> ›</button>
+      <div class="mihon-end-actions">
+        <button class="reader-btn" id="btn-end-prev-chapter" type="button">‹ Önceki Bölüm</button>
+        <a class="reader-btn" href="#" id="btn-end-series">Seri Sayfası</a>
+        <button class="reader-btn mihon-end-next-cta" id="btn-end-next-chapter" type="button">Sonraki Bölüme Geç ›</button>
       </div>
-      <div class="reader-controls">
-        <button class="reader-btn" id="btn-next-chapter" title="Sonraki Bölüm" type="button"><span class="btn-label">Sonraki Bölüm</span> »</button>
+    </div>
+
+    <!-- MIHON ALT HUD: YUZEN SEEKBAR VE EYLEM DOCK CUBUGU -->
+    <div class="reader-footer-bar mihon-bottom-hud" id="reader-footer-bar">
+      <div class="mihon-seekbar-row" id="reader-seekbar-row">
+        <button aria-label="Önceki Bölüm" class="reader-btn mihon-skip-btn" id="btn-prev-chapter" title="Önceki Bölüm" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" x2="5" y1="19" y2="5"/></svg> <span class="btn-label">Önceki Bölüm</span></button>
+        <div class="mihon-seekbar-pill">
+          <span class="mihon-seekbar-num" id="seekbar-current-page">1</span>
+          <input aria-label="Sayfa Kaydırıcısı" class="mihon-page-slider" id="reader-page-slider" max="1" min="1" step="1" type="range" value="1" />
+          <span class="mihon-seekbar-num" id="seekbar-total-pages">1</span>
+        </div>
+        <button aria-label="Sonraki Bölüm" class="reader-btn mihon-skip-btn" id="btn-next-chapter" title="Sonraki Bölüm" type="button"><span class="btn-label">Sonraki Bölüm</span> <svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" x2="19" y1="5" y2="19"/></svg></button>
+      </div>
+
+      <div class="mihon-action-dock">
+        <div class="reader-footer-page-nav hidden" id="reader-footer-page-nav">
+          <button class="reader-btn" id="btn-prev-page" title="Önceki Sayfa" type="button">‹ <span class="btn-label">Önceki Sayfa</span></button>
+          <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
+          <button class="reader-btn" id="btn-next-page" title="Sonraki Sayfa" type="button"><span class="btn-label">Sonraki Sayfa</span> ›</button>
+        </div>
+
+        <div class="reader-controls">
+          <button class="reader-btn" id="btn-dock-comments" title="Bölüm Yorumlarına Git" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span class="btn-label">Yorumlar</span></button>
+          <button class="reader-btn" id="btn-dock-settings" title="Okuyucu Ayarları" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg> <span class="btn-label">Ayarlar</span></button>
+        </div>
       </div>
     </div>
   </div>
@@ -4419,6 +4804,19 @@ body {
     discord: {
       paths:
         '<path d="M9.09 12.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z"/><path d="M14.91 12.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z"/><path d="M18.9 5.3A16.5 16.5 0 0 0 14.8 4l-.5 1a15.2 15.2 0 0 0-4.6 0L9.2 4A16.5 16.5 0 0 0 5.1 5.3C2.5 9.2 1.8 13 2.1 16.7A16.7 16.7 0 0 0 7.2 19.3l1.1-1.8a10.6 10.6 0 0 1-1.7-.8l.4-.3a11.8 11.8 0 0 0 10 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.8a16.7 16.7 0 0 0 5.1-2.6c.4-4.3-.7-8.1-3-11.4Z"/>'
+    },
+    sliders: {
+      paths:
+        '<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>'
+    },
+    'skip-back': {
+      paths: '<polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/>'
+    },
+    'skip-forward': {
+      paths: '<polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/>'
+    },
+    eye: {
+      paths: '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
     }
   };
 
@@ -7536,6 +7934,7 @@ body {
 
   const VALID_MODES = ['webtoon', 'single', 'double', 'novel'];
   const VALID_DIRECTIONS = ['ltr', 'rtl'];
+  const VALID_BG_THEMES = ['dark', 'amoled', 'sepia', 'light'];
 
   /**
    * Manga, Manhwa ve Novel okuma deneyimini yoneten sinif.
@@ -7559,6 +7958,10 @@ body {
       this.direction = VALID_DIRECTIONS.includes(options.direction) ? options.direction : 'ltr';
       this.zoom = this._clamp(options.zoom || 100, 50, 150);
       this.gap = typeof options.gap === 'number' ? Math.max(0, options.gap) : 0;
+      this.backgroundTheme = VALID_BG_THEMES.includes(options.backgroundTheme)
+        ? options.backgroundTheme
+        : 'dark';
+      this.hudVisible = options.hudVisible !== undefined ? Boolean(options.hudVisible) : true;
       this.novelFontSize = this._clamp(options.novelFontSize || 105, 85, 160);
       this.novelFontFamily = options.novelFontFamily === 'serif' ? 'serif' : 'sans';
       this.protectImages =
@@ -8143,27 +8546,58 @@ body {
     }
 
     /**
-     * Tek sayfa veya cift sayfa modunda goruntu alaninin sol/sag kenarina tiklandiginda sayfa degistirir.
+     * Okuyucu arka plan temasini degistirir ('dark', 'amoled', 'sepia', 'light').
+     * @param {string} theme - Arka plan temasi.
+     * @returns {string} Aktif arka plan temasi.
+     */
+    setBackgroundTheme(theme) {
+      if (VALID_BG_THEMES.includes(theme)) {
+        this.backgroundTheme = theme;
+        this._log('info', 'Okuyucu arka plan temasi degistirildi.', {
+          backgroundTheme: this.backgroundTheme
+        });
+      }
+      return this.backgroundTheme;
+    }
+
+    /**
+     * Mihon ust ve alt HUD cubuklarinin gorunurlugunu acar veya kapatir.
+     * @param {boolean} [force] - Zorunlu gorunurluk durumu.
+     * @returns {boolean} Guncel HUD gorunurlugu.
+     */
+    toggleHud(force) {
+      this.hudVisible = typeof force === 'boolean' ? force : !this.hudVisible;
+      return this.hudVisible;
+    }
+
+    /**
+     * Mihon 3 bolgeli tiklama mantigi: Tek/Cift sayfada sol/sag kenar sayfa degistirir,
+     * orta bolge (0.35 - 0.65) ve Webtoon modu HUD cubuklarini gizler/gosterir.
      * @param {number} clickRatioX - 0 ile 1 arasinda yatay tiklama orani.
-     * @returns {'next'|'prev'|'none'} Yapilan sayfa gecisi.
+     * @returns {'next'|'prev'|'toggle-hud'|'none'} Yapilan islem.
      */
     handleViewportClick(clickRatioX) {
-      if (this.mode !== 'single' && this.mode !== 'double') {
+      if (this.mode === 'novel') {
         return 'none';
       }
       const ratio = Number(clickRatioX);
       if (Number.isNaN(ratio)) {
         return 'none';
       }
-      if (ratio < 0.45) {
+      if (this.mode === 'webtoon') {
+        this.toggleHud();
+        return 'toggle-hud';
+      }
+      if (ratio < 0.35) {
         const moved = this.direction === 'rtl' ? this.nextPage() : this.prevPage();
         return moved ? (this.direction === 'rtl' ? 'next' : 'prev') : 'none';
       }
-      if (ratio > 0.55) {
+      if (ratio > 0.65) {
         const moved = this.direction === 'rtl' ? this.prevPage() : this.nextPage();
         return moved ? (this.direction === 'rtl' ? 'prev' : 'next') : 'none';
       }
-      return 'none';
+      this.toggleHud();
+      return 'toggle-hud';
     }
 
     /**
@@ -8207,6 +8641,8 @@ body {
         direction: this.direction,
         zoom: this.zoom,
         gap: this.gap,
+        backgroundTheme: this.backgroundTheme,
+        hudVisible: this.hudVisible,
         novelFontSize: this.novelFontSize,
         novelFontFamily: this.novelFontFamily,
         protectImages: this.protectImages,
@@ -8260,7 +8696,7 @@ body {
         mangaGroup.classList.toggle('hidden', !state.showMangaControls);
       }
       if (imageGroup && imageGroup.classList) {
-        imageGroup.classList.toggle('hidden', !state.showImageControls);
+        imageGroup.classList.toggle('hidden', !state.showImageControls || !state.showAutoScroll);
       }
       if (autoScrollBtn && autoScrollBtn.classList) {
         autoScrollBtn.classList.toggle('hidden', !state.showAutoScroll);
@@ -8291,6 +8727,10 @@ body {
       const viewport = targetDoc.getElementById('reader-viewport');
       const progressBar = targetDoc.getElementById('reader-progress-bar');
       const pageCounter = targetDoc.getElementById('page-counter');
+      const seekbarSlider = targetDoc.getElementById('reader-page-slider');
+      const seekbarCurr = targetDoc.getElementById('seekbar-current-page');
+      const seekbarTotal = targetDoc.getElementById('seekbar-total-pages');
+      const miniPagePill = targetDoc.getElementById('reader-mini-page-pill');
       if (!viewport) return;
       if (!viewport._manowaTouchBound && typeof viewport.addEventListener === 'function') {
         viewport._manowaTouchBound = true;
@@ -8374,14 +8814,29 @@ body {
             const slices = this.getPageSlices(idx);
             return slices
               .map(
-                (src) =>
-                  `<img class="reader-page-item" src="${src}" alt="Sayfa ${idx + 1}" loading="lazy" />`
+                (src, sIdx) =>
+                  `<img class="reader-page-item" data-page-index="${idx}" data-slice-index="${sIdx}" src="${src}" alt="Sayfa ${idx + 1}" loading="lazy" />`
               )
               .join('');
           })
           .join('');
       }
       if (progressBar && progressBar.style) progressBar.style.width = `${state.progressPercent}%`;
+      const total = Math.max(1, state.totalPages);
+      const currPage = Math.min(total, state.currentIndex + 1);
+      if (seekbarCurr) seekbarCurr.textContent = String(currPage);
+      if (seekbarTotal) seekbarTotal.textContent = String(total);
+      if (seekbarSlider) {
+        seekbarSlider.min = '1';
+        seekbarSlider.max = String(total);
+        seekbarSlider.value = String(currPage);
+        if (typeof seekbarSlider.setAttribute === 'function') {
+          seekbarSlider.setAttribute('dir', state.direction === 'rtl' ? 'rtl' : 'ltr');
+        }
+      }
+      if (miniPagePill) {
+        miniPagePill.textContent = `${currPage} / ${total}`;
+      }
       if (pageCounter) {
         if (state.mode === 'novel') {
           pageCounter.textContent = `Novel Metin (${state.novelFontSize || 105}%)`;
@@ -8400,7 +8855,424 @@ body {
     module.exports = {
       ReadingEngine,
       VALID_MODES,
-      VALID_DIRECTIONS
+      VALID_DIRECTIONS,
+      VALID_BG_THEMES
+    };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/reader-hud.js === */
+/**
+ * @fileoverview Mihon (Tachiyomi) tarzi okuyucu HUD cubuklarini, etkilesimli sayfa kaydiricisini
+ * (seekbar), acilir ayarlar cekmecesini ve Webtoon kaydirma takibini yoneten modul.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  const MODE_LABELS = {
+    webtoon: 'Dikey Şerit',
+    single: 'Tek Sayfa',
+    double: 'Çift Sayfa',
+    novel: 'Novel'
+  };
+
+  const iconFn =
+    (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
+    (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
+
+  /**
+   * Mihon okuyucu ust/alt HUD katmanini, ayar cekmecesini ve seekbar etkilesimini yoneten sinif.
+   */
+  class ReaderHudController {
+    /**
+     * ReaderHudController nesnesini yapilandirir.
+     * @param {Object} [options={}] - Yapilandirma secenekleri.
+     */
+    constructor(options = {}) {
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.settingsOpen = false;
+      this._log('debug', 'ReaderHudController baslatildi.');
+    }
+
+    /**
+     * Ic loglama yardimcisi.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Mesaj.
+     * @param {Object|null} [meta=null] - Ek veri.
+     * @returns {void}
+     */
+    _log(level, msg, meta = null) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+
+    /**
+     * Mihon okuyucu ayarlar cekmecesini acar veya kapatir.
+     * @param {boolean} [force] - Zorunlu acik/kapali durumu.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {boolean} Yeni acik durumu.
+     */
+    toggleSettingsSheet(force, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      this.settingsOpen = typeof force === 'boolean' ? force : !this.settingsOpen;
+      if (targetDoc && typeof targetDoc.getElementById === 'function') {
+        const sheet = targetDoc.getElementById('reader-settings-sheet');
+        const topBtn = targetDoc.getElementById('btn-reader-settings');
+        const dockBtn = targetDoc.getElementById('btn-dock-settings');
+        if (sheet && sheet.classList) {
+          sheet.classList.toggle('hidden', !this.settingsOpen);
+        }
+        if (topBtn) {
+          if (topBtn.classList) topBtn.classList.toggle('active', this.settingsOpen);
+          if (typeof topBtn.setAttribute === 'function') {
+            topBtn.setAttribute('aria-expanded', String(this.settingsOpen));
+          }
+        }
+        if (dockBtn && dockBtn.classList) {
+          dockBtn.classList.toggle('active', this.settingsOpen);
+        }
+      }
+      this._log('debug', 'Mihon ayarlar cekmecesi durumu degisti.', {
+        settingsOpen: this.settingsOpen
+      });
+      return this.settingsOpen;
+    }
+
+    /**
+     * Mihon HUD cubuklarini, seekbar degerlerini, arka plan temasini ve ayar haplarini DOM ile esitler.
+     * @param {Object} reader - ReadingEngine ornegi.
+     * @param {Object} [chapterMeta=null] - Aktif bolum/seri gezinme meta verisi.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    syncHudIntoDom(reader, chapterMeta = null, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function' || !reader) return;
+
+      const state = reader.getState();
+      const wrapper = targetDoc.getElementById('reader-wrapper');
+      if (wrapper && wrapper.classList) {
+        wrapper.classList.toggle('hud-hidden', !state.hudVisible);
+        ['dark', 'amoled', 'sepia', 'light'].forEach((bg) => {
+          wrapper.classList.toggle(`reader-bg-${bg}`, state.backgroundTheme === bg);
+        });
+      }
+
+      if (!state.hudVisible && this.settingsOpen) {
+        this.toggleSettingsSheet(false, targetDoc);
+      }
+
+      const dockModeLabel = targetDoc.getElementById('dock-mode-label');
+      const dockDirLabel = targetDoc.getElementById('dock-dir-label');
+      const dockModeBtn = targetDoc.getElementById('btn-dock-mode');
+      const dockDirBtn = targetDoc.getElementById('btn-dock-direction');
+      const seekbarRow = targetDoc.getElementById('reader-seekbar-row');
+      const gapGroup = targetDoc.getElementById('mihon-setting-gap-group');
+      const modeGroup = targetDoc.getElementById('mihon-setting-mode-group');
+      const dirGroup = targetDoc.getElementById('mihon-setting-dir-group');
+
+      const isNovel = state.mode === 'novel' || state.seriesType === 'novel';
+      const isManga = state.seriesType === 'manga' && !isNovel;
+      if (dockModeLabel) dockModeLabel.textContent = MODE_LABELS[state.mode] || 'Dikey Şerit';
+      if (dockDirLabel) dockDirLabel.textContent = state.direction.toUpperCase();
+      if (dockModeBtn && dockModeBtn.classList) dockModeBtn.classList.toggle('hidden', !isManga);
+      if (dockDirBtn && dockDirBtn.classList) {
+        dockDirBtn.classList.toggle('hidden', !isManga || state.mode === 'webtoon');
+      }
+      if (seekbarRow && seekbarRow.classList) {
+        seekbarRow.classList.toggle('hidden', isNovel || state.totalPages <= 1);
+      }
+      if (gapGroup && gapGroup.classList) {
+        gapGroup.classList.toggle('hidden', isNovel || state.mode !== 'webtoon');
+      }
+      if (modeGroup && modeGroup.classList) {
+        modeGroup.classList.toggle('hidden', !isManga);
+      }
+      if (dirGroup && dirGroup.classList) {
+        dirGroup.classList.toggle('hidden', !isManga || state.mode === 'webtoon');
+      }
+
+      const syncPillGroup = (containerId, attrName, activeValue) => {
+        const container = targetDoc.getElementById(containerId);
+        if (!container || typeof container.querySelectorAll !== 'function') return;
+        container.querySelectorAll(`[${attrName}]`).forEach((btn) => {
+          const val = btn.getAttribute(attrName);
+          btn.classList.toggle('active', String(val) === String(activeValue));
+        });
+      };
+
+      syncPillGroup('mihon-mode-pills', 'data-mode-pill', state.mode);
+      syncPillGroup('mihon-dir-pills', 'data-dir-pill', state.direction);
+      syncPillGroup('mihon-bg-pills', 'data-bg-pill', state.backgroundTheme);
+      syncPillGroup('mihon-gap-pills', 'data-gap-pill', state.gap);
+
+      if (chapterMeta) {
+        const endLabel = targetDoc.getElementById('reader-end-chapter-label');
+        const endPrevBtn = targetDoc.getElementById('btn-end-prev-chapter');
+        const endNextBtn = targetDoc.getElementById('btn-end-next-chapter');
+        const endSeriesBtn = targetDoc.getElementById('btn-end-series');
+
+        if (endLabel && chapterMeta.chapterLabel) {
+          endLabel.textContent = `${chapterMeta.chapterLabel} Tamamlandı`;
+        }
+        if (endPrevBtn) endPrevBtn.disabled = !chapterMeta.hasPrevChapter;
+        if (endNextBtn) endNextBtn.disabled = !chapterMeta.hasNextChapter;
+        if (endSeriesBtn && chapterMeta.seriesHref && chapterMeta.seriesId) {
+          endSeriesBtn.setAttribute('href', chapterMeta.seriesHref);
+          endSeriesBtn.setAttribute('data-action', 'detail');
+          endSeriesBtn.setAttribute('data-series', chapterMeta.seriesId);
+        }
+      }
+    }
+
+    /**
+     * Mihon sayfa kaydiricisi (seekbar) degeri degistiginde hedef sayfaya gecis yapar.
+     * @param {Object} reader - ReadingEngine ornegi.
+     * @param {number|string} pageNumber - 1 tabanli hedef sayfa numarasi.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {number} Gidilen 0 tabanli sayfa indeksi.
+     */
+    handleSeekbarChange(reader, pageNumber, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!reader) return 0;
+      const targetIdx = Math.max(0, (Number(pageNumber) || 1) - 1);
+      const idx = reader.goToPage(targetIdx);
+
+      if (reader.mode === 'webtoon') {
+        if (targetDoc && typeof targetDoc.getElementById === 'function') {
+          const viewport = targetDoc.getElementById('reader-viewport');
+          const currEl = targetDoc.getElementById('seekbar-current-page');
+          const miniEl = targetDoc.getElementById('reader-mini-page-pill');
+          const progEl = targetDoc.getElementById('reader-progress-bar');
+          const total = Math.max(1, reader.pages.length);
+          if (currEl) currEl.textContent = String(idx + 1);
+          if (miniEl) miniEl.textContent = `${idx + 1} / ${total}`;
+          if (progEl && progEl.style) progEl.style.width = `${reader.getProgressPercent()}%`;
+          if (viewport && typeof viewport.querySelector === 'function') {
+            const imgEl = viewport.querySelector(`[data-page-index="${idx}"]`);
+            if (imgEl && typeof imgEl.scrollIntoView === 'function') {
+              imgEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+        }
+      } else {
+        reader.syncControlsIntoDom(targetDoc);
+        reader.renderViewportIntoDom(targetDoc);
+      }
+
+      this.syncHudIntoDom(reader, null, targetDoc);
+      return idx;
+    }
+
+    /**
+     * Webtoon (Dikey Serit) modunda kullanici sayfayi kaydirdikca aktif sayfa indeksini algilar
+     * ve seekbar ile ilerleme cubugunu gunceller.
+     * @param {Object} reader - ReadingEngine ornegi.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {number} Algilanan aktif sayfa indeksi.
+     */
+    updateWebtoonScrollPage(reader, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!reader || reader.mode !== 'webtoon' || !targetDoc) {
+        return reader ? reader.currentIndex : 0;
+      }
+      const viewport = targetDoc.getElementById('reader-viewport');
+      if (!viewport || typeof viewport.querySelectorAll !== 'function') {
+        return reader.currentIndex;
+      }
+      const items = viewport.querySelectorAll('[data-page-index]');
+      if (!items || items.length === 0) return reader.currentIndex;
+
+      const winHeight =
+        (typeof globalScope.innerHeight === 'number' && globalScope.innerHeight) || 720;
+      const thresholdY = winHeight * 0.42;
+      let detectedIdx = reader.currentIndex;
+
+      for (let i = 0; i < items.length; i++) {
+        const el = items[i];
+        if (typeof el.getBoundingClientRect !== 'function') continue;
+        const rect = el.getBoundingClientRect();
+        const pageIdx = Number(el.getAttribute('data-page-index'));
+        if (!Number.isNaN(pageIdx) && rect.top <= thresholdY && rect.bottom >= 60) {
+          detectedIdx = pageIdx;
+        }
+      }
+
+      if (detectedIdx !== reader.currentIndex) {
+        reader.currentIndex = detectedIdx;
+        reader.saveProgress();
+        const total = Math.max(1, reader.pages.length);
+        const currPage = Math.min(total, detectedIdx + 1);
+        const seekbarSlider = targetDoc.getElementById('reader-page-slider');
+        const seekbarCurr = targetDoc.getElementById('seekbar-current-page');
+        const miniPill = targetDoc.getElementById('reader-mini-page-pill');
+        const progressBar = targetDoc.getElementById('reader-progress-bar');
+        if (seekbarCurr) seekbarCurr.textContent = String(currPage);
+        if (seekbarSlider) seekbarSlider.value = String(currPage);
+        if (miniPill) miniPill.textContent = `${currPage} / ${total}`;
+        if (progressBar && progressBar.style) {
+          progressBar.style.width = `${reader.getProgressPercent()}%`;
+        }
+      }
+
+      return reader.currentIndex;
+    }
+
+    /**
+     * Okuyucu gorunumune ait tum DOM olay dinleyicilerini baglar.
+     * @param {Object} app - AppController ornegi.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    bindDomEvents(app, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || !app || !app.reader) return;
+
+      const on = (id, event, fn) => {
+        const el = targetDoc.getElementById(id);
+        if (el && typeof el.addEventListener === 'function') {
+          el.addEventListener(event, fn);
+        }
+      };
+
+      const refreshAll = () => {
+        app.syncReaderControls();
+        app.renderReaderViewport();
+        this.syncHudIntoDom(app.reader, null, targetDoc);
+      };
+
+      on('select-chapter', 'change', (e) => app.openReader(app.activeSeriesId, e.target.value));
+      on('select-mode', 'change', (e) => {
+        app.reader.setMode(e.target.value);
+        refreshAll();
+      });
+      on('select-direction', 'change', (e) => {
+        app.reader.setDirection(e.target.value);
+        refreshAll();
+      });
+      on('btn-zoom-in', 'click', () => {
+        app.reader.setZoom(app.reader.zoom + 15);
+        refreshAll();
+      });
+      on('btn-zoom-out', 'click', () => {
+        app.reader.setZoom(app.reader.zoom - 15);
+        refreshAll();
+      });
+      on('btn-font-increase', 'click', () => {
+        app.reader.setNovelFontSize((app.reader.novelFontSize || 105) + 10);
+        refreshAll();
+      });
+      on('btn-font-decrease', 'click', () => {
+        app.reader.setNovelFontSize((app.reader.novelFontSize || 105) - 10);
+        refreshAll();
+      });
+      on('btn-font-family', 'click', () => {
+        app.reader.toggleNovelFontFamily();
+        refreshAll();
+      });
+      on('btn-autoscroll', 'click', (e) => {
+        const active = app.reader.toggleAutoScroll();
+        e.currentTarget.classList.toggle('active', active);
+        e.currentTarget.innerHTML = active
+          ? `${iconFn('pause')} <span class="btn-label">Durdur</span>`
+          : `${iconFn('play')} <span class="btn-label">Oto-Kaydır</span>`;
+      });
+      on('btn-fullscreen', 'click', () => {
+        const wrap = targetDoc.getElementById('reader-wrapper');
+        if (wrap && wrap.requestFullscreen) {
+          if (!targetDoc.fullscreenElement) wrap.requestFullscreen();
+          else if (targetDoc.exitFullscreen) targetDoc.exitFullscreen();
+        }
+      });
+      on('btn-next-page', 'click', () => {
+        if (app.reader.nextPage()) refreshAll();
+      });
+      on('btn-prev-page', 'click', () => {
+        if (app.reader.prevPage()) refreshAll();
+      });
+      on('reader-viewport', 'click', (e) => {
+        if (!e.currentTarget || typeof e.currentTarget.getBoundingClientRect !== 'function') return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        if (rect.width <= 0) return;
+        const ratio = (e.clientX - rect.left) / rect.width;
+        const action = app.reader.handleViewportClick(ratio);
+        if (action === 'toggle-hud') {
+          this.syncHudIntoDom(app.reader, null, targetDoc);
+        } else if (action !== 'none') {
+          refreshAll();
+        }
+      });
+      on('btn-next-chapter', 'click', () => app.navigateChapter(1));
+      on('btn-prev-chapter', 'click', () => app.navigateChapter(-1));
+      on('btn-top-next-chapter', 'click', () => app.navigateChapter(1));
+      on('btn-top-prev-chapter', 'click', () => app.navigateChapter(-1));
+      on('btn-end-next-chapter', 'click', () => app.navigateChapter(1));
+      on('btn-end-prev-chapter', 'click', () => app.navigateChapter(-1));
+
+      on('btn-reader-settings', 'click', () => this.toggleSettingsSheet(undefined, targetDoc));
+      on('btn-dock-settings', 'click', () => this.toggleSettingsSheet(undefined, targetDoc));
+      on('btn-close-reader-settings', 'click', () => this.toggleSettingsSheet(false, targetDoc));
+
+      on('btn-dock-mode', 'click', () => {
+        const modes = ['webtoon', 'single', 'double'];
+        const nextIdx = (Math.max(0, modes.indexOf(app.reader.mode)) + 1) % modes.length;
+        app.reader.setMode(modes[nextIdx]);
+        refreshAll();
+      });
+      on('btn-dock-direction', 'click', () => {
+        app.reader.setDirection(app.reader.direction === 'rtl' ? 'ltr' : 'rtl');
+        refreshAll();
+      });
+      on('btn-dock-comments', 'click', () => {
+        const disqusEl = targetDoc.getElementById('disqus-section');
+        if (disqusEl && typeof disqusEl.scrollIntoView === 'function') {
+          disqusEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+      on('reader-page-slider', 'input', (e) => {
+        this.handleSeekbarChange(app.reader, e.target.value, targetDoc);
+      });
+
+      const sheet = targetDoc.getElementById('reader-settings-sheet');
+      if (sheet && typeof sheet.addEventListener === 'function') {
+        sheet.addEventListener('click', (e) => {
+          const pill = e.target.closest('button.mihon-choice-pill');
+          if (!pill) return;
+          if (pill.hasAttribute('data-mode-pill')) {
+            app.reader.setMode(pill.getAttribute('data-mode-pill'));
+          } else if (pill.hasAttribute('data-dir-pill')) {
+            app.reader.setDirection(pill.getAttribute('data-dir-pill'));
+          } else if (pill.hasAttribute('data-bg-pill')) {
+            app.reader.setBackgroundTheme(pill.getAttribute('data-bg-pill'));
+          } else if (pill.hasAttribute('data-gap-pill')) {
+            app.reader.setGap(Number(pill.getAttribute('data-gap-pill')));
+          }
+          refreshAll();
+        });
+      }
+
+      if (typeof globalScope.addEventListener === 'function') {
+        globalScope.addEventListener(
+          'scroll',
+          () => {
+            if (app.currentView === 'reader') {
+              this.updateWebtoonScrollPage(app.reader, targetDoc);
+            }
+          },
+          { passive: true }
+        );
+      }
+    }
+  }
+
+  globalScope.ReaderHudController = ReaderHudController;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      ReaderHudController,
+      MODE_LABELS
     };
   }
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -9906,6 +10778,9 @@ body {
     (typeof require === 'function'
       ? require('./search-controller').SearchController
       : null);
+  const ReaderHudClass =
+    globalScope.ReaderHudController ||
+    (typeof require === 'function' ? require('./reader-hud').ReaderHudController : null);
   const iconFn =
     (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
     (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
@@ -9924,6 +10799,10 @@ body {
         (globalScope.CatalogController ? new globalScope.CatalogController() : null);
       this.reader =
         deps.reader || (globalScope.ReadingEngine ? new globalScope.ReadingEngine() : null);
+      const ResolvedReaderHud = globalScope.ReaderHudController || ReaderHudClass;
+      this.readerHud =
+        deps.readerHud ||
+        (ResolvedReaderHud ? new ResolvedReaderHud({ logger: this.logger }) : null);
       this.disqus =
         deps.disqus || (globalScope.DisqusLoader ? new globalScope.DisqusLoader() : null);
       this.generator =
@@ -10497,6 +11376,18 @@ body {
       });
       this.syncReaderControls();
       this.renderReaderViewport();
+      if (this.readerHud) {
+        const chapterLabel = this.reader
+          ? this.reader.formatChapterSelectLabel(chapter)
+          : chapter.title;
+        this.readerHud.syncHudIntoDom(this.reader, {
+          chapterLabel,
+          hasPrevChapter,
+          hasNextChapter,
+          seriesHref,
+          seriesId: series.id
+        });
+      }
       this.renderHomeSections();
     }
     /**
@@ -10506,6 +11397,9 @@ body {
     syncReaderControls() {
       if (this.reader && typeof this.reader.syncControlsIntoDom === 'function') {
         this.reader.syncControlsIntoDom();
+      }
+      if (this.readerHud && typeof this.readerHud.syncHudIntoDom === 'function') {
+        this.readerHud.syncHudIntoDom(this.reader);
       }
     }
     /**
@@ -10666,84 +11560,9 @@ body {
         }
         this.renderDebugLogs();
       });
-      on('select-chapter', 'change', (e) => this.openReader(this.activeSeriesId, e.target.value));
-      on('select-mode', 'change', (e) => {
-        this.reader.setMode(e.target.value);
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('select-direction', 'change', (e) => {
-        this.reader.setDirection(e.target.value);
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('btn-zoom-in', 'click', () => {
-        this.reader.setZoom(this.reader.zoom + 15);
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('btn-zoom-out', 'click', () => {
-        this.reader.setZoom(this.reader.zoom - 15);
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('btn-font-increase', 'click', () => {
-        this.reader.setNovelFontSize((this.reader.novelFontSize || 105) + 10);
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('btn-font-decrease', 'click', () => {
-        this.reader.setNovelFontSize((this.reader.novelFontSize || 105) - 10);
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('btn-font-family', 'click', () => {
-        this.reader.toggleNovelFontFamily();
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('btn-autoscroll', 'click', (e) => {
-        const active = this.reader.toggleAutoScroll();
-        e.currentTarget.classList.toggle('active', active);
-        e.currentTarget.innerHTML = active
-          ? `${iconFn('pause')} <span class="btn-label">Durdur</span>`
-          : `${iconFn('play')} <span class="btn-label">Oto-Kaydır</span>`;
-      });
-      on('btn-fullscreen', 'click', () => {
-        const wrap = document.getElementById('reader-wrapper');
-        if (wrap && wrap.requestFullscreen) {
-          if (!document.fullscreenElement) wrap.requestFullscreen();
-          else document.exitFullscreen();
-        }
-      });
-      on('btn-next-page', 'click', () => {
-        if (this.reader.nextPage()) {
-          this.syncReaderControls();
-          this.renderReaderViewport();
-        }
-      });
-      on('btn-prev-page', 'click', () => {
-        if (this.reader.prevPage()) {
-          this.syncReaderControls();
-          this.renderReaderViewport();
-        }
-      });
-      on('reader-viewport', 'click', (e) => {
-        if (!this.reader || !e.currentTarget || typeof e.currentTarget.getBoundingClientRect !== 'function') {
-          return;
-        }
-        const rect = e.currentTarget.getBoundingClientRect();
-        if (rect.width <= 0) return;
-        const ratio = (e.clientX - rect.left) / rect.width;
-        if (this.reader.handleViewportClick(ratio) !== 'none') {
-          this.syncReaderControls();
-          this.renderReaderViewport();
-        }
-      });
-      on('btn-next-chapter', 'click', () => this.navigateChapter(1));
-      on('btn-prev-chapter', 'click', () => this.navigateChapter(-1));
-      on('btn-top-next-chapter', 'click', () => this.navigateChapter(1));
-      on('btn-top-prev-chapter', 'click', () => this.navigateChapter(-1));
+      if (this.readerHud) {
+        this.readerHud.bindDomEvents(this);
+      }
       on('btn-scroll-top', 'click', () => {
         if (typeof globalScope.scrollTo === 'function') {
           globalScope.scrollTo({ top: 0, behavior: 'smooth' });

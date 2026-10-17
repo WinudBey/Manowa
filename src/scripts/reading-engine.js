@@ -8,6 +8,7 @@
 
   const VALID_MODES = ['webtoon', 'single', 'double', 'novel'];
   const VALID_DIRECTIONS = ['ltr', 'rtl'];
+  const VALID_BG_THEMES = ['dark', 'amoled', 'sepia', 'light'];
 
   /**
    * Manga, Manhwa ve Novel okuma deneyimini yoneten sinif.
@@ -31,6 +32,10 @@
       this.direction = VALID_DIRECTIONS.includes(options.direction) ? options.direction : 'ltr';
       this.zoom = this._clamp(options.zoom || 100, 50, 150);
       this.gap = typeof options.gap === 'number' ? Math.max(0, options.gap) : 0;
+      this.backgroundTheme = VALID_BG_THEMES.includes(options.backgroundTheme)
+        ? options.backgroundTheme
+        : 'dark';
+      this.hudVisible = options.hudVisible !== undefined ? Boolean(options.hudVisible) : true;
       this.novelFontSize = this._clamp(options.novelFontSize || 105, 85, 160);
       this.novelFontFamily = options.novelFontFamily === 'serif' ? 'serif' : 'sans';
       this.protectImages =
@@ -615,27 +620,58 @@
     }
 
     /**
-     * Tek sayfa veya cift sayfa modunda goruntu alaninin sol/sag kenarina tiklandiginda sayfa degistirir.
+     * Okuyucu arka plan temasini degistirir ('dark', 'amoled', 'sepia', 'light').
+     * @param {string} theme - Arka plan temasi.
+     * @returns {string} Aktif arka plan temasi.
+     */
+    setBackgroundTheme(theme) {
+      if (VALID_BG_THEMES.includes(theme)) {
+        this.backgroundTheme = theme;
+        this._log('info', 'Okuyucu arka plan temasi degistirildi.', {
+          backgroundTheme: this.backgroundTheme
+        });
+      }
+      return this.backgroundTheme;
+    }
+
+    /**
+     * Mihon ust ve alt HUD cubuklarinin gorunurlugunu acar veya kapatir.
+     * @param {boolean} [force] - Zorunlu gorunurluk durumu.
+     * @returns {boolean} Guncel HUD gorunurlugu.
+     */
+    toggleHud(force) {
+      this.hudVisible = typeof force === 'boolean' ? force : !this.hudVisible;
+      return this.hudVisible;
+    }
+
+    /**
+     * Mihon 3 bolgeli tiklama mantigi: Tek/Cift sayfada sol/sag kenar sayfa degistirir,
+     * orta bolge (0.35 - 0.65) ve Webtoon modu HUD cubuklarini gizler/gosterir.
      * @param {number} clickRatioX - 0 ile 1 arasinda yatay tiklama orani.
-     * @returns {'next'|'prev'|'none'} Yapilan sayfa gecisi.
+     * @returns {'next'|'prev'|'toggle-hud'|'none'} Yapilan islem.
      */
     handleViewportClick(clickRatioX) {
-      if (this.mode !== 'single' && this.mode !== 'double') {
+      if (this.mode === 'novel') {
         return 'none';
       }
       const ratio = Number(clickRatioX);
       if (Number.isNaN(ratio)) {
         return 'none';
       }
-      if (ratio < 0.45) {
+      if (this.mode === 'webtoon') {
+        this.toggleHud();
+        return 'toggle-hud';
+      }
+      if (ratio < 0.35) {
         const moved = this.direction === 'rtl' ? this.nextPage() : this.prevPage();
         return moved ? (this.direction === 'rtl' ? 'next' : 'prev') : 'none';
       }
-      if (ratio > 0.55) {
+      if (ratio > 0.65) {
         const moved = this.direction === 'rtl' ? this.prevPage() : this.nextPage();
         return moved ? (this.direction === 'rtl' ? 'prev' : 'next') : 'none';
       }
-      return 'none';
+      this.toggleHud();
+      return 'toggle-hud';
     }
 
     /**
@@ -679,6 +715,8 @@
         direction: this.direction,
         zoom: this.zoom,
         gap: this.gap,
+        backgroundTheme: this.backgroundTheme,
+        hudVisible: this.hudVisible,
         novelFontSize: this.novelFontSize,
         novelFontFamily: this.novelFontFamily,
         protectImages: this.protectImages,
@@ -732,7 +770,7 @@
         mangaGroup.classList.toggle('hidden', !state.showMangaControls);
       }
       if (imageGroup && imageGroup.classList) {
-        imageGroup.classList.toggle('hidden', !state.showImageControls);
+        imageGroup.classList.toggle('hidden', !state.showImageControls || !state.showAutoScroll);
       }
       if (autoScrollBtn && autoScrollBtn.classList) {
         autoScrollBtn.classList.toggle('hidden', !state.showAutoScroll);
@@ -763,6 +801,10 @@
       const viewport = targetDoc.getElementById('reader-viewport');
       const progressBar = targetDoc.getElementById('reader-progress-bar');
       const pageCounter = targetDoc.getElementById('page-counter');
+      const seekbarSlider = targetDoc.getElementById('reader-page-slider');
+      const seekbarCurr = targetDoc.getElementById('seekbar-current-page');
+      const seekbarTotal = targetDoc.getElementById('seekbar-total-pages');
+      const miniPagePill = targetDoc.getElementById('reader-mini-page-pill');
       if (!viewport) return;
       if (!viewport._manowaTouchBound && typeof viewport.addEventListener === 'function') {
         viewport._manowaTouchBound = true;
@@ -846,14 +888,29 @@
             const slices = this.getPageSlices(idx);
             return slices
               .map(
-                (src) =>
-                  `<img class="reader-page-item" src="${src}" alt="Sayfa ${idx + 1}" loading="lazy" />`
+                (src, sIdx) =>
+                  `<img class="reader-page-item" data-page-index="${idx}" data-slice-index="${sIdx}" src="${src}" alt="Sayfa ${idx + 1}" loading="lazy" />`
               )
               .join('');
           })
           .join('');
       }
       if (progressBar && progressBar.style) progressBar.style.width = `${state.progressPercent}%`;
+      const total = Math.max(1, state.totalPages);
+      const currPage = Math.min(total, state.currentIndex + 1);
+      if (seekbarCurr) seekbarCurr.textContent = String(currPage);
+      if (seekbarTotal) seekbarTotal.textContent = String(total);
+      if (seekbarSlider) {
+        seekbarSlider.min = '1';
+        seekbarSlider.max = String(total);
+        seekbarSlider.value = String(currPage);
+        if (typeof seekbarSlider.setAttribute === 'function') {
+          seekbarSlider.setAttribute('dir', state.direction === 'rtl' ? 'rtl' : 'ltr');
+        }
+      }
+      if (miniPagePill) {
+        miniPagePill.textContent = `${currPage} / ${total}`;
+      }
       if (pageCounter) {
         if (state.mode === 'novel') {
           pageCounter.textContent = `Novel Metin (${state.novelFontSize || 105}%)`;
@@ -872,7 +929,8 @@
     module.exports = {
       ReadingEngine,
       VALID_MODES,
-      VALID_DIRECTIONS
+      VALID_DIRECTIONS,
+      VALID_BG_THEMES
     };
   }
 })(typeof window !== 'undefined' ? window : globalThis);

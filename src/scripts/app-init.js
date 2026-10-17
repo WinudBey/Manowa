@@ -30,6 +30,9 @@
     (typeof require === 'function'
       ? require('./search-controller').SearchController
       : null);
+  const ReaderHudClass =
+    globalScope.ReaderHudController ||
+    (typeof require === 'function' ? require('./reader-hud').ReaderHudController : null);
   const iconFn =
     (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
     (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
@@ -48,6 +51,10 @@
         (globalScope.CatalogController ? new globalScope.CatalogController() : null);
       this.reader =
         deps.reader || (globalScope.ReadingEngine ? new globalScope.ReadingEngine() : null);
+      const ResolvedReaderHud = globalScope.ReaderHudController || ReaderHudClass;
+      this.readerHud =
+        deps.readerHud ||
+        (ResolvedReaderHud ? new ResolvedReaderHud({ logger: this.logger }) : null);
       this.disqus =
         deps.disqus || (globalScope.DisqusLoader ? new globalScope.DisqusLoader() : null);
       this.generator =
@@ -621,6 +628,18 @@
       });
       this.syncReaderControls();
       this.renderReaderViewport();
+      if (this.readerHud) {
+        const chapterLabel = this.reader
+          ? this.reader.formatChapterSelectLabel(chapter)
+          : chapter.title;
+        this.readerHud.syncHudIntoDom(this.reader, {
+          chapterLabel,
+          hasPrevChapter,
+          hasNextChapter,
+          seriesHref,
+          seriesId: series.id
+        });
+      }
       this.renderHomeSections();
     }
     /**
@@ -630,6 +649,9 @@
     syncReaderControls() {
       if (this.reader && typeof this.reader.syncControlsIntoDom === 'function') {
         this.reader.syncControlsIntoDom();
+      }
+      if (this.readerHud && typeof this.readerHud.syncHudIntoDom === 'function') {
+        this.readerHud.syncHudIntoDom(this.reader);
       }
     }
     /**
@@ -790,84 +812,9 @@
         }
         this.renderDebugLogs();
       });
-      on('select-chapter', 'change', (e) => this.openReader(this.activeSeriesId, e.target.value));
-      on('select-mode', 'change', (e) => {
-        this.reader.setMode(e.target.value);
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('select-direction', 'change', (e) => {
-        this.reader.setDirection(e.target.value);
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('btn-zoom-in', 'click', () => {
-        this.reader.setZoom(this.reader.zoom + 15);
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('btn-zoom-out', 'click', () => {
-        this.reader.setZoom(this.reader.zoom - 15);
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('btn-font-increase', 'click', () => {
-        this.reader.setNovelFontSize((this.reader.novelFontSize || 105) + 10);
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('btn-font-decrease', 'click', () => {
-        this.reader.setNovelFontSize((this.reader.novelFontSize || 105) - 10);
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('btn-font-family', 'click', () => {
-        this.reader.toggleNovelFontFamily();
-        this.syncReaderControls();
-        this.renderReaderViewport();
-      });
-      on('btn-autoscroll', 'click', (e) => {
-        const active = this.reader.toggleAutoScroll();
-        e.currentTarget.classList.toggle('active', active);
-        e.currentTarget.innerHTML = active
-          ? `${iconFn('pause')} <span class="btn-label">Durdur</span>`
-          : `${iconFn('play')} <span class="btn-label">Oto-Kaydır</span>`;
-      });
-      on('btn-fullscreen', 'click', () => {
-        const wrap = document.getElementById('reader-wrapper');
-        if (wrap && wrap.requestFullscreen) {
-          if (!document.fullscreenElement) wrap.requestFullscreen();
-          else document.exitFullscreen();
-        }
-      });
-      on('btn-next-page', 'click', () => {
-        if (this.reader.nextPage()) {
-          this.syncReaderControls();
-          this.renderReaderViewport();
-        }
-      });
-      on('btn-prev-page', 'click', () => {
-        if (this.reader.prevPage()) {
-          this.syncReaderControls();
-          this.renderReaderViewport();
-        }
-      });
-      on('reader-viewport', 'click', (e) => {
-        if (!this.reader || !e.currentTarget || typeof e.currentTarget.getBoundingClientRect !== 'function') {
-          return;
-        }
-        const rect = e.currentTarget.getBoundingClientRect();
-        if (rect.width <= 0) return;
-        const ratio = (e.clientX - rect.left) / rect.width;
-        if (this.reader.handleViewportClick(ratio) !== 'none') {
-          this.syncReaderControls();
-          this.renderReaderViewport();
-        }
-      });
-      on('btn-next-chapter', 'click', () => this.navigateChapter(1));
-      on('btn-prev-chapter', 'click', () => this.navigateChapter(-1));
-      on('btn-top-next-chapter', 'click', () => this.navigateChapter(1));
-      on('btn-top-prev-chapter', 'click', () => this.navigateChapter(-1));
+      if (this.readerHud) {
+        this.readerHud.bindDomEvents(this);
+      }
       on('btn-scroll-top', 'click', () => {
         if (typeof globalScope.scrollTo === 'function') {
           globalScope.scrollTo({ top: 0, behavior: 'smooth' });

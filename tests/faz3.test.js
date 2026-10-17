@@ -404,3 +404,206 @@ test('Mobil Uyumluluk: Hamburger menu, acilir arama, simge odakli dugmeler ve Re
   assert.equal(engine.currentIndex, 0);
 });
 
+test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekbar, Arka Plan Temalari ve Webtoon kaydirma takibi dogru calismali', () => {
+  const { ReaderHudController } = require('../src/scripts/reader-hud');
+  const engine = new ReadingEngine({ storage: createMockStorage() });
+  const hud = new ReaderHudController();
+
+  engine.loadChapter({
+    seriesId: 'tomb-raider-king',
+    chapterId: 'trk-279',
+    seriesType: 'Manhwa',
+    sourceLang: 'KR',
+    pages: ['p1.webp', 'p2.webp', 'p3.webp', 'p4.webp']
+  });
+
+  // 1. Webtoon modunda tiklama HUD gorunurlugunu acip kapatmali
+  assert.equal(engine.hudVisible, true);
+  assert.equal(engine.handleViewportClick(0.5), 'toggle-hud');
+  assert.equal(engine.hudVisible, false);
+  assert.equal(engine.handleViewportClick(0.2), 'toggle-hud');
+  assert.equal(engine.hudVisible, true);
+
+  // 2. Tek sayfa modunda kenar tiklamalari sayfa degistirmeli, orta bolge (0.35-0.65) HUD gizlemeli
+  engine.setMode('single');
+  engine.setDirection('ltr');
+  assert.equal(engine.handleViewportClick(0.8), 'next');
+  assert.equal(engine.currentIndex, 1);
+  assert.equal(engine.handleViewportClick(0.5), 'toggle-hud');
+  assert.equal(engine.hudVisible, false);
+
+  // 3. Arka plan temalari ve sayfa boslugu (gap)
+  assert.equal(engine.setBackgroundTheme('amoled'), 'amoled');
+  assert.equal(engine.setBackgroundTheme('sepia'), 'sepia');
+  assert.equal(engine.setGap(16), 16);
+
+  // 4. ReaderHudController DOM esitleme ve Seekbar gezinmesi
+  const makeHudEl = () => {
+    const classes = new Set();
+    const attrs = {};
+    return {
+      classes,
+      attrs,
+      textContent: '',
+      value: '',
+      disabled: false,
+      scrolledIntoView: false,
+      style: { width: '' },
+      setAttribute(k, v) {
+        attrs[k] = v;
+      },
+      getAttribute(k) {
+        return attrs[k];
+      },
+      scrollIntoView() {
+        this.scrolledIntoView = true;
+      },
+      querySelector(sel) {
+        if (sel === '[data-page-index="2"]') return pageImg2;
+        return null;
+      },
+      querySelectorAll() {
+        return [pageImg0, pageImg1, pageImg2];
+      },
+      classList: {
+        toggle(c, force) {
+          const next = typeof force === 'boolean' ? force : !classes.has(c);
+          if (next) classes.add(c);
+          else classes.delete(c);
+          return next;
+        }
+      }
+    };
+  };
+
+  const pageImg0 = makeHudEl();
+  pageImg0.attrs['data-page-index'] = '0';
+  pageImg0.getBoundingClientRect = () => ({ top: -900, bottom: -100 });
+  const pageImg1 = makeHudEl();
+  pageImg1.attrs['data-page-index'] = '1';
+  pageImg1.getBoundingClientRect = () => ({ top: -400, bottom: 40 });
+  const pageImg2 = makeHudEl();
+  pageImg2.attrs['data-page-index'] = '2';
+  pageImg2.getBoundingClientRect = () => ({ top: 100, bottom: 850 });
+
+  const domMap = {
+    'reader-wrapper': makeHudEl(),
+    'reader-settings-sheet': makeHudEl(),
+    'btn-reader-settings': makeHudEl(),
+    'btn-dock-settings': makeHudEl(),
+    'dock-mode-label': makeHudEl(),
+    'dock-dir-label': makeHudEl(),
+    'btn-dock-mode': makeHudEl(),
+    'btn-dock-direction': makeHudEl(),
+    'reader-seekbar-row': makeHudEl(),
+    'mihon-setting-gap-group': makeHudEl(),
+    'mihon-setting-mode-group': makeHudEl(),
+    'mihon-setting-dir-group': makeHudEl(),
+    'reader-end-chapter-label': makeHudEl(),
+    'btn-end-prev-chapter': makeHudEl(),
+    'btn-end-next-chapter': makeHudEl(),
+    'btn-end-series': makeHudEl(),
+    'reader-viewport': makeHudEl(),
+    'seekbar-current-page': makeHudEl(),
+    'seekbar-total-pages': makeHudEl(),
+    'reader-page-slider': makeHudEl(),
+    'reader-mini-page-pill': makeHudEl(),
+    'reader-progress-bar': makeHudEl()
+  };
+
+  const mockDoc = {
+    getElementById(id) {
+      return domMap[id] || null;
+    }
+  };
+
+  // Ayarlar cekmecesini ac/kapat
+  assert.equal(hud.toggleSettingsSheet(true, mockDoc), true);
+  assert.equal(domMap['reader-settings-sheet'].classes.has('hidden'), false);
+  assert.equal(domMap['btn-reader-settings'].attrs['aria-expanded'], 'true');
+
+  // HUD gizlendiginde ayarlar cekmecesi de otomatik kapanmali
+  hud.syncHudIntoDom(
+    engine,
+    {
+      chapterLabel: 'Bölüm 279',
+      hasPrevChapter: true,
+      hasNextChapter: false,
+      seriesHref: '/seri/trk',
+      seriesId: 'tomb-raider-king'
+    },
+    mockDoc
+  );
+  assert.equal(domMap['reader-wrapper'].classes.has('hud-hidden'), true);
+  assert.equal(domMap['reader-wrapper'].classes.has('reader-bg-sepia'), true);
+  assert.equal(hud.settingsOpen, false);
+  assert.equal(domMap['reader-end-chapter-label'].textContent, 'Bölüm 279 Tamamlandı');
+  assert.equal(domMap['btn-end-prev-chapter'].disabled, false);
+  assert.equal(domMap['btn-end-next-chapter'].disabled, true);
+  // Manhwa (Webtoon) serisinde Okuma Modu ve Okuma Yonu gizli olmali
+  assert.equal(domMap['mihon-setting-mode-group'].classes.has('hidden'), true);
+  assert.equal(domMap['mihon-setting-dir-group'].classes.has('hidden'), true);
+
+  // Manga serisinde Okuma Modu ve Okuma Yonu acik, Sayfa Boslugu (single modda) gizli olmali
+  engine.loadChapter({
+    seriesId: 'wistoria',
+    chapterId: 'wistoria-1',
+    seriesType: 'Manga',
+    sourceLang: 'JP',
+    pages: ['m1.webp', 'm2.webp']
+  });
+  hud.syncHudIntoDom(engine, null, mockDoc);
+  assert.equal(domMap['mihon-setting-mode-group'].classes.has('hidden'), false);
+  assert.equal(domMap['mihon-setting-dir-group'].classes.has('hidden'), false);
+  assert.equal(domMap['mihon-setting-gap-group'].classes.has('hidden'), true);
+
+  // Webtoon modunda seekbar ve kaydirma takibi
+  engine.loadChapter({
+    seriesId: 'tomb-raider-king',
+    chapterId: 'trk-279',
+    seriesType: 'Manhwa',
+    sourceLang: 'KR',
+    pages: ['p1.webp', 'p2.webp', 'p3.webp', 'p4.webp']
+  });
+  const seekIdx = hud.handleSeekbarChange(engine, 3, mockDoc);
+  assert.equal(seekIdx, 2);
+  assert.equal(domMap['seekbar-current-page'].textContent, '3');
+  assert.equal(domMap['reader-mini-page-pill'].textContent, '3 / 4');
+  assert.equal(pageImg2.scrolledIntoView, true);
+
+  engine.goToPage(0);
+  const scrolledIdx = hud.updateWebtoonScrollPage(engine, mockDoc);
+  assert.equal(scrolledIdx, 2);
+  assert.equal(domMap['seekbar-current-page'].textContent, '3');
+
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const bodyHtml = fs.readFileSync(
+    path.join(path.resolve(__dirname, '..'), 'src/templates/body-content.html'),
+    'utf8'
+  );
+  const readerCss = fs.readFileSync(
+    path.join(path.resolve(__dirname, '..'), 'src/styles/reader.css'),
+    'utf8'
+  );
+  assert.equal(bodyHtml.includes('Mihon Okuyucu Ayarları'), false);
+  assert.equal(bodyHtml.includes('Okuyucu Ayarları</strong>'), true);
+  assert.equal(bodyHtml.includes('id="reader-group-manga"'), false);
+  assert.equal(bodyHtml.includes('id="btn-zoom-in"'), false);
+  assert.equal(bodyHtml.includes('id="btn-zoom-out"'), false);
+  assert.equal(bodyHtml.includes('id="btn-footer-series"'), false);
+  assert.equal(bodyHtml.includes('id="btn-dock-mode"'), false);
+  assert.equal(bodyHtml.includes('id="btn-dock-direction"'), false);
+  assert.equal(
+    /\.reader-settings-sheet\s*\{[^}]*position:\s*fixed;[^}]*top:\s*50%;[^}]*left:\s*50%;[^}]*transform:\s*translate\(-50%,\s*-50%\);/s.test(
+      readerCss
+    ),
+    true
+  );
+  assert.equal(/\.reader-viewport\s*\{\s*min-height:\s*0;\s*padding:\s*0;/s.test(readerCss), true);
+  assert.equal(/\.reader-footer-bar\s*\{[^}]*flex-direction:\s*row;[^}]*flex-wrap:\s*nowrap;/s.test(readerCss), true);
+  assert.equal(/\.mihon-action-dock\s*\{\s*flex-wrap:\s*nowrap;/s.test(readerCss), true);
+});
+
+
+
