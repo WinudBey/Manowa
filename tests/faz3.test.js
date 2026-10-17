@@ -636,19 +636,25 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
     true
   );
   assert.equal(
-    /\.reader-settings-sheet\s*\{[^}]*position:\s*fixed;[^}]*top:\s*50%;[^}]*left:\s*50%;[^}]*transform:\s*translate\(-50%,\s*-50%\);[^}]*width:\s*min\(94vw,\s*820px\);[^}]*background:\s*rgba\(15,\s*18,\s*28,\s*0\.72\);[^}]*backdrop-filter:\s*blur\(10px\)\s*saturate\(140%\);/s.test(
+    /\.reader-settings-sheet\s*\{[^}]*position:\s*fixed;[^}]*top:\s*50%;[^}]*left:\s*50%;[^}]*transform:\s*translate\(-50%,\s*-50%\);[^}]*width:\s*min\(94vw,\s*780px\);[^}]*background:\s*rgba\(13,\s*16,\s*25,\s*0\.88\);[^}]*backdrop-filter:\s*blur\(14px\)\s*saturate\(150%\);/s.test(
       readerCss
     ),
     true
   );
   assert.equal(
-    /\.mihon-sheet-grid\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*repeat\(auto-fit,\s*minmax\(300px,\s*1fr\)\);/s.test(
+    /\.mihon-sheet-grid\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*repeat\(auto-fit,\s*minmax\(320px,\s*1fr\)\);/s.test(
       readerCss
     ),
     true
   );
   assert.equal(
-    /\.mihon-choice-pill\s*\{[^}]*background:\s*rgba\(20,\s*24,\s*36,\s*0\.58\);/s.test(
+    /\.mihon-setting-group\s*\{[^}]*background:\s*rgba\(8,\s*10,\s*16,\s*0\.52\);/s.test(
+      readerCss
+    ),
+    true
+  );
+  assert.equal(
+    /\.mihon-pill-row\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*repeat\(auto-fit,\s*minmax\(0,\s*1fr\)\);/s.test(
       readerCss
     ),
     true
@@ -656,8 +662,11 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(/\.reader-viewport\s*\{\s*min-height:\s*0;\s*padding:\s*0;/s.test(readerCss), true);
   assert.equal(/\.reader-footer-bar\s*\{[^}]*flex-direction:\s*row;[^}]*flex-wrap:\s*nowrap;/s.test(readerCss), true);
   assert.equal(/\.mihon-action-dock\s*\{\s*flex-wrap:\s*nowrap;/s.test(readerCss), true);
-  assert.equal(/\.mihon-choice-pill\s*\{[^}]*min-height:\s*42px;/s.test(readerCss), true);
+  assert.equal(/\.mihon-choice-pill\s*\{[^}]*min-height:\s*38px;/s.test(readerCss), true);
   assert.equal(/\.mihon-seekbar-pill\s*\{\s*height:\s*44px;/s.test(readerCss), true);
+  assert.equal(bodyHtml.includes('>AMOLED</button>'), true);
+  assert.equal(bodyHtml.includes('>1x Yavaş</button>'), true);
+  assert.equal(bodyHtml.includes('>Yok (0s)</button>'), true);
   assert.equal(
     /\.reader-title-group\s*\{\s*display:\s*none\s*!important;\s*\}/s.test(readerCss),
     false

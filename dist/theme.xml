@@ -3473,15 +3473,15 @@ body[data-active-view="reader"] .scroll-top-btn {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 130;
-  width: min(94vw, 820px);
+  width: min(94vw, 780px);
   max-height: 85vh;
   overflow-y: auto;
   margin: 0;
-  padding: 1rem 1.35rem;
-  background: rgba(15, 18, 28, 0.72);
-  backdrop-filter: blur(10px) saturate(140%);
-  -webkit-backdrop-filter: blur(10px) saturate(140%);
-  border: 1px solid rgba(249, 115, 22, 0.45);
+  padding: 1.1rem 1.35rem;
+  background: rgba(13, 16, 25, 0.88);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(249, 115, 22, 0.4);
   border-radius: 16px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.78), 0 0 0 100vmax rgba(0, 0, 0, 0.55);
   color: #f1f5f9;
@@ -3519,18 +3519,23 @@ body[data-active-view="reader"] .scroll-top-btn {
 
 .mihon-sheet-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   align-items: start;
-  gap: 0.9rem 1.25rem;
+  gap: 0.85rem 1.15rem;
   width: 100%;
 }
 
 .mihon-setting-group {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 0.45rem;
   width: 100%;
+  background: rgba(8, 10, 16, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+  box-sizing: border-box;
 }
 
 .mihon-setting-group.hidden {
@@ -3538,38 +3543,56 @@ body[data-active-view="reader"] .scroll-top-btn {
 }
 
 .mihon-setting-label {
-  font-size: 0.82rem;
-  font-weight: 700;
+  font-size: 0.78rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: #94a3b8;
+  text-align: left;
+  padding-left: 0.2rem;
 }
 
 .mihon-pill-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.4rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  width: 100%;
+  gap: 0.35rem;
+  background: rgba(16, 20, 30, 0.65);
+  padding: 0.25rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-sizing: border-box;
 }
 
 .mihon-choice-pill {
-  background: rgba(20, 24, 36, 0.58);
-  color: #cbd5e1;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 10px;
-  min-height: 42px;
-  padding: 0.45rem 0.85rem;
-  font-size: 0.84rem;
+  width: 100%;
+  min-height: 38px;
+  height: 38px;
+  padding: 0 0.35rem;
+  font-size: 0.82rem;
   font-weight: 700;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #cbd5e1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
   cursor: pointer;
   transition: all 0.16s ease;
 }
 
-.mihon-choice-pill:hover,
+.mihon-choice-pill:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
 .mihon-choice-pill.active {
   background: var(--accent-primary);
   border-color: var(--accent-primary);
   color: #ffffff;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
 }
 
 .mihon-sheet-hint {
@@ -3794,8 +3817,8 @@ body[data-active-view="reader"] .scroll-top-btn {
     padding: 0.95rem 1rem;
   }
   .mihon-sheet-grid {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 0.8rem 0.95rem;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
   .reader-toolbar {
     padding: 0.55rem 0.65rem;
@@ -4367,14 +4390,14 @@ body {
         <div class="mihon-setting-group" id="mihon-setting-dir-group">
           <span class="mihon-setting-label">Okuma Yönü</span>
           <div class="mihon-pill-row" id="mihon-dir-pills">
-            <button class="mihon-choice-pill active" data-dir-pill="ltr" type="button">Soldan Sağa (LTR)</button>
-            <button class="mihon-choice-pill" data-dir-pill="rtl" type="button">Sağdan Sola (RTL)</button>
+            <button class="mihon-choice-pill active" data-dir-pill="ltr" type="button">LTR (Sol→Sağ)</button>
+            <button class="mihon-choice-pill" data-dir-pill="rtl" type="button">RTL (Sağ→Sol)</button>
           </div>
         </div>
         <div class="mihon-setting-group">
           <span class="mihon-setting-label">Arka Plan Teması</span>
           <div class="mihon-pill-row" id="mihon-bg-pills">
-            <button class="mihon-choice-pill" data-bg-pill="amoled" type="button">AMOLED Siyah</button>
+            <button class="mihon-choice-pill" data-bg-pill="amoled" type="button">AMOLED</button>
             <button class="mihon-choice-pill active" data-bg-pill="dark" type="button">Koyu</button>
             <button class="mihon-choice-pill" data-bg-pill="sepia" type="button">Sepya</button>
             <button class="mihon-choice-pill" data-bg-pill="light" type="button">Açık</button>
@@ -4391,19 +4414,19 @@ body {
         <div class="mihon-setting-group" id="mihon-setting-scroll-speed-group">
           <span class="mihon-setting-label">Oto-Kaydır Hızı</span>
           <div class="mihon-pill-row" id="mihon-scroll-speed-pills">
-            <button class="mihon-choice-pill" data-scroll-speed-pill="1" type="button">Yavaş (1x)</button>
-            <button class="mihon-choice-pill active" data-scroll-speed-pill="2" type="button">Normal (2x)</button>
-            <button class="mihon-choice-pill" data-scroll-speed-pill="3" type="button">Hızlı (3x)</button>
-            <button class="mihon-choice-pill" data-scroll-speed-pill="5" type="button">Çok Hızlı (5x)</button>
+            <button class="mihon-choice-pill" data-scroll-speed-pill="1" title="1x Yavaş" type="button">1x Yavaş</button>
+            <button class="mihon-choice-pill active" data-scroll-speed-pill="2" title="2x Normal" type="button">2x Normal</button>
+            <button class="mihon-choice-pill" data-scroll-speed-pill="3" title="3x Hızlı" type="button">3x Hızlı</button>
+            <button class="mihon-choice-pill" data-scroll-speed-pill="5" title="5x Çok Hızlı" type="button">5x Hızlı</button>
           </div>
         </div>
         <div class="mihon-setting-group" id="mihon-setting-scroll-pause-group">
           <span class="mihon-setting-label">Oto-Kaydır Duraklama Hızı</span>
           <div class="mihon-pill-row" id="mihon-scroll-pause-pills">
-            <button class="mihon-choice-pill active" data-scroll-pause-pill="0" type="button">Yok (0 sn)</button>
-            <button class="mihon-choice-pill" data-scroll-pause-pill="1000" type="button">Kısa (1 sn)</button>
-            <button class="mihon-choice-pill" data-scroll-pause-pill="2000" type="button">Orta (2 sn)</button>
-            <button class="mihon-choice-pill" data-scroll-pause-pill="3000" type="button">Uzun (3 sn)</button>
+            <button class="mihon-choice-pill active" data-scroll-pause-pill="0" title="Duraklama Yok" type="button">Yok (0s)</button>
+            <button class="mihon-choice-pill" data-scroll-pause-pill="1000" title="1 Saniye" type="button">Kısa (1s)</button>
+            <button class="mihon-choice-pill" data-scroll-pause-pill="2000" title="2 Saniye" type="button">Orta (2s)</button>
+            <button class="mihon-choice-pill" data-scroll-pause-pill="3000" title="3 Saniye" type="button">Uzun (3s)</button>
           </div>
         </div>
       </div>
