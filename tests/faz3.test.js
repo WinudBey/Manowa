@@ -612,7 +612,7 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(bodyHtml.includes('id="btn-dock-direction"'), false);
   assert.equal(bodyHtml.includes('id="reader-type-badge"'), false);
   assert.equal(bodyHtml.includes('id="btn-fullscreen"'), false);
-  assert.equal(bodyHtml.includes('class="reader-back-arrow">←</span>'), true);
+  assert.equal(bodyHtml.includes('class="ui-icon ui-icon-arrow-left"'), true);
   assert.equal(bodyHtml.includes('class="btn-label" id="reader-series-name"'), true);
   assert.equal(readerCss.includes('.reader-type-badge'), false);
   assert.equal(

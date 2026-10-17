@@ -591,7 +591,7 @@
         if (seriesNameEl) {
           seriesNameEl.textContent = series.title;
         } else {
-          seriesTitleEl.innerHTML = `<span aria-hidden="true" class="reader-back-arrow">←</span> <span class="btn-label" id="reader-series-name">${series.title}</span>`;
+          seriesTitleEl.innerHTML = `${iconFn('arrow-left')} <span class="btn-label" id="reader-series-name">${series.title}</span>`;
         }
         seriesTitleEl.setAttribute('href', seriesHref);
         seriesTitleEl.setAttribute('data-action', 'detail');

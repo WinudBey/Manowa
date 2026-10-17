@@ -808,6 +808,7 @@
     border-radius: 10px;
     justify-content: center;
   }
+  .reader-series-back-btn .ui-icon,
   .reader-btn .ui-icon {
     width: 19px;
     height: 19px;

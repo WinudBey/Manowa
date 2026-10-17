@@ -336,13 +336,6 @@
           ? `${iconFn('pause')} <span class="btn-label">Durdur</span>`
           : `${iconFn('play')} <span class="btn-label">Oto-Kaydır</span>`;
       });
-      on('btn-fullscreen', 'click', () => {
-        const wrap = targetDoc.getElementById('reader-wrapper');
-        if (wrap && wrap.requestFullscreen) {
-          if (!targetDoc.fullscreenElement) wrap.requestFullscreen();
-          else if (targetDoc.exitFullscreen) targetDoc.exitFullscreen();
-        }
-      });
       on('btn-next-page', 'click', () => {
         if (app.reader.nextPage()) refreshAll();
       });
