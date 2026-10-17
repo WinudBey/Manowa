@@ -582,12 +582,17 @@
       if (typeof document === 'undefined') return;
       const seriesHref = this.computeTargetUrl('series', series.id);
       const seriesTitleEl = document.getElementById('reader-series-title');
+      const seriesNameEl = document.getElementById('reader-series-name');
       const footerSeriesBtn = document.getElementById('btn-footer-series');
       const chapterTitleEl = document.getElementById('reader-chapter-title');
       const noteBox = document.getElementById('translator-note-box');
       const selectChapter = document.getElementById('select-chapter');
       if (seriesTitleEl) {
-        seriesTitleEl.textContent = `← ${series.title}`;
+        if (seriesNameEl) {
+          seriesNameEl.textContent = series.title;
+        } else {
+          seriesTitleEl.innerHTML = `<span aria-hidden="true" class="reader-back-arrow">←</span> <span class="btn-label" id="reader-series-name">${series.title}</span>`;
+        }
         seriesTitleEl.setAttribute('href', seriesHref);
         seriesTitleEl.setAttribute('data-action', 'detail');
         seriesTitleEl.setAttribute('data-series', series.id);
@@ -834,10 +839,7 @@
           return;
         }
         const result = this.reader.handleKeyCommand(e.code);
-        if (result === 'fullscreen') {
-          const fsBtn = document.getElementById('btn-fullscreen');
-          if (fsBtn) fsBtn.click();
-        } else if (result !== 'none') {
+        if (result !== 'none' && result !== 'fullscreen') {
           this.syncReaderControls();
           this.renderReaderViewport();
         }

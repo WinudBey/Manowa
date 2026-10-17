@@ -178,7 +178,7 @@
 
       <div class="reader-toolbar">
         <div class="reader-title-group">
-          <a class="reader-series-back-btn" href="#" id="reader-series-title" title="Seri Sayfasına Dön">← Seri Sayfasına Dön</a>
+          <a aria-label="Seri Sayfasına Dön" class="reader-series-back-btn" href="#" id="reader-series-title" title="Seri Sayfasına Dön"><span aria-hidden="true" class="reader-back-arrow">←</span> <span class="btn-label" id="reader-series-name">Seri Sayfasına Dön</span></a>
           <span class="reader-chapter-name hidden" id="reader-chapter-title">Bölüm</span>
         </div>
 
@@ -199,7 +199,6 @@
           </div>
 
           <button aria-controls="reader-settings-sheet" aria-expanded="false" aria-label="Okuyucu Ayarları" class="reader-btn mihon-settings-btn" id="btn-reader-settings" title="Okuyucu Ayarları" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg> <span class="btn-label">Ayarlar</span></button>
-          <button class="reader-btn reader-fullscreen-btn" id="btn-fullscreen" title="Tam Ekran (F)" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> <span class="btn-label">Tam Ekran</span></button>
         </div>
       </div>
     </div>
@@ -241,6 +240,24 @@
             <button class="mihon-choice-pill active" data-gap-pill="0" type="button">Yok (0px)</button>
             <button class="mihon-choice-pill" data-gap-pill="8" type="button">İnce (8px)</button>
             <button class="mihon-choice-pill" data-gap-pill="16" type="button">Geniş (16px)</button>
+          </div>
+        </div>
+        <div class="mihon-setting-group" id="mihon-setting-scroll-speed-group">
+          <span class="mihon-setting-label">Oto-Kaydır Hızı</span>
+          <div class="mihon-pill-row" id="mihon-scroll-speed-pills">
+            <button class="mihon-choice-pill" data-scroll-speed-pill="1" type="button">Yavaş (1x)</button>
+            <button class="mihon-choice-pill active" data-scroll-speed-pill="2" type="button">Normal (2x)</button>
+            <button class="mihon-choice-pill" data-scroll-speed-pill="3" type="button">Hızlı (3x)</button>
+            <button class="mihon-choice-pill" data-scroll-speed-pill="5" type="button">Çok Hızlı (5x)</button>
+          </div>
+        </div>
+        <div class="mihon-setting-group" id="mihon-setting-scroll-pause-group">
+          <span class="mihon-setting-label">Oto-Kaydır Duraklama Hızı</span>
+          <div class="mihon-pill-row" id="mihon-scroll-pause-pills">
+            <button class="mihon-choice-pill active" data-scroll-pause-pill="0" type="button">Yok (0 sn)</button>
+            <button class="mihon-choice-pill" data-scroll-pause-pill="1000" type="button">Kısa (1 sn)</button>
+            <button class="mihon-choice-pill" data-scroll-pause-pill="2000" type="button">Orta (2 sn)</button>
+            <button class="mihon-choice-pill" data-scroll-pause-pill="3000" type="button">Uzun (3 sn)</button>
           </div>
         </div>
       </div>

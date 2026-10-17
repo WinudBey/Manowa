@@ -106,6 +106,8 @@
       const dockDirBtn = targetDoc.getElementById('btn-dock-direction');
       const seekbarRow = targetDoc.getElementById('reader-seekbar-row');
       const gapGroup = targetDoc.getElementById('mihon-setting-gap-group');
+      const scrollSpeedGroup = targetDoc.getElementById('mihon-setting-scroll-speed-group');
+      const scrollPauseGroup = targetDoc.getElementById('mihon-setting-scroll-pause-group');
       const modeGroup = targetDoc.getElementById('mihon-setting-mode-group');
       const dirGroup = targetDoc.getElementById('mihon-setting-dir-group');
 
@@ -122,6 +124,12 @@
       }
       if (gapGroup && gapGroup.classList) {
         gapGroup.classList.toggle('hidden', isNovel || state.mode !== 'webtoon');
+      }
+      if (scrollSpeedGroup && scrollSpeedGroup.classList) {
+        scrollSpeedGroup.classList.toggle('hidden', isNovel || state.mode !== 'webtoon');
+      }
+      if (scrollPauseGroup && scrollPauseGroup.classList) {
+        scrollPauseGroup.classList.toggle('hidden', isNovel || state.mode !== 'webtoon');
       }
       if (modeGroup && modeGroup.classList) {
         modeGroup.classList.toggle('hidden', !isManga);
@@ -154,6 +162,8 @@
       syncPillGroup('mihon-dir-pills', 'data-dir-pill', state.direction);
       syncPillGroup('mihon-bg-pills', 'data-bg-pill', state.backgroundTheme);
       syncPillGroup('mihon-gap-pills', 'data-gap-pill', state.gap);
+      syncPillGroup('mihon-scroll-speed-pills', 'data-scroll-speed-pill', state.autoScrollSpeed);
+      syncPillGroup('mihon-scroll-pause-pills', 'data-scroll-pause-pill', state.autoScrollPause);
 
       if (chapterMeta) {
         const endLabel = targetDoc.getElementById('reader-end-chapter-label');
@@ -395,6 +405,10 @@
             app.reader.setBackgroundTheme(pill.getAttribute('data-bg-pill'));
           } else if (pill.hasAttribute('data-gap-pill')) {
             app.reader.setGap(Number(pill.getAttribute('data-gap-pill')));
+          } else if (pill.hasAttribute('data-scroll-speed-pill')) {
+            app.reader.setAutoScrollSpeed(Number(pill.getAttribute('data-scroll-speed-pill')));
+          } else if (pill.hasAttribute('data-scroll-pause-pill')) {
+            app.reader.setAutoScrollPause(Number(pill.getAttribute('data-scroll-pause-pill')));
           }
           refreshAll();
         });

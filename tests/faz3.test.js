@@ -429,10 +429,14 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(engine.handleViewportClick(0.5), 'toggle-hud');
   assert.equal(engine.hudVisible, false);
 
-  // 3. Arka plan temalari ve sayfa boslugu (gap)
+  // 3. Arka plan temalari, sayfa boslugu (gap), oto-kaydir hizi ve duraklama suresi
   assert.equal(engine.setBackgroundTheme('amoled'), 'amoled');
   assert.equal(engine.setBackgroundTheme('sepia'), 'sepia');
   assert.equal(engine.setGap(16), 16);
+  assert.equal(engine.setAutoScrollSpeed(3), 3);
+  assert.equal(engine.setAutoScrollPause(2000), 2000);
+  assert.equal(engine.getState().autoScrollSpeed, 3);
+  assert.equal(engine.getState().autoScrollPause, 2000);
 
   // 4. ReaderHudController DOM esitleme ve Seekbar gezinmesi
   const makeHudEl = () => {
@@ -494,6 +498,8 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
     'btn-dock-direction': makeHudEl(),
     'reader-seekbar-row': makeHudEl(),
     'mihon-setting-gap-group': makeHudEl(),
+    'mihon-setting-scroll-speed-group': makeHudEl(),
+    'mihon-setting-scroll-pause-group': makeHudEl(),
     'mihon-setting-mode-group': makeHudEl(),
     'mihon-setting-dir-group': makeHudEl(),
     'reader-end-chapter-label': makeHudEl(),
@@ -541,7 +547,7 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(domMap['mihon-setting-mode-group'].classes.has('hidden'), true);
   assert.equal(domMap['mihon-setting-dir-group'].classes.has('hidden'), true);
 
-  // Manga serisinde Okuma Modu ve Okuma Yonu acik, Sayfa Boslugu (single modda) gizli olmali
+  // Manga serisinde Okuma Modu ve Okuma Yonu acik, Sayfa Boslugu ve Oto-Kaydir ayarlari (single modda) gizli olmali
   engine.loadChapter({
     seriesId: 'wistoria',
     chapterId: 'wistoria-1',
@@ -553,8 +559,10 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(domMap['mihon-setting-mode-group'].classes.has('hidden'), false);
   assert.equal(domMap['mihon-setting-dir-group'].classes.has('hidden'), false);
   assert.equal(domMap['mihon-setting-gap-group'].classes.has('hidden'), true);
+  assert.equal(domMap['mihon-setting-scroll-speed-group'].classes.has('hidden'), true);
+  assert.equal(domMap['mihon-setting-scroll-pause-group'].classes.has('hidden'), true);
 
-  // Webtoon modunda seekbar ve kaydirma takibi
+  // Webtoon modunda seekbar, oto-kaydir ayarlari ve kaydirma takibi
   engine.loadChapter({
     seriesId: 'tomb-raider-king',
     chapterId: 'trk-279',
@@ -562,6 +570,9 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
     sourceLang: 'KR',
     pages: ['p1.webp', 'p2.webp', 'p3.webp', 'p4.webp']
   });
+  hud.syncHudIntoDom(engine, null, mockDoc);
+  assert.equal(domMap['mihon-setting-scroll-speed-group'].classes.has('hidden'), false);
+  assert.equal(domMap['mihon-setting-scroll-pause-group'].classes.has('hidden'), false);
   const seekIdx = hud.handleSeekbarChange(engine, 3, mockDoc);
   assert.equal(seekIdx, 2);
   assert.equal(domMap['seekbar-current-page'].textContent, '3');
@@ -589,6 +600,10 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   );
   assert.equal(bodyHtml.includes('Mihon Okuyucu Ayarları'), false);
   assert.equal(bodyHtml.includes('Okuyucu Ayarları</strong>'), true);
+  assert.equal(bodyHtml.includes('id="mihon-setting-scroll-speed-group"'), true);
+  assert.equal(bodyHtml.includes('id="mihon-setting-scroll-pause-group"'), true);
+  assert.equal(bodyHtml.includes('data-scroll-speed-pill="2"'), true);
+  assert.equal(bodyHtml.includes('data-scroll-pause-pill="1000"'), true);
   assert.equal(bodyHtml.includes('id="reader-group-manga"'), false);
   assert.equal(bodyHtml.includes('id="btn-zoom-in"'), false);
   assert.equal(bodyHtml.includes('id="btn-zoom-out"'), false);
@@ -596,6 +611,9 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(bodyHtml.includes('id="btn-dock-mode"'), false);
   assert.equal(bodyHtml.includes('id="btn-dock-direction"'), false);
   assert.equal(bodyHtml.includes('id="reader-type-badge"'), false);
+  assert.equal(bodyHtml.includes('id="btn-fullscreen"'), false);
+  assert.equal(bodyHtml.includes('class="reader-back-arrow">←</span>'), true);
+  assert.equal(bodyHtml.includes('class="btn-label" id="reader-series-name"'), true);
   assert.equal(readerCss.includes('.reader-type-badge'), false);
   assert.equal(
     bodyHtml.includes('class="reader-btn reader-floating-autoscroll" id="btn-autoscroll"'),
@@ -618,7 +636,19 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
     true
   );
   assert.equal(
-    /\.reader-settings-sheet\s*\{[^}]*position:\s*fixed;[^}]*top:\s*50%;[^}]*left:\s*50%;[^}]*transform:\s*translate\(-50%,\s*-50%\);/s.test(
+    /\.reader-settings-sheet\s*\{[^}]*position:\s*fixed;[^}]*top:\s*50%;[^}]*left:\s*50%;[^}]*transform:\s*translate\(-50%,\s*-50%\);[^}]*width:\s*min\(94vw,\s*820px\);[^}]*background:\s*rgba\(15,\s*18,\s*28,\s*0\.72\);[^}]*backdrop-filter:\s*blur\(10px\)\s*saturate\(140%\);/s.test(
+      readerCss
+    ),
+    true
+  );
+  assert.equal(
+    /\.mihon-sheet-grid\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*repeat\(auto-fit,\s*minmax\(300px,\s*1fr\)\);/s.test(
+      readerCss
+    ),
+    true
+  );
+  assert.equal(
+    /\.mihon-choice-pill\s*\{[^}]*background:\s*rgba\(20,\s*24,\s*36,\s*0\.58\);/s.test(
       readerCss
     ),
     true
@@ -630,6 +660,12 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(/\.mihon-seekbar-pill\s*\{\s*height:\s*44px;/s.test(readerCss), true);
   assert.equal(
     /\.reader-title-group\s*\{\s*display:\s*none\s*!important;\s*\}/s.test(readerCss),
+    false
+  );
+  assert.equal(
+    /\.reader-series-back-btn\s*\{[^}]*width:\s*42px;[^}]*min-width:\s*42px;[^}]*height:\s*42px;/s.test(
+      readerCss
+    ),
     true
   );
   assert.equal(

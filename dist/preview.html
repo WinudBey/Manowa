@@ -3138,9 +3138,9 @@ body[data-active-view="reader"] .scroll-top-btn {
   position: sticky;
   top: 0;
   z-index: 110;
-  background: rgba(11, 13, 19, 0.62);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  background: rgba(11, 13, 19, 0.68);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
@@ -3202,8 +3202,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   font-weight: 700;
   color: #e2e8f0;
   text-decoration: none;
-  background: rgba(20, 24, 36, 0.58);
-  border: 1px solid rgba(249, 115, 22, 0.38);
+  background: #141824;
+  border: 1px solid rgba(249, 115, 22, 0.35);
   border-radius: 9px;
   white-space: nowrap;
   overflow: hidden;
@@ -3229,8 +3229,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   display: inline-flex;
   align-items: center;
   height: 36px;
-  background: rgba(20, 24, 36, 0.58);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #141824;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   padding: 0.18rem;
   gap: 0.18rem;
@@ -3312,8 +3312,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   display: inline-flex;
   align-items: center;
   height: 36px;
-  background: rgba(20, 24, 36, 0.58);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #141824;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 9px;
   padding: 0.18rem;
   gap: 0.15rem;
@@ -3351,9 +3351,9 @@ body[data-active-view="reader"] .scroll-top-btn {
 
 .reader-select,
 .reader-btn {
-  background: rgba(20, 24, 36, 0.58);
+  background: #141824;
   color: #f1f5f9;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   height: 36px;
   padding: 0 0.65rem;
   border-radius: 9px;
@@ -3533,15 +3533,15 @@ body[data-active-view="reader"] .scroll-top-btn {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 130;
-  width: min(92vw, 460px);
+  width: min(94vw, 820px);
   max-height: 85vh;
   overflow-y: auto;
   margin: 0;
-  padding: 1.15rem 1.25rem;
-  background: rgba(15, 18, 28, 0.97);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(249, 115, 22, 0.4);
+  padding: 1rem 1.35rem;
+  background: rgba(15, 18, 28, 0.72);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(249, 115, 22, 0.45);
   border-radius: 16px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.78), 0 0 0 100vmax rgba(0, 0, 0, 0.55);
   color: #f1f5f9;
@@ -3552,9 +3552,9 @@ body[data-active-view="reader"] .scroll-top-btn {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.9rem;
-  padding-bottom: 0.55rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .mihon-sheet-title {
@@ -3578,22 +3578,27 @@ body[data-active-view="reader"] .scroll-top-btn {
 }
 
 .mihon-sheet-grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.05rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  align-items: start;
+  gap: 0.9rem 1.25rem;
+  width: 100%;
 }
 
 .mihon-setting-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   width: 100%;
 }
 
+.mihon-setting-group.hidden {
+  display: none !important;
+}
+
 .mihon-setting-label {
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -3604,17 +3609,17 @@ body[data-active-view="reader"] .scroll-top-btn {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .mihon-choice-pill {
-  background: #141824;
+  background: rgba(20, 24, 36, 0.58);
   color: #cbd5e1;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
   min-height: 42px;
-  padding: 0.55rem 1.05rem;
-  font-size: 0.9rem;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.84rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.16s ease;
@@ -3730,9 +3735,9 @@ body[data-active-view="reader"] .scroll-top-btn {
   position: sticky;
   bottom: 0;
   z-index: 108;
-  background: rgba(11, 13, 19, 0.62);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  background: rgba(11, 13, 19, 0.68);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   padding: 0.6rem 1rem;
@@ -3766,8 +3771,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   gap: 0.65rem;
   height: 40px;
   padding: 0 0.85rem;
-  background: rgba(20, 24, 36, 0.58);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #141824;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 999px;
 }
 .mihon-seekbar-num {
@@ -3819,13 +3824,13 @@ body[data-active-view="reader"] .scroll-top-btn {
   display: none !important;
 }
 .page-counter-pill {
-  background: rgba(31, 35, 48, 0.62);
+  background: #1f2330;
   color: #f8fafc;
   padding: 0.4rem 0.9rem;
   border-radius: 999px;
   font-size: 0.86rem;
   font-weight: 700;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid #2e3446;
 }
 .novel-content-box.font-serif {
   font-family: Georgia, 'Times New Roman', Times, serif;
@@ -3844,12 +3849,13 @@ body[data-active-view="reader"] .scroll-top-btn {
     border-radius: 0;
   }
   .reader-settings-sheet {
-    width: min(94vw, 440px);
+    width: min(95vw, 680px);
     margin: 0;
-    padding: 1.2rem 1.1rem;
+    padding: 0.95rem 1rem;
   }
   .mihon-sheet-grid {
-    gap: 0.95rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.8rem 0.95rem;
   }
   .reader-toolbar {
     padding: 0.55rem 0.65rem;
@@ -3859,14 +3865,14 @@ body[data-active-view="reader"] .scroll-top-btn {
   }
   .reader-title-group {
     flex: 0 0 auto;
-    min-width: 0;
   }
   .reader-series-back-btn {
     width: 42px;
+    min-width: 42px;
     height: 42px;
     padding: 0;
     justify-content: center;
-    font-size: 1.05rem;
+    font-size: 1.15rem;
     border-radius: 10px;
   }
   .reader-chapter-switcher {
@@ -3905,6 +3911,7 @@ body[data-active-view="reader"] .scroll-top-btn {
     border-radius: 10px;
     justify-content: center;
   }
+  .reader-series-back-btn .ui-icon,
   .reader-btn .ui-icon {
     width: 19px;
     height: 19px;
@@ -4218,7 +4225,7 @@ body[data-active-view="reader"] .scroll-top-btn {
 
       <div class="reader-toolbar">
         <div class="reader-title-group">
-          <a aria-label="Seri Sayfasına Dön" class="reader-series-back-btn" href="#" id="reader-series-title" title="Seri Sayfasına Dön"><span aria-hidden="true">←</span> <span class="btn-label" id="reader-series-name">Seri Sayfasına Dön</span></a>
+          <a aria-label="Seri Sayfasına Dön" class="reader-series-back-btn" href="#" id="reader-series-title" title="Seri Sayfasına Dön"><svg aria-hidden="true" class="ui-icon ui-icon-arrow-left" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span class="btn-label" id="reader-series-name">Seri Sayfasına Dön</span></a>
           <span class="reader-chapter-name hidden" id="reader-chapter-title">Bölüm</span>
         </div>
 
@@ -4239,7 +4246,6 @@ body[data-active-view="reader"] .scroll-top-btn {
           </div>
 
           <button aria-controls="reader-settings-sheet" aria-expanded="false" aria-label="Okuyucu Ayarları" class="reader-btn mihon-settings-btn" id="btn-reader-settings" title="Okuyucu Ayarları" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg> <span class="btn-label">Ayarlar</span></button>
-          <button class="reader-btn reader-fullscreen-btn" id="btn-fullscreen" title="Tam Ekran (F)" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> <span class="btn-label">Tam Ekran</span></button>
         </div>
       </div>
     </div>
@@ -4281,6 +4287,24 @@ body[data-active-view="reader"] .scroll-top-btn {
             <button class="mihon-choice-pill active" data-gap-pill="0" type="button">Yok (0px)</button>
             <button class="mihon-choice-pill" data-gap-pill="8" type="button">İnce (8px)</button>
             <button class="mihon-choice-pill" data-gap-pill="16" type="button">Geniş (16px)</button>
+          </div>
+        </div>
+        <div class="mihon-setting-group" id="mihon-setting-scroll-speed-group">
+          <span class="mihon-setting-label">Oto-Kaydır Hızı</span>
+          <div class="mihon-pill-row" id="mihon-scroll-speed-pills">
+            <button class="mihon-choice-pill" data-scroll-speed-pill="1" type="button">Yavaş (1x)</button>
+            <button class="mihon-choice-pill active" data-scroll-speed-pill="2" type="button">Normal (2x)</button>
+            <button class="mihon-choice-pill" data-scroll-speed-pill="3" type="button">Hızlı (3x)</button>
+            <button class="mihon-choice-pill" data-scroll-speed-pill="5" type="button">Çok Hızlı (5x)</button>
+          </div>
+        </div>
+        <div class="mihon-setting-group" id="mihon-setting-scroll-pause-group">
+          <span class="mihon-setting-label">Oto-Kaydır Duraklama Hızı</span>
+          <div class="mihon-pill-row" id="mihon-scroll-pause-pills">
+            <button class="mihon-choice-pill active" data-scroll-pause-pill="0" type="button">Yok (0 sn)</button>
+            <button class="mihon-choice-pill" data-scroll-pause-pill="1000" type="button">Kısa (1 sn)</button>
+            <button class="mihon-choice-pill" data-scroll-pause-pill="2000" type="button">Orta (2 sn)</button>
+            <button class="mihon-choice-pill" data-scroll-pause-pill="3000" type="button">Uzun (3 sn)</button>
           </div>
         </div>
       </div>
@@ -7923,8 +7947,11 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       this.seriesId = '';
       this.chapterId = '';
       this.autoScrollActive = false;
-      this.autoScrollSpeed = 2;
+      this.autoScrollSpeed = this._clamp(options.autoScrollSpeed || 2, 1, 5);
+      this.autoScrollPause = Math.max(0, Number(options.autoScrollPause) || 0);
       this._autoScrollTimer = null;
+      this._autoScrollPausedUntil = 0;
+      this._autoScrollMovedPx = 0;
 
       this._log('debug', 'ReadingEngine baslatildi.', {
         seriesType: this.seriesType,
@@ -8351,6 +8378,34 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
     }
 
     /**
+     * Otomatik kaydirma hizini ayarlar (1 - 5).
+     * @param {number} speed - Kaydirma hiz carpani.
+     * @returns {number} Guncel hiz carpani.
+     */
+    setAutoScrollSpeed(speed) {
+      this.autoScrollSpeed = this._clamp(speed, 1, 5);
+      this._log('debug', 'Otomatik kaydirma hizi guncellendi.', {
+        autoScrollSpeed: this.autoScrollSpeed
+      });
+      return this.autoScrollSpeed;
+    }
+
+    /**
+     * Otomatik kaydirma duraklama suresini (ms) ayarlar (0 - 5000).
+     * @param {number} pauseMs - Duraklama suresi (milisaniye).
+     * @returns {number} Guncel duraklama suresi (ms).
+     */
+    setAutoScrollPause(pauseMs) {
+      this.autoScrollPause = this._clamp(Number(pauseMs) || 0, 0, 5000);
+      this._autoScrollPausedUntil = 0;
+      this._autoScrollMovedPx = 0;
+      this._log('debug', 'Otomatik kaydirma duraklama suresi guncellendi.', {
+        autoScrollPause: this.autoScrollPause
+      });
+      return this.autoScrollPause;
+    }
+
+    /**
      * Otomatik dikey kaydirmayi baslatir.
      * @param {Function|null} [scrollCallback=null] - Ozel kaydirma islevi.
      * @returns {boolean} Aktif durumu.
@@ -8358,13 +8413,28 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
     startAutoScroll(scrollCallback = null) {
       this.stopAutoScroll();
       this.autoScrollActive = true;
-      this._log('info', 'Otomatik kaydirma baslatildi.', { speed: this.autoScrollSpeed });
+      this._autoScrollPausedUntil = 0;
+      this._autoScrollMovedPx = 0;
+      this._log('info', 'Otomatik kaydirma baslatildi.', {
+        speed: this.autoScrollSpeed,
+        pauseMs: this.autoScrollPause
+      });
       this._autoScrollTimer = setInterval(() => {
+        if (this.autoScrollPause > 0 && Date.now() < this._autoScrollPausedUntil) {
+          return;
+        }
         const pixels = this.autoScrollSpeed * 2;
         if (typeof scrollCallback === 'function') {
           scrollCallback(pixels);
         } else if (typeof window !== 'undefined' && typeof window.scrollBy === 'function') {
           window.scrollBy({ top: pixels, behavior: 'auto' });
+        }
+        if (this.autoScrollPause > 0) {
+          this._autoScrollMovedPx += pixels;
+          if (this._autoScrollMovedPx >= 480) {
+            this._autoScrollMovedPx = 0;
+            this._autoScrollPausedUntil = Date.now() + this.autoScrollPause;
+          }
         }
       }, 30);
       return this.autoScrollActive;
@@ -8379,6 +8449,8 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         clearInterval(this._autoScrollTimer);
         this._autoScrollTimer = null;
       }
+      this._autoScrollPausedUntil = 0;
+      this._autoScrollMovedPx = 0;
       this.autoScrollActive = false;
       return false;
     }
@@ -8602,6 +8674,8 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         visibleIndices: this.getVisiblePageIndices(),
         progressPercent: this.getProgressPercent(),
         autoScrollActive: this.autoScrollActive,
+        autoScrollSpeed: this.autoScrollSpeed,
+        autoScrollPause: this.autoScrollPause,
         ...controlGroups
       };
     }
@@ -8913,6 +8987,8 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       const dockDirBtn = targetDoc.getElementById('btn-dock-direction');
       const seekbarRow = targetDoc.getElementById('reader-seekbar-row');
       const gapGroup = targetDoc.getElementById('mihon-setting-gap-group');
+      const scrollSpeedGroup = targetDoc.getElementById('mihon-setting-scroll-speed-group');
+      const scrollPauseGroup = targetDoc.getElementById('mihon-setting-scroll-pause-group');
       const modeGroup = targetDoc.getElementById('mihon-setting-mode-group');
       const dirGroup = targetDoc.getElementById('mihon-setting-dir-group');
 
@@ -8929,6 +9005,12 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       }
       if (gapGroup && gapGroup.classList) {
         gapGroup.classList.toggle('hidden', isNovel || state.mode !== 'webtoon');
+      }
+      if (scrollSpeedGroup && scrollSpeedGroup.classList) {
+        scrollSpeedGroup.classList.toggle('hidden', isNovel || state.mode !== 'webtoon');
+      }
+      if (scrollPauseGroup && scrollPauseGroup.classList) {
+        scrollPauseGroup.classList.toggle('hidden', isNovel || state.mode !== 'webtoon');
       }
       if (modeGroup && modeGroup.classList) {
         modeGroup.classList.toggle('hidden', !isManga);
@@ -8961,6 +9043,8 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       syncPillGroup('mihon-dir-pills', 'data-dir-pill', state.direction);
       syncPillGroup('mihon-bg-pills', 'data-bg-pill', state.backgroundTheme);
       syncPillGroup('mihon-gap-pills', 'data-gap-pill', state.gap);
+      syncPillGroup('mihon-scroll-speed-pills', 'data-scroll-speed-pill', state.autoScrollSpeed);
+      syncPillGroup('mihon-scroll-pause-pills', 'data-scroll-pause-pill', state.autoScrollPause);
 
       if (chapterMeta) {
         const endLabel = targetDoc.getElementById('reader-end-chapter-label');
@@ -9133,13 +9217,6 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
           ? `${iconFn('pause')} <span class="btn-label">Durdur</span>`
           : `${iconFn('play')} <span class="btn-label">Oto-Kaydır</span>`;
       });
-      on('btn-fullscreen', 'click', () => {
-        const wrap = targetDoc.getElementById('reader-wrapper');
-        if (wrap && wrap.requestFullscreen) {
-          if (!targetDoc.fullscreenElement) wrap.requestFullscreen();
-          else if (targetDoc.exitFullscreen) targetDoc.exitFullscreen();
-        }
-      });
       on('btn-next-page', 'click', () => {
         if (app.reader.nextPage()) refreshAll();
       });
@@ -9202,6 +9279,10 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
             app.reader.setBackgroundTheme(pill.getAttribute('data-bg-pill'));
           } else if (pill.hasAttribute('data-gap-pill')) {
             app.reader.setGap(Number(pill.getAttribute('data-gap-pill')));
+          } else if (pill.hasAttribute('data-scroll-speed-pill')) {
+            app.reader.setAutoScrollSpeed(Number(pill.getAttribute('data-scroll-speed-pill')));
+          } else if (pill.hasAttribute('data-scroll-pause-pill')) {
+            app.reader.setAutoScrollPause(Number(pill.getAttribute('data-scroll-pause-pill')));
           }
           refreshAll();
         });
@@ -11507,7 +11588,7 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         if (seriesNameEl) {
           seriesNameEl.textContent = series.title;
         } else {
-          seriesTitleEl.textContent = `← ${series.title}`;
+          seriesTitleEl.innerHTML = `${iconFn('arrow-left')} <span class="btn-label" id="reader-series-name">${series.title}</span>`;
         }
         seriesTitleEl.setAttribute('href', seriesHref);
         seriesTitleEl.setAttribute('data-action', 'detail');
@@ -11755,10 +11836,7 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
           return;
         }
         const result = this.reader.handleKeyCommand(e.code);
-        if (result === 'fullscreen') {
-          const fsBtn = document.getElementById('btn-fullscreen');
-          if (fsBtn) fsBtn.click();
-        } else if (result !== 'none') {
+        if (result !== 'none' && result !== 'fullscreen') {
           this.syncReaderControls();
           this.renderReaderViewport();
         }

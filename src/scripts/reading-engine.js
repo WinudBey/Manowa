@@ -48,8 +48,11 @@
       this.seriesId = '';
       this.chapterId = '';
       this.autoScrollActive = false;
-      this.autoScrollSpeed = 2;
+      this.autoScrollSpeed = this._clamp(options.autoScrollSpeed || 2, 1, 5);
+      this.autoScrollPause = Math.max(0, Number(options.autoScrollPause) || 0);
       this._autoScrollTimer = null;
+      this._autoScrollPausedUntil = 0;
+      this._autoScrollMovedPx = 0;
 
       this._log('debug', 'ReadingEngine baslatildi.', {
         seriesType: this.seriesType,
@@ -476,6 +479,34 @@
     }
 
     /**
+     * Otomatik kaydirma hizini ayarlar (1 - 5).
+     * @param {number} speed - Kaydirma hiz carpani.
+     * @returns {number} Guncel hiz carpani.
+     */
+    setAutoScrollSpeed(speed) {
+      this.autoScrollSpeed = this._clamp(speed, 1, 5);
+      this._log('debug', 'Otomatik kaydirma hizi guncellendi.', {
+        autoScrollSpeed: this.autoScrollSpeed
+      });
+      return this.autoScrollSpeed;
+    }
+
+    /**
+     * Otomatik kaydirma duraklama suresini (ms) ayarlar (0 - 5000).
+     * @param {number} pauseMs - Duraklama suresi (milisaniye).
+     * @returns {number} Guncel duraklama suresi (ms).
+     */
+    setAutoScrollPause(pauseMs) {
+      this.autoScrollPause = this._clamp(Number(pauseMs) || 0, 0, 5000);
+      this._autoScrollPausedUntil = 0;
+      this._autoScrollMovedPx = 0;
+      this._log('debug', 'Otomatik kaydirma duraklama suresi guncellendi.', {
+        autoScrollPause: this.autoScrollPause
+      });
+      return this.autoScrollPause;
+    }
+
+    /**
      * Otomatik dikey kaydirmayi baslatir.
      * @param {Function|null} [scrollCallback=null] - Ozel kaydirma islevi.
      * @returns {boolean} Aktif durumu.
@@ -483,13 +514,28 @@
     startAutoScroll(scrollCallback = null) {
       this.stopAutoScroll();
       this.autoScrollActive = true;
-      this._log('info', 'Otomatik kaydirma baslatildi.', { speed: this.autoScrollSpeed });
+      this._autoScrollPausedUntil = 0;
+      this._autoScrollMovedPx = 0;
+      this._log('info', 'Otomatik kaydirma baslatildi.', {
+        speed: this.autoScrollSpeed,
+        pauseMs: this.autoScrollPause
+      });
       this._autoScrollTimer = setInterval(() => {
+        if (this.autoScrollPause > 0 && Date.now() < this._autoScrollPausedUntil) {
+          return;
+        }
         const pixels = this.autoScrollSpeed * 2;
         if (typeof scrollCallback === 'function') {
           scrollCallback(pixels);
         } else if (typeof window !== 'undefined' && typeof window.scrollBy === 'function') {
           window.scrollBy({ top: pixels, behavior: 'auto' });
+        }
+        if (this.autoScrollPause > 0) {
+          this._autoScrollMovedPx += pixels;
+          if (this._autoScrollMovedPx >= 480) {
+            this._autoScrollMovedPx = 0;
+            this._autoScrollPausedUntil = Date.now() + this.autoScrollPause;
+          }
         }
       }, 30);
       return this.autoScrollActive;
@@ -504,6 +550,8 @@
         clearInterval(this._autoScrollTimer);
         this._autoScrollTimer = null;
       }
+      this._autoScrollPausedUntil = 0;
+      this._autoScrollMovedPx = 0;
       this.autoScrollActive = false;
       return false;
     }
@@ -727,6 +775,8 @@
         visibleIndices: this.getVisiblePageIndices(),
         progressPercent: this.getProgressPercent(),
         autoScrollActive: this.autoScrollActive,
+        autoScrollSpeed: this.autoScrollSpeed,
+        autoScrollPause: this.autoScrollPause,
         ...controlGroups
       };
     }
