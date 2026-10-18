@@ -28,6 +28,10 @@
     constructor(options = {}) {
       this.logger = options.logger || globalScope.ManowaLogger || null;
       this.settingsOpen = false;
+      this._lastChapterMeta = null;
+      this._hasScrolledToEnd = false;
+      this._scrollTimeout = null;
+      this._suppressScrollUntil = 0;
       this._log('debug', 'ReaderHudController baslatildi.');
     }
 
@@ -184,20 +188,55 @@
       }
 
       if (chapterMeta) {
+        this._lastChapterMeta = chapterMeta;
+        this._hasScrolledToEnd = false;
+        this._suppressScrollUntil = Date.now() + 400;
+      }
+      const meta = chapterMeta || this._lastChapterMeta;
+      if (meta) {
         const endLabel = targetDoc.getElementById('reader-end-chapter-label');
         const endPrevBtn = targetDoc.getElementById('btn-end-prev-chapter');
         const endNextBtn = targetDoc.getElementById('btn-end-next-chapter');
         const endSeriesBtn = targetDoc.getElementById('btn-end-series');
 
-        if (endLabel && chapterMeta.chapterLabel) {
-          endLabel.textContent = `${chapterMeta.chapterLabel} Tamamlandı`;
+        if (endLabel && meta.chapterLabel) {
+          endLabel.textContent = `${meta.chapterLabel} Tamamlandı`;
         }
-        if (endPrevBtn) endPrevBtn.disabled = !chapterMeta.hasPrevChapter;
-        if (endNextBtn) endNextBtn.disabled = !chapterMeta.hasNextChapter;
-        if (endSeriesBtn && chapterMeta.seriesHref && chapterMeta.seriesId) {
-          endSeriesBtn.setAttribute('href', chapterMeta.seriesHref);
+        if (endPrevBtn) endPrevBtn.disabled = !meta.hasPrevChapter;
+        if (endNextBtn) endNextBtn.disabled = !meta.hasNextChapter;
+        if (endSeriesBtn && meta.seriesHref && meta.seriesId) {
+          endSeriesBtn.setAttribute('href', meta.seriesHref);
           endSeriesBtn.setAttribute('data-action', 'detail');
-          endSeriesBtn.setAttribute('data-series', chapterMeta.seriesId);
+          endSeriesBtn.setAttribute('data-series', meta.seriesId);
+        }
+      }
+
+      const endCard = targetDoc.getElementById('reader-chapter-end-card');
+      const disqusSec = targetDoc.getElementById('disqus-section');
+      if (endCard && endCard.classList) {
+        const isPaged = state.mode === 'single' || state.mode === 'double';
+        const step = state.mode === 'double' ? 2 : 1;
+        const isAtEnd = isPaged && state.totalPages > 0 && state.currentIndex + step >= state.totalPages;
+        endCard.classList.toggle('hidden', isPaged && !isAtEnd);
+
+        if (disqusSec && disqusSec.classList) {
+          if (isPaged) {
+            disqusSec.classList.toggle('hidden', !isAtEnd);
+            disqusSec.classList.toggle('reader-comments-visible', isAtEnd);
+
+            if (isAtEnd && !this._hasScrolledToEnd) {
+              this._hasScrolledToEnd = true;
+              this.scrollToComments(targetDoc);
+            } else if (!isAtEnd) {
+              this._hasScrolledToEnd = false;
+              if (this._scrollTimeout) {
+                clearTimeout(this._scrollTimeout);
+                this._scrollTimeout = null;
+              }
+            }
+          } else {
+            disqusSec.classList.toggle('hidden', false);
+          }
         }
       }
     }
@@ -230,6 +269,9 @@
             if (imgEl && typeof imgEl.scrollIntoView === 'function') {
               imgEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+          }
+          if (idx >= total - 1) {
+            this.checkCommentsEndVisibility(targetDoc);
           }
         }
       } else {
@@ -293,6 +335,67 @@
       }
 
       return reader.currentIndex;
+    }
+
+    /**
+     * Yorum alanina (#disqus-section) akici ve yumusak bir sekilde kaydirir.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    scrollToComments(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
+      if (this._suppressScrollUntil && Date.now() < this._suppressScrollUntil) return;
+      const disqusSec = targetDoc.getElementById('disqus-section');
+      if (!disqusSec) return;
+
+      disqusSec.classList.remove('hidden');
+      disqusSec.classList.add('reader-comments-visible');
+
+      if (this._scrollTimeout) {
+        clearTimeout(this._scrollTimeout);
+      }
+      if (typeof setTimeout === 'function') {
+        this._scrollTimeout = setTimeout(() => {
+          if (typeof disqusSec.scrollIntoView === 'function') {
+            disqusSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else if (typeof globalScope.scrollTo === 'function' && typeof disqusSec.offsetTop === 'number') {
+            globalScope.scrollTo({
+              top: Math.max(0, disqusSec.offsetTop - 80),
+              behavior: 'smooth'
+            });
+          }
+        }, 150);
+      }
+    }
+
+    /**
+     * Dikey kaydirma modlarinda (Webtoon, Novel) bolum sonuna yaklasildiginda
+     * yorum alanini (.reader-comments-visible) yumusak bir sekilde gosterir ve kaydirir.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    checkCommentsEndVisibility(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
+      const endCard = targetDoc.getElementById('reader-chapter-end-card');
+      const disqusSec = targetDoc.getElementById('disqus-section');
+      if (!endCard || !disqusSec || !disqusSec.classList) return;
+
+      if (typeof endCard.getBoundingClientRect === 'function') {
+        const rect = endCard.getBoundingClientRect();
+        const winHeight =
+          (typeof globalScope.innerHeight === 'number' && globalScope.innerHeight) || 720;
+        if (rect.top <= winHeight + 150) {
+          disqusSec.classList.add('reader-comments-visible');
+          if (!this._hasScrolledToEnd) {
+            this._hasScrolledToEnd = true;
+            this.scrollToComments(targetDoc);
+          }
+        } else if (rect.top > winHeight + 350) {
+          this._hasScrolledToEnd = false;
+        }
+      }
     }
 
     /**
@@ -480,12 +583,6 @@
         app.reader.setDirection(app.reader.direction === 'rtl' ? 'ltr' : 'rtl');
         refreshAll();
       });
-      on('btn-dock-comments', 'click', () => {
-        const disqusEl = targetDoc.getElementById('disqus-section');
-        if (disqusEl && typeof disqusEl.scrollIntoView === 'function') {
-          disqusEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
       on('reader-page-slider', 'input', (e) => {
         this.handleSeekbarChange(app.reader, e.target.value, targetDoc);
       });
@@ -512,12 +609,53 @@
         });
       }
 
+      const endCard = targetDoc.getElementById('reader-chapter-end-card');
+      const disqusSec = targetDoc.getElementById('disqus-section');
+      if (
+        endCard &&
+        disqusSec &&
+        typeof globalScope.IntersectionObserver === 'function'
+      ) {
+        try {
+          const endObserver = new globalScope.IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting && app.currentView === 'reader') {
+                  disqusSec.classList.add('reader-comments-visible');
+                  if (!this._hasScrolledToEnd) {
+                    this._hasScrolledToEnd = true;
+                    this.scrollToComments(targetDoc);
+                  }
+                }
+              });
+            },
+            { rootMargin: '0px 0px 150px 0px', threshold: 0.05 }
+          );
+          endObserver.observe(endCard);
+        } catch (_err) {
+          // Fallback to scroll check
+        }
+      }
+
+      on('reader-chapter-end-card', 'click', (e) => {
+        if (
+          e.target &&
+          (e.target.tagName === 'BUTTON' ||
+            e.target.tagName === 'A' ||
+            (typeof e.target.closest === 'function' && e.target.closest('button, a')))
+        ) {
+          return;
+        }
+        this.scrollToComments(targetDoc);
+      });
+
       if (typeof globalScope.addEventListener === 'function') {
         globalScope.addEventListener(
           'scroll',
           () => {
             if (app.currentView === 'reader') {
               this.updateWebtoonScrollPage(app.reader, targetDoc);
+              this.checkCommentsEndVisibility(targetDoc);
             }
           },
           { passive: true }

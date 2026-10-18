@@ -338,7 +338,7 @@ test('ReaderHudController: Ayarlar cekmecesi kapatildiginda acik olan reader-fon
   assert.equal(fontBtnExpanded, 'false');
 });
 
-test('ReaderHudController & reader-novel.css: Novel modunda yorumlar butonu ortalanmali ve mode-novel sinifi senkronize olmali', () => {
+test('ReaderHudController & reader-novel.css: Novel modunda alt barda sonraki bolum butonu hizalanmali ve mode-novel sinifi senkronize olmali', () => {
   const fs = require('fs');
   const path = require('path');
   const { ReaderHudController } = require('../src/scripts/reader-hud');
@@ -378,8 +378,7 @@ test('ReaderHudController & reader-novel.css: Novel modunda yorumlar butonu orta
   assert.equal(wrapperClasses.has('mode-novel'), true);
 
   const novelCss = fs.readFileSync(path.join(__dirname, '../src/styles/reader-novel.css'), 'utf-8');
-  assert.equal(novelCss.includes('.reader-wrapper.mode-novel .reader-footer-bar #btn-dock-comments'), true);
-  assert.equal(/\.reader-wrapper\.mode-novel\s+\.reader-footer-bar\s+#btn-dock-comments\s*\{[^}]*position:\s*absolute;[^}]*left:\s*50%;[^}]*transform:\s*translateX\(-50%\);/s.test(novelCss), true);
+  assert.equal(novelCss.includes('#btn-dock-comments'), false);
   assert.equal(/\.reader-wrapper\.mode-novel\s+\.reader-footer-bar\s+#btn-next-chapter\s*\{[^}]*margin-left:\s*auto;/s.test(novelCss), true);
 });
 

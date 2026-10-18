@@ -50,10 +50,40 @@ body[data-active-view="reader"] .site-footer {
   display: none !important;
 }
 
+@keyframes readerCommentsSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 body[data-active-view="reader"] .disqus-container {
   max-width: 1000px;
-  margin: 2rem auto;
+  margin: 2rem auto 50vh auto;
   padding: 1.5rem;
+  scroll-margin-top: 80px;
+  opacity: 0;
+  transform: translateY(32px);
+  pointer-events: none;
+}
+
+body[data-active-view="reader"] .disqus-container.reader-comments-visible {
+  opacity: 1;
+  transform: translateY(0);
+  animation: readerCommentsSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-active-view="reader"] .disqus-container {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
 
 [data-theme="light"] .site-header {

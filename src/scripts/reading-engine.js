@@ -33,17 +33,10 @@
       this.gap = typeof options.gap === 'number' ? Math.max(0, options.gap) : 0;
       this.backgroundTheme = VALID_BG_THEMES.includes(options.backgroundTheme) ? options.backgroundTheme : 'dark';
       this.hudVisible = options.hudVisible !== undefined ? Boolean(options.hudVisible) : true;
-      const FontLoaderClass =
-        globalScope.NovelFontLoader ||
-        (typeof require === 'function'
-          ? (() => {
-              try {
-                return require('./novel-font-loader').NovelFontLoader;
-              } catch (_e) {
-                return null;
-              }
-            })()
-          : null);
+      let FontLoaderClass = globalScope.NovelFontLoader;
+      if (!FontLoaderClass && typeof require === 'function') {
+        try { FontLoaderClass = require('./novel-font-loader').NovelFontLoader; } catch (_e) {}
+      }
       this.fontLoader =
         options.fontLoader ||
         (FontLoaderClass ? new FontLoaderClass({ storage: this.storage, logger: this.logger }) : null);
@@ -268,11 +261,7 @@
       const saved = this.getProgress(this.seriesId);
       if (typeof chapterData.startPage === 'number') {
         this.currentIndex = this._clamp(chapterData.startPage, 0, Math.max(0, this.pages.length - 1));
-      } else if (
-        saved &&
-        saved.chapterId === this.chapterId &&
-        typeof saved.pageIndex === 'number'
-      ) {
+      } else if (saved && saved.chapterId === this.chapterId && typeof saved.pageIndex === 'number') {
         this.currentIndex = this._clamp(saved.pageIndex, 0, Math.max(0, this.pages.length - 1));
       } else {
         this.currentIndex = 0;
@@ -844,6 +833,18 @@
       if (nextPageBtn) {
         const step = state.mode === 'double' ? 2 : 1;
         nextPageBtn.disabled = state.currentIndex + step >= state.totalPages;
+      }
+      const endCard = getEl('reader-chapter-end-card');
+      const disqusSec = getEl('disqus-section');
+      if (endCard && endCard.classList) {
+        const isPaged = state.mode === 'single' || state.mode === 'double';
+        const step = state.mode === 'double' ? 2 : 1;
+        const isAtEnd = isPaged && state.totalPages > 0 && state.currentIndex + step >= state.totalPages;
+        endCard.classList.toggle('hidden', isPaged && !isAtEnd);
+        if (disqusSec && disqusSec.classList && isPaged) {
+          disqusSec.classList.toggle('hidden', !isAtEnd);
+          disqusSec.classList.toggle('reader-comments-visible', isAtEnd);
+        }
       }
     }
 

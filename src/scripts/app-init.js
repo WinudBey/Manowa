@@ -578,8 +578,15 @@
           defaultMode: isNovel ? 'novel' : (series.defaultReaderMode || '')
         });
       }
+      if (typeof globalScope.scrollTo === 'function') {
+        globalScope.scrollTo({ top: 0, behavior: 'instant' });
+      }
       this.updateDisqus(`chapter-${chapter.id}`, `${series.title} - ${chapter.title}`);
       if (typeof document === 'undefined') return;
+      const disqusSec = document.getElementById('disqus-section');
+      if (disqusSec && disqusSec.classList) {
+        disqusSec.classList.remove('reader-comments-visible');
+      }
       const seriesHref = this.computeTargetUrl('series', series.id);
       const seriesTitleEl = document.getElementById('reader-series-title');
       const seriesNameEl = document.getElementById('reader-series-name');

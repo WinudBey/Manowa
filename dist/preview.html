@@ -54,6 +54,16 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
@@ -2686,10 +2696,40 @@ body[data-active-view="reader"] .site-footer {
   display: none !important;
 }
 
+@keyframes readerCommentsSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 body[data-active-view="reader"] .disqus-container {
   max-width: 1000px;
-  margin: 2rem auto;
+  margin: 2rem auto 50vh auto;
   padding: 1.5rem;
+  scroll-margin-top: 80px;
+  opacity: 0;
+  transform: translateY(32px);
+  pointer-events: none;
+}
+
+body[data-active-view="reader"] .disqus-container.reader-comments-visible {
+  opacity: 1;
+  transform: translateY(0);
+  animation: readerCommentsSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-active-view="reader"] .disqus-container {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
 
 [data-theme="light"] .site-header {
@@ -4457,23 +4497,6 @@ body[data-active-view="reader"] .scroll-top-btn {
   gap: 0.45rem;
 }
 
-.reader-wrapper:has(.mode-novel) .reader-footer-bar .reader-controls,
-.reader-wrapper.mode-novel .reader-footer-bar .reader-controls {
-  flex: 0 0 auto;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.reader-wrapper:has(.mode-novel) .reader-footer-bar #btn-dock-comments,
-.reader-wrapper.mode-novel .reader-footer-bar #btn-dock-comments {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-}
-
 .reader-wrapper:has(.mode-novel) .reader-footer-bar #btn-next-chapter,
 .reader-wrapper.mode-novel .reader-footer-bar #btn-next-chapter {
   margin-left: auto;
@@ -4857,10 +4880,6 @@ body[data-active-view="reader"] .scroll-top-btn {
           <button class="reader-btn" id="btn-prev-page" title="Önceki Sayfa" type="button">‹ <span class="btn-label">Önceki Sayfa</span></button>
           <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
           <button class="reader-btn" id="btn-next-page" title="Sonraki Sayfa" type="button"><span class="btn-label">Sonraki Sayfa</span> ›</button>
-        </div>
-
-        <div class="reader-controls">
-          <button class="reader-btn" id="btn-dock-comments" title="Bölüm Yorumlarına Git" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span class="btn-label">Yorumlar</span></button>
         </div>
 
         <button aria-label="Sonraki Bölüm" class="reader-btn mihon-skip-btn" id="btn-next-chapter" title="Sonraki Bölüm" type="button"><span class="btn-label">Sonraki Bölüm</span> <svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" x2="19" y1="5" y2="19"/></svg></button>
@@ -8708,17 +8727,10 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       this.gap = typeof options.gap === 'number' ? Math.max(0, options.gap) : 0;
       this.backgroundTheme = VALID_BG_THEMES.includes(options.backgroundTheme) ? options.backgroundTheme : 'dark';
       this.hudVisible = options.hudVisible !== undefined ? Boolean(options.hudVisible) : true;
-      const FontLoaderClass =
-        globalScope.NovelFontLoader ||
-        (typeof require === 'function'
-          ? (() => {
-              try {
-                return require('./novel-font-loader').NovelFontLoader;
-              } catch (_e) {
-                return null;
-              }
-            })()
-          : null);
+      let FontLoaderClass = globalScope.NovelFontLoader;
+      if (!FontLoaderClass && typeof require === 'function') {
+        try { FontLoaderClass = require('./novel-font-loader').NovelFontLoader; } catch (_e) {}
+      }
       this.fontLoader =
         options.fontLoader ||
         (FontLoaderClass ? new FontLoaderClass({ storage: this.storage, logger: this.logger }) : null);
@@ -8943,11 +8955,7 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       const saved = this.getProgress(this.seriesId);
       if (typeof chapterData.startPage === 'number') {
         this.currentIndex = this._clamp(chapterData.startPage, 0, Math.max(0, this.pages.length - 1));
-      } else if (
-        saved &&
-        saved.chapterId === this.chapterId &&
-        typeof saved.pageIndex === 'number'
-      ) {
+      } else if (saved && saved.chapterId === this.chapterId && typeof saved.pageIndex === 'number') {
         this.currentIndex = this._clamp(saved.pageIndex, 0, Math.max(0, this.pages.length - 1));
       } else {
         this.currentIndex = 0;
@@ -9520,6 +9528,18 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         const step = state.mode === 'double' ? 2 : 1;
         nextPageBtn.disabled = state.currentIndex + step >= state.totalPages;
       }
+      const endCard = getEl('reader-chapter-end-card');
+      const disqusSec = getEl('disqus-section');
+      if (endCard && endCard.classList) {
+        const isPaged = state.mode === 'single' || state.mode === 'double';
+        const step = state.mode === 'double' ? 2 : 1;
+        const isAtEnd = isPaged && state.totalPages > 0 && state.currentIndex + step >= state.totalPages;
+        endCard.classList.toggle('hidden', isPaged && !isAtEnd);
+        if (disqusSec && disqusSec.classList && isPaged) {
+          disqusSec.classList.toggle('hidden', !isAtEnd);
+          disqusSec.classList.toggle('reader-comments-visible', isAtEnd);
+        }
+      }
     }
 
     /**
@@ -9698,6 +9718,10 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
     constructor(options = {}) {
       this.logger = options.logger || globalScope.ManowaLogger || null;
       this.settingsOpen = false;
+      this._lastChapterMeta = null;
+      this._hasScrolledToEnd = false;
+      this._scrollTimeout = null;
+      this._suppressScrollUntil = 0;
       this._log('debug', 'ReaderHudController baslatildi.');
     }
 
@@ -9854,20 +9878,55 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       }
 
       if (chapterMeta) {
+        this._lastChapterMeta = chapterMeta;
+        this._hasScrolledToEnd = false;
+        this._suppressScrollUntil = Date.now() + 400;
+      }
+      const meta = chapterMeta || this._lastChapterMeta;
+      if (meta) {
         const endLabel = targetDoc.getElementById('reader-end-chapter-label');
         const endPrevBtn = targetDoc.getElementById('btn-end-prev-chapter');
         const endNextBtn = targetDoc.getElementById('btn-end-next-chapter');
         const endSeriesBtn = targetDoc.getElementById('btn-end-series');
 
-        if (endLabel && chapterMeta.chapterLabel) {
-          endLabel.textContent = `${chapterMeta.chapterLabel} Tamamlandı`;
+        if (endLabel && meta.chapterLabel) {
+          endLabel.textContent = `${meta.chapterLabel} Tamamlandı`;
         }
-        if (endPrevBtn) endPrevBtn.disabled = !chapterMeta.hasPrevChapter;
-        if (endNextBtn) endNextBtn.disabled = !chapterMeta.hasNextChapter;
-        if (endSeriesBtn && chapterMeta.seriesHref && chapterMeta.seriesId) {
-          endSeriesBtn.setAttribute('href', chapterMeta.seriesHref);
+        if (endPrevBtn) endPrevBtn.disabled = !meta.hasPrevChapter;
+        if (endNextBtn) endNextBtn.disabled = !meta.hasNextChapter;
+        if (endSeriesBtn && meta.seriesHref && meta.seriesId) {
+          endSeriesBtn.setAttribute('href', meta.seriesHref);
           endSeriesBtn.setAttribute('data-action', 'detail');
-          endSeriesBtn.setAttribute('data-series', chapterMeta.seriesId);
+          endSeriesBtn.setAttribute('data-series', meta.seriesId);
+        }
+      }
+
+      const endCard = targetDoc.getElementById('reader-chapter-end-card');
+      const disqusSec = targetDoc.getElementById('disqus-section');
+      if (endCard && endCard.classList) {
+        const isPaged = state.mode === 'single' || state.mode === 'double';
+        const step = state.mode === 'double' ? 2 : 1;
+        const isAtEnd = isPaged && state.totalPages > 0 && state.currentIndex + step >= state.totalPages;
+        endCard.classList.toggle('hidden', isPaged && !isAtEnd);
+
+        if (disqusSec && disqusSec.classList) {
+          if (isPaged) {
+            disqusSec.classList.toggle('hidden', !isAtEnd);
+            disqusSec.classList.toggle('reader-comments-visible', isAtEnd);
+
+            if (isAtEnd && !this._hasScrolledToEnd) {
+              this._hasScrolledToEnd = true;
+              this.scrollToComments(targetDoc);
+            } else if (!isAtEnd) {
+              this._hasScrolledToEnd = false;
+              if (this._scrollTimeout) {
+                clearTimeout(this._scrollTimeout);
+                this._scrollTimeout = null;
+              }
+            }
+          } else {
+            disqusSec.classList.toggle('hidden', false);
+          }
         }
       }
     }
@@ -9900,6 +9959,9 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
             if (imgEl && typeof imgEl.scrollIntoView === 'function') {
               imgEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+          }
+          if (idx >= total - 1) {
+            this.checkCommentsEndVisibility(targetDoc);
           }
         }
       } else {
@@ -9963,6 +10025,67 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
       }
 
       return reader.currentIndex;
+    }
+
+    /**
+     * Yorum alanina (#disqus-section) akici ve yumusak bir sekilde kaydirir.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    scrollToComments(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
+      if (this._suppressScrollUntil && Date.now() < this._suppressScrollUntil) return;
+      const disqusSec = targetDoc.getElementById('disqus-section');
+      if (!disqusSec) return;
+
+      disqusSec.classList.remove('hidden');
+      disqusSec.classList.add('reader-comments-visible');
+
+      if (this._scrollTimeout) {
+        clearTimeout(this._scrollTimeout);
+      }
+      if (typeof setTimeout === 'function') {
+        this._scrollTimeout = setTimeout(() => {
+          if (typeof disqusSec.scrollIntoView === 'function') {
+            disqusSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else if (typeof globalScope.scrollTo === 'function' && typeof disqusSec.offsetTop === 'number') {
+            globalScope.scrollTo({
+              top: Math.max(0, disqusSec.offsetTop - 80),
+              behavior: 'smooth'
+            });
+          }
+        }, 150);
+      }
+    }
+
+    /**
+     * Dikey kaydirma modlarinda (Webtoon, Novel) bolum sonuna yaklasildiginda
+     * yorum alanini (.reader-comments-visible) yumusak bir sekilde gosterir ve kaydirir.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {void}
+     */
+    checkCommentsEndVisibility(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
+      const endCard = targetDoc.getElementById('reader-chapter-end-card');
+      const disqusSec = targetDoc.getElementById('disqus-section');
+      if (!endCard || !disqusSec || !disqusSec.classList) return;
+
+      if (typeof endCard.getBoundingClientRect === 'function') {
+        const rect = endCard.getBoundingClientRect();
+        const winHeight =
+          (typeof globalScope.innerHeight === 'number' && globalScope.innerHeight) || 720;
+        if (rect.top <= winHeight + 150) {
+          disqusSec.classList.add('reader-comments-visible');
+          if (!this._hasScrolledToEnd) {
+            this._hasScrolledToEnd = true;
+            this.scrollToComments(targetDoc);
+          }
+        } else if (rect.top > winHeight + 350) {
+          this._hasScrolledToEnd = false;
+        }
+      }
     }
 
     /**
@@ -10150,12 +10273,6 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         app.reader.setDirection(app.reader.direction === 'rtl' ? 'ltr' : 'rtl');
         refreshAll();
       });
-      on('btn-dock-comments', 'click', () => {
-        const disqusEl = targetDoc.getElementById('disqus-section');
-        if (disqusEl && typeof disqusEl.scrollIntoView === 'function') {
-          disqusEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
       on('reader-page-slider', 'input', (e) => {
         this.handleSeekbarChange(app.reader, e.target.value, targetDoc);
       });
@@ -10182,12 +10299,53 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         });
       }
 
+      const endCard = targetDoc.getElementById('reader-chapter-end-card');
+      const disqusSec = targetDoc.getElementById('disqus-section');
+      if (
+        endCard &&
+        disqusSec &&
+        typeof globalScope.IntersectionObserver === 'function'
+      ) {
+        try {
+          const endObserver = new globalScope.IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting && app.currentView === 'reader') {
+                  disqusSec.classList.add('reader-comments-visible');
+                  if (!this._hasScrolledToEnd) {
+                    this._hasScrolledToEnd = true;
+                    this.scrollToComments(targetDoc);
+                  }
+                }
+              });
+            },
+            { rootMargin: '0px 0px 150px 0px', threshold: 0.05 }
+          );
+          endObserver.observe(endCard);
+        } catch (_err) {
+          // Fallback to scroll check
+        }
+      }
+
+      on('reader-chapter-end-card', 'click', (e) => {
+        if (
+          e.target &&
+          (e.target.tagName === 'BUTTON' ||
+            e.target.tagName === 'A' ||
+            (typeof e.target.closest === 'function' && e.target.closest('button, a')))
+        ) {
+          return;
+        }
+        this.scrollToComments(targetDoc);
+      });
+
       if (typeof globalScope.addEventListener === 'function') {
         globalScope.addEventListener(
           'scroll',
           () => {
             if (app.currentView === 'reader') {
               this.updateWebtoonScrollPage(app.reader, targetDoc);
+              this.checkCommentsEndVisibility(targetDoc);
             }
           },
           { passive: true }
@@ -12469,8 +12627,15 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
           defaultMode: isNovel ? 'novel' : (series.defaultReaderMode || '')
         });
       }
+      if (typeof globalScope.scrollTo === 'function') {
+        globalScope.scrollTo({ top: 0, behavior: 'instant' });
+      }
       this.updateDisqus(`chapter-${chapter.id}`, `${series.title} - ${chapter.title}`);
       if (typeof document === 'undefined') return;
+      const disqusSec = document.getElementById('disqus-section');
+      if (disqusSec && disqusSec.classList) {
+        disqusSec.classList.remove('reader-comments-visible');
+      }
       const seriesHref = this.computeTargetUrl('series', series.id);
       const seriesTitleEl = document.getElementById('reader-series-title');
       const seriesNameEl = document.getElementById('reader-series-name');

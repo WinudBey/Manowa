@@ -497,6 +497,15 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
         return [pageImg0, pageImg1, pageImg2];
       },
       classList: {
+        add(c) {
+          classes.add(c);
+        },
+        remove(c) {
+          classes.delete(c);
+        },
+        contains(c) {
+          return classes.has(c);
+        },
         toggle(c, force) {
           const next = typeof force === 'boolean' ? force : !classes.has(c);
           if (next) classes.add(c);
@@ -536,12 +545,14 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
     'btn-end-prev-chapter': makeHudEl(),
     'btn-end-next-chapter': makeHudEl(),
     'btn-end-series': makeHudEl(),
+    'reader-chapter-end-card': makeHudEl(),
     'reader-viewport': makeHudEl(),
     'seekbar-current-page': makeHudEl(),
     'seekbar-total-pages': makeHudEl(),
     'reader-page-slider': makeHudEl(),
     'reader-mini-page-pill': makeHudEl(),
-    'reader-progress-bar': makeHudEl()
+    'reader-progress-bar': makeHudEl(),
+    'disqus-section': makeHudEl()
   };
 
   const mockDoc = {
@@ -591,6 +602,24 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(domMap['mihon-setting-gap-group'].classes.has('hidden'), true);
   assert.equal(domMap['mihon-setting-scroll-speed-group'].classes.has('hidden'), true);
   assert.equal(domMap['mihon-setting-scroll-pause-group'].classes.has('hidden'), true);
+  // Manga 1. sayfadayken (ara sayfa) bolum sonu karti ve yorumlar gizli olmali
+  assert.equal(domMap['reader-chapter-end-card'].classes.has('hidden'), true);
+  assert.equal(domMap['disqus-section'].classes.has('hidden'), true);
+  assert.equal(domMap['disqus-section'].classes.has('reader-comments-visible'), false);
+
+  // Son sayfaya (2/2) gecildiginde bolum sonu karti ve yorumlar yumusak bicimde gorunur olmali
+  engine.goToPage(1);
+  hud.syncHudIntoDom(engine, null, mockDoc);
+  assert.equal(domMap['reader-chapter-end-card'].classes.has('hidden'), false);
+  assert.equal(domMap['disqus-section'].classes.has('hidden'), false);
+  assert.equal(domMap['disqus-section'].classes.has('reader-comments-visible'), true);
+
+  // 1. sayfaya donuldugunde bolum sonu karti ve yorumlar tekrar gizlenmeli
+  engine.goToPage(0);
+  hud.syncHudIntoDom(engine, null, mockDoc);
+  assert.equal(domMap['reader-chapter-end-card'].classes.has('hidden'), true);
+  assert.equal(domMap['disqus-section'].classes.has('hidden'), true);
+  assert.equal(domMap['disqus-section'].classes.has('reader-comments-visible'), false);
 
   // Webtoon modunda seekbar, oto-kaydir ayarlari ve kaydirma takibi
   engine.loadChapter({
@@ -601,6 +630,8 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
     pages: ['p1.webp', 'p2.webp', 'p3.webp', 'p4.webp']
   });
   hud.syncHudIntoDom(engine, null, mockDoc);
+  // Webtoon modunda bolum sonu karti surekli gorunur olmali
+  assert.equal(domMap['reader-chapter-end-card'].classes.has('hidden'), false);
   assert.equal(domMap['mihon-setting-scroll-speed-group'].classes.has('hidden'), false);
   assert.equal(domMap['mihon-setting-scroll-pause-group'].classes.has('hidden'), false);
   const seekIdx = hud.handleSeekbarChange(engine, 3, mockDoc);
@@ -718,11 +749,62 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
   assert.equal(/\.mihon-action-dock\s*\{[^}]*flex:\s*1\s+1\s+0%;/s.test(readerCss), true);
   assert.equal(/\.mihon-seekbar-row\s*\{[^}]*justify-content:\s*center;[^}]*margin:\s*0;/s.test(readerCss), true);
 
-  // Sag eylem dock alani siralamasi: Yorumlar once, Sonraki Bolum en sagda yer almali
+  // Sag eylem dock alani: Yorumlar butonu alt bardan kaldirilmis olmali, Sonraki Bolum butonu bulunmali
   const actionDockSegment = bodyHtml.split('class="mihon-action-dock"')[1].split('</div>\n    </div>')[0];
-  const commentsBtnPos = actionDockSegment.indexOf('id="btn-dock-comments"');
-  const nextChapterBtnPos = actionDockSegment.indexOf('id="btn-next-chapter"');
-  assert.equal(commentsBtnPos > 0 && nextChapterBtnPos > 0, true);
-  assert.equal(commentsBtnPos < nextChapterBtnPos, true);
+  assert.equal(actionDockSegment.includes('id="btn-dock-comments"'), false);
+  assert.equal(actionDockSegment.includes('id="btn-next-chapter"'), true);
 });
+
+test('Reader Comments: Alt barda yorum butonu olmamali, bolum sonuna gelindiginde yumusak sekilde acilmali', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const { ReaderHudController } = require('../src/scripts/reader-hud');
+
+  const layoutCss = fs.readFileSync(path.join(__dirname, '../src/styles/layout.css'), 'utf-8');
+  assert.equal(layoutCss.includes('body[data-active-view="reader"] .disqus-container'), true);
+  assert.equal(layoutCss.includes('opacity: 0;'), true);
+  assert.equal(layoutCss.includes('reader-comments-visible'), true);
+  assert.equal(/\.disqus-container\.reader-comments-visible\s*\{[^}]*opacity:\s*1;/s.test(layoutCss), true);
+  assert.equal(layoutCss.includes('scroll-margin-top: 80px;'), true);
+  assert.equal(layoutCss.includes('margin: 2rem auto 50vh auto;'), true);
+
+  const hud = new ReaderHudController();
+  const classes = new Set();
+  const mockDisqus = {
+    classList: {
+      add(c) { classes.add(c); },
+      remove(c) { classes.delete(c); },
+      contains(c) { return classes.has(c); },
+      toggle(c, force) {
+        if (force) classes.add(c);
+        else classes.delete(c);
+      }
+    }
+  };
+
+  let endCardTop = 1500;
+  const mockEndCard = {
+    getBoundingClientRect() {
+      return { top: endCardTop, bottom: endCardTop + 200 };
+    }
+  };
+
+  const mockDoc = {
+    getElementById(id) {
+      if (id === 'disqus-section') return mockDisqus;
+      if (id === 'reader-chapter-end-card') return mockEndCard;
+      return null;
+    }
+  };
+
+  // Henuz bolum sonuna ulasilmadiginda (endCard ekrandan uzakta) gorunur olmamali
+  hud.checkCommentsEndVisibility(mockDoc);
+  assert.equal(classes.has('reader-comments-visible'), false);
+
+  // Kullanici bolum sonuna geldiginde (endCard ekrana girdiginde) yorumlar aktiflesmeli
+  endCardTop = 600;
+  hud.checkCommentsEndVisibility(mockDoc);
+  assert.equal(classes.has('reader-comments-visible'), true);
+});
+
 
