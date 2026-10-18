@@ -95,8 +95,12 @@
 
       const state = reader.getState();
       const wrapper = targetDoc.getElementById('reader-wrapper');
+      const isNovel = state.mode === 'novel' || state.seriesType === 'novel';
+      const isManga = state.seriesType === 'manga' && !isNovel;
+
       if (wrapper && wrapper.classList) {
         wrapper.classList.toggle('hud-hidden', !state.hudVisible);
+        wrapper.classList.toggle('mode-novel', isNovel);
         ['dark', 'amoled', 'sepia', 'light'].forEach((bg) => {
           wrapper.classList.toggle(`reader-bg-${bg}`, state.backgroundTheme === bg);
         });
@@ -117,8 +121,6 @@
       const modeGroup = targetDoc.getElementById('mihon-setting-mode-group');
       const dirGroup = targetDoc.getElementById('mihon-setting-dir-group');
 
-      const isNovel = state.mode === 'novel' || state.seriesType === 'novel';
-      const isManga = state.seriesType === 'manga' && !isNovel;
       if (dockModeLabel) dockModeLabel.textContent = MODE_LABELS[state.mode] || 'Dikey Şerit';
       if (dockDirLabel) dockDirLabel.textContent = state.direction.toUpperCase();
       if (dockModeBtn && dockModeBtn.classList) dockModeBtn.classList.toggle('hidden', !isManga);

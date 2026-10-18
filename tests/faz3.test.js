@@ -276,7 +276,37 @@ test('Reader Sticky Header: Ust cubuk asagi kaydirildiginda uste yapismali ve te
   assert.equal(/\.reader-toolbar\s*\{[^}]*flex-wrap:\s*nowrap;/s.test(readerCss), true);
   assert.equal(/\.reader-controls\s*\{[^}]*flex-wrap:\s*nowrap;/s.test(readerCss), true);
   assert.equal(
-    /body\[data-active-view="reader"\]\s+\.site-header\s*\{[^}]*position:\s*relative;/s.test(
+    /body\[data-active-view="reader"\]\s+\.site-header\s*\{[^}]*display:\s*none\s*!important;/s.test(
+      layoutCss
+    ),
+    true
+  );
+  assert.equal(
+    /body\[data-active-view="reader"\]\s+\.site-main\s*\{[^}]*max-width:\s*100%\s*!important;[^}]*padding:\s*0\s*!important;/s.test(
+      layoutCss
+    ),
+    true
+  );
+  assert.equal(
+    /body\[data-active-view="reader"\]\s+\.reader-wrapper\s*\{[^}]*border:\s*none\s*!important;[^}]*border-radius:\s*0\s*!important;/s.test(
+      layoutCss
+    ),
+    true
+  );
+  assert.equal(
+    /body\[data-active-view="reader"\]\s+\.reader-sticky-header,\s*body\[data-active-view="reader"\]\s+\.reader-progress-track\s*\{[^}]*border-radius:\s*0\s*!important;/s.test(
+      layoutCss
+    ),
+    true
+  );
+  assert.equal(
+    /body\[data-active-view="reader"\]\s+\.reader-footer-bar\s*\{[^}]*border-radius:\s*0\s*!important;/s.test(
+      layoutCss
+    ),
+    true
+  );
+  assert.equal(
+    /body\[data-active-view="reader"\]\s+\.site-footer\s*\{[^}]*display:\s*none\s*!important;/s.test(
       layoutCss
     ),
     true
@@ -682,4 +712,17 @@ test('Mihon Okuyucu (ReaderHudController): Merkez tiklama ile HUD gizleme, Seekb
     /\.reader-chapter-switcher\s*\{[^}]*height:\s*42px;[^}]*margin:\s*0\s+auto;/s.test(readerCss),
     true
   );
+  assert.equal(bodyHtml.includes('id="reader-prev-dock"'), true);
+  assert.equal(bodyHtml.includes('class="mihon-prev-dock"'), true);
+  assert.equal(/\.mihon-prev-dock\s*\{[^}]*flex:\s*1\s+1\s+0%;/s.test(readerCss), true);
+  assert.equal(/\.mihon-action-dock\s*\{[^}]*flex:\s*1\s+1\s+0%;/s.test(readerCss), true);
+  assert.equal(/\.mihon-seekbar-row\s*\{[^}]*justify-content:\s*center;[^}]*margin:\s*0;/s.test(readerCss), true);
+
+  // Sag eylem dock alani siralamasi: Yorumlar once, Sonraki Bolum en sagda yer almali
+  const actionDockSegment = bodyHtml.split('class="mihon-action-dock"')[1].split('</div>\n    </div>')[0];
+  const commentsBtnPos = actionDockSegment.indexOf('id="btn-dock-comments"');
+  const nextChapterBtnPos = actionDockSegment.indexOf('id="btn-next-chapter"');
+  assert.equal(commentsBtnPos > 0 && nextChapterBtnPos > 0, true);
+  assert.equal(commentsBtnPos < nextChapterBtnPos, true);
 });
+

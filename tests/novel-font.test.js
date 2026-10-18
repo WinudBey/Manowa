@@ -338,5 +338,51 @@ test('ReaderHudController: Ayarlar cekmecesi kapatildiginda acik olan reader-fon
   assert.equal(fontBtnExpanded, 'false');
 });
 
+test('ReaderHudController & reader-novel.css: Novel modunda yorumlar butonu ortalanmali ve mode-novel sinifi senkronize olmali', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const { ReaderHudController } = require('../src/scripts/reader-hud');
+
+  const hud = new ReaderHudController();
+  const mockReader = {
+    getState() {
+      return {
+        mode: 'novel',
+        seriesType: 'novel',
+        hudVisible: true,
+        backgroundTheme: 'dark',
+        direction: 'ltr',
+        totalPages: 0
+      };
+    }
+  };
+
+  const wrapperClasses = new Set();
+  const mockDoc = {
+    getElementById(id) {
+      if (id === 'reader-wrapper') {
+        return {
+          classList: {
+            toggle(cls, force) {
+              if (force) wrapperClasses.add(cls);
+              else wrapperClasses.delete(cls);
+            }
+          }
+        };
+      }
+      return null;
+    }
+  };
+
+  hud.syncHudIntoDom(mockReader, null, mockDoc);
+  assert.equal(wrapperClasses.has('mode-novel'), true);
+
+  const novelCss = fs.readFileSync(path.join(__dirname, '../src/styles/reader-novel.css'), 'utf-8');
+  assert.equal(novelCss.includes('.reader-wrapper.mode-novel .reader-footer-bar #btn-dock-comments'), true);
+  assert.equal(/\.reader-wrapper\.mode-novel\s+\.reader-footer-bar\s+#btn-dock-comments\s*\{[^}]*position:\s*absolute;[^}]*left:\s*50%;[^}]*transform:\s*translateX\(-50%\);/s.test(novelCss), true);
+  assert.equal(/\.reader-wrapper\.mode-novel\s+\.reader-footer-bar\s+#btn-next-chapter\s*\{[^}]*margin-left:\s*auto;/s.test(novelCss), true);
+});
+
+
 
 

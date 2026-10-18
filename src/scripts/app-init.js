@@ -839,7 +839,15 @@
           return;
         }
         const result = this.reader.handleKeyCommand(e.code);
-        if (result !== 'none' && result !== 'fullscreen') {
+        if (result === 'fullscreen') {
+          if (typeof document !== 'undefined') {
+            if (!document.fullscreenElement) {
+              document.documentElement.requestFullscreen?.().catch(() => {});
+            } else {
+              document.exitFullscreen?.().catch(() => {});
+            }
+          }
+        } else if (result !== 'none') {
           this.syncReaderControls();
           this.renderReaderViewport();
         }

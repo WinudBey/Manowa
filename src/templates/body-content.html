@@ -349,7 +349,9 @@
 
     <!-- MIHON ALT HUD: YUZEN SEEKBAR VE EYLEM DOCK CUBUGU -->
     <div class="reader-footer-bar mihon-bottom-hud" id="reader-footer-bar">
-      <button aria-label="Önceki Bölüm" class="reader-btn mihon-skip-btn" id="btn-prev-chapter" title="Önceki Bölüm" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" x2="5" y1="19" y2="5"/></svg> <span class="btn-label">Önceki Bölüm</span></button>
+      <div class="mihon-prev-dock" id="reader-prev-dock">
+        <button aria-label="Önceki Bölüm" class="reader-btn mihon-skip-btn" id="btn-prev-chapter" title="Önceki Bölüm" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" x2="5" y1="19" y2="5"/></svg> <span class="btn-label">Önceki Bölüm</span></button>
+      </div>
 
       <div class="mihon-seekbar-row" id="reader-seekbar-row">
         <div class="mihon-seekbar-pill">
@@ -366,11 +368,11 @@
           <button class="reader-btn" id="btn-next-page" title="Sonraki Sayfa" type="button"><span class="btn-label">Sonraki Sayfa</span> ›</button>
         </div>
 
-        <button aria-label="Sonraki Bölüm" class="reader-btn mihon-skip-btn" id="btn-next-chapter" title="Sonraki Bölüm" type="button"><span class="btn-label">Sonraki Bölüm</span> <svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" x2="19" y1="5" y2="19"/></svg></button>
-
         <div class="reader-controls">
           <button class="reader-btn" id="btn-dock-comments" title="Bölüm Yorumlarına Git" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span class="btn-label">Yorumlar</span></button>
         </div>
+
+        <button aria-label="Sonraki Bölüm" class="reader-btn mihon-skip-btn" id="btn-next-chapter" title="Sonraki Bölüm" type="button"><span class="btn-label">Sonraki Bölüm</span> <svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" x2="19" y1="5" y2="19"/></svg></button>
       </div>
     </div>
   </div>

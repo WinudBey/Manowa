@@ -291,4 +291,58 @@
   }
 }
 
+/* ==========================================================================
+   NOVEL ALT HUD DUZENI (ORTALANMIS YORUM DUGMESI)
+   ========================================================================== */
+
+.reader-wrapper:has(.mode-novel) .reader-footer-bar,
+.reader-wrapper.mode-novel .reader-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reader-wrapper:has(.mode-novel) .reader-footer-bar .mihon-prev-dock,
+.reader-wrapper.mode-novel .reader-footer-bar .mihon-prev-dock {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.reader-wrapper:has(.mode-novel) .reader-footer-bar .mihon-action-dock,
+.reader-wrapper.mode-novel .reader-footer-bar .mihon-action-dock {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1 1 0%;
+  min-width: 0;
+  gap: 0.45rem;
+}
+
+.reader-wrapper:has(.mode-novel) .reader-footer-bar .reader-controls,
+.reader-wrapper.mode-novel .reader-footer-bar .reader-controls {
+  flex: 0 0 auto;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reader-wrapper:has(.mode-novel) .reader-footer-bar #btn-dock-comments,
+.reader-wrapper.mode-novel .reader-footer-bar #btn-dock-comments {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.reader-wrapper:has(.mode-novel) .reader-footer-bar #btn-next-chapter,
+.reader-wrapper.mode-novel .reader-footer-bar #btn-next-chapter {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+
 
