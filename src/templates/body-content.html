@@ -251,6 +251,73 @@
             <button class="mihon-choice-pill" data-scroll-pause-pill="3000" title="3 Saniye" type="button">Uzun (3s)</button>
           </div>
         </div>
+        <div class="reader-novel-settings-wrap hidden" id="reader-group-novel">
+          <div class="mihon-setting-group" id="mihon-setting-font-size-group">
+            <span class="mihon-setting-label">Yazı Boyutu</span>
+            <div class="mihon-pill-row mihon-font-size-row">
+              <button class="mihon-choice-pill" id="btn-font-decrease" title="Yazı Boyutunu Küçült" type="button">A−</button>
+              <span class="mihon-choice-pill active" id="font-size-label" style="cursor: default; pointer-events: none;">105%</span>
+              <button class="mihon-choice-pill" id="btn-font-increase" title="Yazı Boyutunu Büyüt" type="button">A+</button>
+            </div>
+          </div>
+          <div class="mihon-setting-group" id="mihon-setting-font-family-group">
+            <span class="mihon-setting-label">Yazı Tipi</span>
+            <div class="reader-font-dropdown mihon-sheet-font-dropdown" id="reader-font-dropdown">
+              <button aria-controls="reader-font-menu" aria-expanded="false" aria-haspopup="listbox" aria-label="Yazı Tipi Seçimi" class="reader-btn reader-font-dropdown-btn" id="btn-font-family" title="Yazı Tipini Değiştir" type="button">
+                <svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                <span class="btn-label" id="font-family-label">Varsayılan (Sans)</span>
+                <svg aria-hidden="true" class="ui-icon ui-icon-chevron" fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+
+              <div aria-label="Yazı Tipi Seçenekleri" class="reader-font-menu hidden" id="reader-font-menu" role="listbox" tabindex="-1">
+                <button aria-selected="true" class="reader-font-option active" data-font-id="sans" role="option" type="button">
+                  <span class="font-option-text" style="font-family: inherit;">Varsayılan (Sans)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="serif" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'Merriweather', Georgia, serif;">Merriweather (Serif)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="lora" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'Lora', Georgia, serif;">Lora (Serif)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="roboto-slab" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'Roboto Slab', Georgia, serif;">Roboto Slab</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="nunito" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'Nunito', sans-serif;">Nunito (Sans)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="inter" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'Inter', sans-serif;">Inter (Sans)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="eb-garamond" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'EB Garamond', Georgia, serif;">EB Garamond (Serif)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="playfair" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'Playfair Display', Georgia, serif;">Playfair Display (Serif)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+              </div>
+
+              <!-- Geriye donuk form ve test uyumlulugu icin gizli select -->
+              <select aria-hidden="true" class="reader-select reader-font-select sr-only-select" id="select-font-family" tabindex="-1" title="Yazı Tipi Seç">
+                <option value="sans">Varsayılan (Sans)</option>
+                <option value="serif">Merriweather (Serif)</option>
+                <option value="lora">Lora (Serif)</option>
+                <option value="roboto-slab">Roboto Slab</option>
+                <option value="nunito">Nunito (Sans)</option>
+                <option value="inter">Inter (Sans)</option>
+                <option value="eb-garamond">EB Garamond (Serif)</option>
+                <option value="playfair">Playfair Display (Serif)</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="mihon-sheet-hint">İpucu: Okuma alanının ortasına tıklayarak üst ve alt kontrol çubuklarını gizleyip açabilirsiniz.</div>
     </div>
@@ -292,16 +359,7 @@
         </div>
       </div>
 
-      <div class="reader-control-cluster reader-novel-bottom-group hidden" id="reader-group-novel">
-        <div class="reader-pill-group">
-          <button class="reader-pill-btn" id="btn-font-decrease" title="Yazı Boyutunu Küçült" type="button">A−</button>
-          <span class="reader-pill-value" id="font-size-label">105%</span>
-          <button class="reader-pill-btn" id="btn-font-increase" title="Yazı Boyutunu Büyüt" type="button">A+</button>
-        </div>
-        <button class="reader-btn" id="btn-font-family" title="Yazı Tipini Değiştir" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> <span id="font-family-label">Sans</span></button>
-      </div>
-
-      <div class="mihon-action-dock" id="reader-action-dock">
+      <div class="mihon-action-dock">
         <div class="reader-footer-page-nav hidden" id="reader-footer-page-nav">
           <button class="reader-btn" id="btn-prev-page" title="Önceki Sayfa" type="button">‹ <span class="btn-label">Önceki Sayfa</span></button>
           <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>

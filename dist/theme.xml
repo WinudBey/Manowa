@@ -3110,11 +3110,17 @@ body[data-active-view="reader"] .scroll-top-btn {
 
 .reader-toolbar {
   padding: 0.65rem 1rem;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.65rem;
   flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.reader-toolbar::-webkit-scrollbar {
+  display: none;
 }
 
 .reader-title-group {
@@ -3122,7 +3128,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   flex-direction: row;
   align-items: center;
   gap: 0.45rem;
-  justify-self: start;
+  flex: 0 1 auto;
   min-width: 0;
 }
 
@@ -3162,7 +3168,6 @@ body[data-active-view="reader"] .scroll-top-btn {
 .reader-chapter-switcher {
   display: inline-flex;
   align-items: center;
-  justify-self: center;
   height: 36px;
   background: #141824;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -3223,7 +3228,6 @@ body[data-active-view="reader"] .scroll-top-btn {
 .reader-controls {
   display: flex;
   align-items: center;
-  justify-self: end;
   justify-content: flex-end;
   gap: 0.45rem;
   flex: 0 0 auto;
@@ -3237,15 +3241,6 @@ body[data-active-view="reader"] .scroll-top-btn {
   gap: 0.45rem;
   flex-wrap: nowrap;
   flex-shrink: 0;
-}
-
-.reader-novel-bottom-group {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  flex: 0 1 auto;
-  margin: 0 auto;
 }
 
 .reader-control-cluster.hidden,
@@ -3308,6 +3303,15 @@ body[data-active-view="reader"] .scroll-top-btn {
   flex-shrink: 0;
   cursor: pointer;
   transition: all 0.18s ease;
+}
+.reader-font-select {
+  border-radius: 999px;
+  max-width: 170px;
+  outline: none;
+}
+.reader-font-select option {
+  background: #141824;
+  color: #f1f5f9;
 }
 
 .reader-select:hover,
@@ -3480,7 +3484,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   z-index: 130;
   width: min(94vw, 780px);
   max-height: 85vh;
-  overflow-y: auto;
+  overflow: visible;
   margin: 0;
   padding: 1.1rem 1.35rem;
   background: rgba(13, 16, 25, 0.88);
@@ -3829,13 +3833,11 @@ body[data-active-view="reader"] .scroll-top-btn {
   .reader-toolbar {
     padding: 0.55rem 0.65rem;
     gap: 0.45rem;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: space-between;
   }
   .reader-title-group {
     flex: 0 0 auto;
-    justify-self: start;
   }
   .reader-series-back-btn {
     width: 42px;
@@ -3850,7 +3852,6 @@ body[data-active-view="reader"] .scroll-top-btn {
     height: 42px;
     flex-shrink: 0;
     margin: 0 auto;
-    justify-self: center;
     padding: 0.18rem;
     gap: 0.15rem;
     border-radius: 10px;
@@ -3869,7 +3870,6 @@ body[data-active-view="reader"] .scroll-top-btn {
   .reader-controls {
     width: auto;
     flex: 0 0 auto;
-    justify-self: end;
     justify-content: flex-end;
     gap: 0.4rem;
     padding-top: 0;
@@ -3945,10 +3945,6 @@ body[data-active-view="reader"] .scroll-top-btn {
     padding: 0.6rem 0.65rem;
     gap: 0.45rem;
   }
-  .reader-novel-bottom-group {
-    gap: 0.35rem;
-    margin: 0 auto;
-  }
   .mihon-seekbar-row {
     gap: 0.45rem;
   }
@@ -4011,17 +4007,299 @@ body[data-active-view="reader"] .scroll-top-btn {
     padding: 0 0.65rem;
     font-size: 0.84rem;
   }
-  .reader-novel-bottom-group {
-    gap: 0.25rem;
+}
+
+/* === MODULE: styles/reader-novel.css === */
+/**
+ * @fileoverview Roman (Novel) okuma modu ve ozel acilir font listesi (custom dropdown) stilleri.
+ * Manowa koyu/turuncu temasi ve W3C WAI-ARIA erisilebilirlik standartlarina uygundur.
+ */
+
+/* ==========================================================================
+   OZEL YAZI TIPI ACILIR MENUSU (CUSTOM FONT DROPDOWN)
+   ========================================================================== */
+
+.reader-font-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Tetikleyici Düğme (Trigger Button) */
+.reader-font-dropdown-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  height: 36px;
+  padding: 0 0.75rem;
+  background: rgba(20, 24, 36, 0.58);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.reader-font-dropdown-btn:hover,
+.reader-font-dropdown-btn.active,
+.reader-font-dropdown-btn[aria-expanded="true"] {
+  border-color: var(--accent-primary);
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+.reader-font-dropdown-btn .btn-label {
+  display: inline-block !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1 1 auto;
+  text-align: left;
+  margin: 0 0.45rem;
+}
+
+.reader-font-dropdown-btn .ui-icon-chevron {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.75;
+  margin-left: 0.2rem;
+}
+
+.reader-font-dropdown-btn[aria-expanded="true"] .ui-icon-chevron {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+/* Acilir Menü Kutusu (Glassmorphism & Theme Box) */
+.reader-font-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 230px;
+  max-width: 300px;
+  max-height: 380px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: rgba(18, 22, 34, 0.96);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 0.4rem;
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.65), 0 0 1px 1px rgba(255, 255, 255, 0.06);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  animation: fontMenuDropdownFade 0.18s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.reader-font-menu.hidden {
+  display: none !important;
+}
+
+@keyframes fontMenuDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
   }
-  .reader-novel-bottom-group .reader-pill-btn {
-    height: 32px;
-    min-width: 26px;
-    padding: 0 0.35rem;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
-  .reader-novel-bottom-group .reader-pill-value {
-    min-width: 36px;
-    font-size: 0.78rem;
+}
+
+/* Liste Seçenekleri (Option Rows) */
+.reader-font-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.55rem 0.85rem;
+  background: transparent;
+  color: #cbd5e1;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.14s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.reader-font-option:hover,
+.reader-font-option:focus-visible {
+  background: rgba(249, 115, 22, 0.16);
+  color: #ffffff;
+  outline: none;
+}
+
+.reader-font-option.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.reader-font-option .font-option-text {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.01em;
+}
+
+.reader-font-option .ui-icon-check {
+  display: none;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.reader-font-option.active .ui-icon-check {
+  display: inline-block;
+}
+
+/* Gizli yerel select elemanı (Screen reader ve form senkronizasyonu) */
+.sr-only-select {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Ozel kaydirma cubugu */
+.reader-font-menu::-webkit-scrollbar {
+  width: 6px;
+}
+.reader-font-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+.reader-font-menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+}
+.reader-font-menu::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Mobil Gorunum Uyarlamasi */
+@media (max-width: 768px) {
+  .reader-font-dropdown-btn {
+    height: 42px;
+    padding: 0 0.8rem;
+    font-size: 0.85rem;
+  }
+  .reader-font-dropdown-btn .btn-label,
+  .mihon-sheet-font-dropdown .reader-font-dropdown-btn .btn-label {
+    display: inline-block !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1 1 auto;
+    text-align: left;
+    margin: 0 0.45rem;
+  }
+  .mihon-sheet-font-dropdown .reader-font-dropdown-btn {
+    height: 42px;
+    font-size: 0.88rem;
+  }
+  .mihon-font-size-row .mihon-choice-pill {
+    min-height: 42px;
+    height: 42px;
+    font-size: 0.92rem;
+  }
+  .reader-font-menu {
+    max-width: min(92vw, 320px);
+    right: 0;
+  }
+  .mihon-sheet-font-dropdown .reader-font-menu {
+    max-width: 100%;
+    left: 0;
+    right: 0;
+  }
+  .reader-font-option {
+    padding: 0.65rem 0.9rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ==========================================================================
+   NOVEL AYARLARI (AYAR CEKMECESI ENTEGRASYONU)
+   ========================================================================== */
+
+.reader-novel-settings-wrap {
+  display: contents;
+}
+
+.reader-novel-settings-wrap.hidden {
+  display: none !important;
+}
+
+.mihon-font-size-row {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.mihon-font-size-row .mihon-choice-pill {
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.mihon-sheet-font-dropdown {
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+
+.mihon-sheet-font-dropdown .reader-font-dropdown-btn {
+  width: 100%;
+  justify-content: space-between;
+  height: 38px;
+  background: rgba(16, 20, 30, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0 0.85rem;
+  box-sizing: border-box;
+}
+
+.mihon-sheet-font-dropdown .reader-font-dropdown-btn:hover,
+.mihon-sheet-font-dropdown .reader-font-dropdown-btn[aria-expanded="true"] {
+  border-color: var(--accent-primary);
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+.mihon-sheet-font-dropdown .reader-font-menu {
+  width: 100%;
+  left: 0;
+  right: 0;
+  min-width: 100%;
+  max-width: 100%;
+  max-height: 220px;
+  z-index: 1500;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(249, 115, 22, 0.35);
+  box-sizing: border-box;
+}
+
+@media (max-height: 560px) {
+  .reader-settings-sheet {
+    max-height: 92vh;
+    overflow-y: auto !important;
   }
 }
 
@@ -4446,6 +4724,73 @@ body {
             <button class="mihon-choice-pill" data-scroll-pause-pill="3000" title="3 Saniye" type="button">Uzun (3s)</button>
           </div>
         </div>
+        <div class="reader-novel-settings-wrap hidden" id="reader-group-novel">
+          <div class="mihon-setting-group" id="mihon-setting-font-size-group">
+            <span class="mihon-setting-label">Yazı Boyutu</span>
+            <div class="mihon-pill-row mihon-font-size-row">
+              <button class="mihon-choice-pill" id="btn-font-decrease" title="Yazı Boyutunu Küçült" type="button">A−</button>
+              <span class="mihon-choice-pill active" id="font-size-label" style="cursor: default; pointer-events: none;">105%</span>
+              <button class="mihon-choice-pill" id="btn-font-increase" title="Yazı Boyutunu Büyüt" type="button">A+</button>
+            </div>
+          </div>
+          <div class="mihon-setting-group" id="mihon-setting-font-family-group">
+            <span class="mihon-setting-label">Yazı Tipi</span>
+            <div class="reader-font-dropdown mihon-sheet-font-dropdown" id="reader-font-dropdown">
+              <button aria-controls="reader-font-menu" aria-expanded="false" aria-haspopup="listbox" aria-label="Yazı Tipi Seçimi" class="reader-btn reader-font-dropdown-btn" id="btn-font-family" title="Yazı Tipini Değiştir" type="button">
+                <svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                <span class="btn-label" id="font-family-label">Varsayılan (Sans)</span>
+                <svg aria-hidden="true" class="ui-icon ui-icon-chevron" fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+
+              <div aria-label="Yazı Tipi Seçenekleri" class="reader-font-menu hidden" id="reader-font-menu" role="listbox" tabindex="-1">
+                <button aria-selected="true" class="reader-font-option active" data-font-id="sans" role="option" type="button">
+                  <span class="font-option-text" style="font-family: inherit;">Varsayılan (Sans)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="serif" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'Merriweather', Georgia, serif;">Merriweather (Serif)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="lora" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'Lora', Georgia, serif;">Lora (Serif)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="roboto-slab" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'Roboto Slab', Georgia, serif;">Roboto Slab</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="nunito" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'Nunito', sans-serif;">Nunito (Sans)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="inter" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'Inter', sans-serif;">Inter (Sans)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="eb-garamond" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'EB Garamond', Georgia, serif;">EB Garamond (Serif)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button aria-selected="false" class="reader-font-option" data-font-id="playfair" role="option" type="button">
+                  <span class="font-option-text" style="font-family: 'Playfair Display', Georgia, serif;">Playfair Display (Serif)</span>
+                  <svg aria-hidden="true" class="ui-icon ui-icon-check" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+              </div>
+
+              <!-- Geriye donuk form ve test uyumlulugu icin gizli select -->
+              <select aria-hidden="true" class="reader-select reader-font-select sr-only-select" id="select-font-family" tabindex="-1" title="Yazı Tipi Seç">
+                <option value="sans">Varsayılan (Sans)</option>
+                <option value="serif">Merriweather (Serif)</option>
+                <option value="lora">Lora (Serif)</option>
+                <option value="roboto-slab">Roboto Slab</option>
+                <option value="nunito">Nunito (Sans)</option>
+                <option value="inter">Inter (Sans)</option>
+                <option value="eb-garamond">EB Garamond (Serif)</option>
+                <option value="playfair">Playfair Display (Serif)</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="mihon-sheet-hint">İpucu: Okuma alanının ortasına tıklayarak üst ve alt kontrol çubuklarını gizleyip açabilirsiniz.</div>
     </div>
@@ -4487,16 +4832,7 @@ body {
         </div>
       </div>
 
-      <div class="reader-control-cluster reader-novel-bottom-group hidden" id="reader-group-novel">
-        <div class="reader-pill-group">
-          <button class="reader-pill-btn" id="btn-font-decrease" title="Yazı Boyutunu Küçült" type="button">A−</button>
-          <span class="reader-pill-value" id="font-size-label">105%</span>
-          <button class="reader-pill-btn" id="btn-font-increase" title="Yazı Boyutunu Büyüt" type="button">A+</button>
-        </div>
-        <button class="reader-btn" id="btn-font-family" title="Yazı Tipini Değiştir" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> <span id="font-family-label">Sans</span></button>
-      </div>
-
-      <div class="mihon-action-dock" id="reader-action-dock">
+      <div class="mihon-action-dock">
         <div class="reader-footer-page-nav hidden" id="reader-footer-page-nav">
           <button class="reader-btn" id="btn-prev-page" title="Önceki Sayfa" type="button">‹ <span class="btn-label">Önceki Sayfa</span></button>
           <span class="page-counter-pill" id="page-counter">Sayfa 1 / 1</span>
@@ -7986,6 +8322,277 @@ body {
   }
 })(typeof window !== 'undefined' ? window : globalThis);
 
+/* === MODULE: scripts/novel-font-loader.js === */
+/**
+ * @fileoverview Novel okuma modunda Google Fonts uzerinden dinamik yazi tipi yukleme
+ * ve yonetim modulu.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  /**
+   * Roman okuma modunda kullanilabilecek Google Fonts ve sistem yazi tipleri.
+   * @type {Array<{id: string, name: string, family: string, google: string|null}>}
+   */
+  const NOVEL_FONTS = [
+    {
+      id: 'sans',
+      name: 'Varsayılan (Sans)',
+      family: 'inherit',
+      google: null
+    },
+    {
+      id: 'serif',
+      name: 'Merriweather (Serif)',
+      family: "'Merriweather', Georgia, serif",
+      google: 'Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400'
+    },
+    {
+      id: 'lora',
+      name: 'Lora (Serif)',
+      family: "'Lora', Georgia, serif",
+      google: 'Lora:ital,wght@0,400;0,600;0,700;1,400'
+    },
+    {
+      id: 'roboto-slab',
+      name: 'Roboto Slab',
+      family: "'Roboto Slab', Georgia, serif",
+      google: 'Roboto+Slab:wght@400;600;700'
+    },
+    {
+      id: 'nunito',
+      name: 'Nunito (Sans)',
+      family: "'Nunito', sans-serif",
+      google: 'Nunito:ital,wght@0,400;0,600;0,700;1,400'
+    },
+    {
+      id: 'inter',
+      name: 'Inter (Sans)',
+      family: "'Inter', sans-serif",
+      google: 'Inter:wght@400;600;700'
+    },
+    {
+      id: 'eb-garamond',
+      name: 'EB Garamond (Serif)',
+      family: "'EB Garamond', Georgia, serif",
+      google: 'EB+Garamond:ital,wght@0,400;0,600;1,400'
+    },
+    {
+      id: 'playfair',
+      name: 'Playfair Display (Serif)',
+      family: "'Playfair Display', Georgia, serif",
+      google: 'Playfair+Display:ital,wght@0,400;0,700;1,400'
+    }
+  ];
+
+  const STORAGE_KEY = 'manowa_novel_font';
+
+  /**
+   * Google Fonts yoneticisi sinifi.
+   */
+  class NovelFontLoader {
+    /**
+     * @param {Object} [options={}] - Yapilandirma secenekleri.
+     * @param {Object} [options.storage] - Yerel depolama nesnesi (localStorage).
+     * @param {Object} [options.logger] - Logger nesnesi.
+     */
+    constructor(options = {}) {
+      this.storage =
+        options.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.loadedFonts = new Set();
+      this.activeFontId = this._resolveInitialFont();
+    }
+
+    /**
+     * Ilk yazi tipi kimligini belirler.
+     * @private
+     * @returns {string} Font kimligi.
+     */
+    _resolveInitialFont() {
+      if (!this.storage) return 'sans';
+      try {
+        const saved = this.storage.getItem(STORAGE_KEY);
+        if (saved && this.getFont(saved)) {
+          return saved;
+        }
+      } catch (_e) {
+        // Depolama erisim hatasinda varsayilan kullanilir
+      }
+      return 'sans';
+    }
+
+    /**
+     * Log kaydi yazar.
+     * @private
+     * @param {string} level - Log seviyesi.
+     * @param {string} message - Mesaj.
+     * @param {Object} [data] - Veri.
+     */
+    _log(level, message, data) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](`[NovelFontLoader] ${message}`, data);
+      }
+    }
+
+    /**
+     * Tum tanimli yazi tiplerini dondurur.
+     * @returns {Array<{id: string, name: string, family: string, google: string|null}>}
+     */
+    getFonts() {
+      return NOVEL_FONTS;
+    }
+
+    /**
+     * Kimlige gore yazi tipi nesnesini dondurur.
+     * @param {string} fontId - Font kimligi.
+     * @returns {Object|null}
+     */
+    getFont(fontId) {
+      const match = NOVEL_FONTS.find((f) => f.id === fontId);
+      return match || null;
+    }
+
+    /**
+     * Guncel aktif yazi tipi nesnesini dondurur.
+     * @returns {Object}
+     */
+    getActiveFont() {
+      return this.getFont(this.activeFontId) || NOVEL_FONTS[0];
+    }
+
+    /**
+     * Bir sonraki yazi tipine gecer ve font kimligini dondurur.
+     * @returns {string} Yeni font kimligi.
+     */
+    cycleFont() {
+      const currIdx = NOVEL_FONTS.findIndex((f) => f.id === this.activeFontId);
+      const nextIdx = (currIdx + 1) % NOVEL_FONTS.length;
+      const nextFont = NOVEL_FONTS[nextIdx];
+      this.setFont(nextFont.id);
+      return this.activeFontId;
+    }
+
+    /**
+     * Aktif yazi tipini ayarlar ve kalici olarak kaydeder.
+     * @param {string} fontId - Font kimligi.
+     * @returns {Object} Secilen font nesnesi.
+     */
+    setFont(fontId) {
+      const found = this.getFont(fontId) || NOVEL_FONTS[0];
+      this.activeFontId = found.id;
+      if (this.storage) {
+        try {
+          this.storage.setItem(STORAGE_KEY, found.id);
+        } catch (_e) {
+          // Depolama hatasi yoksayilir
+        }
+      }
+      this._log('info', 'Yazi tipi secildi.', { fontId: found.id, fontName: found.name });
+      return found;
+    }
+
+    /**
+     * Google Fonts baglantilarini (<link>) DOM icine ekler.
+     * @param {string} [fontId] - Yuklenecek font kimligi (belirtilmezse aktif font).
+     * @param {Document} [doc] - Hedef document nesnesi.
+     * @returns {boolean} Yukleme linki eklendi veya zaten mevcutsa true.
+     */
+    ensureGoogleFontLoaded(fontId, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc || !targetDoc.head) {
+        return false;
+      }
+
+      const fontDef = this.getFont(fontId || this.activeFontId);
+      if (!fontDef || !fontDef.google) {
+        return false;
+      }
+
+      const linkId = `gfont-link-${fontDef.id}`;
+      if (targetDoc.getElementById(linkId)) {
+        return true;
+      }
+
+      // Preconnect linklerini ekle
+      this._ensurePreconnect(targetDoc);
+
+      const link = targetDoc.createElement('link');
+      link.id = linkId;
+      link.rel = 'stylesheet';
+      link.href = `https://fonts.googleapis.com/css2?family=${fontDef.google}&display=swap`;
+      targetDoc.head.appendChild(link);
+
+      this.loadedFonts.add(fontDef.id);
+      this._log('debug', 'Google Font linki head bolumune eklendi.', {
+        fontId: fontDef.id,
+        href: link.href
+      });
+      return true;
+    }
+
+    /**
+     * Google Fonts icin preconnect linklerinin mevcudiyetini saglar.
+     * @private
+     * @param {Document} targetDoc - Hedef document.
+     */
+    _ensurePreconnect(targetDoc) {
+      if (!targetDoc.getElementById('gfont-preconnect-api')) {
+        const linkApi = targetDoc.createElement('link');
+        linkApi.id = 'gfont-preconnect-api';
+        linkApi.rel = 'preconnect';
+        linkApi.href = 'https://fonts.googleapis.com';
+        targetDoc.head.appendChild(linkApi);
+      }
+      if (!targetDoc.getElementById('gfont-preconnect-static')) {
+        const linkStatic = targetDoc.createElement('link');
+        linkStatic.id = 'gfont-preconnect-static';
+        linkStatic.rel = 'preconnect';
+        linkStatic.href = 'https://fonts.gstatic.com';
+        linkStatic.setAttribute('crossorigin', '');
+        targetDoc.head.appendChild(linkStatic);
+      }
+    }
+
+    /**
+     * Secilen fontu bir DOM elemanina veya CSS degiskenine uygular.
+     * @param {HTMLElement} [element] - Novel icerik kutusu elemani.
+     * @param {Document} [doc] - Hedef document.
+     * @returns {string} Uygulanan font family degeri.
+     */
+    applyActiveFont(element, doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      const font = this.getActiveFont();
+
+      if (font.google && targetDoc) {
+        this.ensureGoogleFontLoaded(font.id, targetDoc);
+      }
+
+      if (element && element.style && typeof element.style.setProperty === 'function') {
+        element.style.setProperty('--novel-font-family', font.family);
+        if (font.family !== 'inherit') {
+          element.style.fontFamily = font.family;
+        } else {
+          element.style.fontFamily = '';
+        }
+      }
+
+      return font.family;
+    }
+  }
+
+  globalScope.NOVEL_FONTS = NOVEL_FONTS;
+  globalScope.NovelFontLoader = NovelFontLoader;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      NOVEL_FONTS,
+      NovelFontLoader
+    };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
 /* === MODULE: scripts/reading-engine.js === */
 /**
  * @fileoverview Cok modlu okuma motoru (Webtoon, Tek Sayfa, Cift Sayfa ve Novel) sinifi.
@@ -8009,8 +8616,7 @@ body {
      */
     constructor(options = {}) {
       this.logger = options.logger || globalScope.ManowaLogger || null;
-      this.storage =
-        options.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
+      this.storage = options.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
       this.historyKey = 'manowa_reading_history';
       this.seriesType = this.normalizeSeriesType(
         options.seriesType || 'Manhwa',
@@ -8021,14 +8627,29 @@ body {
       this.direction = VALID_DIRECTIONS.includes(options.direction) ? options.direction : 'ltr';
       this.zoom = this._clamp(options.zoom || 100, 50, 150);
       this.gap = typeof options.gap === 'number' ? Math.max(0, options.gap) : 0;
-      this.backgroundTheme = VALID_BG_THEMES.includes(options.backgroundTheme)
-        ? options.backgroundTheme
-        : 'dark';
+      this.backgroundTheme = VALID_BG_THEMES.includes(options.backgroundTheme) ? options.backgroundTheme : 'dark';
       this.hudVisible = options.hudVisible !== undefined ? Boolean(options.hudVisible) : true;
+      const FontLoaderClass =
+        globalScope.NovelFontLoader ||
+        (typeof require === 'function'
+          ? (() => {
+              try {
+                return require('./novel-font-loader').NovelFontLoader;
+              } catch (_e) {
+                return null;
+              }
+            })()
+          : null);
+      this.fontLoader =
+        options.fontLoader ||
+        (FontLoaderClass ? new FontLoaderClass({ storage: this.storage, logger: this.logger }) : null);
       this.novelFontSize = this._clamp(options.novelFontSize || 105, 85, 160);
-      this.novelFontFamily = options.novelFontFamily === 'serif' ? 'serif' : 'sans';
-      this.protectImages =
-        options.protectImages !== undefined ? Boolean(options.protectImages) : true;
+      this.novelFontFamily =
+        options.novelFontFamily || (this.fontLoader ? this.fontLoader.activeFontId : 'sans');
+      if (options.novelFontFamily && this.fontLoader) {
+        this.fontLoader.setFont(this.novelFontFamily);
+      }
+      this.protectImages = options.protectImages !== undefined ? Boolean(options.protectImages) : true;
       this.rawPages = [];
       this.pageGroups = [];
       this.pages = [];
@@ -8120,18 +8741,12 @@ body {
         const lastSegMatch = String(candidate || '').match(/([^/?#&]+)$/);
         if (!lastSegMatch) continue;
         let fileName = lastSegMatch[1];
-        try {
-          fileName = decodeURIComponent(fileName);
-        } catch (_err) {
-          // Decode hatasini yoksay
-        }
+        try { fileName = decodeURIComponent(fileName); } catch (_err) {}
         const baseName = fileName.replace(/\.(?:webp|jpe?g|png|gif|avif|bmp|svg)$/i, '').trim();
         const sliceMatch =
           baseName.match(/^(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)$/i) ||
           baseName.match(/^(\d{2,})[-_](\d{2,})$/);
-        if (sliceMatch) {
-          return `page:${Number(sliceMatch[1])}`;
-        }
+        if (sliceMatch) return `page:${Number(sliceMatch[1])}`;
       }
       return null;
     }
@@ -8143,9 +8758,7 @@ body {
      * @returns {Array<Array<string>>} Gruplanmis mantiksal sayfa dilimleri.
      */
     groupSlicedPages(rawPages = []) {
-      if (!Array.isArray(rawPages) || rawPages.length === 0) {
-        return [];
-      }
+      if (!Array.isArray(rawPages) || rawPages.length === 0) return [];
       const groups = [];
       let currentGroup = [];
       let currentKey = null;
@@ -8341,13 +8954,44 @@ body {
     }
 
     /**
-     * Novel modu yazi tipini ('sans' ve 'serif') arasinda degistirir.
-     * @returns {string} Guncel yazi tipi ('sans' veya 'serif').
+     * Novel modu yazi tipini degistirir (Google Fonts dongusu).
+     * @returns {string} Guncel yazi tipi kimligi.
      */
     toggleNovelFontFamily() {
-      this.novelFontFamily = this.novelFontFamily === 'serif' ? 'sans' : 'serif';
+      if (this.fontLoader && typeof this.fontLoader.cycleFont === 'function') {
+        this.novelFontFamily = this.fontLoader.cycleFont();
+      } else {
+        this.novelFontFamily = this.novelFontFamily === 'serif' ? 'sans' : 'serif';
+      }
       this._log('info', 'Novel yazi tipi degistirildi.', { novelFontFamily: this.novelFontFamily });
       return this.novelFontFamily;
+    }
+
+    /**
+     * Novel modu yazi tipini dogrudan secer.
+     * @param {string} fontId - Font kimligi.
+     * @returns {string} Secilen font kimligi.
+     */
+    setNovelFontFamily(fontId) {
+      if (this.fontLoader && typeof this.fontLoader.setFont === 'function') {
+        const font = this.fontLoader.setFont(fontId);
+        this.novelFontFamily = font.id;
+      } else {
+        this.novelFontFamily = fontId;
+      }
+      this._log('info', 'Novel yazi tipi secildi.', { novelFontFamily: this.novelFontFamily });
+      return this.novelFontFamily;
+    }
+
+    /**
+     * Novel yazi tipi etiketini dondurur.
+     * @returns {string} Font adi.
+     */
+    getNovelFontLabel() {
+      if (this.fontLoader && typeof this.fontLoader.getActiveFont === 'function') {
+        return this.fontLoader.getActiveFont().name;
+      }
+      return this.novelFontFamily === 'serif' ? 'Serif' : 'Sans';
     }
 
     /**
@@ -8356,22 +9000,12 @@ body {
      */
     getVisiblePageIndices() {
       const total = this.pages.length;
-      if (total === 0) {
-        return [];
-      }
-      if (this.mode === 'webtoon') {
-        return this.pages.map((_, idx) => idx);
-      }
-      if (this.mode === 'single') {
-        return [this.currentIndex];
-      }
+      if (total === 0) return [];
+      if (this.mode === 'webtoon') return this.pages.map((_, idx) => idx);
+      if (this.mode === 'single') return [this.currentIndex];
       const pair = [this.currentIndex];
-      if (this.currentIndex + 1 < total) {
-        pair.push(this.currentIndex + 1);
-      }
-      if (this.direction === 'rtl' && pair.length === 2) {
-        return [pair[1], pair[0]];
-      }
+      if (this.currentIndex + 1 < total) pair.push(this.currentIndex + 1);
+      if (this.direction === 'rtl' && pair.length === 2) return [pair[1], pair[0]];
       return pair;
     }
 
@@ -8380,9 +9014,7 @@ body {
      * @returns {boolean} Sayfa degistiyse true.
      */
     nextPage() {
-      if (this.mode === 'webtoon' || this.mode === 'novel' || this.pages.length === 0) {
-        return false;
-      }
+      if (this.mode === 'webtoon' || this.mode === 'novel' || this.pages.length === 0) return false;
       const step = this.mode === 'double' ? 2 : 1;
       if (this.currentIndex + step < this.pages.length) {
         this.currentIndex += step;
@@ -8399,9 +9031,7 @@ body {
      * @returns {boolean} Sayfa degistiyse true.
      */
     prevPage() {
-      if (this.mode === 'webtoon' || this.mode === 'novel' || this.pages.length === 0) {
-        return false;
-      }
+      if (this.mode === 'webtoon' || this.mode === 'novel' || this.pages.length === 0) return false;
       const step = this.mode === 'double' ? 2 : 1;
       if (this.currentIndex > 0) {
         this.currentIndex = Math.max(0, this.currentIndex - step);
@@ -8757,6 +9387,7 @@ body {
         hudVisible: this.hudVisible,
         novelFontSize: this.novelFontSize,
         novelFontFamily: this.novelFontFamily,
+        novelFontLabel: this.getNovelFontLabel(),
         protectImages: this.protectImages,
         currentIndex: this.currentIndex,
         totalPages: this.pages.length,
@@ -8779,44 +9410,33 @@ body {
       const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
       if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
       const state = this.getState();
-      const modeSelect = targetDoc.getElementById('select-mode');
-      const dirSelect = targetDoc.getElementById('select-direction');
-      const zoomLabel = targetDoc.getElementById('zoom-label');
-      const fontSizeLabel = targetDoc.getElementById('font-size-label');
-      const fontFamilyLabel = targetDoc.getElementById('font-family-label');
-      const mangaGroup = targetDoc.getElementById('reader-group-manga');
-      const imageGroup = targetDoc.getElementById('reader-group-image');
-      const novelGroup = targetDoc.getElementById('reader-group-novel');
-      const autoScrollBtn = targetDoc.getElementById('btn-autoscroll');
-      const footerPageNav = targetDoc.getElementById('reader-footer-page-nav');
-      const prevPageBtn = targetDoc.getElementById('btn-prev-page');
-      const nextPageBtn = targetDoc.getElementById('btn-next-page');
+      const getEl = (id) => targetDoc.getElementById(id);
+      const modeSelect = getEl('select-mode');
+      const dirSelect = getEl('select-direction');
+      const zoomLabel = getEl('zoom-label');
+      const fontSizeLabel = getEl('font-size-label');
+      const fontFamilyLabel = getEl('font-family-label');
+      const fontSelect = getEl('select-font-family');
+      const mangaGroup = getEl('reader-group-manga');
+      const imageGroup = getEl('reader-group-image');
+      const novelGroup = getEl('reader-group-novel');
+      const autoScrollBtn = getEl('btn-autoscroll');
+      const footerPageNav = getEl('reader-footer-page-nav');
+      const prevPageBtn = getEl('btn-prev-page');
+      const nextPageBtn = getEl('btn-next-page');
 
       if (modeSelect) modeSelect.value = state.mode;
       if (dirSelect) dirSelect.value = state.direction;
       if (zoomLabel) zoomLabel.textContent = `${state.zoom}%`;
       if (fontSizeLabel) fontSizeLabel.textContent = `${state.novelFontSize}%`;
-      if (fontFamilyLabel) {
-        fontFamilyLabel.textContent = state.novelFontFamily === 'serif' ? 'Serif' : 'Sans';
-      }
-      if (mangaGroup && mangaGroup.classList) {
-        mangaGroup.classList.toggle('hidden', !state.showMangaControls);
-      }
-      if (imageGroup && imageGroup.classList) {
-        imageGroup.classList.toggle('hidden', !state.showImageControls || !state.showAutoScroll);
-      }
-      if (autoScrollBtn && autoScrollBtn.classList) {
-        autoScrollBtn.classList.toggle('hidden', !state.showAutoScroll);
-      }
-      if (novelGroup && novelGroup.classList) {
-        novelGroup.classList.toggle('hidden', !state.showNovelControls);
-      }
-      if (footerPageNav && footerPageNav.classList) {
-        footerPageNav.classList.toggle('hidden', !state.showPageFooterNav);
-      }
-      if (prevPageBtn) {
-        prevPageBtn.disabled = state.currentIndex <= 0;
-      }
+      if (fontFamilyLabel) fontFamilyLabel.textContent = state.novelFontLabel || (state.novelFontFamily === 'serif' ? 'Serif' : 'Sans');
+      if (fontSelect) fontSelect.value = state.novelFontFamily || 'sans';
+      if (mangaGroup && mangaGroup.classList) mangaGroup.classList.toggle('hidden', !state.showMangaControls);
+      if (imageGroup && imageGroup.classList) imageGroup.classList.toggle('hidden', !state.showImageControls || !state.showAutoScroll);
+      if (autoScrollBtn && autoScrollBtn.classList) autoScrollBtn.classList.toggle('hidden', !state.showAutoScroll);
+      if (novelGroup && novelGroup.classList) novelGroup.classList.toggle('hidden', !state.showNovelControls);
+      if (footerPageNav && footerPageNav.classList) footerPageNav.classList.toggle('hidden', !state.showPageFooterNav);
+      if (prevPageBtn) prevPageBtn.disabled = state.currentIndex <= 0;
       if (nextPageBtn) {
         const step = state.mode === 'double' ? 2 : 1;
         nextPageBtn.disabled = state.currentIndex + step >= state.totalPages;
@@ -8854,12 +9474,7 @@ body {
         viewport.addEventListener(
           'touchend',
           (ev) => {
-            if (
-              this._touchStartX !== null &&
-              this._touchStartX !== undefined &&
-              ev.changedTouches &&
-              ev.changedTouches[0]
-            ) {
+            if (this._touchStartX !== null && ev.changedTouches && ev.changedTouches[0]) {
               const res = this.handleTouchSwipe(
                 this._touchStartX,
                 ev.changedTouches[0].clientX,
@@ -8884,9 +9499,14 @@ body {
         viewport.style.setProperty('--page-gap', `${state.gap}px`);
       }
       if (state.mode === 'novel' || (state.totalPages === 0 && this.htmlContent)) {
+        const fontDef = this.fontLoader ? this.fontLoader.getFont(state.novelFontFamily) : null;
         const fontClass = state.novelFontFamily === 'serif' ? 'font-serif' : '';
+        const fontStyle = fontDef && fontDef.family !== 'inherit' ? `font-family: ${fontDef.family};` : '';
         const fontSizePct = state.novelFontSize || 105;
-        viewport.innerHTML = `<article class="novel-content-box ${fontClass}" style="font-size: ${fontSizePct}%;">${this.htmlContent}</article>`;
+        viewport.innerHTML = `<article class="novel-content-box ${fontClass}" style="font-size: ${fontSizePct}%; ${fontStyle}">${this.htmlContent}</article>`;
+        if (this.fontLoader && targetDoc) {
+          this.fontLoader.ensureGoogleFontLoaded(state.novelFontFamily, targetDoc);
+        }
       } else if (state.mode === 'double') {
         const pageBlocks = state.visibleIndices
           .map((idx) => {
@@ -9036,6 +9656,16 @@ body {
             topBtn.setAttribute('aria-expanded', String(this.settingsOpen));
           }
         }
+        if (!this.settingsOpen) {
+          const fontMenu = targetDoc.getElementById('reader-font-menu');
+          const fontBtn = targetDoc.getElementById('btn-font-family');
+          if (fontMenu && fontMenu.classList) {
+            fontMenu.classList.add('hidden');
+          }
+          if (fontBtn && typeof fontBtn.setAttribute === 'function') {
+            fontBtn.setAttribute('aria-expanded', 'false');
+          }
+        }
       }
       this._log('debug', 'Mihon ayarlar cekmecesi durumu degisti.', {
         settingsOpen: this.settingsOpen
@@ -9132,21 +9762,27 @@ body {
       syncPillGroup('mihon-scroll-speed-pills', 'data-scroll-speed-pill', state.autoScrollSpeed);
       syncPillGroup('mihon-scroll-pause-pills', 'data-scroll-pause-pill', state.autoScrollPause);
 
+      const fontMenu = targetDoc.getElementById('reader-font-menu');
+      if (fontMenu && typeof fontMenu.querySelectorAll === 'function') {
+        const options = fontMenu.querySelectorAll('.reader-font-option');
+        options.forEach((opt) => {
+          const isSelected = opt.getAttribute('data-font-id') === state.novelFontFamily;
+          opt.classList.toggle('active', isSelected);
+          opt.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        });
+      }
+
       if (chapterMeta) {
         const endLabel = targetDoc.getElementById('reader-end-chapter-label');
         const endPrevBtn = targetDoc.getElementById('btn-end-prev-chapter');
         const endNextBtn = targetDoc.getElementById('btn-end-next-chapter');
         const endSeriesBtn = targetDoc.getElementById('btn-end-series');
-        const dockPrevBtn = targetDoc.getElementById('btn-prev-chapter');
-        const dockNextBtn = targetDoc.getElementById('btn-next-chapter');
 
         if (endLabel && chapterMeta.chapterLabel) {
           endLabel.textContent = `${chapterMeta.chapterLabel} Tamamlandı`;
         }
         if (endPrevBtn) endPrevBtn.disabled = !chapterMeta.hasPrevChapter;
         if (endNextBtn) endNextBtn.disabled = !chapterMeta.hasNextChapter;
-        if (dockPrevBtn) dockPrevBtn.disabled = !chapterMeta.hasPrevChapter;
-        if (dockNextBtn) dockNextBtn.disabled = !chapterMeta.hasNextChapter;
         if (endSeriesBtn && chapterMeta.seriesHref && chapterMeta.seriesId) {
           endSeriesBtn.setAttribute('href', chapterMeta.seriesHref);
           endSeriesBtn.setAttribute('data-action', 'detail');
@@ -9296,9 +9932,97 @@ body {
         app.reader.setNovelFontSize((app.reader.novelFontSize || 105) - 10);
         refreshAll();
       });
-      on('btn-font-family', 'click', () => {
-        app.reader.toggleNovelFontFamily();
-        refreshAll();
+      const fontDropdown = targetDoc.getElementById('reader-font-dropdown');
+      const fontTrigger = targetDoc.getElementById('btn-font-family');
+      const fontMenu = targetDoc.getElementById('reader-font-menu');
+
+      const toggleFontMenu = (forceOpen) => {
+        if (!fontMenu || !fontTrigger) return;
+        const isHidden = fontMenu.classList.contains('hidden');
+        const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : isHidden;
+        fontMenu.classList.toggle('hidden', !shouldOpen);
+        fontTrigger.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        if (shouldOpen) {
+          const activeOpt =
+            fontMenu.querySelector('.reader-font-option.active') ||
+            fontMenu.querySelector('.reader-font-option');
+          if (activeOpt && typeof activeOpt.focus === 'function') {
+            activeOpt.focus();
+          }
+        }
+      };
+
+      on('btn-font-family', 'click', (e) => {
+        if (fontMenu) {
+          if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+          toggleFontMenu();
+        } else {
+          app.reader.toggleNovelFontFamily();
+          refreshAll();
+        }
+      });
+
+      if (fontMenu && typeof fontMenu.querySelectorAll === 'function') {
+        const fontOptions = fontMenu.querySelectorAll('.reader-font-option');
+        fontOptions.forEach((opt) => {
+          opt.addEventListener('click', (e) => {
+            if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+            const fontId = opt.getAttribute('data-font-id');
+            if (fontId) {
+              app.reader.setNovelFontFamily(fontId);
+              refreshAll();
+              toggleFontMenu(false);
+              if (fontTrigger && typeof fontTrigger.focus === 'function') {
+                fontTrigger.focus();
+              }
+            }
+          });
+        });
+
+        fontMenu.addEventListener('keydown', (e) => {
+          const opts = Array.from(fontMenu.querySelectorAll('.reader-font-option'));
+          const currentIdx = opts.indexOf(targetDoc.activeElement);
+          if (e.key === 'ArrowDown') {
+            if (typeof e.preventDefault === 'function') e.preventDefault();
+            const nextIdx = (currentIdx + 1) % opts.length;
+            if (opts[nextIdx] && typeof opts[nextIdx].focus === 'function') {
+              opts[nextIdx].focus();
+            }
+          } else if (e.key === 'ArrowUp') {
+            if (typeof e.preventDefault === 'function') e.preventDefault();
+            const prevIdx = (currentIdx - 1 + opts.length) % opts.length;
+            if (opts[prevIdx] && typeof opts[prevIdx].focus === 'function') {
+              opts[prevIdx].focus();
+            }
+          } else if (e.key === 'Escape') {
+            if (typeof e.preventDefault === 'function') e.preventDefault();
+            toggleFontMenu(false);
+            if (fontTrigger && typeof fontTrigger.focus === 'function') {
+              fontTrigger.focus();
+            }
+          }
+        });
+      }
+
+      if (typeof targetDoc.addEventListener === 'function') {
+        targetDoc.addEventListener('click', (e) => {
+          if (
+            fontDropdown &&
+            typeof fontDropdown.contains === 'function' &&
+            !fontDropdown.contains(e.target) &&
+            fontMenu &&
+            !fontMenu.classList.contains('hidden')
+          ) {
+            toggleFontMenu(false);
+          }
+        });
+      }
+
+      on('select-font-family', 'change', (e) => {
+        if (e && e.target && e.target.value) {
+          app.reader.setNovelFontFamily(e.target.value);
+          refreshAll();
+        }
       });
       on('btn-autoscroll', 'click', (e) => {
         const active = app.reader.toggleAutoScroll();

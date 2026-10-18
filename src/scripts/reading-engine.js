@@ -20,8 +20,7 @@
      */
     constructor(options = {}) {
       this.logger = options.logger || globalScope.ManowaLogger || null;
-      this.storage =
-        options.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
+      this.storage = options.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
       this.historyKey = 'manowa_reading_history';
       this.seriesType = this.normalizeSeriesType(
         options.seriesType || 'Manhwa',
@@ -32,14 +31,29 @@
       this.direction = VALID_DIRECTIONS.includes(options.direction) ? options.direction : 'ltr';
       this.zoom = this._clamp(options.zoom || 100, 50, 150);
       this.gap = typeof options.gap === 'number' ? Math.max(0, options.gap) : 0;
-      this.backgroundTheme = VALID_BG_THEMES.includes(options.backgroundTheme)
-        ? options.backgroundTheme
-        : 'dark';
+      this.backgroundTheme = VALID_BG_THEMES.includes(options.backgroundTheme) ? options.backgroundTheme : 'dark';
       this.hudVisible = options.hudVisible !== undefined ? Boolean(options.hudVisible) : true;
+      const FontLoaderClass =
+        globalScope.NovelFontLoader ||
+        (typeof require === 'function'
+          ? (() => {
+              try {
+                return require('./novel-font-loader').NovelFontLoader;
+              } catch (_e) {
+                return null;
+              }
+            })()
+          : null);
+      this.fontLoader =
+        options.fontLoader ||
+        (FontLoaderClass ? new FontLoaderClass({ storage: this.storage, logger: this.logger }) : null);
       this.novelFontSize = this._clamp(options.novelFontSize || 105, 85, 160);
-      this.novelFontFamily = options.novelFontFamily === 'serif' ? 'serif' : 'sans';
-      this.protectImages =
-        options.protectImages !== undefined ? Boolean(options.protectImages) : true;
+      this.novelFontFamily =
+        options.novelFontFamily || (this.fontLoader ? this.fontLoader.activeFontId : 'sans');
+      if (options.novelFontFamily && this.fontLoader) {
+        this.fontLoader.setFont(this.novelFontFamily);
+      }
+      this.protectImages = options.protectImages !== undefined ? Boolean(options.protectImages) : true;
       this.rawPages = [];
       this.pageGroups = [];
       this.pages = [];
@@ -131,18 +145,12 @@
         const lastSegMatch = String(candidate || '').match(/([^/?#&]+)$/);
         if (!lastSegMatch) continue;
         let fileName = lastSegMatch[1];
-        try {
-          fileName = decodeURIComponent(fileName);
-        } catch (_err) {
-          // Decode hatasini yoksay
-        }
+        try { fileName = decodeURIComponent(fileName); } catch (_err) {}
         const baseName = fileName.replace(/\.(?:webp|jpe?g|png|gif|avif|bmp|svg)$/i, '').trim();
         const sliceMatch =
           baseName.match(/^(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)$/i) ||
           baseName.match(/^(\d{2,})[-_](\d{2,})$/);
-        if (sliceMatch) {
-          return `page:${Number(sliceMatch[1])}`;
-        }
+        if (sliceMatch) return `page:${Number(sliceMatch[1])}`;
       }
       return null;
     }
@@ -154,9 +162,7 @@
      * @returns {Array<Array<string>>} Gruplanmis mantiksal sayfa dilimleri.
      */
     groupSlicedPages(rawPages = []) {
-      if (!Array.isArray(rawPages) || rawPages.length === 0) {
-        return [];
-      }
+      if (!Array.isArray(rawPages) || rawPages.length === 0) return [];
       const groups = [];
       let currentGroup = [];
       let currentKey = null;
@@ -352,13 +358,44 @@
     }
 
     /**
-     * Novel modu yazi tipini ('sans' ve 'serif') arasinda degistirir.
-     * @returns {string} Guncel yazi tipi ('sans' veya 'serif').
+     * Novel modu yazi tipini degistirir (Google Fonts dongusu).
+     * @returns {string} Guncel yazi tipi kimligi.
      */
     toggleNovelFontFamily() {
-      this.novelFontFamily = this.novelFontFamily === 'serif' ? 'sans' : 'serif';
+      if (this.fontLoader && typeof this.fontLoader.cycleFont === 'function') {
+        this.novelFontFamily = this.fontLoader.cycleFont();
+      } else {
+        this.novelFontFamily = this.novelFontFamily === 'serif' ? 'sans' : 'serif';
+      }
       this._log('info', 'Novel yazi tipi degistirildi.', { novelFontFamily: this.novelFontFamily });
       return this.novelFontFamily;
+    }
+
+    /**
+     * Novel modu yazi tipini dogrudan secer.
+     * @param {string} fontId - Font kimligi.
+     * @returns {string} Secilen font kimligi.
+     */
+    setNovelFontFamily(fontId) {
+      if (this.fontLoader && typeof this.fontLoader.setFont === 'function') {
+        const font = this.fontLoader.setFont(fontId);
+        this.novelFontFamily = font.id;
+      } else {
+        this.novelFontFamily = fontId;
+      }
+      this._log('info', 'Novel yazi tipi secildi.', { novelFontFamily: this.novelFontFamily });
+      return this.novelFontFamily;
+    }
+
+    /**
+     * Novel yazi tipi etiketini dondurur.
+     * @returns {string} Font adi.
+     */
+    getNovelFontLabel() {
+      if (this.fontLoader && typeof this.fontLoader.getActiveFont === 'function') {
+        return this.fontLoader.getActiveFont().name;
+      }
+      return this.novelFontFamily === 'serif' ? 'Serif' : 'Sans';
     }
 
     /**
@@ -367,22 +404,12 @@
      */
     getVisiblePageIndices() {
       const total = this.pages.length;
-      if (total === 0) {
-        return [];
-      }
-      if (this.mode === 'webtoon') {
-        return this.pages.map((_, idx) => idx);
-      }
-      if (this.mode === 'single') {
-        return [this.currentIndex];
-      }
+      if (total === 0) return [];
+      if (this.mode === 'webtoon') return this.pages.map((_, idx) => idx);
+      if (this.mode === 'single') return [this.currentIndex];
       const pair = [this.currentIndex];
-      if (this.currentIndex + 1 < total) {
-        pair.push(this.currentIndex + 1);
-      }
-      if (this.direction === 'rtl' && pair.length === 2) {
-        return [pair[1], pair[0]];
-      }
+      if (this.currentIndex + 1 < total) pair.push(this.currentIndex + 1);
+      if (this.direction === 'rtl' && pair.length === 2) return [pair[1], pair[0]];
       return pair;
     }
 
@@ -391,9 +418,7 @@
      * @returns {boolean} Sayfa degistiyse true.
      */
     nextPage() {
-      if (this.mode === 'webtoon' || this.mode === 'novel' || this.pages.length === 0) {
-        return false;
-      }
+      if (this.mode === 'webtoon' || this.mode === 'novel' || this.pages.length === 0) return false;
       const step = this.mode === 'double' ? 2 : 1;
       if (this.currentIndex + step < this.pages.length) {
         this.currentIndex += step;
@@ -410,9 +435,7 @@
      * @returns {boolean} Sayfa degistiyse true.
      */
     prevPage() {
-      if (this.mode === 'webtoon' || this.mode === 'novel' || this.pages.length === 0) {
-        return false;
-      }
+      if (this.mode === 'webtoon' || this.mode === 'novel' || this.pages.length === 0) return false;
       const step = this.mode === 'double' ? 2 : 1;
       if (this.currentIndex > 0) {
         this.currentIndex = Math.max(0, this.currentIndex - step);
@@ -768,6 +791,7 @@
         hudVisible: this.hudVisible,
         novelFontSize: this.novelFontSize,
         novelFontFamily: this.novelFontFamily,
+        novelFontLabel: this.getNovelFontLabel(),
         protectImages: this.protectImages,
         currentIndex: this.currentIndex,
         totalPages: this.pages.length,
@@ -790,44 +814,33 @@
       const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
       if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
       const state = this.getState();
-      const modeSelect = targetDoc.getElementById('select-mode');
-      const dirSelect = targetDoc.getElementById('select-direction');
-      const zoomLabel = targetDoc.getElementById('zoom-label');
-      const fontSizeLabel = targetDoc.getElementById('font-size-label');
-      const fontFamilyLabel = targetDoc.getElementById('font-family-label');
-      const mangaGroup = targetDoc.getElementById('reader-group-manga');
-      const imageGroup = targetDoc.getElementById('reader-group-image');
-      const novelGroup = targetDoc.getElementById('reader-group-novel');
-      const autoScrollBtn = targetDoc.getElementById('btn-autoscroll');
-      const footerPageNav = targetDoc.getElementById('reader-footer-page-nav');
-      const prevPageBtn = targetDoc.getElementById('btn-prev-page');
-      const nextPageBtn = targetDoc.getElementById('btn-next-page');
+      const getEl = (id) => targetDoc.getElementById(id);
+      const modeSelect = getEl('select-mode');
+      const dirSelect = getEl('select-direction');
+      const zoomLabel = getEl('zoom-label');
+      const fontSizeLabel = getEl('font-size-label');
+      const fontFamilyLabel = getEl('font-family-label');
+      const fontSelect = getEl('select-font-family');
+      const mangaGroup = getEl('reader-group-manga');
+      const imageGroup = getEl('reader-group-image');
+      const novelGroup = getEl('reader-group-novel');
+      const autoScrollBtn = getEl('btn-autoscroll');
+      const footerPageNav = getEl('reader-footer-page-nav');
+      const prevPageBtn = getEl('btn-prev-page');
+      const nextPageBtn = getEl('btn-next-page');
 
       if (modeSelect) modeSelect.value = state.mode;
       if (dirSelect) dirSelect.value = state.direction;
       if (zoomLabel) zoomLabel.textContent = `${state.zoom}%`;
       if (fontSizeLabel) fontSizeLabel.textContent = `${state.novelFontSize}%`;
-      if (fontFamilyLabel) {
-        fontFamilyLabel.textContent = state.novelFontFamily === 'serif' ? 'Serif' : 'Sans';
-      }
-      if (mangaGroup && mangaGroup.classList) {
-        mangaGroup.classList.toggle('hidden', !state.showMangaControls);
-      }
-      if (imageGroup && imageGroup.classList) {
-        imageGroup.classList.toggle('hidden', !state.showImageControls || !state.showAutoScroll);
-      }
-      if (autoScrollBtn && autoScrollBtn.classList) {
-        autoScrollBtn.classList.toggle('hidden', !state.showAutoScroll);
-      }
-      if (novelGroup && novelGroup.classList) {
-        novelGroup.classList.toggle('hidden', !state.showNovelControls);
-      }
-      if (footerPageNav && footerPageNav.classList) {
-        footerPageNav.classList.toggle('hidden', !state.showPageFooterNav);
-      }
-      if (prevPageBtn) {
-        prevPageBtn.disabled = state.currentIndex <= 0;
-      }
+      if (fontFamilyLabel) fontFamilyLabel.textContent = state.novelFontLabel || (state.novelFontFamily === 'serif' ? 'Serif' : 'Sans');
+      if (fontSelect) fontSelect.value = state.novelFontFamily || 'sans';
+      if (mangaGroup && mangaGroup.classList) mangaGroup.classList.toggle('hidden', !state.showMangaControls);
+      if (imageGroup && imageGroup.classList) imageGroup.classList.toggle('hidden', !state.showImageControls || !state.showAutoScroll);
+      if (autoScrollBtn && autoScrollBtn.classList) autoScrollBtn.classList.toggle('hidden', !state.showAutoScroll);
+      if (novelGroup && novelGroup.classList) novelGroup.classList.toggle('hidden', !state.showNovelControls);
+      if (footerPageNav && footerPageNav.classList) footerPageNav.classList.toggle('hidden', !state.showPageFooterNav);
+      if (prevPageBtn) prevPageBtn.disabled = state.currentIndex <= 0;
       if (nextPageBtn) {
         const step = state.mode === 'double' ? 2 : 1;
         nextPageBtn.disabled = state.currentIndex + step >= state.totalPages;
@@ -865,12 +878,7 @@
         viewport.addEventListener(
           'touchend',
           (ev) => {
-            if (
-              this._touchStartX !== null &&
-              this._touchStartX !== undefined &&
-              ev.changedTouches &&
-              ev.changedTouches[0]
-            ) {
+            if (this._touchStartX !== null && ev.changedTouches && ev.changedTouches[0]) {
               const res = this.handleTouchSwipe(
                 this._touchStartX,
                 ev.changedTouches[0].clientX,
@@ -895,9 +903,14 @@
         viewport.style.setProperty('--page-gap', `${state.gap}px`);
       }
       if (state.mode === 'novel' || (state.totalPages === 0 && this.htmlContent)) {
+        const fontDef = this.fontLoader ? this.fontLoader.getFont(state.novelFontFamily) : null;
         const fontClass = state.novelFontFamily === 'serif' ? 'font-serif' : '';
+        const fontStyle = fontDef && fontDef.family !== 'inherit' ? `font-family: ${fontDef.family};` : '';
         const fontSizePct = state.novelFontSize || 105;
-        viewport.innerHTML = `<article class="novel-content-box ${fontClass}" style="font-size: ${fontSizePct}%;">${this.htmlContent}</article>`;
+        viewport.innerHTML = `<article class="novel-content-box ${fontClass}" style="font-size: ${fontSizePct}%; ${fontStyle}">${this.htmlContent}</article>`;
+        if (this.fontLoader && targetDoc) {
+          this.fontLoader.ensureGoogleFontLoaded(state.novelFontFamily, targetDoc);
+        }
       } else if (state.mode === 'double') {
         const pageBlocks = state.visibleIndices
           .map((idx) => {

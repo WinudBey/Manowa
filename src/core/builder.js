@@ -143,7 +143,8 @@ class ThemeBuilder {
       'search.css',
       'generator.css',
       'layout.css',
-      'reader.css'
+      'reader.css',
+      'reader-novel.css'
     ];
     const scriptOrder = [
       'client-logger.js',
@@ -155,6 +156,7 @@ class ThemeBuilder {
       'series-page.js',
       'hero-slider.js',
       'sidebar-controller.js',
+      'novel-font-loader.js',
       'reading-engine.js',
       'reader-hud.js',
       'post-generator.js',

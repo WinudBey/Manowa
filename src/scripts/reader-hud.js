@@ -65,6 +65,16 @@
             topBtn.setAttribute('aria-expanded', String(this.settingsOpen));
           }
         }
+        if (!this.settingsOpen) {
+          const fontMenu = targetDoc.getElementById('reader-font-menu');
+          const fontBtn = targetDoc.getElementById('btn-font-family');
+          if (fontMenu && fontMenu.classList) {
+            fontMenu.classList.add('hidden');
+          }
+          if (fontBtn && typeof fontBtn.setAttribute === 'function') {
+            fontBtn.setAttribute('aria-expanded', 'false');
+          }
+        }
       }
       this._log('debug', 'Mihon ayarlar cekmecesi durumu degisti.', {
         settingsOpen: this.settingsOpen
@@ -161,21 +171,27 @@
       syncPillGroup('mihon-scroll-speed-pills', 'data-scroll-speed-pill', state.autoScrollSpeed);
       syncPillGroup('mihon-scroll-pause-pills', 'data-scroll-pause-pill', state.autoScrollPause);
 
+      const fontMenu = targetDoc.getElementById('reader-font-menu');
+      if (fontMenu && typeof fontMenu.querySelectorAll === 'function') {
+        const options = fontMenu.querySelectorAll('.reader-font-option');
+        options.forEach((opt) => {
+          const isSelected = opt.getAttribute('data-font-id') === state.novelFontFamily;
+          opt.classList.toggle('active', isSelected);
+          opt.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        });
+      }
+
       if (chapterMeta) {
         const endLabel = targetDoc.getElementById('reader-end-chapter-label');
         const endPrevBtn = targetDoc.getElementById('btn-end-prev-chapter');
         const endNextBtn = targetDoc.getElementById('btn-end-next-chapter');
         const endSeriesBtn = targetDoc.getElementById('btn-end-series');
-        const dockPrevBtn = targetDoc.getElementById('btn-prev-chapter');
-        const dockNextBtn = targetDoc.getElementById('btn-next-chapter');
 
         if (endLabel && chapterMeta.chapterLabel) {
           endLabel.textContent = `${chapterMeta.chapterLabel} Tamamlandı`;
         }
         if (endPrevBtn) endPrevBtn.disabled = !chapterMeta.hasPrevChapter;
         if (endNextBtn) endNextBtn.disabled = !chapterMeta.hasNextChapter;
-        if (dockPrevBtn) dockPrevBtn.disabled = !chapterMeta.hasPrevChapter;
-        if (dockNextBtn) dockNextBtn.disabled = !chapterMeta.hasNextChapter;
         if (endSeriesBtn && chapterMeta.seriesHref && chapterMeta.seriesId) {
           endSeriesBtn.setAttribute('href', chapterMeta.seriesHref);
           endSeriesBtn.setAttribute('data-action', 'detail');
@@ -325,9 +341,97 @@
         app.reader.setNovelFontSize((app.reader.novelFontSize || 105) - 10);
         refreshAll();
       });
-      on('btn-font-family', 'click', () => {
-        app.reader.toggleNovelFontFamily();
-        refreshAll();
+      const fontDropdown = targetDoc.getElementById('reader-font-dropdown');
+      const fontTrigger = targetDoc.getElementById('btn-font-family');
+      const fontMenu = targetDoc.getElementById('reader-font-menu');
+
+      const toggleFontMenu = (forceOpen) => {
+        if (!fontMenu || !fontTrigger) return;
+        const isHidden = fontMenu.classList.contains('hidden');
+        const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : isHidden;
+        fontMenu.classList.toggle('hidden', !shouldOpen);
+        fontTrigger.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        if (shouldOpen) {
+          const activeOpt =
+            fontMenu.querySelector('.reader-font-option.active') ||
+            fontMenu.querySelector('.reader-font-option');
+          if (activeOpt && typeof activeOpt.focus === 'function') {
+            activeOpt.focus();
+          }
+        }
+      };
+
+      on('btn-font-family', 'click', (e) => {
+        if (fontMenu) {
+          if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+          toggleFontMenu();
+        } else {
+          app.reader.toggleNovelFontFamily();
+          refreshAll();
+        }
+      });
+
+      if (fontMenu && typeof fontMenu.querySelectorAll === 'function') {
+        const fontOptions = fontMenu.querySelectorAll('.reader-font-option');
+        fontOptions.forEach((opt) => {
+          opt.addEventListener('click', (e) => {
+            if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+            const fontId = opt.getAttribute('data-font-id');
+            if (fontId) {
+              app.reader.setNovelFontFamily(fontId);
+              refreshAll();
+              toggleFontMenu(false);
+              if (fontTrigger && typeof fontTrigger.focus === 'function') {
+                fontTrigger.focus();
+              }
+            }
+          });
+        });
+
+        fontMenu.addEventListener('keydown', (e) => {
+          const opts = Array.from(fontMenu.querySelectorAll('.reader-font-option'));
+          const currentIdx = opts.indexOf(targetDoc.activeElement);
+          if (e.key === 'ArrowDown') {
+            if (typeof e.preventDefault === 'function') e.preventDefault();
+            const nextIdx = (currentIdx + 1) % opts.length;
+            if (opts[nextIdx] && typeof opts[nextIdx].focus === 'function') {
+              opts[nextIdx].focus();
+            }
+          } else if (e.key === 'ArrowUp') {
+            if (typeof e.preventDefault === 'function') e.preventDefault();
+            const prevIdx = (currentIdx - 1 + opts.length) % opts.length;
+            if (opts[prevIdx] && typeof opts[prevIdx].focus === 'function') {
+              opts[prevIdx].focus();
+            }
+          } else if (e.key === 'Escape') {
+            if (typeof e.preventDefault === 'function') e.preventDefault();
+            toggleFontMenu(false);
+            if (fontTrigger && typeof fontTrigger.focus === 'function') {
+              fontTrigger.focus();
+            }
+          }
+        });
+      }
+
+      if (typeof targetDoc.addEventListener === 'function') {
+        targetDoc.addEventListener('click', (e) => {
+          if (
+            fontDropdown &&
+            typeof fontDropdown.contains === 'function' &&
+            !fontDropdown.contains(e.target) &&
+            fontMenu &&
+            !fontMenu.classList.contains('hidden')
+          ) {
+            toggleFontMenu(false);
+          }
+        });
+      }
+
+      on('select-font-family', 'change', (e) => {
+        if (e && e.target && e.target.value) {
+          app.reader.setNovelFontFamily(e.target.value);
+          refreshAll();
+        }
       });
       on('btn-autoscroll', 'click', (e) => {
         const active = app.reader.toggleAutoScroll();
