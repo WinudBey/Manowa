@@ -327,5 +327,225 @@
   flex-shrink: 0;
 }
 
+/* ==========================================================================
+   OZEL OKUYUCU BOLUM SECIM LISTESI (CUSTOM CHAPTER DROPDOWN LISTBOX)
+   ========================================================================== */
+.reader-chapter-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.reader-chapter-dropdown-btn {
+  background: transparent;
+  border: none;
+  height: 28px;
+  padding: 0 0.65rem;
+  min-width: 130px;
+  max-width: 220px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  color: #f1f5f9;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border-radius: 6px;
+  transition: all 0.16s ease;
+  outline: none;
+  font-size: 0.88rem;
+  font-family: inherit;
+}
+
+.reader-chapter-dropdown-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.reader-chapter-dropdown-btn[aria-expanded="true"] {
+  background: rgba(249, 115, 22, 0.18);
+  color: var(--accent-primary);
+}
+
+.reader-chapter-dropdown-btn .ui-icon-chevron {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.reader-chapter-dropdown-btn[aria-expanded="true"] .ui-icon-chevron {
+  transform: rotate(180deg);
+}
+
+.reader-chapter-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  max-width: min(320px, calc(100vw - 2rem));
+  max-height: 400px;
+  background: rgba(18, 22, 34, 0.98);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: 0 16px 38px -4px rgba(0, 0, 0, 0.75), 0 0 1px 1px rgba(255, 255, 255, 0.08);
+  z-index: 1250;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  animation: chapterMenuFade 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reader-chapter-menu.hidden {
+  display: none !important;
+}
+
+@keyframes chapterMenuFade {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+.reader-chapter-search-wrap {
+  padding: 0.1rem 0.2rem 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.reader-chapter-filter-input {
+  width: 100%;
+  background: rgba(11, 14, 23, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.84rem;
+  color: #f1f5f9;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.reader-chapter-filter-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.25);
+}
+
+.reader-chapter-options-list {
+  max-height: 310px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-right: 0.15rem;
+}
+
+.reader-chapter-options-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.reader-chapter-options-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+
+.reader-chapter-options-list::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+.reader-chapter-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.55rem 0.8rem;
+  background: transparent;
+  color: #cbd5e1;
+  border: none;
+  border-radius: 7px;
+  font-size: 0.86rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.14s ease;
+  user-select: none;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.reader-chapter-option:hover,
+.reader-chapter-option:focus-visible {
+  background: rgba(249, 115, 22, 0.16);
+  color: #ffffff;
+  outline: none;
+}
+
+.reader-chapter-option.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.reader-chapter-option .chapter-option-text {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reader-chapter-option .ui-icon-check {
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+
+.reader-chapter-option.hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   MOBIL BOLUM SECIM LISTESI UYARLAMASI (RESPONSIVE CHAPTER DROPDOWN)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .reader-chapter-dropdown-btn {
+    height: 34px;
+    min-width: 0;
+    padding: 0 0.5rem;
+    gap: 0.35rem;
+    font-size: 0.84rem;
+  }
+  .reader-chapter-dropdown-btn .btn-label {
+    display: inline-block !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: clamp(80px, 34vw, 160px);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+  .reader-chapter-menu {
+    max-width: min(320px, calc(100vw - 1.5rem));
+  }
+}
+
+@media (max-width: 480px) {
+  .reader-chapter-dropdown-btn {
+    padding: 0 0.4rem;
+    gap: 0.25rem;
+  }
+  .reader-chapter-dropdown-btn .btn-label {
+    max-width: clamp(70px, 30vw, 130px);
+    font-size: 0.8rem;
+  }
+}
+
 
 

@@ -70,6 +70,17 @@
       if (viewName === 'generator') {
         return isPreview ? '#olusturucu' : '/?gorunum=olusturucu';
       }
+      if (viewName === 'page') {
+        if (isPreview) {
+          return (this.locationObj && this.locationObj.hash && this.locationObj.hash.startsWith('#sayfa'))
+            ? this.locationObj.hash
+            : '#sayfa';
+        }
+        if (this.locationObj && this.locationObj.pathname && this.locationObj.pathname.includes('/p/')) {
+          return this.locationObj.pathname + (this.locationObj.search || '');
+        }
+        return seriesId ? `/p/${seriesId}.html` : '/?gorunum=sayfa';
+      }
       if (viewName === 'series' && seriesId) {
         const series = catalog ? catalog.getSeriesById(seriesId) : null;
         if (series && series.url && !isPreview) {
@@ -184,6 +195,8 @@
           return { matched: true, view: 'history', seriesId: '', chapterId: '' };
         } else if (hashVal === 'olusturucu') {
           return { matched: true, view: 'generator', seriesId: '', chapterId: '' };
+        } else if (hashVal === 'sayfa' || hashVal.startsWith('sayfa/')) {
+          return { matched: true, view: 'page', seriesId: '', chapterId: '' };
         }
       }
       try {
@@ -204,6 +217,9 @@
         if (qGorunum === 'olusturucu') {
           return { matched: true, view: 'generator', seriesId: '', chapterId: '' };
         }
+        if (qGorunum === 'sayfa') {
+          return { matched: true, view: 'page', seriesId: '', chapterId: '' };
+        }
         if (qSeri && qBolum) {
           return { matched: true, view: 'reader', seriesId: qSeri, chapterId: qBolum };
         }
@@ -219,6 +235,18 @@
       const targetPath = extractPathname(href);
       if (targetPath.endsWith('/preview.html') || targetPath === '/' || targetPath === '') {
         return empty;
+      }
+      if (targetPath.includes('/p/')) {
+        return { matched: true, view: 'page', seriesId: '', chapterId: '' };
+      }
+      if (typeof document !== 'undefined') {
+        const metaPage = document.querySelector('meta[name="is-static-page"]');
+        if (metaPage && metaPage.getAttribute('content') === 'true') {
+          return { matched: true, view: 'page', seriesId: '', chapterId: '' };
+        }
+        if (document.getElementById('blogger-static-page-raw')) {
+          return { matched: true, view: 'page', seriesId: '', chapterId: '' };
+        }
       }
       for (const series of catalog.seriesList) {
         for (const ch of series.chapters || []) {

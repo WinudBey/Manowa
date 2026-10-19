@@ -5,37 +5,15 @@
  */
 (function (globalScope) {
   'use strict';
-  const RouterClass =
-    globalScope.RouterController ||
-    (typeof require === 'function' ? require('./router-controller').RouterController : null);
-  const UserLibraryClass =
-    globalScope.UserLibrary ||
-    (typeof require === 'function' ? require('./user-library').UserLibrary : null);
-  const HeroSliderClass =
-    globalScope.HeroSlider ||
-    (typeof require === 'function' ? require('./hero-slider').HeroSlider : null);
-  const SidebarClass =
-    globalScope.SidebarController ||
-    (typeof require === 'function' ? require('./sidebar-controller').SidebarController : null);
-  const SeriesPageClass =
-    globalScope.SeriesPageController ||
-    (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
-  const ThemeBridgeClass =
-    globalScope.BloggerThemeBridge ||
-    (typeof require === 'function'
-      ? require('./blogger-theme-bridge').BloggerThemeBridge
-      : null);
-  const SearchControllerClass =
-    globalScope.SearchController ||
-    (typeof require === 'function'
-      ? require('./search-controller').SearchController
-      : null);
-  const ReaderHudClass =
-    globalScope.ReaderHudController ||
-    (typeof require === 'function' ? require('./reader-hud').ReaderHudController : null);
-  const iconFn =
-    (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
-    (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
+  const RouterClass = globalScope.RouterController || (typeof require === 'function' ? require('./router-controller').RouterController : null);
+  const UserLibraryClass = globalScope.UserLibrary || (typeof require === 'function' ? require('./user-library').UserLibrary : null);
+  const HeroSliderClass = globalScope.HeroSlider || (typeof require === 'function' ? require('./hero-slider').HeroSlider : null);
+  const SidebarClass = globalScope.SidebarController || (typeof require === 'function' ? require('./sidebar-controller').SidebarController : null);
+  const SeriesPageClass = globalScope.SeriesPageController || (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
+  const ThemeBridgeClass = globalScope.BloggerThemeBridge || (typeof require === 'function' ? require('./blogger-theme-bridge').BloggerThemeBridge : null);
+  const SearchControllerClass = globalScope.SearchController || (typeof require === 'function' ? require('./search-controller').SearchController : null);
+  const ReaderHudClass = globalScope.ReaderHudController || (typeof require === 'function' ? require('./reader-hud').ReaderHudController : null);
+  const iconFn = (globalScope.ManowaIcons && globalScope.ManowaIcons.get) || (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
   /**
    * Tum tema gorunumlerini, Blogger URL entegrasyonunu ve dinamik veri akisini yoneten sinif.
    */
@@ -46,47 +24,21 @@
      */
     constructor(deps = {}) {
       this.logger = deps.logger || globalScope.ManowaLogger || null;
-      this.catalog =
-        deps.catalog ||
-        (globalScope.CatalogController ? new globalScope.CatalogController() : null);
-      this.reader =
-        deps.reader || (globalScope.ReadingEngine ? new globalScope.ReadingEngine() : null);
+      this.catalog = deps.catalog || (globalScope.CatalogController ? new globalScope.CatalogController() : null);
+      this.reader = deps.reader || (globalScope.ReadingEngine ? new globalScope.ReadingEngine() : null);
       const ResolvedReaderHud = globalScope.ReaderHudController || ReaderHudClass;
-      this.readerHud =
-        deps.readerHud ||
-        (ResolvedReaderHud ? new ResolvedReaderHud({ logger: this.logger }) : null);
-      this.disqus =
-        deps.disqus || (globalScope.DisqusLoader ? new globalScope.DisqusLoader() : null);
-      this.generator =
-        deps.generator || (globalScope.PostGenerator ? new globalScope.PostGenerator() : null);
-      this.library =
-        deps.library || (UserLibraryClass ? new UserLibraryClass({ logger: this.logger }) : null);
-      this.heroSlider =
-        deps.heroSlider || (HeroSliderClass ? new HeroSliderClass({ logger: this.logger }) : null);
-      this.sidebar =
-        deps.sidebar || (SidebarClass ? new SidebarClass({ logger: this.logger }) : null);
+      this.readerHud = deps.readerHud || (ResolvedReaderHud ? new ResolvedReaderHud({ logger: this.logger }) : null);
+      this.disqus = deps.disqus || (globalScope.DisqusLoader ? new globalScope.DisqusLoader() : null);
+      this.generator = deps.generator || (globalScope.PostGenerator ? new globalScope.PostGenerator() : null);
+      this.library = deps.library || (UserLibraryClass ? new UserLibraryClass({ logger: this.logger }) : null);
+      this.heroSlider = deps.heroSlider || (HeroSliderClass ? new HeroSliderClass({ logger: this.logger }) : null);
+      this.sidebar = deps.sidebar || (SidebarClass ? new SidebarClass({ logger: this.logger }) : null);
       const ResolvedSeriesPage = globalScope.SeriesPageController || SeriesPageClass;
-      this.seriesPage =
-        deps.seriesPage ||
-        (ResolvedSeriesPage ? new ResolvedSeriesPage({ logger: this.logger }) : null);
+      this.seriesPage = deps.seriesPage || (ResolvedSeriesPage ? new ResolvedSeriesPage({ logger: this.logger }) : null);
       const ResolvedThemeBridge = globalScope.BloggerThemeBridge || ThemeBridgeClass;
-      this.themeBridge =
-        deps.themeBridge ||
-        (ResolvedThemeBridge ? new ResolvedThemeBridge({ logger: this.logger }) : null);
-      this.feedLoader =
-        deps.feedLoader ||
-        (globalScope.BloggerFeedLoader
-          ? new globalScope.BloggerFeedLoader({ logger: this.logger })
-          : null);
-      this.router =
-        deps.router ||
-        (RouterClass
-          ? new RouterClass({
-              logger: this.logger,
-              historyObj: deps.historyObj,
-              locationObj: deps.locationObj
-            })
-          : null);
+      this.themeBridge = deps.themeBridge || (ResolvedThemeBridge ? new ResolvedThemeBridge({ logger: this.logger }) : null);
+      this.feedLoader = deps.feedLoader || (globalScope.BloggerFeedLoader ? new globalScope.BloggerFeedLoader({ logger: this.logger }) : null);
+      this.router = deps.router || (RouterClass ? new RouterClass({ logger: this.logger, historyObj: deps.historyObj, locationObj: deps.locationObj }) : null);
       this.siteBaseTitle = globalScope.MANOWA_SITE_TITLE || 'Manowa';
       this.currentView = 'catalog';
       this.commentsVisible = false;
@@ -94,26 +46,20 @@
       this.activeChapterId = '';
       this.chapterSortOrder = 'desc';
       const ResolvedSearchClass = globalScope.SearchController || SearchControllerClass;
-      this.searchController =
-        deps.searchController ||
-        (ResolvedSearchClass
-          ? new ResolvedSearchClass({
-              logger: this.logger,
-              getSeriesList: () => (this.catalog ? this.catalog.seriesList : []),
-              onSelect: (seriesId) => {
-                if (this.themeBridge) this.themeBridge.closeMobilePanels();
-                this.openSeriesDetail(seriesId);
-              },
-              onViewAll: (query) => {
-                if (this.themeBridge) this.themeBridge.closeMobilePanels();
-                if (this.catalog) {
-                  this.catalog.setSearchQuery(query);
-                }
-                this.switchToCatalogIfNeeded();
-                this.renderCatalogView();
-              }
-            })
-          : null);
+      this.searchController = deps.searchController || (ResolvedSearchClass ? new ResolvedSearchClass({
+        logger: this.logger,
+        getSeriesList: () => (this.catalog ? this.catalog.seriesList : []),
+        onSelect: (seriesId) => {
+          if (this.themeBridge) this.themeBridge.closeMobilePanels();
+          this.openSeriesDetail(seriesId);
+        },
+        onViewAll: (query) => {
+          if (this.themeBridge) this.themeBridge.closeMobilePanels();
+          if (this.catalog) this.catalog.setSearchQuery(query);
+          this.switchToCatalogIfNeeded();
+          this.renderCatalogView();
+        }
+      }) : null);
     }
     /**
      * Tarayici DOM baslatmasini, ust baslik entegrasyonunu ve dinamik Blogger veri cekimini calistirir.
@@ -306,6 +252,7 @@
         else if (resolved.view === 'bookmarks') this.openBookmarks(routeOpts);
         else if (resolved.view === 'history') this.openHistory(routeOpts);
         else if (resolved.view === 'generator') this.openGenerator(routeOpts);
+        else if (resolved.view === 'page') this.openPage(routeOpts);
         else return false;
         return true;
       }
@@ -329,6 +276,7 @@
         if (state.view === 'bookmarks') return this.openBookmarks(noHist);
         if (state.view === 'history') return this.openHistory(noHist);
         if (state.view === 'generator') return this.openGenerator(noHist);
+        if (state.view === 'page') return this.openPage(noHist);
         if (state.view === 'catalog') return this.openCatalog(noHist);
       }
       if (!this.handleUrlRouting(undefined, { updateHistory: false, openCatalogOnRoot: true })) {
@@ -336,7 +284,7 @@
       }
     }
     /**
-     * Aktif gorunumu degistirir ('catalog', 'series', 'reader', 'bookmarks', 'history', 'generator').
+     * Aktif gorunumu degistirir ('catalog', 'series', 'reader', 'bookmarks', 'history', 'generator', 'page').
      * Yorum alanini (#disqus-section) yalnizca 'series' ve 'reader' gorunumlerinde gosterir.
      * @param {string} viewName - Hedef gorunum.
      * @returns {void}
@@ -354,7 +302,8 @@
         reader: document.getElementById('view-reader'),
         bookmarks: document.getElementById('view-bookmarks'),
         history: document.getElementById('view-history'),
-        generator: document.getElementById('view-generator')
+        generator: document.getElementById('view-generator'),
+        page: document.getElementById('view-page')
       };
       Object.keys(views).forEach((key) => {
         if (views[key]) views[key].classList.toggle('hidden', key !== viewName);
@@ -370,7 +319,10 @@
       Object.keys(navMap).forEach((key) => {
         if (navMap[key]) navMap[key].classList.toggle('active', key === viewName);
       });
-      if (viewName !== 'reader' && this.reader) this.reader.stopAutoScroll();
+      if (viewName !== 'reader') {
+        if (this.reader) this.reader.stopAutoScroll();
+        if (document.body) document.body.removeAttribute('data-reader-mode');
+      }
       const scrollBtn = document.getElementById('btn-scroll-top');
       if (scrollBtn && scrollBtn.classList && viewName === 'reader') {
         scrollBtn.classList.add('hidden');
@@ -463,11 +415,33 @@
      */
     openGenerator(options = {}) {
       this.switchView('generator');
-      this.triggerGenerator('chapter');
+      if (this.themeBridge) this.themeBridge.switchGeneratorTab('series');
+      this.triggerGenerator('series');
       const targetUrl = this.computeTargetUrl('generator');
       this.syncBrowserHistory(
         { view: 'generator', seriesId: '', chapterId: '' },
         `Gönderi Oluşturucu - ${this.siteBaseTitle}`,
+        targetUrl,
+        options
+      );
+    }
+    /**
+     * Blogger Statik Sayfa gorunumunu acar ve icerigi yerlestirir.
+     * @param {Object} [options={}] - Gecmis secenekleri.
+     * @returns {void}
+     */
+    openPage(options = {}) {
+      this.switchView('page');
+      let pageTitleText = 'Sayfa';
+      if (typeof document !== 'undefined' && this.themeBridge) {
+        const info = this.themeBridge.renderStaticPage(document);
+        if (info && info.title) pageTitleText = info.title;
+      }
+      const pageTitle = `${pageTitleText} - ${this.siteBaseTitle}`;
+      const targetUrl = this.computeTargetUrl('page');
+      this.syncBrowserHistory(
+        { view: 'page', seriesId: '', chapterId: '' },
+        pageTitle,
         targetUrl,
         options
       );
@@ -624,11 +598,32 @@
       }
       const sortedAsc = this.catalog.getSortedChapters(series.id, 'asc');
       const currentChapterIdx = sortedAsc.findIndex((c) => c.id === chapter.id);
+      const currentChapterLabel = this.reader
+        ? this.reader.formatChapterSelectLabel(chapter)
+        : `Bölüm ${chapter.number}`;
+      const currentLabelEl = document.getElementById('reader-current-chapter-label');
+      if (currentLabelEl) currentLabelEl.textContent = currentChapterLabel;
+
       if (selectChapter) {
         selectChapter.innerHTML = sortedAsc
           .map((c) => {
             const label = this.reader ? this.reader.formatChapterSelectLabel(c) : `Bölüm ${c.number}`;
             return `<option value="${c.id}" ${c.id === chapter.id ? 'selected' : ''}>${label}</option>`;
+          })
+          .join('');
+        selectChapter.value = chapter.id;
+      }
+
+      const chapterOptionsList = document.getElementById('reader-chapter-options-list');
+      if (chapterOptionsList) {
+        chapterOptionsList.innerHTML = sortedAsc
+          .map((c) => {
+            const label = this.reader ? this.reader.formatChapterSelectLabel(c) : `Bölüm ${c.number}`;
+            const isSelected = c.id === chapter.id;
+            return `<button class="reader-chapter-option ${isSelected ? 'active' : ''}" data-chapter-id="${c.id}" role="option" aria-selected="${isSelected ? 'true' : 'false'}" type="button">
+              <span class="chapter-option-text">${label}</span>
+              ${isSelected ? `${iconFn('check')}` : ''}
+            </button>`;
           })
           .join('');
       }
@@ -788,6 +783,7 @@
         if (el) el.addEventListener(event, fn);
       };
       on('btn-gen-close', 'click', () => this.openCatalog());
+      on('btn-page-back', 'click', () => this.openCatalog());
       on('nav-generator', 'click', () => this.openGenerator());
       on('nav-bookmarks', 'click', () => this.openBookmarks());
       on('nav-history', 'click', () => this.openHistory());
@@ -809,21 +805,7 @@
           this.renderCatalogView();
         });
       }
-      on('select-catalog-sort', 'change', (e) => {
-        this.catalog.setSortOrder(e.target.value);
-        this.renderCatalogView();
-      });
-      const langGroup = document.getElementById('lang-filter-group');
-      if (langGroup) {
-        langGroup.addEventListener('click', (e) => {
-          const btn = e.target.closest('[data-lang]');
-          if (!btn) return;
-          langGroup.querySelectorAll('.filter-pill').forEach((b) => b.classList.remove('active'));
-          btn.classList.add('active');
-          this.catalog.setLanguageFilter(btn.getAttribute('data-lang'));
-          this.renderCatalogView();
-        });
-      }
+
       on('btn-theme-toggle', 'click', () => {
         if (this.themeBridge) {
           this.themeBridge.toggleThemeMode();
@@ -861,10 +843,40 @@
       });
       const connectBlog = async () => {
         const inp = document.getElementById('input-blog-origin');
-        if (inp && this.feedLoader && typeof this.feedLoader.setSavedBlogOrigin === 'function') {
-          inp.value = this.feedLoader.setSavedBlogOrigin(inp.value);
-          await this.loadDynamicData();
+        const btn = document.getElementById('btn-connect-blog');
+        if (!inp || !this.feedLoader) return;
+        const raw = String(inp.value || '').trim();
+        const origHtml = btn ? btn.innerHTML : '';
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = `<span class="btn-label">Bağlanıyor...</span>`;
+        }
+        try {
+          const norm = this.feedLoader.setSavedBlogOrigin(raw);
+          inp.value = norm;
+          if (!norm) {
+            if (this.catalog) this.catalog.setSeriesList(null);
+            this.updateHeroShowcase();
+            this.renderHomeSections();
+            this.renderCatalogView();
+            this.openCatalog();
+            this.renderDebugLogs();
+            if (btn) btn.innerHTML = `<span class="btn-label">Sıfırlandı</span>`;
+            setTimeout(() => { if (btn) { btn.disabled = false; btn.innerHTML = origHtml; } }, 1500);
+            return;
+          }
+          const loaded = await this.loadDynamicData();
           this.openCatalog();
+          this.renderDebugLogs();
+          if (btn) {
+            btn.innerHTML = `<span class="btn-label">${loaded > 0 ? `${loaded} Seri` : 'Seri Yok'}</span>`;
+            setTimeout(() => { if (btn) { btn.disabled = false; btn.innerHTML = origHtml; } }, 2200);
+          }
+        } catch (_err) {
+          if (btn) {
+            btn.innerHTML = `<span class="btn-label">Hata!</span>`;
+            setTimeout(() => { if (btn) { btn.disabled = false; btn.innerHTML = origHtml; } }, 2000);
+          }
         }
       };
       on('btn-connect-blog', 'click', connectBlog);
@@ -881,6 +893,18 @@
           );
           this.renderDebugLogs();
         }
+      });
+      on('btn-tab-gen-series', 'click', () => {
+        if (this.themeBridge) this.themeBridge.switchGeneratorTab('series');
+        this.triggerGenerator('series');
+      });
+      on('btn-tab-gen-chapter', 'click', () => {
+        if (this.themeBridge) this.themeBridge.switchGeneratorTab('chapter');
+        this.triggerGenerator('chapter');
+      });
+      on('gen-series-title', 'input', (e) => {
+        const inp = document.getElementById('gen-chapter-series-title');
+        if (inp && (!inp.value || inp.value === 'Örnek Seri')) inp.value = e.target.value;
       });
       on('btn-generate-series', 'click', () => this.triggerGenerator('series'));
       on('btn-generate-chapter', 'click', () => this.triggerGenerator('chapter'));

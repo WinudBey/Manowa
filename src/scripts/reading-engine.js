@@ -47,6 +47,15 @@
         this.fontLoader.setFont(this.novelFontFamily);
       }
       this.protectImages = options.protectImages !== undefined ? Boolean(options.protectImages) : true;
+      this.sliceMerger =
+        options.sliceMerger ||
+        (globalScope.SliceMerger ? new globalScope.SliceMerger({ logger: this.logger }) : null);
+      if (!this.sliceMerger && typeof require !== 'undefined') {
+        try {
+          const { SliceMerger } = require('./slice-merger');
+          if (SliceMerger) this.sliceMerger = new SliceMerger({ logger: this.logger });
+        } catch (_err) {}
+      }
       this.rawPages = [];
       this.pageGroups = [];
       this.pages = [];
@@ -124,54 +133,25 @@
 
     /**
      * Gorsel URL'sinden "01_01", "01_02", "02-01" gibi bolunmus sayfa grup anahtarini cikarir.
-     * Tekil dosya adlarinda (orn: "Kapak.webp", "p1.webp") null dondurur.
      * @param {string} rawUrl - Gorsel URL dizgesi.
-     * @returns {string|null} Mantiksal sayfa grup anahtari (orn: "page:1") veya null.
+     * @returns {string|null} Mantiksal sayfa grup anahtari veya null.
      */
     extractSliceGroupKey(rawUrl) {
-      const rawStr = String(rawUrl || '');
-      const cleanPath = rawStr.split(/[?#]/)[0];
-      const hashPath = rawStr.includes('#') ? rawStr.split('#').pop() : '';
-      const candidates = [cleanPath, hashPath, rawStr];
-
-      for (const candidate of candidates) {
-        const lastSegMatch = String(candidate || '').match(/([^/?#&]+)$/);
-        if (!lastSegMatch) continue;
-        let fileName = lastSegMatch[1];
-        try { fileName = decodeURIComponent(fileName); } catch (_err) {}
-        const baseName = fileName.replace(/\.(?:webp|jpe?g|png|gif|avif|bmp|svg)$/i, '').trim();
-        const sliceMatch =
-          baseName.match(/^(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)$/i) ||
-          baseName.match(/^(\d{2,})[-_](\d{2,})$/);
-        if (sliceMatch) return `page:${Number(sliceMatch[1])}`;
-      }
-      return null;
+      if (globalScope.SliceMerger) return globalScope.SliceMerger.extractSliceGroupKey(rawUrl);
+      const clean = String(rawUrl || '').split(/[?#]/)[0];
+      const match = clean.match(/(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)\.[a-z0-9]+$/i);
+      return match ? `page:${Number(match[1])}` : null;
     }
 
     /**
-     * "01_01, 01_02, 01_03" seklinde bolunerek yuklenmis gorsel URL listesini
-     * ardisik mantiksal tam sayfa gruplarina (Array<Array<string>>) donusturur.
-     * @param {Array<string>} [rawPages=[]] - Ham gorsel URL dizisi.
+     * Bolunmus gorsel URL listesini tam sayfa gruplarina donusturur.
+     * @param {Array<string>} [rawPages=[]] - Ham URL dizisi.
      * @returns {Array<Array<string>>} Gruplanmis mantiksal sayfa dilimleri.
      */
     groupSlicedPages(rawPages = []) {
-      if (!Array.isArray(rawPages) || rawPages.length === 0) return [];
-      const groups = [];
-      let currentGroup = [];
-      let currentKey = null;
-
-      rawPages.forEach((url) => {
-        const key = this.extractSliceGroupKey(url);
-        if (key && key === currentKey && currentGroup.length > 0) {
-          currentGroup.push(url);
-        } else {
-          currentGroup = [url];
-          currentKey = key;
-          groups.push(currentGroup);
-        }
-      });
-
-      return groups;
+      if (globalScope.SliceMerger) return globalScope.SliceMerger.groupSlicedPages(rawPages);
+      if (!Array.isArray(rawPages)) return [];
+      return rawPages.map((p) => [p]);
     }
 
     /**
@@ -652,9 +632,7 @@
      * @returns {Object} Seri bazli gecmis nesnesi.
      */
     getAllHistory() {
-      if (!this.storage) {
-        return {};
-      }
+      if (!this.storage) return {};
       try {
         const raw = this.storage.getItem(this.historyKey);
         return raw ? JSON.parse(raw) : {};
@@ -712,13 +690,9 @@
      * @returns {'next'|'prev'|'toggle-hud'|'none'} Yapilan islem.
      */
     handleViewportClick(clickRatioX) {
-      if (this.mode === 'novel') {
-        return 'none';
-      }
+      if (this.mode === 'novel') return 'none';
       const ratio = Number(clickRatioX);
-      if (Number.isNaN(ratio)) {
-        return 'none';
-      }
+      if (Number.isNaN(ratio)) return 'none';
       if (this.mode === 'webtoon') {
         this.toggleHud();
         return 'toggle-hud';
@@ -849,6 +823,27 @@
     }
 
     /**
+     * DOM icindeki tum stitched canvas elemanlarini birlestirir.
+     * @param {HTMLElement} [container] - Kapsayici DOM elemani.
+     * @returns {void}
+     */
+    stitchVisibleCanvases(container) {
+      if (!container || !this.sliceMerger || typeof container.querySelectorAll !== 'function') {
+        return;
+      }
+      const canvases = container.querySelectorAll('canvas.reader-stitched-canvas');
+      canvases.forEach((canvas) => {
+        const pageIdx = Number(canvas.getAttribute('data-page-index'));
+        if (!Number.isNaN(pageIdx)) {
+          const slices = this.getPageSlices(pageIdx);
+          if (Array.isArray(slices) && slices.length > 1) {
+            this.sliceMerger.stitchCanvas(canvas, slices);
+          }
+        }
+      });
+    }
+
+    /**
      * Okuma motoru goruntuleme alanini (viewport) aktif moda gore cizer.
      * @param {Document} [doc] - Hedef DOM belgesi.
      * @returns {void}
@@ -899,6 +894,9 @@
       }
       const state = this.getState();
       viewport.className = `reader-viewport mode-${state.mode} ${state.protectImages ? 'protect-images' : ''}`;
+      if (targetDoc && targetDoc.body) targetDoc.body.setAttribute('data-reader-mode', state.mode);
+      const wrapper = targetDoc && typeof targetDoc.getElementById === 'function' ? targetDoc.getElementById('reader-wrapper') : null;
+      if (wrapper) wrapper.setAttribute('data-reader-mode', state.mode);
       if (viewport.style && typeof viewport.style.setProperty === 'function') {
         viewport.style.setProperty('--reader-zoom', `${Math.round((state.zoom / 100) * 800)}px`);
         viewport.style.setProperty('--page-gap', `${state.gap}px`);
@@ -912,44 +910,35 @@
         if (this.fontLoader && targetDoc) {
           this.fontLoader.ensureGoogleFontLoaded(state.novelFontFamily, targetDoc);
         }
-      } else if (state.mode === 'double') {
-        const pageBlocks = state.visibleIndices
-          .map((idx) => {
-            const slices = this.getPageSlices(idx);
-            const sliceImgs = slices
+      } else if (state.mode === 'double' || state.mode === 'single') {
+        const renderBlock = (idx) => {
+          const slices = this.getPageSlices(idx);
+          if (slices.length > 1) {
+            const fallback = slices
               .map(
                 (src, sIdx) =>
-                  `<img class="reader-page-item" src="${src}" alt="Sayfa ${idx + 1}${slices.length > 1 ? ' Parça ' + (sIdx + 1) : ''}" />`
+                  `<img class="reader-page-item reader-slice-fallback" src="${src}" alt="Sayfa ${idx + 1} Parça ${sIdx + 1}" />`
               )
               .join('');
-            return `<div class="reader-logical-page" data-page-index="${idx}">${sliceImgs}</div>`;
-          })
-          .join('');
-        viewport.innerHTML = `<div class="double-page-grid">${pageBlocks}</div>`;
-      } else if (state.mode === 'single') {
-        const pageBlocks = state.visibleIndices
-          .map((idx) => {
-            const slices = this.getPageSlices(idx);
-            const sliceImgs = slices
-              .map(
-                (src, sIdx) =>
-                  `<img class="reader-page-item" src="${src}" alt="Sayfa ${idx + 1}${slices.length > 1 ? ' Parça ' + (sIdx + 1) : ''}" />`
-              )
-              .join('');
-            return `<div class="reader-logical-page" data-page-index="${idx}">${sliceImgs}</div>`;
-          })
-          .join('');
-        viewport.innerHTML = pageBlocks;
+            return `<div class="reader-logical-page" data-page-index="${idx}"><canvas class="reader-page-item reader-stitched-canvas" data-page-index="${idx}" aria-label="Sayfa ${idx + 1} (${slices.length} Parça)">${fallback}</canvas></div>`;
+          }
+          return `<div class="reader-logical-page" data-page-index="${idx}"><img class="reader-page-item" src="${slices[0] || ''}" alt="Sayfa ${idx + 1}" /></div>`;
+        };
+        const pageBlocks = state.visibleIndices.map(renderBlock).join('');
+        viewport.innerHTML =
+          state.mode === 'double' ? `<div class="double-page-grid">${pageBlocks}</div>` : pageBlocks;
+        this.stitchVisibleCanvases(viewport);
       } else {
         viewport.innerHTML = state.visibleIndices
           .map((idx) => {
             const slices = this.getPageSlices(idx);
-            return slices
+            const sliceImgs = slices
               .map(
                 (src, sIdx) =>
                   `<img class="reader-page-item" data-page-index="${idx}" data-slice-index="${sIdx}" src="${src}" alt="Sayfa ${idx + 1}" loading="lazy" />`
               )
               .join('');
+            return `<div class="reader-logical-page" data-page-index="${idx}">${sliceImgs}</div>`;
           })
           .join('');
       }
@@ -962,13 +951,13 @@
         seekbarSlider.min = '1';
         seekbarSlider.max = String(total);
         seekbarSlider.value = String(currPage);
-        if (typeof seekbarSlider.setAttribute === 'function') {
-          seekbarSlider.setAttribute('dir', state.direction === 'rtl' ? 'rtl' : 'ltr');
+        if (typeof seekbarSlider.setAttribute === 'function') seekbarSlider.setAttribute('dir', 'ltr');
+        const fill = total > 1 ? Math.round(((currPage - 1) / (total - 1)) * 100) : 0;
+        if (seekbarSlider.style && typeof seekbarSlider.style.setProperty === 'function') {
+          seekbarSlider.style.setProperty('--slider-fill', `${fill}%`);
         }
       }
-      if (miniPagePill) {
-        miniPagePill.textContent = `${currPage} / ${total}`;
-      }
+      if (miniPagePill) miniPagePill.textContent = `${currPage} / ${total}`;
       if (pageCounter) {
         if (state.mode === 'novel') {
           pageCounter.textContent = `Novel Metin (${state.novelFontSize || 105}%)`;

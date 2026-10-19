@@ -165,6 +165,7 @@ body {
     ]]></b:template-skin>
     <meta expr:content='data:skin.vars.disqus_shortname' id='manowa-disqus-meta' name='disqus-shortname'/>
     <meta expr:content='data:skin.vars.theme_default_mode' id='manowa-theme-mode-meta' name='theme-default-mode'/>
+    <meta expr:content='data:view.isPage ? &quot;true&quot; : &quot;false&quot;' id='manowa-is-page-meta' name='is-static-page'/>
   </head>
   <body>
     <header class='site-header'>
@@ -239,6 +240,15 @@ body {
         <b:section class='hidden' id='main-blog-section' name='Blog Kayıtları (Veri Kaynağı)' showaddelement='yes'>
           <b:widget id='Blog1' locked='true' title='Blog Kayıtları' type='Blog' version='2'>
             <b:includable id='main'>
+              <b:if cond='data:view.isPage'>
+                <div class='hidden' id='blogger-static-page-raw'>
+                  <b:loop values='data:posts' var='post'>
+                    <div class='static-post-data' expr:data-title='data:post.title'>
+                      <data:post.body/>
+                    </div>
+                  </b:loop>
+                </div>
+              </b:if>
               <div class='posts-wrapper hidden'>
                 <b:loop values='data:posts' var='post'>
                   <article class='post-entry' expr:data-post-id='data:post.id' expr:data-post-url='data:post.url'>

@@ -654,6 +654,77 @@ body {
   }
 }
 
+/* ==========================================================================
+   STATIK SAYFA (STATIC PAGE) STILLERI
+   ========================================================================== */
+
+.static-page-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin: 1.5rem auto 2.5rem auto;
+  max-width: 960px;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+.static-page-main-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 1.25rem 0;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border-color);
+  letter-spacing: -0.02em;
+}
+
+.static-page-content {
+  font-size: 1rem;
+  color: var(--text-primary);
+  overflow-wrap: break-word;
+}
+
+.static-page-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  margin: 1rem 0;
+}
+
+.static-page-content a {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.static-page-content a:hover {
+  color: var(--accent-hover);
+}
+
+.static-page-content h2,
+.static-page-content h3,
+.static-page-content h4 {
+  color: var(--text-primary);
+  margin: 1.5rem 0 0.75rem 0;
+}
+
+.static-page-content p {
+  margin: 0 0 1rem 0;
+}
+
+@media (max-width: 640px) {
+  .static-page-card {
+    padding: 1.25rem;
+    margin: 1rem auto;
+  }
+
+  .static-page-main-title {
+    font-size: 1.4rem;
+  }
+}
+
 /* === MODULE: styles/series-page.css === */
 /**
  * @fileoverview Baştan tasarlanan Seri Bilgileri Sayfası (#view-series) stilleri.
@@ -2621,7 +2692,36 @@ body[data-active-view="reader"] .reader-wrapper {
   margin-bottom: 0 !important;
   width: 100% !important;
   min-height: 100vh;
+  min-height: 100dvh;
+  display: flex !important;
+  flex-direction: column !important;
 }
+
+body[data-active-view="reader"] .reader-viewport {
+  flex: 1 0 auto !important;
+}
+
+body[data-active-view="reader"][data-reader-mode="single"],
+body[data-active-view="reader"][data-reader-mode="double"] {
+  overflow-y: hidden !important;
+  overscroll-behavior-y: none !important;
+  height: 100dvh !important;
+}
+
+body[data-active-view="reader"][data-reader-mode="single"] .reader-wrapper,
+body[data-active-view="reader"][data-reader-mode="double"] .reader-wrapper {
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+}
+
+body[data-active-view="reader"][data-reader-mode="single"] .reader-viewport,
+body[data-active-view="reader"][data-reader-mode="double"] .reader-viewport {
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
 
 body[data-active-view="reader"] .reader-sticky-header,
 body[data-active-view="reader"] .reader-progress-track {
@@ -2647,6 +2747,14 @@ body[data-active-view="reader"] .site-footer {
   }
 }
 
+body[data-active-view="reader"] .disqus-container:not(.reader-comments-visible) {
+  display: none !important;
+}
+
+body[data-active-view="reader"] #debug-log-panel {
+  display: none !important;
+}
+
 body[data-active-view="reader"] .disqus-container {
   max-width: 1000px;
   margin: 2rem auto 50vh auto;
@@ -2658,6 +2766,7 @@ body[data-active-view="reader"] .disqus-container {
 }
 
 body[data-active-view="reader"] .disqus-container.reader-comments-visible {
+  display: block !important;
   opacity: 1;
   transform: translateY(0);
   animation: readerCommentsSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -2789,6 +2898,62 @@ body[data-active-view="reader"] .disqus-container.reader-comments-visible {
   border-color: var(--accent-primary);
   background: var(--accent-primary);
   color: #ffffff;
+}
+
+/* ==========================================================================
+   TEMA GENELI LISTE KUTUSU (SELECT & LISTBOX) TEMA UYUM STANDARDI
+   ========================================================================== */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm, 8px);
+  padding: 0.55rem 2.2rem 0.55rem 0.8rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 14px 14px;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+select:hover {
+  border-color: rgba(249, 115, 22, 0.45);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+select:focus,
+select:focus-visible {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-glow, rgba(249, 115, 22, 0.2));
+  outline: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  border-color: var(--border-color);
+}
+
+select option,
+select optgroup {
+  background-color: #141824;
+  color: #f1f5f9;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+[data-theme="light"] select option,
+[data-theme="light"] select optgroup {
+  background-color: #ffffff;
+  color: #0f172a;
 }
 
 .site-main {
@@ -3135,24 +3300,10 @@ body[data-active-view="reader"] .scroll-top-btn {
   transition: background-color 0.25s ease;
 }
 
-.reader-wrapper.reader-bg-amoled {
-  background: #000000;
-  border-color: rgba(255, 255, 255, 0.06);
-}
-
-.reader-wrapper.reader-bg-dark {
-  background: #090b10;
-}
-
-.reader-wrapper.reader-bg-sepia {
-  background: #f4ecd8;
-  border-color: #d6c7a9;
-}
-
-.reader-wrapper.reader-bg-light {
-  background: #f8fafc;
-  border-color: #cbd5e1;
-}
+.reader-wrapper.reader-bg-amoled { background: #000000; border-color: rgba(255, 255, 255, 0.06); }
+.reader-wrapper.reader-bg-dark { background: #090b10; }
+.reader-wrapper.reader-bg-sepia { background: #f4ecd8; border-color: #d6c7a9; }
+.reader-wrapper.reader-bg-light { background: #f8fafc; border-color: #cbd5e1; }
 
 .reader-sticky-header {
   position: sticky;
@@ -3195,12 +3346,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   justify-content: space-between;
   gap: 0.65rem;
   flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.reader-toolbar::-webkit-scrollbar {
-  display: none;
+  overflow: visible;
 }
 
 .reader-title-group {
@@ -3232,11 +3378,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   transition: all 0.18s ease;
 }
 
-.reader-series-back-btn:hover {
-  background: var(--accent-primary);
-  border-color: var(--accent-primary);
-  color: #ffffff;
-}
+.reader-series-back-btn:hover { background: var(--accent-primary); border-color: var(--accent-primary); color: #ffffff; }
 
 .reader-chapter-name {
   font-size: 0.88rem;
@@ -3276,35 +3418,37 @@ body[data-active-view="reader"] .scroll-top-btn {
   transition: all 0.16s ease;
 }
 
-.reader-step-btn:hover:not(:disabled) {
-  background: var(--accent-primary);
-  color: #ffffff;
-}
+.reader-step-btn:hover:not(:disabled) { background: var(--accent-primary); color: #ffffff; }
 
-.reader-step-btn:disabled {
-  opacity: 0.32;
-  cursor: not-allowed;
-}
+.reader-step-btn:disabled { opacity: 0.32; cursor: not-allowed; }
 
 .reader-chapter-select {
-  background: transparent !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-color: transparent !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.55rem center !important;
+  background-size: 11px 11px !important;
   border: none !important;
+  border-radius: 6px !important;
   height: 28px !important;
-  padding: 0 0.65rem !important;
+  padding: 0 1.55rem 0 0.85rem !important;
   min-width: 138px;
   font-weight: 700;
   text-align: center;
-}
-
-.reader-chapter-select:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
-  color: #ffffff !important;
-}
-
-.reader-chapter-select option {
-  background: #141824;
+  cursor: pointer;
   color: #f1f5f9;
+  outline: none !important;
+  transition: all 0.16s ease;
 }
+
+.reader-chapter-select:hover { background-color: rgba(255, 255, 255, 0.08) !important; color: #ffffff !important; }
+
+.reader-chapter-select:focus-visible { box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.45) !important; }
+
+.reader-chapter-select option { background: #141824; color: #f1f5f9; padding: 6px 10px; }
 
 .reader-controls {
   display: flex;
@@ -3329,8 +3473,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   flex-shrink: 0;
 }
 
-.reader-control-cluster.hidden,
-.reader-footer-page-nav.hidden {
+.reader-control-cluster.hidden {
   display: none !important;
 }
 
@@ -3361,10 +3504,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   transition: all 0.16s ease;
 }
 
-.reader-pill-btn:hover {
-  background: var(--accent-primary);
-  color: #ffffff;
-}
+.reader-pill-btn:hover { background: var(--accent-primary); color: #ffffff; }
 
 .reader-pill-value {
   font-size: 0.76rem;
@@ -3390,15 +3530,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   cursor: pointer;
   transition: all 0.18s ease;
 }
-.reader-font-select {
-  border-radius: 999px;
-  max-width: 170px;
-  outline: none;
-}
-.reader-font-select option {
-  background: #141824;
-  color: #f1f5f9;
-}
+.reader-font-select { border-radius: 999px; max-width: 170px; outline: none; }
+.reader-font-select option { background: #141824; color: #f1f5f9; }
 
 .reader-select:hover,
 .reader-btn:hover,
@@ -3450,27 +3583,66 @@ body[data-active-view="reader"] .scroll-top-btn {
 
 .reader-viewport.mode-single,
 .reader-viewport.mode-double {
+  padding-bottom: 0 !important;
   cursor: pointer;
+  overflow: hidden !important;
+  touch-action: pan-x;
 }
 
-.reader-viewport.mode-single .reader-logical-page {
+.reader-viewport.mode-single .reader-logical-page,
+.reader-viewport.mode-double .reader-logical-page {
   width: 100%;
-  max-width: var(--reader-zoom);
+  height: 100%;
+  max-width: min(var(--reader-zoom), 100%);
+  max-height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0 !important;
+  margin: auto;
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+  line-height: 0;
+  font-size: 0;
 }
 
-.reader-viewport.mode-single .reader-page-item {
-  width: 100%;
-  max-width: var(--reader-zoom);
+.reader-viewport.mode-single .reader-page-item,
+.reader-viewport.mode-double .reader-page-item {
+  max-width: min(var(--reader-zoom), 100%);
+  max-height: 100%;
+  width: auto;
   height: auto;
+  object-fit: contain;
   display: block;
-  margin: 0;
+  margin: auto;
+}
+
+.reader-viewport.mode-double .reader-page-item {
+  max-width: 100%;
+}
+
+.reader-wrapper.hud-hidden .reader-viewport.mode-single .reader-page-item,
+.reader-wrapper.hud-hidden .reader-viewport.mode-double .reader-page-item {
+  max-height: calc(100dvh - 16px);
+}
+
+.reader-logical-page .reader-slice-fallback,
+.reader-logical-page img.reader-page-item:not(:only-child) {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  display: block !important;
+  vertical-align: top;
+  flex-shrink: 0;
+}
+
+.reader-page-item.reader-stitched-canvas {
+  background: transparent;
+  display: block;
+  margin: auto;
+  border-radius: 4px;
 }
 
 .reader-viewport.mode-double .double-page-grid {
@@ -3478,24 +3650,11 @@ body[data-active-view="reader"] .scroll-top-btn {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem;
   width: 100%;
+  height: 100%;
   max-width: calc(var(--reader-zoom) * 1.6);
-  align-items: start;
-}
-
-.reader-viewport.mode-double .reader-logical-page {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.reader-viewport.mode-double .reader-page-item {
-  width: 100%;
-  height: auto;
-  display: block;
-  margin: 0;
+  max-height: 100%;
+  align-items: center;
+  justify-items: center;
 }
 
 .reader-viewport.mode-novel {
@@ -3515,9 +3674,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   line-height: 1.85;
 }
 
-.novel-content-box p,
-.novel-content-box .orv_line {
-  margin-bottom: 1.15rem;
+.novel-content-box p {
+  margin-bottom: 1.25rem;
 }
 
 .novel-content-box .orv_title h1 {
@@ -3633,10 +3791,6 @@ body[data-active-view="reader"] .scroll-top-btn {
   box-sizing: border-box;
 }
 
-.mihon-setting-group.hidden {
-  display: none !important;
-}
-
 .mihon-setting-label {
   font-size: 0.78rem;
   font-weight: 800;
@@ -3701,11 +3855,13 @@ body[data-active-view="reader"] .scroll-top-btn {
 }
 
 .mihon-mini-page-pill {
-  position: sticky;
-  bottom: 0.65rem;
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 105;
   width: fit-content;
-  margin: 0 auto 0.5rem;
+  margin: 0;
   padding: 0.32rem 0.85rem;
   border-radius: 999px;
   background: rgba(11, 13, 19, 0.85);
@@ -3719,6 +3875,7 @@ body[data-active-view="reader"] .scroll-top-btn {
 }
 .reader-wrapper.hud-hidden .mihon-mini-page-pill {
   opacity: 0.9;
+  pointer-events: auto;
 }
 .reader-floating-autoscroll {
   position: fixed;
@@ -3743,9 +3900,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   background: var(--accent-hover);
   border-color: rgba(255, 255, 255, 0.45);
 }
-.reader-wrapper.hud-hidden .reader-floating-autoscroll {
-  bottom: 1.5rem;
-}
+
 .mihon-chapter-end-card {
   max-width: 760px;
   margin: 1.25rem auto;
@@ -3786,9 +3941,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   border-color: var(--accent-primary) !important;
   color: #ffffff !important;
 }
-.mihon-end-next-cta:hover {
-  background: var(--accent-hover) !important;
-}
+
 .reader-footer-bar {
   position: sticky;
   bottom: 0;
@@ -3851,16 +4004,28 @@ body[data-active-view="reader"] .scroll-top-btn {
   text-align: center;
 }
 .mihon-page-slider {
+  --slider-fill: 0%;
   flex: 1 1 auto;
   min-width: 0;
   appearance: none;
   -webkit-appearance: none;
   height: 7px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
+  background: linear-gradient(
+    to right,
+    var(--accent-primary) 0%,
+    var(--accent-primary) var(--slider-fill, 0%),
+    rgba(255, 255, 255, 0.18) var(--slider-fill, 0%),
+    rgba(255, 255, 255, 0.18) 100%
+  );
   outline: none;
   cursor: pointer;
   accent-color: var(--accent-primary);
+}
+.mihon-page-slider::-moz-range-progress {
+  background: var(--accent-primary);
+  height: 7px;
+  border-radius: 999px;
 }
 .mihon-page-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -3889,9 +4054,11 @@ body[data-active-view="reader"] .scroll-top-btn {
   margin-left: 0;
   justify-content: flex-end;
 }
+
 .reader-footer-page-nav {
   display: none !important;
 }
+
 .page-counter-pill {
   background: #1f2330;
   color: #f8fafc;
@@ -3901,9 +4068,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   font-weight: 700;
   border: 1px solid #2e3446;
 }
-.novel-content-box.font-serif {
-  font-family: Georgia, 'Times New Roman', Times, serif;
-}
+.novel-content-box.font-serif { font-family: Georgia, 'Times New Roman', Times, serif; }
 
 @media (max-width: 768px) {
   .reader-wrapper {
@@ -3912,10 +4077,6 @@ body[data-active-view="reader"] .scroll-top-btn {
     border-left: none;
     border-right: none;
     margin-bottom: 0.75rem;
-  }
-  .reader-sticky-header,
-  .reader-progress-track {
-    border-radius: 0;
   }
   .reader-settings-sheet {
     width: min(95vw, 680px);
@@ -3932,8 +4093,10 @@ body[data-active-view="reader"] .scroll-top-btn {
     flex-wrap: nowrap;
     justify-content: space-between;
   }
-  .reader-title-group {
-    flex: 0 0 auto;
+  .reader-toolbar .reader-title-group {
+    flex: 1 1 0% !important;
+    min-width: 0;
+    justify-content: flex-start;
   }
   .reader-series-back-btn {
     width: 42px;
@@ -3946,7 +4109,7 @@ body[data-active-view="reader"] .scroll-top-btn {
   }
   .reader-chapter-switcher {
     height: 42px;
-    flex-shrink: 0;
+    flex: 0 0 auto;
     margin: 0 auto;
     padding: 0.18rem;
     gap: 0.15rem;
@@ -3963,9 +4126,10 @@ body[data-active-view="reader"] .scroll-top-btn {
     font-size: 0.88rem;
     padding: 0 0.45rem !important;
   }
-  .reader-controls {
+  .reader-toolbar .reader-controls {
     width: auto;
-    flex: 0 0 auto;
+    flex: 1 1 0% !important;
+    min-width: 0;
     justify-content: flex-end;
     gap: 0.4rem;
     padding-top: 0;
@@ -3993,9 +4157,7 @@ body[data-active-view="reader"] .scroll-top-btn {
     padding: 0;
     border-radius: 999px;
   }
-  .reader-wrapper.hud-hidden .reader-floating-autoscroll {
-    bottom: 1rem;
-  }
+
   .reader-pill-btn {
     height: 34px;
     min-width: 34px;
@@ -4013,19 +4175,20 @@ body[data-active-view="reader"] .scroll-top-btn {
   .reader-viewport {
     min-height: 0;
     padding: 0;
+    padding-bottom: 4.5rem;
     justify-content: flex-start;
   }
   .reader-viewport.mode-webtoon {
     padding: 0;
+    padding-bottom: 4.5rem;
   }
-  .reader-viewport.mode-single .reader-logical-page {
-    border-radius: 0;
-  }
-  .reader-viewport.mode-double .double-page-grid {
-    grid-template-columns: 1fr;
+  .reader-viewport.mode-single,
+  .reader-viewport.mode-double {
+    padding: 0;
+    padding-bottom: 0 !important;
   }
   .reader-viewport.mode-novel {
-    padding: 0.85rem 0.65rem;
+    padding: 0.85rem 0.65rem 4.5rem;
   }
   .novel-content-box {
     padding: 1.2rem 1rem;
@@ -4038,27 +4201,36 @@ body[data-active-view="reader"] .scroll-top-btn {
   }
   .reader-footer-bar {
     border-radius: 0;
-    padding: 0.6rem 0.65rem;
-    gap: 0.45rem;
+    padding: 0.55rem 0.65rem max(0.55rem, env(safe-area-inset-bottom, 0px)) 0.65rem;
+    gap: 0.5rem;
   }
   .mihon-prev-dock {
-    flex: 1 1 0%;
-    min-width: 0;
+    flex: 0 0 auto;
+    min-width: 42px;
   }
   .mihon-seekbar-row {
+    flex: 1 1 auto;
+    width: auto;
+    max-width: none;
+    min-width: 0;
     gap: 0.45rem;
-    width: clamp(140px, 46vw, 650px);
+    margin: 0;
   }
   .mihon-seekbar-pill {
     height: 44px;
+    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
     padding: 0 0.75rem;
     gap: 0.55rem;
   }
   .mihon-seekbar-num {
-    font-size: 0.9rem;
-    min-width: 24px;
+    font-size: 0.88rem;
+    min-width: 22px;
   }
   .mihon-page-slider {
+    flex: 1 1 auto;
+    min-width: 0;
     height: 8px;
   }
   .mihon-page-slider::-webkit-slider-thumb {
@@ -4067,8 +4239,8 @@ body[data-active-view="reader"] .scroll-top-btn {
   }
   .mihon-action-dock {
     flex-wrap: nowrap;
-    flex: 1 1 0%;
-    min-width: 0;
+    flex: 0 0 auto;
+    min-width: 42px;
     justify-content: flex-end;
     gap: 0.4rem;
     margin-left: 0;
@@ -4078,18 +4250,9 @@ body[data-active-view="reader"] .scroll-top-btn {
     margin-left: 0;
     gap: 0.4rem;
   }
-  .reader-footer-bar .reader-btn {
-    height: 44px;
-    min-width: 44px;
-    padding: 0 0.7rem;
-  }
-  .page-counter-pill {
-    height: 40px;
-    display: inline-flex;
-    align-items: center;
-    padding: 0 0.75rem;
-    font-size: 0.86rem;
-  }
+  .reader-footer-bar .reader-btn { height: 44px; width: 44px; min-width: 44px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; }
+  .reader-footer-bar .ui-icon { width: 16px; height: 16px; }
+  .page-counter-pill { height: 40px; display: inline-flex; align-items: center; padding: 0 0.75rem; font-size: 0.86rem; }
 }
 
 @media (max-width: 480px) {
@@ -4097,20 +4260,13 @@ body[data-active-view="reader"] .scroll-top-btn {
     min-width: 92px;
     font-size: 0.84rem;
   }
-  .reader-footer-bar .reader-btn {
-    height: 42px;
-    min-width: 42px;
-    padding: 0 0.65rem;
-    font-size: 0.84rem;
+  .reader-footer-bar {
+    padding: 0.45rem 0.55rem max(0.55rem, env(safe-area-inset-bottom, 0px)) 0.55rem;
+    gap: 0.35rem;
   }
-  .mihon-seekbar-pill {
-    height: 42px;
-    padding: 0 0.65rem;
-  }
-  .page-counter-pill {
-    padding: 0 0.65rem;
-    font-size: 0.84rem;
-  }
+  .reader-footer-bar .reader-btn { height: 42px; width: 42px; min-width: 42px; padding: 0; font-size: 0.84rem; }
+  .mihon-seekbar-pill { height: 42px; padding: 0 0.65rem; }
+  .page-counter-pill { padding: 0 0.65rem; font-size: 0.84rem; }
 }
 
 /* === MODULE: styles/reader-novel.css === */
@@ -4443,6 +4599,226 @@ body[data-active-view="reader"] .scroll-top-btn {
   flex-shrink: 0;
 }
 
+/* ==========================================================================
+   OZEL OKUYUCU BOLUM SECIM LISTESI (CUSTOM CHAPTER DROPDOWN LISTBOX)
+   ========================================================================== */
+.reader-chapter-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.reader-chapter-dropdown-btn {
+  background: transparent;
+  border: none;
+  height: 28px;
+  padding: 0 0.65rem;
+  min-width: 130px;
+  max-width: 220px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  color: #f1f5f9;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border-radius: 6px;
+  transition: all 0.16s ease;
+  outline: none;
+  font-size: 0.88rem;
+  font-family: inherit;
+}
+
+.reader-chapter-dropdown-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.reader-chapter-dropdown-btn[aria-expanded="true"] {
+  background: rgba(249, 115, 22, 0.18);
+  color: var(--accent-primary);
+}
+
+.reader-chapter-dropdown-btn .ui-icon-chevron {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.reader-chapter-dropdown-btn[aria-expanded="true"] .ui-icon-chevron {
+  transform: rotate(180deg);
+}
+
+.reader-chapter-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  max-width: min(320px, calc(100vw - 2rem));
+  max-height: 400px;
+  background: rgba(18, 22, 34, 0.98);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: 0 16px 38px -4px rgba(0, 0, 0, 0.75), 0 0 1px 1px rgba(255, 255, 255, 0.08);
+  z-index: 1250;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  animation: chapterMenuFade 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reader-chapter-menu.hidden {
+  display: none !important;
+}
+
+@keyframes chapterMenuFade {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+.reader-chapter-search-wrap {
+  padding: 0.1rem 0.2rem 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.reader-chapter-filter-input {
+  width: 100%;
+  background: rgba(11, 14, 23, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.84rem;
+  color: #f1f5f9;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.reader-chapter-filter-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.25);
+}
+
+.reader-chapter-options-list {
+  max-height: 310px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-right: 0.15rem;
+}
+
+.reader-chapter-options-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.reader-chapter-options-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+
+.reader-chapter-options-list::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+.reader-chapter-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.55rem 0.8rem;
+  background: transparent;
+  color: #cbd5e1;
+  border: none;
+  border-radius: 7px;
+  font-size: 0.86rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.14s ease;
+  user-select: none;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.reader-chapter-option:hover,
+.reader-chapter-option:focus-visible {
+  background: rgba(249, 115, 22, 0.16);
+  color: #ffffff;
+  outline: none;
+}
+
+.reader-chapter-option.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.reader-chapter-option .chapter-option-text {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reader-chapter-option .ui-icon-check {
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+
+.reader-chapter-option.hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   MOBIL BOLUM SECIM LISTESI UYARLAMASI (RESPONSIVE CHAPTER DROPDOWN)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .reader-chapter-dropdown-btn {
+    height: 34px;
+    min-width: 0;
+    padding: 0 0.5rem;
+    gap: 0.35rem;
+    font-size: 0.84rem;
+  }
+  .reader-chapter-dropdown-btn .btn-label {
+    display: inline-block !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: clamp(80px, 34vw, 160px);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+  .reader-chapter-menu {
+    max-width: min(320px, calc(100vw - 1.5rem));
+  }
+}
+
+@media (max-width: 480px) {
+  .reader-chapter-dropdown-btn {
+    padding: 0 0.4rem;
+    gap: 0.25rem;
+  }
+  .reader-chapter-dropdown-btn .btn-label {
+    max-width: clamp(70px, 30vw, 130px);
+    font-size: 0.8rem;
+  }
+}
+
 /* === BLOGGER THEME DESIGNER VARIABLE BINDINGS === */
 :root {
   --bg-primary: $(body.background.color);
@@ -4551,6 +4927,7 @@ body {
     ]]></b:template-skin>
     <meta expr:content='data:skin.vars.disqus_shortname' id='manowa-disqus-meta' name='disqus-shortname'/>
     <meta expr:content='data:skin.vars.theme_default_mode' id='manowa-theme-mode-meta' name='theme-default-mode'/>
+    <meta expr:content='data:view.isPage ? &quot;true&quot; : &quot;false&quot;' id='manowa-is-page-meta' name='is-static-page'/>
   </head>
   <body>
     <header class='site-header'>
@@ -4797,7 +5174,20 @@ body {
 
         <div class="reader-chapter-switcher">
           <button aria-label="Önceki Bölüm" class="reader-step-btn" id="btn-top-prev-chapter" title="Önceki Bölüm" type="button">‹</button>
-          <select class="reader-select reader-chapter-select" id="select-chapter" title="Bölüm Seç"></select>
+          <div class="reader-chapter-dropdown" id="reader-chapter-dropdown">
+            <button aria-controls="reader-chapter-menu" aria-expanded="false" aria-haspopup="listbox" aria-label="Bölüm Seçimi" class="reader-chapter-dropdown-btn" id="btn-chapter-dropdown" title="Bölüm Seç" type="button">
+              <span class="btn-label" id="reader-current-chapter-label">Bölüm Seç</span>
+              <svg aria-hidden="true" class="ui-icon ui-icon-chevron" fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div aria-label="Bölüm Listesi" class="reader-chapter-menu hidden" id="reader-chapter-menu" role="listbox" tabindex="-1">
+              <div class="reader-chapter-search-wrap">
+                <input autocomplete="off" class="reader-chapter-filter-input" id="input-chapter-filter" placeholder="Bölüm ara..." type="search" />
+              </div>
+              <div class="reader-chapter-options-list" id="reader-chapter-options-list"></div>
+            </div>
+            <!-- Geriye donuk form ve test uyumlulugu icin gizli select -->
+            <select aria-hidden="true" class="reader-select reader-chapter-select sr-only-select" id="select-chapter" tabindex="-1" title="Bölüm Seç"></select>
+          </div>
           <button aria-label="Sonraki Bölüm" class="reader-step-btn" id="btn-top-next-chapter" title="Sonraki Bölüm" type="button">›</button>
         </div>
 
@@ -5008,6 +5398,28 @@ body {
   <div class="chapter-grid" id="history-list-grid"></div>
 </section>
 
+<!-- GORUNUM 6: BLOGGER STATIK SAYFA (HAKKIMIZDA, ILETISIM, GONDERI OLUSTURUCU VB.) -->
+<section class="hidden" id="view-page">
+  <div class="series-nav-bar">
+    <a class="icon-btn" data-action="catalog" href="/" id="btn-page-back" title="Kataloğa Dön">
+      <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      <span class="btn-label">Kataloğa Dön</span>
+    </a>
+    <nav aria-label="Sayfa Konumu" class="breadcrumb-trail">
+      <a class="breadcrumb-link" data-action="catalog" href="/">
+        <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="btn-label">Ana Sayfa</span>
+      </a>
+      <span>›</span>
+      <span id="page-breadcrumb-title">Sayfa</span>
+    </nav>
+  </div>
+  <article class="static-page-card" id="static-page-card">
+    <h1 class="static-page-main-title" id="static-page-title">Sayfa Başlığı</h1>
+    <div class="static-page-content" id="static-page-body"></div>
+  </article>
+</section>
+
 
 
 <!-- ORTAK DISQUS YORUM ENTEGRASYONU ALANI -->
@@ -5028,6 +5440,15 @@ body {
         <b:section class='hidden' id='main-blog-section' name='Blog Kayıtları (Veri Kaynağı)' showaddelement='yes'>
           <b:widget id='Blog1' locked='true' title='Blog Kayıtları' type='Blog' version='2'>
             <b:includable id='main'>
+              <b:if cond='data:view.isPage'>
+                <div class='hidden' id='blogger-static-page-raw'>
+                  <b:loop values='data:posts' var='post'>
+                    <div class='static-post-data' expr:data-title='data:post.title'>
+                      <data:post.body/>
+                    </div>
+                  </b:loop>
+                </div>
+              </b:if>
               <div class='posts-wrapper hidden'>
                 <b:loop values='data:posts' var='post'>
                   <article class='post-entry' expr:data-post-id='data:post.id' expr:data-post-url='data:post.url'>
@@ -5643,12 +6064,14 @@ body {
     normalizeBlogOrigin(rawUrl) {
       const trimmed = String(rawUrl || '').trim();
       if (!trimmed) return '';
-      const withProto = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+      const withDomain =
+        !trimmed.includes('.') && !trimmed.includes('/') ? `${trimmed}.blogspot.com` : trimmed;
+      const withProto = /^https?:\/\//i.test(withDomain) ? withDomain : `https://${withDomain}`;
       try {
         const parsed = new URL(withProto);
         return parsed.origin;
       } catch (_err) {
-        return trimmed.replace(/\/+$/, '');
+        return withDomain.replace(/\/+$/, '');
       }
     }
     /**
@@ -5915,15 +6338,18 @@ body {
         const postUrl = post.url || '';
         const isSeriesPost =
           catsLower.includes('seri') ||
+          catsLower.includes('series') ||
           html.includes('manowa-series-post') ||
           html.includes('actual-series-tag') ||
           /\[Slug:/i.test(html);
         const isChapterPost =
-          catsLower.includes('bölüm') ||
-          catsLower.includes('bolum') ||
+          catsLower.some((c) => ['bölüm', 'bolum', 'chapter', 'ch'].includes(c)) ||
           html.includes('manowa-chapter-post') ||
-          (!isSeriesPost && /b[öo]l[üu]m\s*\d+/i.test(title));
-        if (isSeriesPost && !catsLower.includes('bölüm')) {
+          (!isSeriesPost &&
+            (/b[öo]l[üu]m\s*\d+/i.test(title) ||
+              /\bch(?:apter)?\.?\s*\d+/i.test(title) ||
+              /\b\d+\s*$/i.test(title)));
+        if (isSeriesPost && !catsLower.some((c) => ['bölüm', 'bolum', 'chapter', 'ch'].includes(c))) {
           const tagFromHtml = this.extractSeriesTagFromHtml(html);
           const seriesTag = tagFromHtml || title;
           const seriesId = toSlug(seriesTag);
@@ -5963,27 +6389,67 @@ body {
       });
       chapterItems.forEach((chPost) => {
         const htmlSeriesTag = this.extractSeriesTagFromHtml(chPost.html);
-        const matchingExistingCat = chPost.categories.find((c) => seriesMap.has(toSlug(c)));
-        const nonGenericLabel = chPost.categories.find((c) => {
-          const lower = String(c).toLowerCase();
-          if (['bölüm', 'bolum', 'seri'].includes(lower)) return false;
-          if (KNOWN_TYPES.some((t) => t.toLowerCase() === lower)) return false;
-          if (KNOWN_STATUSES.some((s) => s.toLowerCase() === lower)) return false;
-          return true;
-        });
-        const inferredSeriesTitle =
-          htmlSeriesTag ||
-          matchingExistingCat ||
-          nonGenericLabel ||
-          this.inferSeriesNameFromChapterTitle(chPost.title) ||
-          'Genel Seri';
-        const seriesId = toSlug(inferredSeriesTitle);
+        const titleInferredName = this.inferSeriesNameFromChapterTitle(chPost.title);
+        const titleInferredSlug = toSlug(titleInferredName);
+
+        let targetSeriesId = '';
+        if (htmlSeriesTag && seriesMap.has(toSlug(htmlSeriesTag))) {
+          targetSeriesId = toSlug(htmlSeriesTag);
+        }
+        if (!targetSeriesId && titleInferredSlug && seriesMap.has(titleInferredSlug)) {
+          targetSeriesId = titleInferredSlug;
+        }
+        if (!targetSeriesId) {
+          for (const cat of chPost.categories) {
+            const catSlug = toSlug(cat);
+            if (seriesMap.has(catSlug)) {
+              targetSeriesId = catSlug;
+              break;
+            }
+            for (const [sId, sObj] of seriesMap.entries()) {
+              const sTitleLower = sObj.title.toLowerCase();
+              const catLower = cat.toLowerCase();
+              if (sTitleLower === catLower || sId.includes(catSlug) || catSlug.includes(sId)) {
+                targetSeriesId = sId;
+                break;
+              }
+            }
+            if (targetSeriesId) break;
+          }
+        }
+        if (!targetSeriesId) {
+          for (const [sId, sObj] of seriesMap.entries()) {
+            if (chPost.title.toLowerCase().startsWith(sObj.title.toLowerCase())) {
+              targetSeriesId = sId;
+              break;
+            }
+          }
+        }
+
+        let inferredTitle = '';
+        if (targetSeriesId && seriesMap.has(targetSeriesId)) {
+          inferredTitle = seriesMap.get(targetSeriesId).title;
+        } else {
+          const nonGenericCat = chPost.categories.find((c) => {
+            const lower = String(c).toLowerCase();
+            if (['bölüm', 'bolum', 'chapter', 'ch', 'seri', 'series', 'ep', 'episode'].includes(lower)) {
+              return false;
+            }
+            if (KNOWN_TYPES.some((t) => t.toLowerCase() === lower)) return false;
+            if (KNOWN_STATUSES.some((s) => s.toLowerCase() === lower)) return false;
+            return true;
+          });
+          inferredTitle = nonGenericCat || titleInferredName || 'Genel Seri';
+          targetSeriesId = toSlug(inferredTitle);
+        }
+
+        const seriesId = targetSeriesId;
         if (!seriesMap.has(seriesId)) {
           const imgs = this.extractImages(chPost.html);
           const isNovelChapter = detectNovelChapter(chPost.html, imgs, '');
           seriesMap.set(seriesId, {
             id: seriesId,
-            title: inferredSeriesTitle,
+            title: inferredTitle,
             altTitle: '',
             author: '',
             artist: '',
@@ -5997,7 +6463,7 @@ body {
             rating: '9.5',
             genres: ['Genel'],
             cover: imgs[0] || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak',
-            synopsis: `${inferredSeriesTitle} çeviri bölümleri.`,
+            synopsis: `${inferredTitle} çeviri bölümleri.`,
             url: '',
             publishedDate: chPost.publishedDate,
             chapters: []
@@ -6181,38 +6647,55 @@ body {
      */
     async fetchDynamicCatalog(feedUrl = '/feeds/posts/default?alt=json&max-results=500') {
       const savedOrigin = this.getSavedBlogOrigin();
-      const isFileProtocol =
-        typeof location !== 'undefined' && location.protocol === 'file:' && feedUrl.startsWith('/');
-      if (this.fetchFn && !isFileProtocol && !savedOrigin) {
+      const resolvedOrigin =
+        savedOrigin ||
+        (typeof location !== 'undefined' && location.origin && location.origin.startsWith('http')
+          ? location.origin
+          : '');
+      const isBrowser = typeof window !== 'undefined' && typeof location !== 'undefined';
+      const isFileProtocol = isBrowser && location.protocol === 'file:';
+      const isCrossOrigin =
+        isBrowser &&
+        (isFileProtocol || (resolvedOrigin && location.origin !== resolvedOrigin));
+
+      // Eger yerel dosya (file://) ise ve herhangi bir blog adresi belirtilmemisse DOM veya varsayilan icerigi don
+      if (isFileProtocol && !resolvedOrigin) {
+        return this.parseDomEntries();
+      }
+
+      // Tarayici uzerinde farkli origin veya yerel onizleme (file://) ise CORS hatasini engellemek icin dogrudan JSONP kullan
+      if (isCrossOrigin && typeof document !== 'undefined' && resolvedOrigin) {
+        const jsonpSeries = await this.fetchViaJsonp(resolvedOrigin);
+        if (jsonpSeries.length > 0) {
+          return jsonpSeries;
+        }
+      }
+
+      if (this.fetchFn) {
+        const targetUrl = resolvedOrigin
+          ? `${resolvedOrigin}/feeds/posts/default?alt=json&max-results=500`
+          : feedUrl;
         try {
-          this._log('debug', 'Blogger JSON Feed istegi gonderiliyor.', { feedUrl });
-          const response = await this.fetchFn(feedUrl);
-          if (!response || !response.ok) {
-            throw new Error(`HTTP ${response ? response.status : 'NO_RESPONSE'}`);
-          }
-          const json = await response.json();
-          const seriesList = this.parseBloggerFeedJson(json);
-          if (seriesList.length > 0) {
-            this._log('info', 'Blogger JSON Feed basariyla yuklendi.', { count: seriesList.length });
-            return seriesList;
+          this._log('debug', 'Blogger JSON Feed istegi gonderiliyor.', { targetUrl });
+          const response = await this.fetchFn(targetUrl);
+          if (response && response.ok) {
+            const json = await response.json();
+            const seriesList = this.parseBloggerFeedJson(json);
+            if (seriesList.length > 0) {
+              this._log('info', 'Blogger JSON Feed basariyla yuklendi.', { count: seriesList.length });
+              return seriesList;
+            }
           }
         } catch (err) {
-          this._log('warn', 'Blogger JSON Feed alinamadi, yedek yontemler deneniyor.', {
+          this._log('warn', 'Blogger JSON Feed fetch alinamadi, JSONP deneniyor.', {
             error: err.message
           });
         }
       }
-      if (typeof document !== 'undefined') {
-        const origin =
-          savedOrigin ||
-          (typeof location !== 'undefined' && location.origin && location.origin.startsWith('http')
-            ? location.origin
-            : '');
-        if (origin) {
-          const jsonpSeries = await this.fetchViaJsonp(origin);
-          if (jsonpSeries.length > 0) {
-            return jsonpSeries;
-          }
+      if (typeof document !== 'undefined' && resolvedOrigin) {
+        const jsonpSeries = await this.fetchViaJsonp(resolvedOrigin);
+        if (jsonpSeries.length > 0) {
+          return jsonpSeries;
         }
       }
       return this.parseDomEntries();
@@ -6333,6 +6816,28 @@ body {
               createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 1, '#ea580c'),
               createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 2, '#c2410c')
             ]
+          },
+          {
+            id: 'golge-hukumdari-bolum-2',
+            number: 2,
+            title: 'Gölge Hükümdarı Bölüm 2',
+            date: '2026-09-27',
+            translatorNote: '',
+            pages: [
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 2', 1, '#ea580c'),
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 2', 2, '#c2410c')
+            ]
+          },
+          {
+            id: 'golge-hukumdari-bolum-3',
+            number: 3,
+            title: 'Gölge Hükümdarı Bölüm 3',
+            date: '2026-09-28',
+            translatorNote: '',
+            pages: [
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 3', 1, '#ea580c'),
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 3', 2, '#c2410c')
+            ]
           }
         ]
       },
@@ -6412,6 +6917,11 @@ body {
       if (Array.isArray(newSeriesList)) {
         this.seriesList = newSeriesList.slice();
         this._log('info', 'Katalog dinamik seri listesiyle guncellendi.', {
+          count: this.seriesList.length
+        });
+      } else if (newSeriesList === null) {
+        this.seriesList = getDefaultCatalog();
+        this._log('info', 'Katalog varsayilan serilerle sifirlandi.', {
           count: this.seriesList.length
         });
       }
@@ -8731,6 +9241,224 @@ body {
   }
 })(typeof window !== 'undefined' ? window : globalThis);
 
+/* === MODULE: scripts/slice-merger.js === */
+/**
+ * @fileoverview Coklu parcalara (dilimlere) bolunmus Manga sayfalarini
+ * tek bir HTML5 Canvas uzerinde kesintisiz birlestiren ve onbellege alan modul.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  /**
+   * Bolunmus sayfa dilimlerini tek bir Canvas uzerinde birlestiren sinif.
+   */
+  class SliceMerger {
+    /**
+     * SliceMerger nesnesini baslatir.
+     * @param {Object} [options={}] - Yapilandirma secenekleri.
+     * @param {Object} [options.logger=null] - Loglama nesnesi.
+     */
+    constructor(options = {}) {
+      this.logger = options.logger || null;
+      this.cache = new Map();
+      this.inProgress = new Map();
+    }
+
+    /**
+     * Ic loglama yardimcisi.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Log mesaji.
+     * @param {Object|null} [meta=null] - Ek veri.
+     * @returns {void}
+     */
+    _log(level, msg, meta = null) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+
+    /**
+     * Gorsel URL'sinden "01_01", "01_02", "02-01" gibi bolunmus sayfa grup anahtarini cikarir.
+     * @param {string} rawUrl - Gorsel URL dizgesi.
+     * @returns {string|null} Mantiksal sayfa grup anahtari veya null.
+     */
+    static extractSliceGroupKey(rawUrl) {
+      const rawStr = String(rawUrl || '');
+      const cleanPath = rawStr.split(/[?#]/)[0];
+      const hashPath = rawStr.includes('#') ? rawStr.split('#').pop() : '';
+      const candidates = [cleanPath, hashPath, rawStr];
+
+      for (const candidate of candidates) {
+        const lastSegMatch = String(candidate || '').match(/([^/?#&]+)$/);
+        if (!lastSegMatch) continue;
+        let fileName = lastSegMatch[1];
+        try { fileName = decodeURIComponent(fileName); } catch (_err) {}
+        const baseName = fileName.replace(/\.(?:webp|jpe?g|png|gif|avif|bmp|svg)$/i, '').trim();
+        const sliceMatch =
+          baseName.match(/^(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)$/i) ||
+          baseName.match(/^(\d{2,})[-_](\d{2,})$/);
+        if (sliceMatch) return `page:${Number(sliceMatch[1])}`;
+      }
+      return null;
+    }
+
+    /**
+     * Ham URL listesini ardisik mantiksal tam sayfa gruplarina donusturur.
+     * @param {Array<string>} [rawPages=[]] - Ham URL dizisi.
+     * @returns {Array<Array<string>>} Gruplanmis sayfa dilimleri.
+     */
+    static groupSlicedPages(rawPages = []) {
+      if (!Array.isArray(rawPages) || rawPages.length === 0) return [];
+      const groups = [];
+      let currentGroup = [];
+      let currentKey = null;
+
+      rawPages.forEach((url) => {
+        const key = SliceMerger.extractSliceGroupKey(url);
+        if (key && key === currentKey && currentGroup.length > 0) {
+          currentGroup.push(url);
+        } else {
+          currentGroup = [url];
+          currentKey = key;
+          groups.push(currentGroup);
+        }
+      });
+
+      return groups;
+    }
+
+    /**
+     * Dilim URL dizisinden onbellek anahtari olusturur.
+     * @param {Array<string>} sliceUrls - Gorsel dilim URL dizisi.
+     * @returns {string} Onbellek anahtari.
+     */
+    getCacheKey(sliceUrls) {
+      if (!Array.isArray(sliceUrls)) return '';
+      return sliceUrls.join('|');
+    }
+
+    /**
+     * Tek bir gorseli yukler.
+     * @param {string} url - Gorsel URL'si.
+     * @returns {Promise<HTMLImageElement>} Yuklenen Image nesnesi.
+     */
+    loadImage(url) {
+      return new Promise((resolve, reject) => {
+        if (typeof Image === 'undefined') {
+          return reject(new Error('Image constructor bulunamadi (Node ortami)'));
+        }
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => resolve(img);
+        img.onerror = () => {
+          if (img.crossOrigin) {
+            const fallbackImg = new Image();
+            fallbackImg.onload = () => resolve(fallbackImg);
+            fallbackImg.onerror = () => reject(new Error(`Gorsel yuklenemedi: ${url}`));
+            fallbackImg.src = url;
+          } else {
+            reject(new Error(`Gorsel yuklenemedi: ${url}`));
+          }
+        };
+        img.src = url;
+      });
+    }
+
+    /**
+     * Verilen tum dilimleri paralel yukler ve birlesik boyutlari hesaplar.
+     * @param {Array<string>} sliceUrls - Dilim URL dizisi.
+     * @returns {Promise<{ images: Array<HTMLImageElement>, width: number, height: number }>}
+     */
+    async loadAllSlices(sliceUrls) {
+      const images = await Promise.all(sliceUrls.map((url) => this.loadImage(url)));
+      let maxWidth = 0;
+      let totalHeight = 0;
+
+      for (const img of images) {
+        const w = img.naturalWidth || img.width || 800;
+        const h = img.naturalHeight || img.height || 600;
+        if (w > maxWidth) maxWidth = w;
+        totalHeight += h;
+      }
+
+      return {
+        images,
+        width: Math.max(1, maxWidth),
+        height: Math.max(1, totalHeight)
+      };
+    }
+
+    /**
+     * DOM uzerindeki canvas elemanina dilimleri cizer.
+     * @param {HTMLCanvasElement} canvas - Hedef canvas elemani.
+     * @param {Array<string>} sliceUrls - Birlestirilecek dilim URL dizisi.
+     * @returns {Promise<boolean>} Basarili ise true.
+     */
+    async stitchCanvas(canvas, sliceUrls) {
+      if (!canvas || !Array.isArray(sliceUrls) || sliceUrls.length === 0) {
+        return false;
+      }
+      if (typeof canvas.getContext !== 'function') {
+        return false;
+      }
+
+      const cacheKey = this.getCacheKey(sliceUrls);
+      this._log('debug', 'Parca birlestirme baslatildi', {
+        sliceCount: sliceUrls.length,
+        cacheKey
+      });
+
+      try {
+        let loadPromise = this.inProgress.get(cacheKey);
+        if (!loadPromise) {
+          loadPromise = this.loadAllSlices(sliceUrls);
+          this.inProgress.set(cacheKey, loadPromise);
+        }
+
+        const data = await loadPromise;
+        this.inProgress.delete(cacheKey);
+
+        canvas.width = data.width;
+        canvas.height = data.height;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return false;
+
+        let currentY = 0;
+        for (const img of data.images) {
+          const imgW = img.naturalWidth || img.width || data.width;
+          const imgH = img.naturalHeight || img.height || 0;
+          const offsetX = Math.max(0, Math.round((data.width - imgW) / 2));
+          ctx.drawImage(img, offsetX, currentY, imgW, imgH);
+          currentY += imgH;
+        }
+
+        canvas.setAttribute('data-stitched', 'true');
+        canvas.classList.add('stitched-ready');
+        this._log('info', 'Parcalar basariyla birlestirildi', {
+          width: data.width,
+          height: data.height,
+          sliceCount: sliceUrls.length
+        });
+        return true;
+      } catch (err) {
+        this.inProgress.delete(cacheKey);
+        this._log('warn', 'Parca birlestirme basarisiz oldu, fallback devrede', {
+          error: err.message
+        });
+        return false;
+      }
+    }
+  }
+
+  globalScope.SliceMerger = SliceMerger;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { SliceMerger };
+  }
+})(typeof window !== 'undefined' ? window : global);
+
 /* === MODULE: scripts/reading-engine.js === */
 /**
  * @fileoverview Cok modlu okuma motoru (Webtoon, Tek Sayfa, Cift Sayfa ve Novel) sinifi.
@@ -8781,6 +9509,15 @@ body {
         this.fontLoader.setFont(this.novelFontFamily);
       }
       this.protectImages = options.protectImages !== undefined ? Boolean(options.protectImages) : true;
+      this.sliceMerger =
+        options.sliceMerger ||
+        (globalScope.SliceMerger ? new globalScope.SliceMerger({ logger: this.logger }) : null);
+      if (!this.sliceMerger && typeof require !== 'undefined') {
+        try {
+          const { SliceMerger } = require('./slice-merger');
+          if (SliceMerger) this.sliceMerger = new SliceMerger({ logger: this.logger });
+        } catch (_err) {}
+      }
       this.rawPages = [];
       this.pageGroups = [];
       this.pages = [];
@@ -8858,54 +9595,25 @@ body {
 
     /**
      * Gorsel URL'sinden "01_01", "01_02", "02-01" gibi bolunmus sayfa grup anahtarini cikarir.
-     * Tekil dosya adlarinda (orn: "Kapak.webp", "p1.webp") null dondurur.
      * @param {string} rawUrl - Gorsel URL dizgesi.
-     * @returns {string|null} Mantiksal sayfa grup anahtari (orn: "page:1") veya null.
+     * @returns {string|null} Mantiksal sayfa grup anahtari veya null.
      */
     extractSliceGroupKey(rawUrl) {
-      const rawStr = String(rawUrl || '');
-      const cleanPath = rawStr.split(/[?#]/)[0];
-      const hashPath = rawStr.includes('#') ? rawStr.split('#').pop() : '';
-      const candidates = [cleanPath, hashPath, rawStr];
-
-      for (const candidate of candidates) {
-        const lastSegMatch = String(candidate || '').match(/([^/?#&]+)$/);
-        if (!lastSegMatch) continue;
-        let fileName = lastSegMatch[1];
-        try { fileName = decodeURIComponent(fileName); } catch (_err) {}
-        const baseName = fileName.replace(/\.(?:webp|jpe?g|png|gif|avif|bmp|svg)$/i, '').trim();
-        const sliceMatch =
-          baseName.match(/^(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)$/i) ||
-          baseName.match(/^(\d{2,})[-_](\d{2,})$/);
-        if (sliceMatch) return `page:${Number(sliceMatch[1])}`;
-      }
-      return null;
+      if (globalScope.SliceMerger) return globalScope.SliceMerger.extractSliceGroupKey(rawUrl);
+      const clean = String(rawUrl || '').split(/[?#]/)[0];
+      const match = clean.match(/(?:sayfa[_-]?|page[_-]?|p)?(\d+)[_](\d+)\.[a-z0-9]+$/i);
+      return match ? `page:${Number(match[1])}` : null;
     }
 
     /**
-     * "01_01, 01_02, 01_03" seklinde bolunerek yuklenmis gorsel URL listesini
-     * ardisik mantiksal tam sayfa gruplarina (Array<Array<string>>) donusturur.
-     * @param {Array<string>} [rawPages=[]] - Ham gorsel URL dizisi.
+     * Bolunmus gorsel URL listesini tam sayfa gruplarina donusturur.
+     * @param {Array<string>} [rawPages=[]] - Ham URL dizisi.
      * @returns {Array<Array<string>>} Gruplanmis mantiksal sayfa dilimleri.
      */
     groupSlicedPages(rawPages = []) {
-      if (!Array.isArray(rawPages) || rawPages.length === 0) return [];
-      const groups = [];
-      let currentGroup = [];
-      let currentKey = null;
-
-      rawPages.forEach((url) => {
-        const key = this.extractSliceGroupKey(url);
-        if (key && key === currentKey && currentGroup.length > 0) {
-          currentGroup.push(url);
-        } else {
-          currentGroup = [url];
-          currentKey = key;
-          groups.push(currentGroup);
-        }
-      });
-
-      return groups;
+      if (globalScope.SliceMerger) return globalScope.SliceMerger.groupSlicedPages(rawPages);
+      if (!Array.isArray(rawPages)) return [];
+      return rawPages.map((p) => [p]);
     }
 
     /**
@@ -9386,9 +10094,7 @@ body {
      * @returns {Object} Seri bazli gecmis nesnesi.
      */
     getAllHistory() {
-      if (!this.storage) {
-        return {};
-      }
+      if (!this.storage) return {};
       try {
         const raw = this.storage.getItem(this.historyKey);
         return raw ? JSON.parse(raw) : {};
@@ -9446,13 +10152,9 @@ body {
      * @returns {'next'|'prev'|'toggle-hud'|'none'} Yapilan islem.
      */
     handleViewportClick(clickRatioX) {
-      if (this.mode === 'novel') {
-        return 'none';
-      }
+      if (this.mode === 'novel') return 'none';
       const ratio = Number(clickRatioX);
-      if (Number.isNaN(ratio)) {
-        return 'none';
-      }
+      if (Number.isNaN(ratio)) return 'none';
       if (this.mode === 'webtoon') {
         this.toggleHud();
         return 'toggle-hud';
@@ -9583,6 +10285,27 @@ body {
     }
 
     /**
+     * DOM icindeki tum stitched canvas elemanlarini birlestirir.
+     * @param {HTMLElement} [container] - Kapsayici DOM elemani.
+     * @returns {void}
+     */
+    stitchVisibleCanvases(container) {
+      if (!container || !this.sliceMerger || typeof container.querySelectorAll !== 'function') {
+        return;
+      }
+      const canvases = container.querySelectorAll('canvas.reader-stitched-canvas');
+      canvases.forEach((canvas) => {
+        const pageIdx = Number(canvas.getAttribute('data-page-index'));
+        if (!Number.isNaN(pageIdx)) {
+          const slices = this.getPageSlices(pageIdx);
+          if (Array.isArray(slices) && slices.length > 1) {
+            this.sliceMerger.stitchCanvas(canvas, slices);
+          }
+        }
+      });
+    }
+
+    /**
      * Okuma motoru goruntuleme alanini (viewport) aktif moda gore cizer.
      * @param {Document} [doc] - Hedef DOM belgesi.
      * @returns {void}
@@ -9633,6 +10356,9 @@ body {
       }
       const state = this.getState();
       viewport.className = `reader-viewport mode-${state.mode} ${state.protectImages ? 'protect-images' : ''}`;
+      if (targetDoc && targetDoc.body) targetDoc.body.setAttribute('data-reader-mode', state.mode);
+      const wrapper = targetDoc && typeof targetDoc.getElementById === 'function' ? targetDoc.getElementById('reader-wrapper') : null;
+      if (wrapper) wrapper.setAttribute('data-reader-mode', state.mode);
       if (viewport.style && typeof viewport.style.setProperty === 'function') {
         viewport.style.setProperty('--reader-zoom', `${Math.round((state.zoom / 100) * 800)}px`);
         viewport.style.setProperty('--page-gap', `${state.gap}px`);
@@ -9646,44 +10372,35 @@ body {
         if (this.fontLoader && targetDoc) {
           this.fontLoader.ensureGoogleFontLoaded(state.novelFontFamily, targetDoc);
         }
-      } else if (state.mode === 'double') {
-        const pageBlocks = state.visibleIndices
-          .map((idx) => {
-            const slices = this.getPageSlices(idx);
-            const sliceImgs = slices
+      } else if (state.mode === 'double' || state.mode === 'single') {
+        const renderBlock = (idx) => {
+          const slices = this.getPageSlices(idx);
+          if (slices.length > 1) {
+            const fallback = slices
               .map(
                 (src, sIdx) =>
-                  `<img class="reader-page-item" src="${src}" alt="Sayfa ${idx + 1}${slices.length > 1 ? ' Parça ' + (sIdx + 1) : ''}" />`
+                  `<img class="reader-page-item reader-slice-fallback" src="${src}" alt="Sayfa ${idx + 1} Parça ${sIdx + 1}" />`
               )
               .join('');
-            return `<div class="reader-logical-page" data-page-index="${idx}">${sliceImgs}</div>`;
-          })
-          .join('');
-        viewport.innerHTML = `<div class="double-page-grid">${pageBlocks}</div>`;
-      } else if (state.mode === 'single') {
-        const pageBlocks = state.visibleIndices
-          .map((idx) => {
-            const slices = this.getPageSlices(idx);
-            const sliceImgs = slices
-              .map(
-                (src, sIdx) =>
-                  `<img class="reader-page-item" src="${src}" alt="Sayfa ${idx + 1}${slices.length > 1 ? ' Parça ' + (sIdx + 1) : ''}" />`
-              )
-              .join('');
-            return `<div class="reader-logical-page" data-page-index="${idx}">${sliceImgs}</div>`;
-          })
-          .join('');
-        viewport.innerHTML = pageBlocks;
+            return `<div class="reader-logical-page" data-page-index="${idx}"><canvas class="reader-page-item reader-stitched-canvas" data-page-index="${idx}" aria-label="Sayfa ${idx + 1} (${slices.length} Parça)">${fallback}</canvas></div>`;
+          }
+          return `<div class="reader-logical-page" data-page-index="${idx}"><img class="reader-page-item" src="${slices[0] || ''}" alt="Sayfa ${idx + 1}" /></div>`;
+        };
+        const pageBlocks = state.visibleIndices.map(renderBlock).join('');
+        viewport.innerHTML =
+          state.mode === 'double' ? `<div class="double-page-grid">${pageBlocks}</div>` : pageBlocks;
+        this.stitchVisibleCanvases(viewport);
       } else {
         viewport.innerHTML = state.visibleIndices
           .map((idx) => {
             const slices = this.getPageSlices(idx);
-            return slices
+            const sliceImgs = slices
               .map(
                 (src, sIdx) =>
                   `<img class="reader-page-item" data-page-index="${idx}" data-slice-index="${sIdx}" src="${src}" alt="Sayfa ${idx + 1}" loading="lazy" />`
               )
               .join('');
+            return `<div class="reader-logical-page" data-page-index="${idx}">${sliceImgs}</div>`;
           })
           .join('');
       }
@@ -9696,13 +10413,13 @@ body {
         seekbarSlider.min = '1';
         seekbarSlider.max = String(total);
         seekbarSlider.value = String(currPage);
-        if (typeof seekbarSlider.setAttribute === 'function') {
-          seekbarSlider.setAttribute('dir', state.direction === 'rtl' ? 'rtl' : 'ltr');
+        if (typeof seekbarSlider.setAttribute === 'function') seekbarSlider.setAttribute('dir', 'ltr');
+        const fill = total > 1 ? Math.round(((currPage - 1) / (total - 1)) * 100) : 0;
+        if (seekbarSlider.style && typeof seekbarSlider.style.setProperty === 'function') {
+          seekbarSlider.style.setProperty('--slider-fill', `${fill}%`);
         }
       }
-      if (miniPagePill) {
-        miniPagePill.textContent = `${currPage} / ${total}`;
-      }
+      if (miniPagePill) miniPagePill.textContent = `${currPage} / ${total}`;
       if (pageCounter) {
         if (state.mode === 'novel') {
           pageCounter.textContent = `Novel Metin (${state.novelFontSize || 105}%)`;
@@ -9799,6 +10516,10 @@ body {
             topBtn.setAttribute('aria-expanded', String(this.settingsOpen));
           }
         }
+        const chapterMenu = targetDoc.getElementById('reader-chapter-menu');
+        const chapterBtn = targetDoc.getElementById('btn-chapter-dropdown');
+        if (chapterMenu && chapterMenu.classList) chapterMenu.classList.add('hidden');
+        if (chapterBtn && typeof chapterBtn.setAttribute === 'function') chapterBtn.setAttribute('aria-expanded', 'false');
         if (!this.settingsOpen) {
           const fontMenu = targetDoc.getElementById('reader-font-menu');
           const fontBtn = targetDoc.getElementById('btn-font-family');
@@ -9990,10 +10711,15 @@ body {
           const currEl = targetDoc.getElementById('seekbar-current-page');
           const miniEl = targetDoc.getElementById('reader-mini-page-pill');
           const progEl = targetDoc.getElementById('reader-progress-bar');
+          const seekbarSlider = targetDoc.getElementById('reader-page-slider');
           const total = Math.max(1, reader.pages.length);
           if (currEl) currEl.textContent = String(idx + 1);
           if (miniEl) miniEl.textContent = `${idx + 1} / ${total}`;
           if (progEl && progEl.style) progEl.style.width = `${reader.getProgressPercent()}%`;
+          if (seekbarSlider && seekbarSlider.style && typeof seekbarSlider.style.setProperty === 'function') {
+            const fill = total > 1 ? Math.round((idx / (total - 1)) * 100) : 0;
+            seekbarSlider.style.setProperty('--slider-fill', `${fill}%`);
+          }
           if (viewport && typeof viewport.querySelector === 'function') {
             const imgEl = viewport.querySelector(`[data-page-index="${idx}"]`);
             if (imgEl && typeof imgEl.scrollIntoView === 'function') {
@@ -10057,7 +10783,13 @@ body {
         const miniPill = targetDoc.getElementById('reader-mini-page-pill');
         const progressBar = targetDoc.getElementById('reader-progress-bar');
         if (seekbarCurr) seekbarCurr.textContent = String(currPage);
-        if (seekbarSlider) seekbarSlider.value = String(currPage);
+        if (seekbarSlider) {
+          seekbarSlider.value = String(currPage);
+          const fill = total > 1 ? Math.round(((currPage - 1) / (total - 1)) * 100) : 0;
+          if (seekbarSlider.style && typeof seekbarSlider.style.setProperty === 'function') {
+            seekbarSlider.style.setProperty('--slider-fill', `${fill}%`);
+          }
+        }
         if (miniPill) miniPill.textContent = `${currPage} / ${total}`;
         if (progressBar && progressBar.style) {
           progressBar.style.width = `${reader.getProgressPercent()}%`;
@@ -10110,10 +10842,12 @@ body {
       if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
       const endCard = targetDoc.getElementById('reader-chapter-end-card');
       const disqusSec = targetDoc.getElementById('disqus-section');
-      if (!endCard || !disqusSec || !disqusSec.classList) return;
+      if (endCard.classList && endCard.classList.contains('hidden')) return;
+      if (typeof endCard.offsetHeight === 'number' && endCard.offsetHeight === 0) return;
 
       if (typeof endCard.getBoundingClientRect === 'function') {
         const rect = endCard.getBoundingClientRect();
+        if (rect.height === 0) return;
         const winHeight =
           (typeof globalScope.innerHeight === 'number' && globalScope.innerHeight) || 720;
         if (rect.top <= winHeight + 150) {
@@ -10152,6 +10886,70 @@ body {
       };
 
       on('select-chapter', 'change', (e) => app.openReader(app.activeSeriesId, e.target.value));
+
+      const chapterTrigger = targetDoc.getElementById('btn-chapter-dropdown');
+      const chapterMenu = targetDoc.getElementById('reader-chapter-menu');
+      const chapterFilterInput = targetDoc.getElementById('input-chapter-filter');
+      const chapterDropdown = targetDoc.getElementById('reader-chapter-dropdown');
+
+      const toggleChapterMenu = (forceOpen) => {
+        if (!chapterMenu || !chapterTrigger) return;
+        const isHidden = chapterMenu.classList.contains('hidden');
+        const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : isHidden;
+        chapterMenu.classList.toggle('hidden', !shouldOpen);
+        chapterTrigger.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        if (shouldOpen) {
+          if (chapterFilterInput) {
+            chapterFilterInput.value = '';
+            chapterMenu.querySelectorAll('.reader-chapter-option').forEach((opt) => opt.classList.remove('hidden'));
+            setTimeout(() => {
+              if (typeof chapterFilterInput.focus === 'function') {
+                chapterFilterInput.focus({ preventScroll: true });
+              }
+            }, 60);
+          }
+          const activeOpt = chapterMenu.querySelector('.reader-chapter-option.active');
+          const optionsList = targetDoc.getElementById('reader-chapter-options-list');
+          if (activeOpt && optionsList) {
+            optionsList.scrollTop = Math.max(0, activeOpt.offsetTop - optionsList.offsetTop - 30);
+          }
+        }
+      };
+
+      on('btn-chapter-dropdown', 'click', (e) => {
+        if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+        toggleChapterMenu();
+      });
+
+      if (chapterFilterInput) {
+        chapterFilterInput.addEventListener('input', (e) => {
+          const q = String(e.target.value || '').trim().toLowerCase();
+          chapterMenu.querySelectorAll('.reader-chapter-option').forEach((opt) => {
+            const matches = !q || (opt.textContent || '').toLowerCase().includes(q);
+            opt.classList.toggle('hidden', !matches);
+          });
+        });
+        chapterFilterInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            toggleChapterMenu(false);
+            if (chapterTrigger && typeof chapterTrigger.focus === 'function') chapterTrigger.focus();
+          }
+        });
+      }
+
+      if (chapterMenu) {
+        chapterMenu.addEventListener('click', (e) => {
+          const opt = e.target.closest('.reader-chapter-option');
+          if (!opt) return;
+          if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+          const chapterId = opt.getAttribute('data-chapter-id');
+          if (chapterId && app && typeof app.openReader === 'function') {
+            app.openReader(app.activeSeriesId, chapterId);
+            toggleChapterMenu(false);
+          }
+        });
+      }
+
       on('select-mode', 'change', (e) => {
         app.reader.setMode(e.target.value);
         refreshAll();
@@ -10259,6 +11057,15 @@ body {
           ) {
             toggleFontMenu(false);
           }
+          if (
+            chapterDropdown &&
+            typeof chapterDropdown.contains === 'function' &&
+            !chapterDropdown.contains(e.target) &&
+            chapterMenu &&
+            !chapterMenu.classList.contains('hidden')
+          ) {
+            toggleChapterMenu(false);
+          }
         });
       }
 
@@ -10314,6 +11121,13 @@ body {
         refreshAll();
       });
       on('reader-page-slider', 'input', (e) => {
+        const slider = e.target;
+        const total = Math.max(1, (app.reader && app.reader.pages && app.reader.pages.length) || Number(slider.max) || 1);
+        const curr = Number(slider.value) || 1;
+        const fill = total > 1 ? Math.round(((curr - 1) / (total - 1)) * 100) : 0;
+        if (slider.style && typeof slider.style.setProperty === 'function') {
+          slider.style.setProperty('--slider-fill', `${fill}%`);
+        }
         this.handleSeekbarChange(app.reader, e.target.value, targetDoc);
       });
 
@@ -10350,7 +11164,13 @@ body {
           const endObserver = new globalScope.IntersectionObserver(
             (entries) => {
               entries.forEach((entry) => {
-                if (entry.isIntersecting && app.currentView === 'reader') {
+                if (
+                  entry.isIntersecting &&
+                  entry.intersectionRatio > 0 &&
+                  app.currentView === 'reader' &&
+                  !endCard.classList.contains('hidden') &&
+                  endCard.offsetHeight > 0
+                ) {
                   disqusSec.classList.add('reader-comments-visible');
                   if (!this._hasScrolledToEnd) {
                     this._hasScrolledToEnd = true;
@@ -10384,7 +11204,9 @@ body {
           'scroll',
           () => {
             if (app.currentView === 'reader') {
-              this.updateWebtoonScrollPage(app.reader, targetDoc);
+              if (app.reader && app.reader.mode === 'webtoon') {
+                this.updateWebtoonScrollPage(app.reader, targetDoc);
+              }
               this.checkCommentsEndVisibility(targetDoc);
             }
           },
@@ -10476,6 +11298,17 @@ body {
       }
       if (viewName === 'generator') {
         return isPreview ? '#olusturucu' : '/?gorunum=olusturucu';
+      }
+      if (viewName === 'page') {
+        if (isPreview) {
+          return (this.locationObj && this.locationObj.hash && this.locationObj.hash.startsWith('#sayfa'))
+            ? this.locationObj.hash
+            : '#sayfa';
+        }
+        if (this.locationObj && this.locationObj.pathname && this.locationObj.pathname.includes('/p/')) {
+          return this.locationObj.pathname + (this.locationObj.search || '');
+        }
+        return seriesId ? `/p/${seriesId}.html` : '/?gorunum=sayfa';
       }
       if (viewName === 'series' && seriesId) {
         const series = catalog ? catalog.getSeriesById(seriesId) : null;
@@ -10591,6 +11424,8 @@ body {
           return { matched: true, view: 'history', seriesId: '', chapterId: '' };
         } else if (hashVal === 'olusturucu') {
           return { matched: true, view: 'generator', seriesId: '', chapterId: '' };
+        } else if (hashVal === 'sayfa' || hashVal.startsWith('sayfa/')) {
+          return { matched: true, view: 'page', seriesId: '', chapterId: '' };
         }
       }
       try {
@@ -10611,6 +11446,9 @@ body {
         if (qGorunum === 'olusturucu') {
           return { matched: true, view: 'generator', seriesId: '', chapterId: '' };
         }
+        if (qGorunum === 'sayfa') {
+          return { matched: true, view: 'page', seriesId: '', chapterId: '' };
+        }
         if (qSeri && qBolum) {
           return { matched: true, view: 'reader', seriesId: qSeri, chapterId: qBolum };
         }
@@ -10626,6 +11464,18 @@ body {
       const targetPath = extractPathname(href);
       if (targetPath.endsWith('/preview.html') || targetPath === '/' || targetPath === '') {
         return empty;
+      }
+      if (targetPath.includes('/p/')) {
+        return { matched: true, view: 'page', seriesId: '', chapterId: '' };
+      }
+      if (typeof document !== 'undefined') {
+        const metaPage = document.querySelector('meta[name="is-static-page"]');
+        if (metaPage && metaPage.getAttribute('content') === 'true') {
+          return { matched: true, view: 'page', seriesId: '', chapterId: '' };
+        }
+        if (document.getElementById('blogger-static-page-raw')) {
+          return { matched: true, view: 'page', seriesId: '', chapterId: '' };
+        }
       }
       for (const series of catalog.seriesList) {
         for (const ch of series.chapters || []) {
@@ -11089,6 +11939,45 @@ body {
      * @param {'series'|'chapter'} mode - Olusturma modu.
      * @param {Document} [doc] - Hedef DOM belgesi.
      * @returns {Object|null} Uretilen kod nesnesi.
+    /**
+     * Gonderi olusturucu sekmeleri arasinda gecis yapar.
+     * @param {'series'|'chapter'} tabName - Hedef sekme.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {'series'|'chapter'} Aktif sekme.
+     */
+    switchGeneratorTab(tabName, doc) {
+      const isSeries = tabName === 'series';
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc) return tabName;
+
+      const btnSeries = targetDoc.getElementById('btn-tab-gen-series');
+      const btnChapter = targetDoc.getElementById('btn-tab-gen-chapter');
+      const panelSeries = targetDoc.getElementById('panel-gen-series');
+      const panelChapter = targetDoc.getElementById('panel-gen-chapter');
+
+      if (btnSeries) {
+        btnSeries.classList.toggle('active', isSeries);
+        btnSeries.setAttribute('aria-selected', isSeries ? 'true' : 'false');
+      }
+      if (btnChapter) {
+        btnChapter.classList.toggle('active', !isSeries);
+        btnChapter.setAttribute('aria-selected', !isSeries ? 'true' : 'false');
+      }
+      if (panelSeries) {
+        panelSeries.classList.toggle('hidden', !isSeries);
+      }
+      if (panelChapter) {
+        panelChapter.classList.toggle('hidden', isSeries);
+      }
+      return tabName;
+    }
+
+    /**
+     * Gonderi olusturucudaki DOM girdilerinden seri veya bolum HTML kodunu uretir.
+     * @param {Object} generator - PostGenerator nesnesi.
+     * @param {'series'|'chapter'} mode - Olusturma modu.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {Object|null} Uretilen kod nesnesi.
      */
     runGeneratorFromDom(generator, mode, doc) {
       if (!generator) return null;
@@ -11097,22 +11986,62 @@ body {
         const el = targetDoc && targetDoc.getElementById ? targetDoc.getElementById(id) : null;
         return (el && el.value) || fallback;
       };
-      const title = getVal('gen-series-title', 'Yeni Seri');
-      const sourceLang = getVal('gen-source-lang', 'KR');
-      const chapterNumber = getVal('gen-chapter-num', 1);
-      const readerMode = getVal('gen-reader-mode', 'webtoon');
-      const translatorNote = getVal('gen-translator-note', '');
-      const pages = getVal('gen-pages-input', '');
-      const res =
-        mode === 'series'
-          ? generator.generateSeriesPost({ title, sourceLang, defaultReaderMode: readerMode })
-          : generator.generateChapterPost({
-              seriesTitle: title,
-              chapterNumber,
-              readerMode,
-              translatorNote,
-              pages
-            });
+
+      let res;
+      if (mode === 'series') {
+        const title = getVal('gen-series-title', 'Yeni Seri');
+        const altTitle = getVal('gen-series-alt-title', '');
+        const sourceLang = getVal('gen-source-lang', 'KR');
+        const status = getVal('gen-series-status', 'Devam Ediyor');
+        const readerMode = getVal('gen-reader-mode', 'webtoon');
+        const cover = getVal('gen-series-cover', '');
+        const author = getVal('gen-series-author', '');
+        const artist = getVal('gen-series-artist', '');
+        const translator = getVal('gen-series-translator', 'Manowa Çeviri');
+        const editor = getVal('gen-series-editor', 'Manowa Editör');
+        const year = getVal('gen-series-year', '');
+        const genres = getVal('gen-series-genres', 'Aksiyon, Fantastik');
+        const synopsis = getVal('gen-series-synopsis', '');
+
+        const typeMap = { KR: 'Manhwa', JP: 'Manga', CN: 'Manhua', EN: 'Novel' };
+        const type = typeMap[sourceLang] || 'Manhwa';
+
+        res = generator.generateSeriesPost({
+          title,
+          altTitle,
+          sourceLang,
+          type,
+          status,
+          defaultReaderMode: readerMode,
+          cover,
+          author,
+          artist,
+          translator,
+          editor,
+          year,
+          genres,
+          synopsis
+        });
+      } else {
+        const seriesTitle =
+          getVal('gen-chapter-series-title', '') || getVal('gen-series-title', 'Yeni Seri');
+        const chapterNumber = getVal('gen-chapter-num', 1);
+        const chapterTitle = getVal('gen-chapter-title', '');
+        const readerMode =
+          getVal('gen-chapter-reader-mode', '') || getVal('gen-reader-mode', 'webtoon');
+        const translatorNote = getVal('gen-translator-note', '');
+        const pages = getVal('gen-pages-input', '');
+
+        res = generator.generateChapterPost({
+          seriesTitle,
+          chapterNumber,
+          chapterTitle: chapterTitle || `${seriesTitle} Bölüm ${chapterNumber}`,
+          readerMode,
+          translatorNote,
+          pages
+        });
+      }
+
       if (targetDoc && targetDoc.getElementById) {
         const outEl = targetDoc.getElementById('gen-code-output');
         const labelsEl = targetDoc.getElementById('gen-labels-info');
@@ -11120,6 +12049,65 @@ body {
         if (labelsEl) labelsEl.textContent = `Önerilen Blogger Etiketleri: ${res.labels}`;
       }
       return res;
+    }
+
+    /**
+     * Blogger statik sayfa basligini ve icerigini DOM'dan okuyup #view-page icine aktarir.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {{ title: string, hasContent: boolean }} Sayfa bilgileri.
+     */
+    renderStaticPage(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc) return { title: 'Sayfa', hasContent: false };
+
+      const titleEl = targetDoc.getElementById('static-page-title');
+      const breadcrumbTitleEl = targetDoc.getElementById('page-breadcrumb-title');
+      const bodyEl = targetDoc.getElementById('static-page-body');
+
+      let pageTitle = '';
+      let pageHtml = '';
+
+      const rawContainer = targetDoc.getElementById('blogger-static-page-raw');
+      if (rawContainer) {
+        const postData = rawContainer.querySelector('.static-post-data');
+        if (postData) {
+          pageTitle = postData.getAttribute('data-title') || '';
+          pageHtml = postData.innerHTML;
+        } else {
+          pageHtml = rawContainer.innerHTML;
+        }
+      }
+
+      if (!pageHtml) {
+        const postEntry = targetDoc.querySelector('.post-entry');
+        if (postEntry) {
+          const entryTitle = postEntry.querySelector('.post-title');
+          const entryBody = postEntry.querySelector('.post-body');
+          if (entryTitle) pageTitle = entryTitle.textContent.trim();
+          if (entryBody) pageHtml = entryBody.innerHTML;
+        }
+      }
+
+      if (!pageTitle && targetDoc.title) {
+        pageTitle = targetDoc.title.split(' - ')[0].trim() || 'Sayfa';
+      }
+
+      if (titleEl) titleEl.textContent = pageTitle || 'Sayfa';
+      if (breadcrumbTitleEl) breadcrumbTitleEl.textContent = pageTitle || 'Sayfa';
+      if (bodyEl) {
+        bodyEl.innerHTML =
+          pageHtml ||
+          '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">Bu sayfa Blogger üzerinde bir Statik Sayfa olarak yayınlandığında içeriği burada görüntülenecektir.</p>';
+      }
+
+      if (this.logger && typeof this.logger.info === 'function') {
+        this.logger.info('Statik sayfa icerigi DOM uzerine aktarildi.', {
+          title: pageTitle,
+          hasContent: Boolean(pageHtml)
+        });
+      }
+
+      return { title: pageTitle || 'Sayfa', hasContent: Boolean(pageHtml) };
     }
 
     /**
@@ -11880,37 +12868,15 @@ body {
  */
 (function (globalScope) {
   'use strict';
-  const RouterClass =
-    globalScope.RouterController ||
-    (typeof require === 'function' ? require('./router-controller').RouterController : null);
-  const UserLibraryClass =
-    globalScope.UserLibrary ||
-    (typeof require === 'function' ? require('./user-library').UserLibrary : null);
-  const HeroSliderClass =
-    globalScope.HeroSlider ||
-    (typeof require === 'function' ? require('./hero-slider').HeroSlider : null);
-  const SidebarClass =
-    globalScope.SidebarController ||
-    (typeof require === 'function' ? require('./sidebar-controller').SidebarController : null);
-  const SeriesPageClass =
-    globalScope.SeriesPageController ||
-    (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
-  const ThemeBridgeClass =
-    globalScope.BloggerThemeBridge ||
-    (typeof require === 'function'
-      ? require('./blogger-theme-bridge').BloggerThemeBridge
-      : null);
-  const SearchControllerClass =
-    globalScope.SearchController ||
-    (typeof require === 'function'
-      ? require('./search-controller').SearchController
-      : null);
-  const ReaderHudClass =
-    globalScope.ReaderHudController ||
-    (typeof require === 'function' ? require('./reader-hud').ReaderHudController : null);
-  const iconFn =
-    (globalScope.ManowaIcons && globalScope.ManowaIcons.get) ||
-    (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
+  const RouterClass = globalScope.RouterController || (typeof require === 'function' ? require('./router-controller').RouterController : null);
+  const UserLibraryClass = globalScope.UserLibrary || (typeof require === 'function' ? require('./user-library').UserLibrary : null);
+  const HeroSliderClass = globalScope.HeroSlider || (typeof require === 'function' ? require('./hero-slider').HeroSlider : null);
+  const SidebarClass = globalScope.SidebarController || (typeof require === 'function' ? require('./sidebar-controller').SidebarController : null);
+  const SeriesPageClass = globalScope.SeriesPageController || (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
+  const ThemeBridgeClass = globalScope.BloggerThemeBridge || (typeof require === 'function' ? require('./blogger-theme-bridge').BloggerThemeBridge : null);
+  const SearchControllerClass = globalScope.SearchController || (typeof require === 'function' ? require('./search-controller').SearchController : null);
+  const ReaderHudClass = globalScope.ReaderHudController || (typeof require === 'function' ? require('./reader-hud').ReaderHudController : null);
+  const iconFn = (globalScope.ManowaIcons && globalScope.ManowaIcons.get) || (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
   /**
    * Tum tema gorunumlerini, Blogger URL entegrasyonunu ve dinamik veri akisini yoneten sinif.
    */
@@ -11921,47 +12887,21 @@ body {
      */
     constructor(deps = {}) {
       this.logger = deps.logger || globalScope.ManowaLogger || null;
-      this.catalog =
-        deps.catalog ||
-        (globalScope.CatalogController ? new globalScope.CatalogController() : null);
-      this.reader =
-        deps.reader || (globalScope.ReadingEngine ? new globalScope.ReadingEngine() : null);
+      this.catalog = deps.catalog || (globalScope.CatalogController ? new globalScope.CatalogController() : null);
+      this.reader = deps.reader || (globalScope.ReadingEngine ? new globalScope.ReadingEngine() : null);
       const ResolvedReaderHud = globalScope.ReaderHudController || ReaderHudClass;
-      this.readerHud =
-        deps.readerHud ||
-        (ResolvedReaderHud ? new ResolvedReaderHud({ logger: this.logger }) : null);
-      this.disqus =
-        deps.disqus || (globalScope.DisqusLoader ? new globalScope.DisqusLoader() : null);
-      this.generator =
-        deps.generator || (globalScope.PostGenerator ? new globalScope.PostGenerator() : null);
-      this.library =
-        deps.library || (UserLibraryClass ? new UserLibraryClass({ logger: this.logger }) : null);
-      this.heroSlider =
-        deps.heroSlider || (HeroSliderClass ? new HeroSliderClass({ logger: this.logger }) : null);
-      this.sidebar =
-        deps.sidebar || (SidebarClass ? new SidebarClass({ logger: this.logger }) : null);
+      this.readerHud = deps.readerHud || (ResolvedReaderHud ? new ResolvedReaderHud({ logger: this.logger }) : null);
+      this.disqus = deps.disqus || (globalScope.DisqusLoader ? new globalScope.DisqusLoader() : null);
+      this.generator = deps.generator || (globalScope.PostGenerator ? new globalScope.PostGenerator() : null);
+      this.library = deps.library || (UserLibraryClass ? new UserLibraryClass({ logger: this.logger }) : null);
+      this.heroSlider = deps.heroSlider || (HeroSliderClass ? new HeroSliderClass({ logger: this.logger }) : null);
+      this.sidebar = deps.sidebar || (SidebarClass ? new SidebarClass({ logger: this.logger }) : null);
       const ResolvedSeriesPage = globalScope.SeriesPageController || SeriesPageClass;
-      this.seriesPage =
-        deps.seriesPage ||
-        (ResolvedSeriesPage ? new ResolvedSeriesPage({ logger: this.logger }) : null);
+      this.seriesPage = deps.seriesPage || (ResolvedSeriesPage ? new ResolvedSeriesPage({ logger: this.logger }) : null);
       const ResolvedThemeBridge = globalScope.BloggerThemeBridge || ThemeBridgeClass;
-      this.themeBridge =
-        deps.themeBridge ||
-        (ResolvedThemeBridge ? new ResolvedThemeBridge({ logger: this.logger }) : null);
-      this.feedLoader =
-        deps.feedLoader ||
-        (globalScope.BloggerFeedLoader
-          ? new globalScope.BloggerFeedLoader({ logger: this.logger })
-          : null);
-      this.router =
-        deps.router ||
-        (RouterClass
-          ? new RouterClass({
-              logger: this.logger,
-              historyObj: deps.historyObj,
-              locationObj: deps.locationObj
-            })
-          : null);
+      this.themeBridge = deps.themeBridge || (ResolvedThemeBridge ? new ResolvedThemeBridge({ logger: this.logger }) : null);
+      this.feedLoader = deps.feedLoader || (globalScope.BloggerFeedLoader ? new globalScope.BloggerFeedLoader({ logger: this.logger }) : null);
+      this.router = deps.router || (RouterClass ? new RouterClass({ logger: this.logger, historyObj: deps.historyObj, locationObj: deps.locationObj }) : null);
       this.siteBaseTitle = globalScope.MANOWA_SITE_TITLE || 'Manowa';
       this.currentView = 'catalog';
       this.commentsVisible = false;
@@ -11969,26 +12909,20 @@ body {
       this.activeChapterId = '';
       this.chapterSortOrder = 'desc';
       const ResolvedSearchClass = globalScope.SearchController || SearchControllerClass;
-      this.searchController =
-        deps.searchController ||
-        (ResolvedSearchClass
-          ? new ResolvedSearchClass({
-              logger: this.logger,
-              getSeriesList: () => (this.catalog ? this.catalog.seriesList : []),
-              onSelect: (seriesId) => {
-                if (this.themeBridge) this.themeBridge.closeMobilePanels();
-                this.openSeriesDetail(seriesId);
-              },
-              onViewAll: (query) => {
-                if (this.themeBridge) this.themeBridge.closeMobilePanels();
-                if (this.catalog) {
-                  this.catalog.setSearchQuery(query);
-                }
-                this.switchToCatalogIfNeeded();
-                this.renderCatalogView();
-              }
-            })
-          : null);
+      this.searchController = deps.searchController || (ResolvedSearchClass ? new ResolvedSearchClass({
+        logger: this.logger,
+        getSeriesList: () => (this.catalog ? this.catalog.seriesList : []),
+        onSelect: (seriesId) => {
+          if (this.themeBridge) this.themeBridge.closeMobilePanels();
+          this.openSeriesDetail(seriesId);
+        },
+        onViewAll: (query) => {
+          if (this.themeBridge) this.themeBridge.closeMobilePanels();
+          if (this.catalog) this.catalog.setSearchQuery(query);
+          this.switchToCatalogIfNeeded();
+          this.renderCatalogView();
+        }
+      }) : null);
     }
     /**
      * Tarayici DOM baslatmasini, ust baslik entegrasyonunu ve dinamik Blogger veri cekimini calistirir.
@@ -12181,6 +13115,7 @@ body {
         else if (resolved.view === 'bookmarks') this.openBookmarks(routeOpts);
         else if (resolved.view === 'history') this.openHistory(routeOpts);
         else if (resolved.view === 'generator') this.openGenerator(routeOpts);
+        else if (resolved.view === 'page') this.openPage(routeOpts);
         else return false;
         return true;
       }
@@ -12204,6 +13139,7 @@ body {
         if (state.view === 'bookmarks') return this.openBookmarks(noHist);
         if (state.view === 'history') return this.openHistory(noHist);
         if (state.view === 'generator') return this.openGenerator(noHist);
+        if (state.view === 'page') return this.openPage(noHist);
         if (state.view === 'catalog') return this.openCatalog(noHist);
       }
       if (!this.handleUrlRouting(undefined, { updateHistory: false, openCatalogOnRoot: true })) {
@@ -12211,7 +13147,7 @@ body {
       }
     }
     /**
-     * Aktif gorunumu degistirir ('catalog', 'series', 'reader', 'bookmarks', 'history', 'generator').
+     * Aktif gorunumu degistirir ('catalog', 'series', 'reader', 'bookmarks', 'history', 'generator', 'page').
      * Yorum alanini (#disqus-section) yalnizca 'series' ve 'reader' gorunumlerinde gosterir.
      * @param {string} viewName - Hedef gorunum.
      * @returns {void}
@@ -12229,7 +13165,8 @@ body {
         reader: document.getElementById('view-reader'),
         bookmarks: document.getElementById('view-bookmarks'),
         history: document.getElementById('view-history'),
-        generator: document.getElementById('view-generator')
+        generator: document.getElementById('view-generator'),
+        page: document.getElementById('view-page')
       };
       Object.keys(views).forEach((key) => {
         if (views[key]) views[key].classList.toggle('hidden', key !== viewName);
@@ -12245,7 +13182,10 @@ body {
       Object.keys(navMap).forEach((key) => {
         if (navMap[key]) navMap[key].classList.toggle('active', key === viewName);
       });
-      if (viewName !== 'reader' && this.reader) this.reader.stopAutoScroll();
+      if (viewName !== 'reader') {
+        if (this.reader) this.reader.stopAutoScroll();
+        if (document.body) document.body.removeAttribute('data-reader-mode');
+      }
       const scrollBtn = document.getElementById('btn-scroll-top');
       if (scrollBtn && scrollBtn.classList && viewName === 'reader') {
         scrollBtn.classList.add('hidden');
@@ -12338,11 +13278,33 @@ body {
      */
     openGenerator(options = {}) {
       this.switchView('generator');
-      this.triggerGenerator('chapter');
+      if (this.themeBridge) this.themeBridge.switchGeneratorTab('series');
+      this.triggerGenerator('series');
       const targetUrl = this.computeTargetUrl('generator');
       this.syncBrowserHistory(
         { view: 'generator', seriesId: '', chapterId: '' },
         `Gönderi Oluşturucu - ${this.siteBaseTitle}`,
+        targetUrl,
+        options
+      );
+    }
+    /**
+     * Blogger Statik Sayfa gorunumunu acar ve icerigi yerlestirir.
+     * @param {Object} [options={}] - Gecmis secenekleri.
+     * @returns {void}
+     */
+    openPage(options = {}) {
+      this.switchView('page');
+      let pageTitleText = 'Sayfa';
+      if (typeof document !== 'undefined' && this.themeBridge) {
+        const info = this.themeBridge.renderStaticPage(document);
+        if (info && info.title) pageTitleText = info.title;
+      }
+      const pageTitle = `${pageTitleText} - ${this.siteBaseTitle}`;
+      const targetUrl = this.computeTargetUrl('page');
+      this.syncBrowserHistory(
+        { view: 'page', seriesId: '', chapterId: '' },
+        pageTitle,
         targetUrl,
         options
       );
@@ -12499,11 +13461,32 @@ body {
       }
       const sortedAsc = this.catalog.getSortedChapters(series.id, 'asc');
       const currentChapterIdx = sortedAsc.findIndex((c) => c.id === chapter.id);
+      const currentChapterLabel = this.reader
+        ? this.reader.formatChapterSelectLabel(chapter)
+        : `Bölüm ${chapter.number}`;
+      const currentLabelEl = document.getElementById('reader-current-chapter-label');
+      if (currentLabelEl) currentLabelEl.textContent = currentChapterLabel;
+
       if (selectChapter) {
         selectChapter.innerHTML = sortedAsc
           .map((c) => {
             const label = this.reader ? this.reader.formatChapterSelectLabel(c) : `Bölüm ${c.number}`;
             return `<option value="${c.id}" ${c.id === chapter.id ? 'selected' : ''}>${label}</option>`;
+          })
+          .join('');
+        selectChapter.value = chapter.id;
+      }
+
+      const chapterOptionsList = document.getElementById('reader-chapter-options-list');
+      if (chapterOptionsList) {
+        chapterOptionsList.innerHTML = sortedAsc
+          .map((c) => {
+            const label = this.reader ? this.reader.formatChapterSelectLabel(c) : `Bölüm ${c.number}`;
+            const isSelected = c.id === chapter.id;
+            return `<button class="reader-chapter-option ${isSelected ? 'active' : ''}" data-chapter-id="${c.id}" role="option" aria-selected="${isSelected ? 'true' : 'false'}" type="button">
+              <span class="chapter-option-text">${label}</span>
+              ${isSelected ? `${iconFn('check')}` : ''}
+            </button>`;
           })
           .join('');
       }
@@ -12663,6 +13646,7 @@ body {
         if (el) el.addEventListener(event, fn);
       };
       on('btn-gen-close', 'click', () => this.openCatalog());
+      on('btn-page-back', 'click', () => this.openCatalog());
       on('nav-generator', 'click', () => this.openGenerator());
       on('nav-bookmarks', 'click', () => this.openBookmarks());
       on('nav-history', 'click', () => this.openHistory());
@@ -12684,21 +13668,7 @@ body {
           this.renderCatalogView();
         });
       }
-      on('select-catalog-sort', 'change', (e) => {
-        this.catalog.setSortOrder(e.target.value);
-        this.renderCatalogView();
-      });
-      const langGroup = document.getElementById('lang-filter-group');
-      if (langGroup) {
-        langGroup.addEventListener('click', (e) => {
-          const btn = e.target.closest('[data-lang]');
-          if (!btn) return;
-          langGroup.querySelectorAll('.filter-pill').forEach((b) => b.classList.remove('active'));
-          btn.classList.add('active');
-          this.catalog.setLanguageFilter(btn.getAttribute('data-lang'));
-          this.renderCatalogView();
-        });
-      }
+
       on('btn-theme-toggle', 'click', () => {
         if (this.themeBridge) {
           this.themeBridge.toggleThemeMode();
@@ -12736,10 +13706,40 @@ body {
       });
       const connectBlog = async () => {
         const inp = document.getElementById('input-blog-origin');
-        if (inp && this.feedLoader && typeof this.feedLoader.setSavedBlogOrigin === 'function') {
-          inp.value = this.feedLoader.setSavedBlogOrigin(inp.value);
-          await this.loadDynamicData();
+        const btn = document.getElementById('btn-connect-blog');
+        if (!inp || !this.feedLoader) return;
+        const raw = String(inp.value || '').trim();
+        const origHtml = btn ? btn.innerHTML : '';
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = `<span class="btn-label">Bağlanıyor...</span>`;
+        }
+        try {
+          const norm = this.feedLoader.setSavedBlogOrigin(raw);
+          inp.value = norm;
+          if (!norm) {
+            if (this.catalog) this.catalog.setSeriesList(null);
+            this.updateHeroShowcase();
+            this.renderHomeSections();
+            this.renderCatalogView();
+            this.openCatalog();
+            this.renderDebugLogs();
+            if (btn) btn.innerHTML = `<span class="btn-label">Sıfırlandı</span>`;
+            setTimeout(() => { if (btn) { btn.disabled = false; btn.innerHTML = origHtml; } }, 1500);
+            return;
+          }
+          const loaded = await this.loadDynamicData();
           this.openCatalog();
+          this.renderDebugLogs();
+          if (btn) {
+            btn.innerHTML = `<span class="btn-label">${loaded > 0 ? `${loaded} Seri` : 'Seri Yok'}</span>`;
+            setTimeout(() => { if (btn) { btn.disabled = false; btn.innerHTML = origHtml; } }, 2200);
+          }
+        } catch (_err) {
+          if (btn) {
+            btn.innerHTML = `<span class="btn-label">Hata!</span>`;
+            setTimeout(() => { if (btn) { btn.disabled = false; btn.innerHTML = origHtml; } }, 2000);
+          }
         }
       };
       on('btn-connect-blog', 'click', connectBlog);
@@ -12756,6 +13756,18 @@ body {
           );
           this.renderDebugLogs();
         }
+      });
+      on('btn-tab-gen-series', 'click', () => {
+        if (this.themeBridge) this.themeBridge.switchGeneratorTab('series');
+        this.triggerGenerator('series');
+      });
+      on('btn-tab-gen-chapter', 'click', () => {
+        if (this.themeBridge) this.themeBridge.switchGeneratorTab('chapter');
+        this.triggerGenerator('chapter');
+      });
+      on('gen-series-title', 'input', (e) => {
+        const inp = document.getElementById('gen-chapter-series-title');
+        if (inp && (!inp.value || inp.value === 'Örnek Seri')) inp.value = e.target.value;
       });
       on('btn-generate-series', 'click', () => this.triggerGenerator('series'));
       on('btn-generate-chapter', 'click', () => this.triggerGenerator('chapter'));

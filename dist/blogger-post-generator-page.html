@@ -1,0 +1,637 @@
+<!-- =====================================================================
+  MANOWA — BLOGGER STATİK SAYFA: SERİ & BÖLÜM GÖNDERİ KODU OLUŞTURUCU
+  Kurulum: Blogger Paneli -> Sayfalar -> Yeni Sayfa -> HTML Görünümü
+  Bu kod bağımsızdır; harici kütüphane gerektirmez.
+===================================================================== -->
+
+<div class="manowa-page-generator" id="manowa-page-generator">
+  <style>
+    .manowa-page-generator {
+      --mpg-bg: #0f1117;
+      --mpg-card: #181c28;
+      --mpg-card-hover: #222738;
+      --mpg-border: #2d3348;
+      --mpg-text: #f8fafc;
+      --mpg-text-sub: #94a3b8;
+      --mpg-accent: #f97316;
+      --mpg-accent-hover: #fb923c;
+      --mpg-code-bg: #090b10;
+      --mpg-code-text: #fdba74;
+      --mpg-radius: 12px;
+      --mpg-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      
+      font-family: var(--mpg-font);
+      background: var(--mpg-bg);
+      color: var(--mpg-text);
+      border: 1px solid var(--mpg-border);
+      border-radius: var(--mpg-radius);
+      padding: 1.75rem;
+      margin: 1.5rem auto;
+      max-width: 960px;
+      box-sizing: border-box;
+      line-height: 1.5;
+    }
+
+    .manowa-page-generator * {
+      box-sizing: border-box;
+    }
+
+    .mpg-header {
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--mpg-border);
+      padding-bottom: 1rem;
+    }
+
+    .mpg-title {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--mpg-text);
+      margin: 0 0 0.4rem 0;
+    }
+
+    .mpg-desc {
+      font-size: 0.9rem;
+      color: var(--mpg-text-sub);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .mpg-tabs {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--mpg-border);
+      padding-bottom: 0.85rem;
+      flex-wrap: wrap;
+    }
+
+    .mpg-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.15rem;
+      border-radius: 8px;
+      border: 1px solid var(--mpg-border);
+      background: var(--mpg-card);
+      color: var(--mpg-text-sub);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mpg-tab-btn:hover {
+      background: var(--mpg-card-hover);
+      color: var(--mpg-text);
+      border-color: var(--mpg-accent);
+    }
+
+    .mpg-tab-btn.active {
+      background: var(--mpg-accent);
+      color: #ffffff;
+      border-color: var(--mpg-accent);
+      box-shadow: 0 2px 10px rgba(249, 115, 22, 0.3);
+    }
+
+    .mpg-panel {
+      display: block;
+    }
+
+    .mpg-panel.hidden {
+      display: none !important;
+    }
+
+    .mpg-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .mpg-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .mpg-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--mpg-text-sub);
+    }
+
+    .mpg-control {
+      background: var(--mpg-card);
+      color: var(--mpg-text);
+      border: 1px solid var(--mpg-border);
+      border-radius: 8px;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .mpg-control:focus {
+      border-color: var(--mpg-accent);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.16);
+    }
+
+    select.mpg-control {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      cursor: pointer;
+      padding-right: 2.3rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.85rem center;
+      background-size: 14px 14px;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    select.mpg-control:hover {
+      border-color: rgba(249, 115, 22, 0.5);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    }
+
+    select.mpg-control:focus {
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    }
+
+    select.mpg-control option {
+      background-color: #141824;
+      color: #f1f5f9;
+      padding: 0.6rem 0.8rem;
+    }
+
+    textarea.mpg-control {
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.4;
+    }
+
+    .mpg-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+      flex-wrap: wrap;
+    }
+
+    .mpg-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--mpg-accent);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.65rem 1.25rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mpg-btn-primary:hover {
+      background: var(--mpg-accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .mpg-output-wrap {
+      margin-top: 1.5rem;
+      background: var(--mpg-code-bg);
+      border: 1px solid var(--mpg-border);
+      border-radius: 10px;
+      padding: 1.1rem;
+    }
+
+    .mpg-output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--mpg-text-sub);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .mpg-btn-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--mpg-card);
+      color: var(--mpg-text);
+      border: 1px solid var(--mpg-border);
+      border-radius: 6px;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mpg-btn-copy:hover {
+      border-color: var(--mpg-accent);
+      color: var(--mpg-accent);
+    }
+
+    .mpg-code {
+      width: 100%;
+      min-height: 160px;
+      background: transparent;
+      color: var(--mpg-code-text);
+      border: none;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      font-size: 0.82rem;
+      resize: vertical;
+      outline: none;
+      line-height: 1.5;
+    }
+  </style>
+
+  <!-- BAŞLIK ALANI -->
+  <div class="mpg-header">
+    <h2 class="mpg-title">
+      <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      Blogger Seri &amp; Bölüm Gönderi Kodu Oluşturucu
+    </h2>
+    <p class="mpg-desc">
+      Blogger üzerinde yeni bir çeviri serisi veya yeni bir bölüm yayınlarken HTML görünümüne yapıştıracağınız hazır kodu ve etiketleri buradan kolayca üretebilirsiniz.
+    </p>
+  </div>
+
+  <!-- SEKME DÜĞMELERİ -->
+  <div class="mpg-tabs" role="tablist">
+    <button class="mpg-tab-btn active" id="mpg-tab-series" role="tab" aria-selected="true" type="button">
+      <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      1. Seri Tanıtımı Gönderisi
+    </button>
+    <button class="mpg-tab-btn" id="mpg-tab-chapter" role="tab" aria-selected="false" type="button">
+      <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      2. Bölüm Okuma Gönderisi
+    </button>
+  </div>
+
+  <!-- SEKME 1: SERİ TANITIM FORMU -->
+  <div class="mpg-panel" id="mpg-panel-series">
+    <div class="mpg-grid">
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-series-title">Seri Adı *</label>
+        <input class="mpg-control" id="mpg-series-title" type="text" value="Solo Leveling" placeholder="Örn: Solo Leveling" />
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-series-alt-title">Alternatif / Orijinal İsimler</label>
+        <input class="mpg-control" id="mpg-series-alt-title" type="text" value="Only I Level Up, Na Honjaman Rebeleop" placeholder="Örn: Only I Level Up" />
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-source-lang">Tür / Kaynak Dil</label>
+        <select class="mpg-control" id="mpg-source-lang">
+          <option value="KR" selected="selected">Manhwa (Korece - KR)</option>
+          <option value="JP">Manga (Japonca - JP)</option>
+          <option value="CN">Manhua (Çince - CN)</option>
+          <option value="EN">Novel / Webcomic (İngilizce - EN)</option>
+        </select>
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-series-status">Yayın Durumu</label>
+        <select class="mpg-control" id="mpg-series-status">
+          <option value="Devam Ediyor" selected="selected">Devam Ediyor</option>
+          <option value="Tamamlandı">Tamamlandı</option>
+          <option value="Güncel">Güncel</option>
+          <option value="Askıda">Askıda</option>
+          <option value="İptal Edildi">İptal Edildi</option>
+          <option value="Yakında">Yakında</option>
+        </select>
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-reader-mode">Varsayılan Okuma Motoru</label>
+        <select class="mpg-control" id="mpg-reader-mode">
+          <option value="webtoon" selected="selected">Webtoon (Dikey Şerit)</option>
+          <option value="single">Tek Sayfa (Manga)</option>
+          <option value="double">Çift Sayfa (Kitap)</option>
+          <option value="novel">Novel (Metin Modu)</option>
+        </select>
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-series-cover">Seri Kapak Görsel URL'si</label>
+        <input class="mpg-control" id="mpg-series-cover" type="url" value="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600" placeholder="https://..." />
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-series-author">Yazar</label>
+        <input class="mpg-control" id="mpg-series-author" type="text" value="Chugong" placeholder="Yazar adı" />
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-series-artist">Çizer</label>
+        <input class="mpg-control" id="mpg-series-artist" type="text" value="DUBU (REDICE STUDIO)" placeholder="Çizer adı" />
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-series-translator">Çevirmen</label>
+        <input class="mpg-control" id="mpg-series-translator" type="text" value="Manowa Çeviri" placeholder="Çevirmen adı" />
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-series-editor">Editör</label>
+        <input class="mpg-control" id="mpg-series-editor" type="text" value="Manowa Editör" placeholder="Editör adı" />
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-series-year">Yıl / Stüdyo</label>
+        <input class="mpg-control" id="mpg-series-year" type="text" value="2018" placeholder="Örn: 2018 / REDICE STUDIO" />
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-series-genres">Kategoriler / Türler (Virgülle ayırınız)</label>
+        <input class="mpg-control" id="mpg-series-genres" type="text" value="Aksiyon, Fantastik, Macera, Zindan" placeholder="Aksiyon, Fantastik, Macera" />
+      </div>
+    </div>
+
+    <div class="mpg-group" style="margin-bottom: 1rem;">
+      <label class="mpg-label" for="mpg-series-synopsis">Seri Özeti (Hikaye Konusu)</label>
+      <textarea class="mpg-control" id="mpg-series-synopsis" rows="4" placeholder="Serinin konusunu buraya yazınız...">On yıl önce, gerçek dünyayı canavarların dünyasına bağlayan "Kapı" açıldı. Sung Jin-Woo, en zayıf avcı iken ölümcül bir çift zindanda gizemli bir görev penceresiyle karşılaşır.</textarea>
+    </div>
+
+    <div class="mpg-actions">
+      <button class="mpg-btn-primary" id="mpg-btn-generate-series" type="button">
+        <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Seri Tanıtım HTML Üret
+      </button>
+    </div>
+  </div>
+
+  <!-- SEKME 2: BÖLÜM OKUMA FORMU -->
+  <div class="mpg-panel hidden" id="mpg-panel-chapter">
+    <div class="mpg-grid">
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-chapter-series-title">Bağlı Olduğu Seri Adı *</label>
+        <input class="mpg-control" id="mpg-chapter-series-title" type="text" value="Solo Leveling" placeholder="Seri Adı (Örn: Solo Leveling)" />
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-chapter-num">Bölüm Numarası *</label>
+        <input class="mpg-control" id="mpg-chapter-num" type="number" step="any" value="1" />
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-chapter-title">Özel Bölüm Başlığı (İsteğe Bağlı)</label>
+        <input class="mpg-control" id="mpg-chapter-title" type="text" value="" placeholder="Boş bırakılırsa: [Seri Adı] Bölüm [No]" />
+      </div>
+      <div class="mpg-group">
+        <label class="mpg-label" for="mpg-chapter-reader-mode">Bölüm Okuma Motoru</label>
+        <select class="mpg-control" id="mpg-chapter-reader-mode">
+          <option value="webtoon" selected="selected">Webtoon (Dikey Şerit)</option>
+          <option value="single">Tek Sayfa (Manga)</option>
+          <option value="double">Çift Sayfa (Kitap)</option>
+          <option value="novel">Novel (Metin Modu)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mpg-group" style="margin-bottom: 1rem;">
+      <label class="mpg-label" for="mpg-translator-note">Çevirmen Notu (İsteğe Bağlı)</label>
+      <input class="mpg-control" id="mpg-translator-note" placeholder="Bölüm başı çevirmen notu..." type="text" value="" />
+    </div>
+
+    <div class="mpg-group" style="margin-bottom: 1rem;">
+      <label class="mpg-label" for="mpg-pages-input">Bölüm Sayfa Görsel URL'leri (Her satıra 1 resim URL'si)</label>
+      <textarea class="mpg-control" id="mpg-pages-input" placeholder="https://resim-adresi.com/sayfa-1.jpg&#10;https://resim-adresi.com/sayfa-2.jpg">https://placehold.co/800x1200/1e1b4b/ffffff?text=Sayfa+1
+https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
+    </div>
+
+    <div class="mpg-actions">
+      <button class="mpg-btn-primary" id="mpg-btn-generate-chapter" type="button">
+        <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Bölüm Okuma HTML Üret
+      </button>
+    </div>
+  </div>
+
+  <!-- ORTAK ÇIKTI ALANI -->
+  <div class="mpg-output-wrap">
+    <div class="mpg-output-header">
+      <span id="mpg-labels-info">Önerilen Blogger Etiketleri: Seri, Manhwa, Devam Ediyor, Solo Leveling</span>
+      <button class="mpg-btn-copy" id="mpg-btn-copy" type="button">
+        <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span id="mpg-copy-label">Kodu Kopyala</span>
+      </button>
+    </div>
+    <textarea class="mpg-code" id="mpg-code-output" readonly="readonly" placeholder="Üretilen HTML kodu burada görünecektir..."></textarea>
+  </div>
+
+  <!-- JAVASCRIPT MOTORU -->
+  <script>
+    (function () {
+      'use strict';
+
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function slugify(text) {
+        const trMap = {
+          ç: 'c', ğ: 'g', ı: 'i', ö: 'o', ş: 's', ü: 'u',
+          Ç: 'c', Ğ: 'g', İ: 'i', Ö: 'o', Ş: 's', Ü: 'u'
+        };
+        const replaced = String(text || '')
+          .replace(/[çğıöşüÇĞİÖŞÜ]/g, function (ch) { return trMap[ch] || ch; })
+          .toLowerCase();
+        return replaced.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'seri';
+      }
+
+      function getVal(id, fallback) {
+        var el = document.getElementById(id);
+        return (el && el.value) ? el.value.trim() : (fallback || '');
+      }
+
+      function switchTab(mode) {
+        var isSeries = mode === 'series';
+        var tabSeries = document.getElementById('mpg-tab-series');
+        var tabChapter = document.getElementById('mpg-tab-chapter');
+        var panelSeries = document.getElementById('mpg-panel-series');
+        var panelChapter = document.getElementById('mpg-panel-chapter');
+
+        if (tabSeries) {
+          tabSeries.classList.toggle('active', isSeries);
+          tabSeries.setAttribute('aria-selected', isSeries ? 'true' : 'false');
+        }
+        if (tabChapter) {
+          tabChapter.classList.toggle('active', !isSeries);
+          tabChapter.setAttribute('aria-selected', !isSeries ? 'true' : 'false');
+        }
+        if (panelSeries) panelSeries.classList.toggle('hidden', !isSeries);
+        if (panelChapter) panelChapter.classList.toggle('hidden', isSeries);
+
+        if (isSeries) {
+          generateSeries();
+        } else {
+          generateChapter();
+        }
+      }
+
+      function generateSeries() {
+        var title = getVal('mpg-series-title', 'Yeni Seri');
+        var id = slugify(title);
+        var altTitle = getVal('mpg-series-alt-title', '');
+        var sourceLang = getVal('mpg-source-lang', 'KR');
+        var status = getVal('mpg-series-status', 'Devam Ediyor');
+        var readerMode = getVal('mpg-reader-mode', 'webtoon');
+        var cover = getVal('mpg-series-cover', 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak');
+        var author = getVal('mpg-series-author', '');
+        var artist = getVal('mpg-series-artist', '');
+        var translator = getVal('mpg-series-translator', 'Manowa Çeviri');
+        var editor = getVal('mpg-series-editor', 'Manowa Editör');
+        var year = getVal('mpg-series-year', '');
+        var rawGenres = getVal('mpg-series-genres', 'Aksiyon, Fantastik');
+        var synopsis = getVal('mpg-series-synopsis', 'Seri özeti yakında eklenecektir.');
+
+        var genreList = rawGenres.split(',').map(function (g) { return g.trim(); }).filter(Boolean);
+        var typeMap = { KR: 'Manhwa', JP: 'Manga', CN: 'Manhua', EN: 'Novel' };
+        var type = typeMap[sourceLang] || 'Manhwa';
+
+        var metaRows = [];
+        if (author) metaRows.push('    <p><strong>Yazar:</strong> <span>' + escapeHtml(author) + '</span></p>');
+        if (artist) metaRows.push('    <p><strong>Çizer:</strong> <span>' + escapeHtml(artist) + '</span></p>');
+        if (translator) metaRows.push('    <p><strong>Çevirmen:</strong> <span>' + escapeHtml(translator) + '</span></p>');
+        if (editor) metaRows.push('    <p><strong>Editör:</strong> <span>' + escapeHtml(editor) + '</span></p>');
+        if (year) metaRows.push('    <p><strong>Yıl / Stüdyo:</strong> <span>' + escapeHtml(year) + '</span></p>');
+        if (altTitle) metaRows.push('    <p><strong>Diğer İsimler:</strong> <span>' + escapeHtml(altTitle) + '</span></p>');
+        var metaHtml = metaRows.length > 0 ? '  <div class="series-meta-info">\n' + metaRows.join('\n') + '\n  </div>' : '';
+
+        var htmlParts = [
+          '<!-- MANOWA SERI TANITIM KODU -->',
+          '<div id="actual-series-tag" style="display:none;">' + escapeHtml(title) + '</div>',
+          '<div class="manowa-series-post"',
+          '  data-series-id="' + escapeHtml(id) + '"',
+          '  data-title="' + escapeHtml(title) + '"',
+          '  data-alt-title="' + escapeHtml(altTitle) + '"',
+          '  data-source-lang="' + escapeHtml(sourceLang) + '"',
+          '  data-type="' + escapeHtml(type) + '"',
+          '  data-reader-mode="' + escapeHtml(readerMode) + '"',
+          '  data-status="' + escapeHtml(status) + '"',
+          '  data-author="' + escapeHtml(author) + '"',
+          '  data-artist="' + escapeHtml(artist) + '"',
+          '  data-translator="' + escapeHtml(translator) + '"',
+          '  data-editor="' + escapeHtml(editor) + '"',
+          '  data-year="' + escapeHtml(year) + '"',
+          '  data-genres="' + escapeHtml(genreList.join(',')) + '"',
+          '  data-cover="' + escapeHtml(cover) + '">',
+          '  <img src="' + escapeHtml(cover) + '" alt="' + escapeHtml(title) + '" />'
+        ];
+
+        if (metaHtml) htmlParts.push(metaHtml);
+
+        htmlParts.push(
+          '  <div class="synopsis-box">',
+          '    <h3>Özet</h3>',
+          '    <p class="manowa-synopsis">' + escapeHtml(synopsis) + '</p>',
+          '  </div>',
+          '</div>'
+        );
+
+        var labelParts = ['Seri', type, status].concat(genreList).concat([title]).filter(Boolean);
+        var uniqueLabels = [];
+        for (var i = 0; i < labelParts.length; i++) {
+          if (uniqueLabels.indexOf(labelParts[i]) === -1) uniqueLabels.push(labelParts[i]);
+        }
+
+        var outEl = document.getElementById('mpg-code-output');
+        var labelsEl = document.getElementById('mpg-labels-info');
+        if (outEl) outEl.value = htmlParts.join('\n');
+        if (labelsEl) labelsEl.textContent = 'Önerilen Blogger Etiketleri: ' + uniqueLabels.join(', ');
+      }
+
+      function generateChapter() {
+        var seriesTitle = getVal('mpg-chapter-series-title', '') || getVal('mpg-series-title', 'Yeni Seri');
+        var seriesId = slugify(seriesTitle);
+        var chapterNumber = Number(getVal('mpg-chapter-num', '1')) || 1;
+        var chapterId = seriesId + '-bolum-' + chapterNumber;
+        var customTitle = getVal('mpg-chapter-title', '');
+        var title = customTitle || (seriesTitle + ' Bölüm ' + chapterNumber);
+        var readerMode = getVal('mpg-chapter-reader-mode', 'webtoon');
+        var translatorNote = getVal('mpg-translator-note', '');
+        var rawPages = getVal('mpg-pages-input', '');
+
+        var pages = rawPages.split(/[\r\n,]+/).map(function (u) { return u.trim(); }).filter(Boolean);
+
+        var pageImgsHtml = pages.map(function (url, idx) {
+          return '    <div class="separator" data-carousel-item=""><img class="manowa-page-img" data-index="' + idx + '" src="' + escapeHtml(url) + '" alt="' + escapeHtml(title) + ' - Sayfa ' + (idx + 1) + '" loading="lazy" /></div>';
+        }).join('\n');
+
+        var htmlParts = [
+          '<!-- MANOWA BOLUM OKUMA KODU -->',
+          '<div class="manowa-chapter-post"',
+          '  data-series-id="' + escapeHtml(seriesId) + '"',
+          '  data-chapter-id="' + escapeHtml(chapterId) + '"',
+          '  data-chapter-number="' + chapterNumber + '"',
+          '  data-chapter-title="' + escapeHtml(title) + '"',
+          '  data-reader-mode="' + escapeHtml(readerMode) + '"',
+          '  data-translator-note="' + escapeHtml(translatorNote) + '">',
+          '  <div class="manowa-pages-data">',
+          pageImgsHtml,
+          '  </div>',
+          '</div>'
+        ];
+
+        var labels = 'Bölüm, ' + seriesTitle;
+        var outEl = document.getElementById('mpg-code-output');
+        var labelsEl = document.getElementById('mpg-labels-info');
+        if (outEl) outEl.value = htmlParts.join('\n');
+        if (labelsEl) labelsEl.textContent = 'Önerilen Blogger Etiketleri: ' + labels;
+      }
+
+      function copyCode() {
+        var outEl = document.getElementById('mpg-code-output');
+        var copyBtn = document.getElementById('mpg-copy-label');
+        if (!outEl || !outEl.value) return;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(outEl.value).then(function () {
+            if (copyBtn) {
+              copyBtn.textContent = 'Kopyalandı! ✓';
+              setTimeout(function () { copyBtn.textContent = 'Kodu Kopyala'; }, 2000);
+            }
+          });
+        } else {
+          outEl.select();
+          document.execCommand('copy');
+          if (copyBtn) {
+            copyBtn.textContent = 'Kopyalandı! ✓';
+            setTimeout(function () { copyBtn.textContent = 'Kodu Kopyala'; }, 2000);
+          }
+        }
+      }
+
+      // Event Bağlantıları
+      var tabSeries = document.getElementById('mpg-tab-series');
+      var tabChapter = document.getElementById('mpg-tab-chapter');
+      var btnGenSeries = document.getElementById('mpg-btn-generate-series');
+      var btnGenChapter = document.getElementById('mpg-btn-generate-chapter');
+      var btnCopy = document.getElementById('mpg-btn-copy');
+      var seriesTitleInput = document.getElementById('mpg-series-title');
+
+      if (tabSeries) tabSeries.addEventListener('click', function () { switchTab('series'); });
+      if (tabChapter) tabChapter.addEventListener('click', function () { switchTab('chapter'); });
+      if (btnGenSeries) btnGenSeries.addEventListener('click', generateSeries);
+      if (btnGenChapter) btnGenChapter.addEventListener('click', generateChapter);
+      if (btnCopy) btnCopy.addEventListener('click', copyCode);
+
+      if (seriesTitleInput) {
+        seriesTitleInput.addEventListener('input', function (e) {
+          var chInput = document.getElementById('mpg-chapter-series-title');
+          if (chInput && (!chInput.value || chInput.value === 'Solo Leveling' || chInput.value === 'Yeni Seri')) {
+            chInput.value = e.target.value;
+          }
+        });
+      }
+
+      // İlk yükleme
+      generateSeries();
+    })();
+  </script>
+</div>

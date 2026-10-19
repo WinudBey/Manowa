@@ -157,6 +157,7 @@ class ThemeBuilder {
       'hero-slider.js',
       'sidebar-controller.js',
       'novel-font-loader.js',
+      'slice-merger.js',
       'reading-engine.js',
       'reader-hud.js',
       'post-generator.js',

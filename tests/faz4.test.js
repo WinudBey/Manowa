@@ -867,3 +867,94 @@ test('BloggerThemeBridge ve Blogger Tema Ozellestiricisi (b:skin Group/Variable 
     true
   );
 });
+
+test('PostGenerator: Yazar, cizer, editor, yil, kapak ve ozet meta verilerini eksiksiz uretmeli', () => {
+  const gen = new PostGenerator();
+  const loader = new BloggerFeedLoader();
+
+  const seriesRes = gen.generateSeriesPost({
+    title: 'Solo Leveling',
+    altTitle: 'Only I Level Up',
+    sourceLang: 'KR',
+    type: 'Manhwa',
+    status: 'Devam Ediyor',
+    author: 'Chugong',
+    artist: 'DUBU',
+    translator: 'Manowa Çeviri',
+    editor: 'Manowa Editör',
+    year: '2018',
+    genres: ['Aksiyon', 'Fantastik'],
+    cover: 'https://example.com/sl.jpg',
+    synopsis: 'Sung Jin-Woo zindan mücadelesi.'
+  });
+
+  assert.equal(seriesRes.html.includes('data-author="Chugong"'), true);
+  assert.equal(seriesRes.html.includes('data-artist="DUBU"'), true);
+  assert.equal(seriesRes.html.includes('<strong>Yazar:</strong> <span>Chugong</span>'), true);
+  assert.equal(seriesRes.html.includes('<strong>Çizer:</strong> <span>DUBU</span>'), true);
+  assert.equal(seriesRes.html.includes('<strong>Editör:</strong> <span>Manowa Editör</span>'), true);
+  assert.equal(seriesRes.html.includes('<strong>Yıl / Stüdyo:</strong> <span>2018</span>'), true);
+  assert.equal(
+    seriesRes.labels.includes('Seri, Manhwa, Devam Ediyor, Aksiyon, Fantastik, Solo Leveling'),
+    true
+  );
+
+  const parsed = loader.buildCatalogFromPosts([
+    {
+      title: 'Solo Leveling',
+      categories: ['Seri', 'Manhwa', 'Devam Ediyor', 'Aksiyon', 'Fantastik', 'Solo Leveling'],
+      content: seriesRes.html
+    }
+  ]);
+
+  assert.equal(parsed.length, 1);
+  assert.equal(parsed[0].author, 'Chugong');
+  assert.equal(parsed[0].artist, 'DUBU');
+  assert.equal(parsed[0].editor, 'Manowa Editör');
+  assert.equal(parsed[0].year, '2018');
+  assert.equal(parsed[0].altTitle, 'Only I Level Up');
+  assert.equal(parsed[0].synopsis, 'Sung Jin-Woo zindan mücadelesi.');
+});
+
+test('BloggerThemeBridge: Gonderi olusturucu sekmeleri ve DOM veri aktarimini yonetmeli', () => {
+  const { BloggerThemeBridge } = require('../src/scripts/blogger-theme-bridge');
+  const bridge = new BloggerThemeBridge();
+  const gen = new PostGenerator();
+
+  const mockDoc = {
+    elements: {
+      'btn-tab-gen-series': { classList: { toggle() {} }, setAttribute() {} },
+      'btn-tab-gen-chapter': { classList: { toggle() {} }, setAttribute() {} },
+      'panel-gen-series': { classList: { toggle() {} } },
+      'panel-gen-chapter': { classList: { toggle() {} } },
+      'gen-series-title': { value: 'Yeni Manga' },
+      'gen-series-alt-title': { value: 'New Manga' },
+      'gen-source-lang': { value: 'JP' },
+      'gen-series-status': { value: 'Devam Ediyor' },
+      'gen-reader-mode': { value: 'single' },
+      'gen-series-cover': { value: 'https://example.com/cover.png' },
+      'gen-series-author': { value: 'Oda' },
+      'gen-series-artist': { value: 'Oda' },
+      'gen-series-translator': { value: 'Çevirmen' },
+      'gen-series-editor': { value: 'Editör' },
+      'gen-series-year': { value: '1997' },
+      'gen-series-genres': { value: 'Macera, Shounen' },
+      'gen-series-synopsis': { value: 'Korsanlar çağı.' },
+      'gen-code-output': { value: '' },
+      'gen-labels-info': { textContent: '' }
+    },
+    getElementById(id) {
+      return this.elements[id] || null;
+    }
+  };
+
+  const switched = bridge.switchGeneratorTab('chapter', mockDoc);
+  assert.equal(switched, 'chapter');
+
+  const res = bridge.runGeneratorFromDom(gen, 'series', mockDoc);
+  assert.equal(res.seriesObject.title, 'Yeni Manga');
+  assert.equal(res.seriesObject.type, 'Manga');
+  assert.equal(res.seriesObject.author, 'Oda');
+  assert.equal(mockDoc.elements['gen-code-output'].value.includes('Yeni Manga'), true);
+});
+

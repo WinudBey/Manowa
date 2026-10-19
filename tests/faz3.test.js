@@ -807,4 +807,29 @@ test('Reader Comments: Alt barda yorum butonu olmamali, bolum sonuna gelindigind
   assert.equal(classes.has('reader-comments-visible'), true);
 });
 
+test('SliceMerger: extractSliceGroupKey ve groupSlicedPages dilimleri dogru gruplamali ve stitchCanvas calismali', async () => {
+  const { SliceMerger } = require('../src/scripts/slice-merger');
+  const merger = new SliceMerger();
+
+  assert.equal(SliceMerger.extractSliceGroupKey('https://example.com/01_01.webp'), 'page:1');
+  assert.equal(SliceMerger.extractSliceGroupKey('https://example.com/01_02.webp'), 'page:1');
+  assert.equal(SliceMerger.extractSliceGroupKey('https://example.com/sayfa-02_01.png'), 'page:2');
+  assert.equal(SliceMerger.extractSliceGroupKey('https://example.com/single-page.png'), null);
+
+  const groups = SliceMerger.groupSlicedPages([
+    'https://example.com/cover.webp',
+    'https://example.com/01_01.webp',
+    'https://example.com/01_02.webp',
+    'https://example.com/02_01.webp'
+  ]);
+  assert.equal(groups.length, 3);
+  assert.deepEqual(groups[0], ['https://example.com/cover.webp']);
+  assert.deepEqual(groups[1], ['https://example.com/01_01.webp', 'https://example.com/01_02.webp']);
+  assert.deepEqual(groups[2], ['https://example.com/02_01.webp']);
+
+  // stitchCanvas gecersiz eleman ile cagrildiginda false donmeli
+  const res = await merger.stitchCanvas(null, []);
+  assert.equal(res, false);
+});
+
 

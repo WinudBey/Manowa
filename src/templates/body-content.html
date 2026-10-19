@@ -11,8 +11,8 @@
   </div>
   <div class="header-controls">
     <!-- DEV_ONLY_START -->
-    <div class="search-box" id="dev-blog-origin-box" style="display: flex; gap: 0.35rem; align-items: center;">
-      <input class="search-input" id="input-blog-origin" placeholder="Blog URL (örn: blogadi.blogspot.com)" style="max-width: 225px;" type="url" />
+    <div class="search-box" id="dev-blog-origin-box" style="display: flex; gap: 0.35rem; align-items: center; flex-shrink: 0;">
+      <input class="search-input" id="input-blog-origin" placeholder="Blog URL (örn: blogadi.blogspot.com)" style="min-width: 215px; max-width: 235px; flex-shrink: 0;" type="url" />
       <button class="icon-btn" id="btn-connect-blog" title="Blogger Verilerini Çek" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> <span class="btn-label">Bağla</span></button>
     </div>
     <!-- DEV_ONLY_END -->
@@ -184,7 +184,20 @@
 
         <div class="reader-chapter-switcher">
           <button aria-label="Önceki Bölüm" class="reader-step-btn" id="btn-top-prev-chapter" title="Önceki Bölüm" type="button">‹</button>
-          <select class="reader-select reader-chapter-select" id="select-chapter" title="Bölüm Seç"></select>
+          <div class="reader-chapter-dropdown" id="reader-chapter-dropdown">
+            <button aria-controls="reader-chapter-menu" aria-expanded="false" aria-haspopup="listbox" aria-label="Bölüm Seçimi" class="reader-chapter-dropdown-btn" id="btn-chapter-dropdown" title="Bölüm Seç" type="button">
+              <span class="btn-label" id="reader-current-chapter-label">Bölüm Seç</span>
+              <svg aria-hidden="true" class="ui-icon ui-icon-chevron" fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div aria-label="Bölüm Listesi" class="reader-chapter-menu hidden" id="reader-chapter-menu" role="listbox" tabindex="-1">
+              <div class="reader-chapter-search-wrap">
+                <input autocomplete="off" class="reader-chapter-filter-input" id="input-chapter-filter" placeholder="Bölüm ara..." type="search" />
+              </div>
+              <div class="reader-chapter-options-list" id="reader-chapter-options-list"></div>
+            </div>
+            <!-- Geriye donuk form ve test uyumlulugu icin gizli select -->
+            <select aria-hidden="true" class="reader-select reader-chapter-select sr-only-select" id="select-chapter" tabindex="-1" title="Bölüm Seç"></select>
+          </div>
           <button aria-label="Sonraki Bölüm" class="reader-step-btn" id="btn-top-next-chapter" title="Sonraki Bölüm" type="button">›</button>
         </div>
 
@@ -395,6 +408,28 @@
   <div class="chapter-grid" id="history-list-grid"></div>
 </section>
 
+<!-- GORUNUM 6: BLOGGER STATIK SAYFA (HAKKIMIZDA, ILETISIM, GONDERI OLUSTURUCU VB.) -->
+<section class="hidden" id="view-page">
+  <div class="series-nav-bar">
+    <a class="icon-btn" data-action="catalog" href="/" id="btn-page-back" title="Kataloğa Dön">
+      <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      <span class="btn-label">Kataloğa Dön</span>
+    </a>
+    <nav aria-label="Sayfa Konumu" class="breadcrumb-trail">
+      <a class="breadcrumb-link" data-action="catalog" href="/">
+        <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="btn-label">Ana Sayfa</span>
+      </a>
+      <span>›</span>
+      <span id="page-breadcrumb-title">Sayfa</span>
+    </nav>
+  </div>
+  <article class="static-page-card" id="static-page-card">
+    <h1 class="static-page-main-title" id="static-page-title">Sayfa Başlığı</h1>
+    <div class="static-page-content" id="static-page-body"></div>
+  </article>
+</section>
+
 <!-- DEV_ONLY_START -->
 <!-- GORUNUM 6: BLOGGER GONDERI KODU OLUSTURUCU (YALNIZCA PREVIEW ICIN) -->
 <section class="hidden" id="view-generator">
@@ -404,52 +439,151 @@
       <button class="icon-btn" id="btn-gen-close" type="button">← Kataloğa Dön</button>
     </div>
     <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
-      Blogger'da yeni bir çeviri serisi veya yeni bir bölüm yayınlarken HTML görünümüne yapıştıracağınız hazır kodu ve etiketleri buradan üretebilirsiniz.
+      Blogger'da yeni bir çeviri serisi tanıtımı veya yeni bir bölüm yayınlarken HTML görünümüne yapıştıracağınız hazır kodu ve etiketleri buradan üretebilirsiniz.
     </p>
 
-    <div class="form-grid">
-      <div class="form-group">
-        <label for="gen-series-title">Seri Adı</label>
-        <input class="form-control" id="gen-series-title" type="text" value="Örnek Seri" />
+    <!-- SEKME BUTONLARI -->
+    <div class="generator-tabs" role="tablist">
+      <button class="generator-tab-btn active" id="btn-tab-gen-series" role="tab" aria-selected="true" type="button">
+        <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <span>1. Seri Tanıtımı Gönderisi</span>
+      </button>
+      <button class="generator-tab-btn" id="btn-tab-gen-chapter" role="tab" aria-selected="false" type="button">
+        <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span>2. Bölüm Okuma Gönderisi</span>
+      </button>
+    </div>
+
+    <!-- SEKME 1: SERİ TANITIM FORMU -->
+    <div class="generator-panel" id="panel-gen-series">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="gen-series-title">Seri Adı *</label>
+          <input class="form-control" id="gen-series-title" type="text" value="Örnek Seri" placeholder="Örn: Solo Leveling" />
+        </div>
+        <div class="form-group">
+          <label for="gen-series-alt-title">Alternatif / Orijinal İsimler</label>
+          <input class="form-control" id="gen-series-alt-title" type="text" value="" placeholder="Örn: Only I Level Up, Na Honjaman Rebeleop" />
+        </div>
+        <div class="form-group">
+          <label for="gen-source-lang">Tür / Kaynak Dil</label>
+          <select class="form-control" id="gen-source-lang">
+            <option value="KR" selected="selected">Manhwa (Korece - KR)</option>
+            <option value="JP">Manga (Japonca - JP)</option>
+            <option value="CN">Manhua (Çince - CN)</option>
+            <option value="EN">Novel / Webcomic (İngilizce - EN)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="gen-series-status">Yayın Durumu</label>
+          <select class="form-control" id="gen-series-status">
+            <option value="Devam Ediyor" selected="selected">Devam Ediyor</option>
+            <option value="Tamamlandı">Tamamlandı</option>
+            <option value="Güncel">Güncel</option>
+            <option value="Askıda">Askıda</option>
+            <option value="İptal Edildi">İptal Edildi</option>
+            <option value="Yakında">Yakında</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="gen-reader-mode">Varsayılan Okuma Motoru</label>
+          <select class="form-control" id="gen-reader-mode">
+            <option value="webtoon" selected="selected">Webtoon (Dikey Şerit)</option>
+            <option value="single">Tek Sayfa (Manga)</option>
+            <option value="double">Çift Sayfa (Kitap)</option>
+            <option value="novel">Novel (Metin Modu)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="gen-series-cover">Seri Kapak Görsel URL'si</label>
+          <input class="form-control" id="gen-series-cover" type="url" value="https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak" placeholder="https://..." />
+        </div>
+        <div class="form-group">
+          <label for="gen-series-author">Yazar</label>
+          <input class="form-control" id="gen-series-author" type="text" value="Chugong" placeholder="Yazar adı" />
+        </div>
+        <div class="form-group">
+          <label for="gen-series-artist">Çizer</label>
+          <input class="form-control" id="gen-series-artist" type="text" value="DUBU" placeholder="Çizer adı" />
+        </div>
+        <div class="form-group">
+          <label for="gen-series-translator">Çevirmen</label>
+          <input class="form-control" id="gen-series-translator" type="text" value="Manowa Çeviri" placeholder="Çevirmen adı" />
+        </div>
+        <div class="form-group">
+          <label for="gen-series-editor">Editör</label>
+          <input class="form-control" id="gen-series-editor" type="text" value="Manowa Editör" placeholder="Editör adı" />
+        </div>
+        <div class="form-group">
+          <label for="gen-series-year">Yıl / Stüdyo</label>
+          <input class="form-control" id="gen-series-year" type="text" value="2024" placeholder="Örn: 2024 / REDICE STUDIO" />
+        </div>
+        <div class="form-group">
+          <label for="gen-series-genres">Kategoriler / Türler (Virgülle ayırınız)</label>
+          <input class="form-control" id="gen-series-genres" type="text" value="Aksiyon, Fantastik, Macera" placeholder="Aksiyon, Fantastik, Zindan" />
+        </div>
       </div>
-      <div class="form-group">
-        <label for="gen-source-lang">Tür / Kaynak Dil</label>
-        <select class="form-control" id="gen-source-lang">
-          <option value="KR">Manhwa (Korece)</option>
-          <option value="JP">Manga (Japonca)</option>
-          <option value="CN">Manhua (Çince)</option>
-          <option value="EN">Novel / Webcomic</option>
-        </select>
+
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="gen-series-synopsis">Seri Özeti (Hikaye Konusu)</label>
+        <textarea class="form-control" id="gen-series-synopsis" rows="4" placeholder="Serinin konusunu buraya yazınız...">On yıl önce, gerçek dünyayı canavarların dünyasına bağlayan "Kapı" açıldı. Sung Jin-Woo, en zayıf E-sınıfı avcı iken ölümcül bir çift zindanda gizemli bir görev arayüzü ile yeniden doğar.</textarea>
       </div>
-      <div class="form-group">
-        <label for="gen-chapter-num">Bölüm Numarası</label>
-        <input class="form-control" id="gen-chapter-num" type="number" value="1" />
-      </div>
-      <div class="form-group">
-        <label for="gen-reader-mode">Varsayılan Okuma Motoru</label>
-        <select class="form-control" id="gen-reader-mode">
-          <option value="webtoon">Webtoon (Dikey Şerit)</option>
-          <option value="single">Tek Sayfa (Manga)</option>
-          <option value="double">Çift Sayfa (Kitap)</option>
-        </select>
+
+      <div class="detail-actions">
+        <button class="primary-btn" id="btn-generate-series" type="button">
+          <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Seri Tanıtım HTML Üret
+        </button>
       </div>
     </div>
 
-    <div class="form-group" style="margin-bottom: 1rem;">
-      <label for="gen-translator-note">Çevirmen Notu (İsteğe Bağlı)</label>
-      <input class="form-control" id="gen-translator-note" placeholder="Bölüm başı çevirmen notu..." type="text" value="" />
-    </div>
+    <!-- SEKME 2: BÖLÜM OKUMA FORMU -->
+    <div class="generator-panel hidden" id="panel-gen-chapter">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="gen-chapter-series-title">Bağlı Olduğu Seri Adı *</label>
+          <input class="form-control" id="gen-chapter-series-title" type="text" value="Örnek Seri" placeholder="Seri Adı (Örn: Solo Leveling)" />
+        </div>
+        <div class="form-group">
+          <label for="gen-chapter-num">Bölüm Numarası *</label>
+          <input class="form-control" id="gen-chapter-num" type="number" step="any" value="1" />
+        </div>
+        <div class="form-group">
+          <label for="gen-chapter-title">Özel Bölüm Başlığı (İsteğe Bağlı)</label>
+          <input class="form-control" id="gen-chapter-title" type="text" value="" placeholder="Boş bırakılırsa: [Seri Adı] Bölüm [No]" />
+        </div>
+        <div class="form-group">
+          <label for="gen-chapter-reader-mode">Bölüm Okuma Motoru</label>
+          <select class="form-control" id="gen-chapter-reader-mode">
+            <option value="webtoon" selected="selected">Webtoon (Dikey Şerit)</option>
+            <option value="single">Tek Sayfa (Manga)</option>
+            <option value="double">Çift Sayfa (Kitap)</option>
+            <option value="novel">Novel (Metin Modu)</option>
+          </select>
+        </div>
+      </div>
 
-    <div class="form-group" style="margin-bottom: 1rem;">
-      <label for="gen-pages-input">Bölüm Sayfa Görsel URL'leri (Her satıra 1 resim URL'si)</label>
-      <textarea class="form-control" id="gen-pages-input">https://placehold.co/800x1200/1e1b4b/ffffff?text=Sayfa+1
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="gen-translator-note">Çevirmen Notu (İsteğe Bağlı)</label>
+        <input class="form-control" id="gen-translator-note" placeholder="Bölüm başı çevirmen notu..." type="text" value="" />
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="gen-pages-input">Bölüm Sayfa Görsel URL'leri (Her satıra 1 resim URL'si)</label>
+        <textarea class="form-control" id="gen-pages-input">https://placehold.co/800x1200/1e1b4b/ffffff?text=Sayfa+1
 https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
-    </div>
+      </div>
 
-    <div class="detail-actions">
-      <button class="primary-btn" id="btn-generate-series" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Seri Tanıtım HTML Üret</button>
-      <button class="primary-btn" id="btn-generate-chapter" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Bölüm Okuma HTML Üret</button>
-      <button class="icon-btn" id="btn-test-generated" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg> Üretilen Bölümü Şimdi Okuyucuda Test Et</button>
+      <div class="detail-actions">
+        <button class="primary-btn" id="btn-generate-chapter" type="button">
+          <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Bölüm Okuma HTML Üret
+        </button>
+        <button class="icon-btn" id="btn-test-generated" type="button">
+          <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Üretilen Bölümü Şimdi Okuyucuda Test Et
+        </button>
+      </div>
     </div>
 
     <div class="code-output-wrap">

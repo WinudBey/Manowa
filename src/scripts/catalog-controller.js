@@ -100,6 +100,28 @@
               createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 1, '#ea580c'),
               createSamplePageSvg('Gölge Hükümdarı - Bölüm 1', 2, '#c2410c')
             ]
+          },
+          {
+            id: 'golge-hukumdari-bolum-2',
+            number: 2,
+            title: 'Gölge Hükümdarı Bölüm 2',
+            date: '2026-09-27',
+            translatorNote: '',
+            pages: [
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 2', 1, '#ea580c'),
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 2', 2, '#c2410c')
+            ]
+          },
+          {
+            id: 'golge-hukumdari-bolum-3',
+            number: 3,
+            title: 'Gölge Hükümdarı Bölüm 3',
+            date: '2026-09-28',
+            translatorNote: '',
+            pages: [
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 3', 1, '#ea580c'),
+              createSamplePageSvg('Gölge Hükümdarı - Bölüm 3', 2, '#c2410c')
+            ]
           }
         ]
       },
@@ -179,6 +201,11 @@
       if (Array.isArray(newSeriesList)) {
         this.seriesList = newSeriesList.slice();
         this._log('info', 'Katalog dinamik seri listesiyle guncellendi.', {
+          count: this.seriesList.length
+        });
+      } else if (newSeriesList === null) {
+        this.seriesList = getDefaultCatalog();
+        this._log('info', 'Katalog varsayilan serilerle sifirlandi.', {
           count: this.seriesList.length
         });
       }

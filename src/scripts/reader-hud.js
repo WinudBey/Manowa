@@ -69,6 +69,10 @@
             topBtn.setAttribute('aria-expanded', String(this.settingsOpen));
           }
         }
+        const chapterMenu = targetDoc.getElementById('reader-chapter-menu');
+        const chapterBtn = targetDoc.getElementById('btn-chapter-dropdown');
+        if (chapterMenu && chapterMenu.classList) chapterMenu.classList.add('hidden');
+        if (chapterBtn && typeof chapterBtn.setAttribute === 'function') chapterBtn.setAttribute('aria-expanded', 'false');
         if (!this.settingsOpen) {
           const fontMenu = targetDoc.getElementById('reader-font-menu');
           const fontBtn = targetDoc.getElementById('btn-font-family');
@@ -260,10 +264,15 @@
           const currEl = targetDoc.getElementById('seekbar-current-page');
           const miniEl = targetDoc.getElementById('reader-mini-page-pill');
           const progEl = targetDoc.getElementById('reader-progress-bar');
+          const seekbarSlider = targetDoc.getElementById('reader-page-slider');
           const total = Math.max(1, reader.pages.length);
           if (currEl) currEl.textContent = String(idx + 1);
           if (miniEl) miniEl.textContent = `${idx + 1} / ${total}`;
           if (progEl && progEl.style) progEl.style.width = `${reader.getProgressPercent()}%`;
+          if (seekbarSlider && seekbarSlider.style && typeof seekbarSlider.style.setProperty === 'function') {
+            const fill = total > 1 ? Math.round((idx / (total - 1)) * 100) : 0;
+            seekbarSlider.style.setProperty('--slider-fill', `${fill}%`);
+          }
           if (viewport && typeof viewport.querySelector === 'function') {
             const imgEl = viewport.querySelector(`[data-page-index="${idx}"]`);
             if (imgEl && typeof imgEl.scrollIntoView === 'function') {
@@ -327,7 +336,13 @@
         const miniPill = targetDoc.getElementById('reader-mini-page-pill');
         const progressBar = targetDoc.getElementById('reader-progress-bar');
         if (seekbarCurr) seekbarCurr.textContent = String(currPage);
-        if (seekbarSlider) seekbarSlider.value = String(currPage);
+        if (seekbarSlider) {
+          seekbarSlider.value = String(currPage);
+          const fill = total > 1 ? Math.round(((currPage - 1) / (total - 1)) * 100) : 0;
+          if (seekbarSlider.style && typeof seekbarSlider.style.setProperty === 'function') {
+            seekbarSlider.style.setProperty('--slider-fill', `${fill}%`);
+          }
+        }
         if (miniPill) miniPill.textContent = `${currPage} / ${total}`;
         if (progressBar && progressBar.style) {
           progressBar.style.width = `${reader.getProgressPercent()}%`;
@@ -380,10 +395,12 @@
       if (!targetDoc || typeof targetDoc.getElementById !== 'function') return;
       const endCard = targetDoc.getElementById('reader-chapter-end-card');
       const disqusSec = targetDoc.getElementById('disqus-section');
-      if (!endCard || !disqusSec || !disqusSec.classList) return;
+      if (endCard.classList && endCard.classList.contains('hidden')) return;
+      if (typeof endCard.offsetHeight === 'number' && endCard.offsetHeight === 0) return;
 
       if (typeof endCard.getBoundingClientRect === 'function') {
         const rect = endCard.getBoundingClientRect();
+        if (rect.height === 0) return;
         const winHeight =
           (typeof globalScope.innerHeight === 'number' && globalScope.innerHeight) || 720;
         if (rect.top <= winHeight + 150) {
@@ -422,6 +439,70 @@
       };
 
       on('select-chapter', 'change', (e) => app.openReader(app.activeSeriesId, e.target.value));
+
+      const chapterTrigger = targetDoc.getElementById('btn-chapter-dropdown');
+      const chapterMenu = targetDoc.getElementById('reader-chapter-menu');
+      const chapterFilterInput = targetDoc.getElementById('input-chapter-filter');
+      const chapterDropdown = targetDoc.getElementById('reader-chapter-dropdown');
+
+      const toggleChapterMenu = (forceOpen) => {
+        if (!chapterMenu || !chapterTrigger) return;
+        const isHidden = chapterMenu.classList.contains('hidden');
+        const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : isHidden;
+        chapterMenu.classList.toggle('hidden', !shouldOpen);
+        chapterTrigger.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        if (shouldOpen) {
+          if (chapterFilterInput) {
+            chapterFilterInput.value = '';
+            chapterMenu.querySelectorAll('.reader-chapter-option').forEach((opt) => opt.classList.remove('hidden'));
+            setTimeout(() => {
+              if (typeof chapterFilterInput.focus === 'function') {
+                chapterFilterInput.focus({ preventScroll: true });
+              }
+            }, 60);
+          }
+          const activeOpt = chapterMenu.querySelector('.reader-chapter-option.active');
+          const optionsList = targetDoc.getElementById('reader-chapter-options-list');
+          if (activeOpt && optionsList) {
+            optionsList.scrollTop = Math.max(0, activeOpt.offsetTop - optionsList.offsetTop - 30);
+          }
+        }
+      };
+
+      on('btn-chapter-dropdown', 'click', (e) => {
+        if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+        toggleChapterMenu();
+      });
+
+      if (chapterFilterInput) {
+        chapterFilterInput.addEventListener('input', (e) => {
+          const q = String(e.target.value || '').trim().toLowerCase();
+          chapterMenu.querySelectorAll('.reader-chapter-option').forEach((opt) => {
+            const matches = !q || (opt.textContent || '').toLowerCase().includes(q);
+            opt.classList.toggle('hidden', !matches);
+          });
+        });
+        chapterFilterInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            toggleChapterMenu(false);
+            if (chapterTrigger && typeof chapterTrigger.focus === 'function') chapterTrigger.focus();
+          }
+        });
+      }
+
+      if (chapterMenu) {
+        chapterMenu.addEventListener('click', (e) => {
+          const opt = e.target.closest('.reader-chapter-option');
+          if (!opt) return;
+          if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+          const chapterId = opt.getAttribute('data-chapter-id');
+          if (chapterId && app && typeof app.openReader === 'function') {
+            app.openReader(app.activeSeriesId, chapterId);
+            toggleChapterMenu(false);
+          }
+        });
+      }
+
       on('select-mode', 'change', (e) => {
         app.reader.setMode(e.target.value);
         refreshAll();
@@ -529,6 +610,15 @@
           ) {
             toggleFontMenu(false);
           }
+          if (
+            chapterDropdown &&
+            typeof chapterDropdown.contains === 'function' &&
+            !chapterDropdown.contains(e.target) &&
+            chapterMenu &&
+            !chapterMenu.classList.contains('hidden')
+          ) {
+            toggleChapterMenu(false);
+          }
         });
       }
 
@@ -584,6 +674,13 @@
         refreshAll();
       });
       on('reader-page-slider', 'input', (e) => {
+        const slider = e.target;
+        const total = Math.max(1, (app.reader && app.reader.pages && app.reader.pages.length) || Number(slider.max) || 1);
+        const curr = Number(slider.value) || 1;
+        const fill = total > 1 ? Math.round(((curr - 1) / (total - 1)) * 100) : 0;
+        if (slider.style && typeof slider.style.setProperty === 'function') {
+          slider.style.setProperty('--slider-fill', `${fill}%`);
+        }
         this.handleSeekbarChange(app.reader, e.target.value, targetDoc);
       });
 
@@ -620,7 +717,13 @@
           const endObserver = new globalScope.IntersectionObserver(
             (entries) => {
               entries.forEach((entry) => {
-                if (entry.isIntersecting && app.currentView === 'reader') {
+                if (
+                  entry.isIntersecting &&
+                  entry.intersectionRatio > 0 &&
+                  app.currentView === 'reader' &&
+                  !endCard.classList.contains('hidden') &&
+                  endCard.offsetHeight > 0
+                ) {
                   disqusSec.classList.add('reader-comments-visible');
                   if (!this._hasScrolledToEnd) {
                     this._hasScrolledToEnd = true;
@@ -654,7 +757,9 @@
           'scroll',
           () => {
             if (app.currentView === 'reader') {
-              this.updateWebtoonScrollPage(app.reader, targetDoc);
+              if (app.reader && app.reader.mode === 'webtoon') {
+                this.updateWebtoonScrollPage(app.reader, targetDoc);
+              }
               this.checkCommentsEndVisibility(targetDoc);
             }
           },

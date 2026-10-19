@@ -427,6 +427,45 @@
      * @param {'series'|'chapter'} mode - Olusturma modu.
      * @param {Document} [doc] - Hedef DOM belgesi.
      * @returns {Object|null} Uretilen kod nesnesi.
+    /**
+     * Gonderi olusturucu sekmeleri arasinda gecis yapar.
+     * @param {'series'|'chapter'} tabName - Hedef sekme.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {'series'|'chapter'} Aktif sekme.
+     */
+    switchGeneratorTab(tabName, doc) {
+      const isSeries = tabName === 'series';
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc) return tabName;
+
+      const btnSeries = targetDoc.getElementById('btn-tab-gen-series');
+      const btnChapter = targetDoc.getElementById('btn-tab-gen-chapter');
+      const panelSeries = targetDoc.getElementById('panel-gen-series');
+      const panelChapter = targetDoc.getElementById('panel-gen-chapter');
+
+      if (btnSeries) {
+        btnSeries.classList.toggle('active', isSeries);
+        btnSeries.setAttribute('aria-selected', isSeries ? 'true' : 'false');
+      }
+      if (btnChapter) {
+        btnChapter.classList.toggle('active', !isSeries);
+        btnChapter.setAttribute('aria-selected', !isSeries ? 'true' : 'false');
+      }
+      if (panelSeries) {
+        panelSeries.classList.toggle('hidden', !isSeries);
+      }
+      if (panelChapter) {
+        panelChapter.classList.toggle('hidden', isSeries);
+      }
+      return tabName;
+    }
+
+    /**
+     * Gonderi olusturucudaki DOM girdilerinden seri veya bolum HTML kodunu uretir.
+     * @param {Object} generator - PostGenerator nesnesi.
+     * @param {'series'|'chapter'} mode - Olusturma modu.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {Object|null} Uretilen kod nesnesi.
      */
     runGeneratorFromDom(generator, mode, doc) {
       if (!generator) return null;
@@ -435,22 +474,62 @@
         const el = targetDoc && targetDoc.getElementById ? targetDoc.getElementById(id) : null;
         return (el && el.value) || fallback;
       };
-      const title = getVal('gen-series-title', 'Yeni Seri');
-      const sourceLang = getVal('gen-source-lang', 'KR');
-      const chapterNumber = getVal('gen-chapter-num', 1);
-      const readerMode = getVal('gen-reader-mode', 'webtoon');
-      const translatorNote = getVal('gen-translator-note', '');
-      const pages = getVal('gen-pages-input', '');
-      const res =
-        mode === 'series'
-          ? generator.generateSeriesPost({ title, sourceLang, defaultReaderMode: readerMode })
-          : generator.generateChapterPost({
-              seriesTitle: title,
-              chapterNumber,
-              readerMode,
-              translatorNote,
-              pages
-            });
+
+      let res;
+      if (mode === 'series') {
+        const title = getVal('gen-series-title', 'Yeni Seri');
+        const altTitle = getVal('gen-series-alt-title', '');
+        const sourceLang = getVal('gen-source-lang', 'KR');
+        const status = getVal('gen-series-status', 'Devam Ediyor');
+        const readerMode = getVal('gen-reader-mode', 'webtoon');
+        const cover = getVal('gen-series-cover', '');
+        const author = getVal('gen-series-author', '');
+        const artist = getVal('gen-series-artist', '');
+        const translator = getVal('gen-series-translator', 'Manowa Çeviri');
+        const editor = getVal('gen-series-editor', 'Manowa Editör');
+        const year = getVal('gen-series-year', '');
+        const genres = getVal('gen-series-genres', 'Aksiyon, Fantastik');
+        const synopsis = getVal('gen-series-synopsis', '');
+
+        const typeMap = { KR: 'Manhwa', JP: 'Manga', CN: 'Manhua', EN: 'Novel' };
+        const type = typeMap[sourceLang] || 'Manhwa';
+
+        res = generator.generateSeriesPost({
+          title,
+          altTitle,
+          sourceLang,
+          type,
+          status,
+          defaultReaderMode: readerMode,
+          cover,
+          author,
+          artist,
+          translator,
+          editor,
+          year,
+          genres,
+          synopsis
+        });
+      } else {
+        const seriesTitle =
+          getVal('gen-chapter-series-title', '') || getVal('gen-series-title', 'Yeni Seri');
+        const chapterNumber = getVal('gen-chapter-num', 1);
+        const chapterTitle = getVal('gen-chapter-title', '');
+        const readerMode =
+          getVal('gen-chapter-reader-mode', '') || getVal('gen-reader-mode', 'webtoon');
+        const translatorNote = getVal('gen-translator-note', '');
+        const pages = getVal('gen-pages-input', '');
+
+        res = generator.generateChapterPost({
+          seriesTitle,
+          chapterNumber,
+          chapterTitle: chapterTitle || `${seriesTitle} Bölüm ${chapterNumber}`,
+          readerMode,
+          translatorNote,
+          pages
+        });
+      }
+
       if (targetDoc && targetDoc.getElementById) {
         const outEl = targetDoc.getElementById('gen-code-output');
         const labelsEl = targetDoc.getElementById('gen-labels-info');
@@ -458,6 +537,65 @@
         if (labelsEl) labelsEl.textContent = `Önerilen Blogger Etiketleri: ${res.labels}`;
       }
       return res;
+    }
+
+    /**
+     * Blogger statik sayfa basligini ve icerigini DOM'dan okuyup #view-page icine aktarir.
+     * @param {Document} [doc] - Hedef DOM belgesi.
+     * @returns {{ title: string, hasContent: boolean }} Sayfa bilgileri.
+     */
+    renderStaticPage(doc) {
+      const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
+      if (!targetDoc) return { title: 'Sayfa', hasContent: false };
+
+      const titleEl = targetDoc.getElementById('static-page-title');
+      const breadcrumbTitleEl = targetDoc.getElementById('page-breadcrumb-title');
+      const bodyEl = targetDoc.getElementById('static-page-body');
+
+      let pageTitle = '';
+      let pageHtml = '';
+
+      const rawContainer = targetDoc.getElementById('blogger-static-page-raw');
+      if (rawContainer) {
+        const postData = rawContainer.querySelector('.static-post-data');
+        if (postData) {
+          pageTitle = postData.getAttribute('data-title') || '';
+          pageHtml = postData.innerHTML;
+        } else {
+          pageHtml = rawContainer.innerHTML;
+        }
+      }
+
+      if (!pageHtml) {
+        const postEntry = targetDoc.querySelector('.post-entry');
+        if (postEntry) {
+          const entryTitle = postEntry.querySelector('.post-title');
+          const entryBody = postEntry.querySelector('.post-body');
+          if (entryTitle) pageTitle = entryTitle.textContent.trim();
+          if (entryBody) pageHtml = entryBody.innerHTML;
+        }
+      }
+
+      if (!pageTitle && targetDoc.title) {
+        pageTitle = targetDoc.title.split(' - ')[0].trim() || 'Sayfa';
+      }
+
+      if (titleEl) titleEl.textContent = pageTitle || 'Sayfa';
+      if (breadcrumbTitleEl) breadcrumbTitleEl.textContent = pageTitle || 'Sayfa';
+      if (bodyEl) {
+        bodyEl.innerHTML =
+          pageHtml ||
+          '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">Bu sayfa Blogger üzerinde bir Statik Sayfa olarak yayınlandığında içeriği burada görüntülenecektir.</p>';
+      }
+
+      if (this.logger && typeof this.logger.info === 'function') {
+        this.logger.info('Statik sayfa icerigi DOM uzerine aktarildi.', {
+          title: pageTitle,
+          hasContent: Boolean(pageHtml)
+        });
+      }
+
+      return { title: pageTitle || 'Sayfa', hasContent: Boolean(pageHtml) };
     }
 
     /**

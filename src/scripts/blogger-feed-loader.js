@@ -88,12 +88,14 @@
     normalizeBlogOrigin(rawUrl) {
       const trimmed = String(rawUrl || '').trim();
       if (!trimmed) return '';
-      const withProto = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+      const withDomain =
+        !trimmed.includes('.') && !trimmed.includes('/') ? `${trimmed}.blogspot.com` : trimmed;
+      const withProto = /^https?:\/\//i.test(withDomain) ? withDomain : `https://${withDomain}`;
       try {
         const parsed = new URL(withProto);
         return parsed.origin;
       } catch (_err) {
-        return trimmed.replace(/\/+$/, '');
+        return withDomain.replace(/\/+$/, '');
       }
     }
     /**
@@ -360,15 +362,18 @@
         const postUrl = post.url || '';
         const isSeriesPost =
           catsLower.includes('seri') ||
+          catsLower.includes('series') ||
           html.includes('manowa-series-post') ||
           html.includes('actual-series-tag') ||
           /\[Slug:/i.test(html);
         const isChapterPost =
-          catsLower.includes('bölüm') ||
-          catsLower.includes('bolum') ||
+          catsLower.some((c) => ['bölüm', 'bolum', 'chapter', 'ch'].includes(c)) ||
           html.includes('manowa-chapter-post') ||
-          (!isSeriesPost && /b[öo]l[üu]m\s*\d+/i.test(title));
-        if (isSeriesPost && !catsLower.includes('bölüm')) {
+          (!isSeriesPost &&
+            (/b[öo]l[üu]m\s*\d+/i.test(title) ||
+              /\bch(?:apter)?\.?\s*\d+/i.test(title) ||
+              /\b\d+\s*$/i.test(title)));
+        if (isSeriesPost && !catsLower.some((c) => ['bölüm', 'bolum', 'chapter', 'ch'].includes(c))) {
           const tagFromHtml = this.extractSeriesTagFromHtml(html);
           const seriesTag = tagFromHtml || title;
           const seriesId = toSlug(seriesTag);
@@ -408,27 +413,67 @@
       });
       chapterItems.forEach((chPost) => {
         const htmlSeriesTag = this.extractSeriesTagFromHtml(chPost.html);
-        const matchingExistingCat = chPost.categories.find((c) => seriesMap.has(toSlug(c)));
-        const nonGenericLabel = chPost.categories.find((c) => {
-          const lower = String(c).toLowerCase();
-          if (['bölüm', 'bolum', 'seri'].includes(lower)) return false;
-          if (KNOWN_TYPES.some((t) => t.toLowerCase() === lower)) return false;
-          if (KNOWN_STATUSES.some((s) => s.toLowerCase() === lower)) return false;
-          return true;
-        });
-        const inferredSeriesTitle =
-          htmlSeriesTag ||
-          matchingExistingCat ||
-          nonGenericLabel ||
-          this.inferSeriesNameFromChapterTitle(chPost.title) ||
-          'Genel Seri';
-        const seriesId = toSlug(inferredSeriesTitle);
+        const titleInferredName = this.inferSeriesNameFromChapterTitle(chPost.title);
+        const titleInferredSlug = toSlug(titleInferredName);
+
+        let targetSeriesId = '';
+        if (htmlSeriesTag && seriesMap.has(toSlug(htmlSeriesTag))) {
+          targetSeriesId = toSlug(htmlSeriesTag);
+        }
+        if (!targetSeriesId && titleInferredSlug && seriesMap.has(titleInferredSlug)) {
+          targetSeriesId = titleInferredSlug;
+        }
+        if (!targetSeriesId) {
+          for (const cat of chPost.categories) {
+            const catSlug = toSlug(cat);
+            if (seriesMap.has(catSlug)) {
+              targetSeriesId = catSlug;
+              break;
+            }
+            for (const [sId, sObj] of seriesMap.entries()) {
+              const sTitleLower = sObj.title.toLowerCase();
+              const catLower = cat.toLowerCase();
+              if (sTitleLower === catLower || sId.includes(catSlug) || catSlug.includes(sId)) {
+                targetSeriesId = sId;
+                break;
+              }
+            }
+            if (targetSeriesId) break;
+          }
+        }
+        if (!targetSeriesId) {
+          for (const [sId, sObj] of seriesMap.entries()) {
+            if (chPost.title.toLowerCase().startsWith(sObj.title.toLowerCase())) {
+              targetSeriesId = sId;
+              break;
+            }
+          }
+        }
+
+        let inferredTitle = '';
+        if (targetSeriesId && seriesMap.has(targetSeriesId)) {
+          inferredTitle = seriesMap.get(targetSeriesId).title;
+        } else {
+          const nonGenericCat = chPost.categories.find((c) => {
+            const lower = String(c).toLowerCase();
+            if (['bölüm', 'bolum', 'chapter', 'ch', 'seri', 'series', 'ep', 'episode'].includes(lower)) {
+              return false;
+            }
+            if (KNOWN_TYPES.some((t) => t.toLowerCase() === lower)) return false;
+            if (KNOWN_STATUSES.some((s) => s.toLowerCase() === lower)) return false;
+            return true;
+          });
+          inferredTitle = nonGenericCat || titleInferredName || 'Genel Seri';
+          targetSeriesId = toSlug(inferredTitle);
+        }
+
+        const seriesId = targetSeriesId;
         if (!seriesMap.has(seriesId)) {
           const imgs = this.extractImages(chPost.html);
           const isNovelChapter = detectNovelChapter(chPost.html, imgs, '');
           seriesMap.set(seriesId, {
             id: seriesId,
-            title: inferredSeriesTitle,
+            title: inferredTitle,
             altTitle: '',
             author: '',
             artist: '',
@@ -442,7 +487,7 @@
             rating: '9.5',
             genres: ['Genel'],
             cover: imgs[0] || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak',
-            synopsis: `${inferredSeriesTitle} çeviri bölümleri.`,
+            synopsis: `${inferredTitle} çeviri bölümleri.`,
             url: '',
             publishedDate: chPost.publishedDate,
             chapters: []
@@ -626,38 +671,55 @@
      */
     async fetchDynamicCatalog(feedUrl = '/feeds/posts/default?alt=json&max-results=500') {
       const savedOrigin = this.getSavedBlogOrigin();
-      const isFileProtocol =
-        typeof location !== 'undefined' && location.protocol === 'file:' && feedUrl.startsWith('/');
-      if (this.fetchFn && !isFileProtocol && !savedOrigin) {
+      const resolvedOrigin =
+        savedOrigin ||
+        (typeof location !== 'undefined' && location.origin && location.origin.startsWith('http')
+          ? location.origin
+          : '');
+      const isBrowser = typeof window !== 'undefined' && typeof location !== 'undefined';
+      const isFileProtocol = isBrowser && location.protocol === 'file:';
+      const isCrossOrigin =
+        isBrowser &&
+        (isFileProtocol || (resolvedOrigin && location.origin !== resolvedOrigin));
+
+      // Eger yerel dosya (file://) ise ve herhangi bir blog adresi belirtilmemisse DOM veya varsayilan icerigi don
+      if (isFileProtocol && !resolvedOrigin) {
+        return this.parseDomEntries();
+      }
+
+      // Tarayici uzerinde farkli origin veya yerel onizleme (file://) ise CORS hatasini engellemek icin dogrudan JSONP kullan
+      if (isCrossOrigin && typeof document !== 'undefined' && resolvedOrigin) {
+        const jsonpSeries = await this.fetchViaJsonp(resolvedOrigin);
+        if (jsonpSeries.length > 0) {
+          return jsonpSeries;
+        }
+      }
+
+      if (this.fetchFn) {
+        const targetUrl = resolvedOrigin
+          ? `${resolvedOrigin}/feeds/posts/default?alt=json&max-results=500`
+          : feedUrl;
         try {
-          this._log('debug', 'Blogger JSON Feed istegi gonderiliyor.', { feedUrl });
-          const response = await this.fetchFn(feedUrl);
-          if (!response || !response.ok) {
-            throw new Error(`HTTP ${response ? response.status : 'NO_RESPONSE'}`);
-          }
-          const json = await response.json();
-          const seriesList = this.parseBloggerFeedJson(json);
-          if (seriesList.length > 0) {
-            this._log('info', 'Blogger JSON Feed basariyla yuklendi.', { count: seriesList.length });
-            return seriesList;
+          this._log('debug', 'Blogger JSON Feed istegi gonderiliyor.', { targetUrl });
+          const response = await this.fetchFn(targetUrl);
+          if (response && response.ok) {
+            const json = await response.json();
+            const seriesList = this.parseBloggerFeedJson(json);
+            if (seriesList.length > 0) {
+              this._log('info', 'Blogger JSON Feed basariyla yuklendi.', { count: seriesList.length });
+              return seriesList;
+            }
           }
         } catch (err) {
-          this._log('warn', 'Blogger JSON Feed alinamadi, yedek yontemler deneniyor.', {
+          this._log('warn', 'Blogger JSON Feed fetch alinamadi, JSONP deneniyor.', {
             error: err.message
           });
         }
       }
-      if (typeof document !== 'undefined') {
-        const origin =
-          savedOrigin ||
-          (typeof location !== 'undefined' && location.origin && location.origin.startsWith('http')
-            ? location.origin
-            : '');
-        if (origin) {
-          const jsonpSeries = await this.fetchViaJsonp(origin);
-          if (jsonpSeries.length > 0) {
-            return jsonpSeries;
-          }
+      if (typeof document !== 'undefined' && resolvedOrigin) {
+        const jsonpSeries = await this.fetchViaJsonp(resolvedOrigin);
+        if (jsonpSeries.length > 0) {
+          return jsonpSeries;
         }
       }
       return this.parseDomEntries();

@@ -92,7 +92,11 @@
       const defaultReaderMode =
         data.defaultReaderMode || (sourceLang === 'JP' ? 'single' : 'webtoon');
       const status = data.status || 'Devam Ediyor';
+      const author = data.author || '';
+      const artist = data.artist || '';
       const translator = data.translator || 'Manowa Çeviri';
+      const editor = data.editor || 'Manowa Editör';
+      const year = data.year || '';
       const cover = data.cover || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak';
       const genreList = Array.isArray(data.genres)
         ? data.genres
@@ -106,19 +110,32 @@
         id,
         title,
         altTitle,
+        author,
+        artist,
+        translator,
+        editor,
+        year,
         sourceLang,
         type,
         defaultReaderMode,
         status,
-        translator,
-        rating: '9.5',
+        rating: data.rating || '9.5',
         genres: genreList,
         cover,
         synopsis,
         chapters: []
       };
 
-      const html = [
+      const metaRows = [];
+      if (author) metaRows.push(`    <p><strong>Yazar:</strong> <span>${escapeHtml(author)}</span></p>`);
+      if (artist) metaRows.push(`    <p><strong>Çizer:</strong> <span>${escapeHtml(artist)}</span></p>`);
+      if (translator) metaRows.push(`    <p><strong>Çevirmen:</strong> <span>${escapeHtml(translator)}</span></p>`);
+      if (editor) metaRows.push(`    <p><strong>Editör:</strong> <span>${escapeHtml(editor)}</span></p>`);
+      if (year) metaRows.push(`    <p><strong>Yıl / Stüdyo:</strong> <span>${escapeHtml(year)}</span></p>`);
+      if (altTitle) metaRows.push(`    <p><strong>Diğer İsimler:</strong> <span>${escapeHtml(altTitle)}</span></p>`);
+      const metaHtml = metaRows.length > 0 ? `  <div class="series-meta-info">\n${metaRows.join('\n')}\n  </div>` : '';
+
+      const htmlParts = [
         `<!-- MANOWA SERI TANITIM KODU -->`,
         `<div id="actual-series-tag" style="display:none;">${escapeHtml(title)}</div>`,
         `<div class="manowa-series-post"`,
@@ -129,18 +146,32 @@
         `  data-type="${escapeHtml(type)}"`,
         `  data-reader-mode="${escapeHtml(defaultReaderMode)}"`,
         `  data-status="${escapeHtml(status)}"`,
+        `  data-author="${escapeHtml(author)}"`,
+        `  data-artist="${escapeHtml(artist)}"`,
         `  data-translator="${escapeHtml(translator)}"`,
+        `  data-editor="${escapeHtml(editor)}"`,
+        `  data-year="${escapeHtml(year)}"`,
         `  data-genres="${escapeHtml(genreList.join(','))}"`,
         `  data-cover="${escapeHtml(cover)}">`,
-        `  <img src="${escapeHtml(cover)}" alt="${escapeHtml(title)}" />`,
+        `  <img src="${escapeHtml(cover)}" alt="${escapeHtml(title)}" />`
+      ];
+
+      if (metaHtml) {
+        htmlParts.push(metaHtml);
+      }
+
+      htmlParts.push(
         `  <div class="synopsis-box">`,
         `    <h3>Özet</h3>`,
         `    <p class="manowa-synopsis">${escapeHtml(synopsis)}</p>`,
         `  </div>`,
         `</div>`
-      ].join('\n');
+      );
 
-      const labels = ['Seri', type, status, ...genreList, title].join(', ');
+      const html = htmlParts.join('\n');
+      const labelList = ['Seri', type, status, ...genreList, title].filter(Boolean);
+      const uniqueLabels = Array.from(new Set(labelList));
+      const labels = uniqueLabels.join(', ');
       this._log('info', 'Seri gonderi HTML kodu uretildi.', { id, labels });
       return { html, labels, seriesObject };
     }
