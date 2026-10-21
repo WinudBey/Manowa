@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manowa - Yükleme Animasyonu Demoları (Seçenek A ve B)</title>
+  <style>
+    :root {
+      --bg-primary: #0f1117;
+      --bg-secondary: #181b24;
+      --bg-card: #1f2330;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-primary: #f97316;
+      --accent-hover: #fb923c;
+      --accent-glow: rgba(249, 115, 22, 0.25);
+      --border-color: #2e3446;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 90px;
+    }
+
+    /* ======================================================== */
+    /* SEÇENEK A: ÜST YÜKLEME İLERLEME ÇUBUĞU (TOP PROGRESS BAR) */
+    /* ======================================================== */
+    #top-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, #ea580c, #f97316, #facc15);
+      box-shadow: 0 0 10px #f97316, 0 0 5px #ea580c;
+      z-index: 100000;
+      transition: width 0.25s ease, opacity 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #top-progress-bar.active {
+      opacity: 1;
+    }
+
+    #top-progress-bar.done {
+      width: 100% !important;
+      opacity: 0;
+      transition: width 0.15s ease, opacity 0.4s ease 0.15s;
+    }
+
+    /* ======================================================== */
+    /* SEÇENEK B: TAM EKRAN PRELOADER (FULL-SCREEN PRELOADER)    */
+    /* ======================================================== */
+    #fullscreen-preloader {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-primary);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.45s ease, visibility 0.45s ease;
+      visibility: visible;
+      opacity: 1;
+    }
+
+    #fullscreen-preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .preloader-brand {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .preloader-logo {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .preloader-logo .accent {
+      color: var(--accent-primary);
+      text-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    /* Parlayan nabız halkası */
+    .preloader-spinner {
+      position: relative;
+      width: 54px;
+      height: 54px;
+    }
+
+    .preloader-spinner::before,
+    .preloader-spinner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 3px solid transparent;
+    }
+
+    .preloader-spinner::before {
+      border-top-color: var(--accent-primary);
+      border-right-color: var(--accent-primary);
+      animation: spin 0.9s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+    }
+
+    .preloader-spinner::after {
+      border: 3px solid rgba(249, 115, 22, 0.15);
+    }
+
+    .preloader-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.5px;
+      font-weight: 500;
+      animation: pulseText 1.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseText {
+      from { opacity: 0.4; }
+      to { opacity: 1; }
+    }
+
+    /* ======================================================== */
+    /* MOCK MANOWA SAYFA YAPISI                                 */
+    /* ======================================================== */
+    header.site-header {
+      background: rgba(15, 17, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .brand-logo .accent {
+      color: var(--accent-primary);
+    }
+
+    .nav-mock {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .nav-mock span.active {
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+
+    .hero-mock {
+      background: linear-gradient(135deg, #1e2330 0%, #151821 100%);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hero-text h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-text p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 4px;
+      height: 18px;
+      background: var(--accent-primary);
+      border-radius: 2px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card-mock {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* İskelet / Shimmer Animasyonu (Lazy Loading Dalgası) */
+    .card-cover-wrap {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      background: var(--bg-card);
+      overflow: hidden;
+    }
+
+    .card-cover-wrap.shimmer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.06) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      animation: shimmer 1.5s infinite;
+      z-index: 1;
+    }
+
+    @keyframes shimmer {
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .card-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .card-cover-img.is-loaded {
+      opacity: 1;
+    }
+
+    .card-mock:hover .card-cover-img.is-loaded {
+      transform: scale(1.05);
+    }
+
+    .card-body {
+      padding: 0.75rem;
+    }
+
+    .card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ======================================================== */
+    /* DEMO KONTROL PANELİ (SABİT ALT BAR)                      */
+    /* ======================================================== */
+    .demo-controls-dock {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(24, 27, 36, 0.95);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--accent-primary);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      border-radius: 999px;
+      padding: 0.5rem 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 100010;
+    }
+
+    .demo-badge {
+      background: rgba(249, 115, 22, 0.15);
+      color: var(--accent-primary);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .demo-btn {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      padding: 0.45rem 0.9rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .demo-btn:hover {
+      background: var(--border-color);
+      border-color: var(--accent-primary);
+      transform: translateY(-1px);
+    }
+
+    .demo-btn.btn-primary {
+      background: var(--accent-primary);
+      color: #ffffff;
+      border-color: var(--accent-primary);
+    }
+
+    .demo-btn.btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    @media (max-width: 768px) {
+      .demo-controls-dock {
+        width: 92%;
+        flex-wrap: wrap;
+        border-radius: var(--radius-md);
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SEÇENEK A: Üst İlerleme Çubuğu -->
+  <div id="top-progress-bar" aria-hidden="true"></div>
+
+  <!-- SEÇENEK B: Tam Ekran Preloader -->
+  <div id="fullscreen-preloader" aria-live="polite">
+    <div class="preloader-brand">
+      <div class="preloader-logo">
+        <span>MANO</span><span class="accent">WA</span>
+      </div>
+      <div class="preloader-spinner"></div>
+      <div class="preloader-text">İçerikler yükleniyor...</div>
+    </div>
+  </div>
+
+  <!-- Örnek Site Başlığı -->
+  <header class="site-header">
+    <a href="#" class="brand-logo">MANO<span class="accent">WA</span></a>
+    <div class="nav-mock">
+      <span class="active">Ana Sayfa</span>
+      <span>Tüm Seriler</span>
+      <span>Popüler</span>
+      <span>Geçmiş</span>
+    </div>
+  </header>
+
+  <!-- Örnek İçerik -->
+  <main class="container">
+    <section class="hero-mock">
+      <div class="hero-text">
+        <h1>Manowa Yükleme Deneyimi</h1>
+        <p>Aşağıdaki panelden Seçenek A (Üst Çubuk) ve Seçenek B (Tam Ekran Preloader) demolarını canlı test edebilirsiniz.</p>
+      </div>
+    </section>
+
+    <h2 class="section-title">Popüler Seriler (Lazy Loading İskelet Simülasyonu)</h2>
+    <div class="cards-grid" id="cards-grid">
+      <!-- 6 Adet Örnek Kart -->
+      <article class="card-mock">
+        <div class="card-cover-wrap shimmer">
+          <img class="card-cover-img" src="https://picsum.photos/seed/manowa1/400/533" alt="Solo Leveling" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Solo Leveling</h3>
+          <div class="card-subtitle">Bölüm 200 • Manhwa</div>
+        </div>
+      </article>
+
+      <article class="card-mock">
+        <div class="card-cover-wrap shimmer">
+          <img class="card-cover-img" src="https://picsum.photos/seed/manowa2/400/533" alt="Omniscient Reader" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Omniscient Reader's Viewpoint</h3>
+          <div class="card-subtitle">Bölüm 180 • Manhwa</div>
+        </div>
+      </article>
+
+      <article class="card-mock">
+        <div class="card-cover-wrap shimmer">
+          <img class="card-cover-img" src="https://picsum.photos/seed/manowa3/400/533" alt="Tower of God" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Tower of God</h3>
+          <div class="card-subtitle">Bölüm 580 • Manhwa</div>
+        </div>
+      </article>
+
+      <article class="card-mock">
+        <div class="card-cover-wrap shimmer">
+          <img class="card-cover-img" src="https://picsum.photos/seed/manowa4/400/533" alt="The Beginning After The End" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">The Beginning After The End</h3>
+          <div class="card-subtitle">Bölüm 175 • Manhwa</div>
+        </div>
+      </article>
+
+      <article class="card-mock">
+        <div class="card-cover-wrap shimmer">
+          <img class="card-cover-img" src="https://picsum.photos/seed/manowa5/400/533" alt="Jujutsu Kaisen" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Jujutsu Kaisen</h3>
+          <div class="card-subtitle">Bölüm 260 • Manga</div>
+        </div>
+      </article>
+
+      <article class="card-mock">
+        <div class="card-cover-wrap shimmer">
+          <img class="card-cover-img" src="https://picsum.photos/seed/manowa6/400/533" alt="Shadow Slave" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Shadow Slave</h3>
+          <div class="card-subtitle">Bölüm 1450 • Novel</div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- CANLI DEMO KONTROL PANELİ -->
+  <aside class="demo-controls-dock" aria-label="Demo Kontrolleri">
+    <span class="demo-badge">Canlı Demo</span>
+    <button type="button" class="demo-btn btn-primary" id="btn-trigger-a">
+      <span>▶</span> Seçenek A (Üst Çubuk)
+    </button>
+    <button type="button" class="demo-btn btn-primary" id="btn-trigger-b">
+      <span>▶</span> Seçenek B (Tam Ekran)
+    </button>
+    <button type="button" class="demo-btn" id="btn-reload-imgs">
+      <span>↻</span> Kart İskeletlerini Sıfırla
+    </button>
+  </aside>
+
+  <script>
+    // --- SEÇENEK A: ÜST İLERLEME ÇUBUĞU KONTROLCÜSÜ ---
+    const topBar = document.getElementById('top-progress-bar');
+    let progressTimer = null;
+
+    function runOptionA() {
+      if (progressTimer) clearInterval(progressTimer);
+      topBar.className = 'active';
+      topBar.style.width = '0%';
+
+      let currentWidth = 10;
+      topBar.style.width = currentWidth + '%';
+
+      progressTimer = setInterval(() => {
+        if (currentWidth < 85) {
+          currentWidth += Math.random() * 20 + 5;
+          if (currentWidth > 85) currentWidth = 85;
+          topBar.style.width = currentWidth + '%';
+        } else {
+          clearInterval(progressTimer);
+          setTimeout(() => {
+            topBar.classList.add('done');
+            setTimeout(() => {
+              topBar.className = '';
+              topBar.style.width = '0%';
+            }, 600);
+          }, 400);
+        }
+      }, 120);
+    }
+
+    // --- SEÇENEK B: TAM EKRAN PRELOADER KONTROLCÜSÜ ---
+    const fullPreloader = document.getElementById('fullscreen-preloader');
+
+    function runOptionB(duration = 1800) {
+      fullPreloader.classList.remove('hidden');
+      setTimeout(() => {
+        fullPreloader.classList.add('hidden');
+      }, duration);
+    }
+
+    // --- KART GÖRSELLERİ LAZY LOAD VE İSKELET SİMÜLASYONU ---
+    function setupImages() {
+      const cards = document.querySelectorAll('.card-mock');
+      cards.forEach((card, index) => {
+        const wrap = card.querySelector('.card-cover-wrap');
+        const img = card.querySelector('.card-cover-img');
+        wrap.classList.add('shimmer');
+        img.classList.remove('is-loaded');
+
+        // Gecikmeli yükleme simülasyonu
+        setTimeout(() => {
+          img.classList.add('is-loaded');
+          wrap.classList.remove('shimmer');
+        }, 600 + index * 250);
+      });
+    }
+
+    // Başlangıç tetikleyicileri
+    document.getElementById('btn-trigger-a').addEventListener('click', () => {
+      runOptionA();
+    });
+
+    document.getElementById('btn-trigger-b').addEventListener('click', () => {
+      runOptionB(2000);
+    });
+
+    document.getElementById('btn-reload-imgs').addEventListener('click', () => {
+      setupImages();
+    });
+
+    // İlk açılışta Seçenek B'yi 1.2 saniye gösterip yumuşakça kapatalım
+    window.addEventListener('DOMContentLoaded', () => {
+      setupImages();
+      runOptionB(1200);
+    });
+  </script>
+</body>
+</html>

@@ -832,4 +832,58 @@ test('SliceMerger: extractSliceGroupKey ve groupSlicedPages dilimleri dogru grup
   assert.equal(res, false);
 });
 
+test('SliceMerger: Onbellek (cache), LRU tahliyesi ve clearCache dogru calismali', () => {
+  const { SliceMerger } = require('../src/scripts/slice-merger');
+  const merger = new SliceMerger({ maxCacheSize: 3 });
+
+  merger._putCache('p1', { width: 100, height: 100 });
+  merger._putCache('p2', { width: 200, height: 200 });
+  merger._putCache('p3', { width: 300, height: 300 });
+
+  assert.equal(merger.isCached(['p1']), true);
+  assert.equal(merger.isCached(['p2']), true);
+  assert.equal(merger.isCached(['p3']), true);
+
+  // 4. oge eklendiginde en eski p1 tahliye edilmeli (LRU)
+  merger._putCache('p4', { width: 400, height: 400 });
+  assert.equal(merger.isCached(['p1']), false);
+  assert.equal(merger.isCached(['p4']), true);
+  assert.equal(merger.cache.size, 3);
+
+  // clearCache tum onbellegi temizlemeli
+  merger.clearCache();
+  assert.equal(merger.cache.size, 0);
+  assert.equal(merger.isCached(['p2']), false);
+});
+
+test('SliceMerger: stitchCanvas onbellekteki veriyi aninda (0ms) aktarmali', async () => {
+  const { SliceMerger } = require('../src/scripts/slice-merger');
+  const merger = new SliceMerger();
+
+  const mockCtx = {
+    drawImage: () => {}
+  };
+  const mockCanvas = {
+    getContext: () => mockCtx,
+    setAttribute: (attr, val) => { mockCanvas[attr] = val; },
+    classList: {
+      add: (cls) => { mockCanvas.className = cls; }
+    }
+  };
+
+  merger._putCache('url1|url2', {
+    width: 600,
+    height: 1200,
+    images: [{ width: 600, height: 600 }, { width: 600, height: 600 }]
+  });
+
+  const res = await merger.stitchCanvas(mockCanvas, ['url1', 'url2']);
+  assert.equal(res, true);
+  assert.equal(mockCanvas.width, 600);
+  assert.equal(mockCanvas.height, 1200);
+  assert.equal(mockCanvas['data-stitched'], 'true');
+  assert.equal(mockCanvas.className, 'stitched-ready');
+});
+
+
 

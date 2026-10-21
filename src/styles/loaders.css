@@ -1,0 +1,220 @@
+/**
+ * @fileoverview Manowa Blogger Temasi - Hibrit Yukleme ve Lazy Loading Stilleri.
+ * Ust ilerleme cubugu (#top-progress-bar), tam ekran preloader (#fullscreen-preloader)
+ * ve gorsel iskelet pariltisi (shimmer wave) kurallarini icerir.
+ */
+
+/* ==========================================================================
+   1. UST ILERLEME CUBUGU (TOP PROGRESS BAR - SPA / ROTA GECISLERI)
+   ========================================================================== */
+
+#top-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, #ea580c 0%, var(--accent-primary) 50%, #facc15 100%);
+  box-shadow: 0 0 10px var(--accent-primary), 0 0 5px var(--accent-hover);
+  z-index: 100050;
+  opacity: 0;
+  pointer-events: none;
+  transition: width 0.22s ease, opacity 0.25s ease;
+  will-change: width, opacity;
+}
+
+#top-progress-bar.active {
+  opacity: 1;
+}
+
+#top-progress-bar.done {
+  width: 100% !important;
+  opacity: 0;
+  transition: width 0.16s ease, opacity 0.35s ease 0.12s;
+}
+
+/* ==========================================================================
+   2. TAM EKRAN PRELOADER (INITIAL FULLSCREEN COLD-LOAD PRELOADER)
+   ========================================================================== */
+
+#fullscreen-preloader {
+  position: fixed;
+  inset: 0;
+  background-color: var(--bg-primary);
+  z-index: 100040;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s ease;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#fullscreen-preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.preloader-brand-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  user-select: none;
+}
+
+.preloader-logo-title {
+  font-size: 2.25rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.preloader-logo-title .accent {
+  color: var(--accent-primary);
+  text-shadow: 0 0 24px var(--accent-glow);
+}
+
+.preloader-ring-pulse {
+  position: relative;
+  width: 52px;
+  height: 52px;
+}
+
+.preloader-ring-pulse::before,
+.preloader-ring-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid transparent;
+}
+
+.preloader-ring-pulse::before {
+  border-top-color: var(--accent-primary);
+  border-right-color: var(--accent-primary);
+  animation: preloaderSpin 0.85s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+}
+
+.preloader-ring-pulse::after {
+  border: 3px solid rgba(249, 115, 22, 0.18);
+}
+
+.preloader-status-text {
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  animation: preloaderTextPulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes preloaderSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes preloaderTextPulse {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 0.95;
+  }
+}
+
+/* ==========================================================================
+   3. ISKELET PARILTISI VE YUMUSAK GECIS (SHIMMER & FADE-IN)
+   ========================================================================== */
+
+.card-cover-wrap.shimmer,
+.directory-series-card .card-cover-wrap.shimmer,
+.sidebar-rank-thumb.shimmer,
+.series-related-thumb.shimmer,
+.reader-page-item.shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-card);
+}
+
+.card-cover-wrap.shimmer::before,
+.directory-series-card .card-cover-wrap.shimmer::before,
+.sidebar-rank-thumb.shimmer::before,
+.series-related-thumb.shimmer::before,
+.reader-page-item.shimmer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmerWave 1.4s infinite ease-in-out;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@keyframes shimmerWave {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Gorsel ilk yuklenirken gizlidir, yuklendiginde yumusakca acilir */
+.card-cover,
+.card-cover-img,
+.sidebar-rank-thumb,
+.series-related-thumb {
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  will-change: opacity;
+}
+
+.card-cover.is-loaded,
+.card-cover-img.is-loaded,
+.sidebar-rank-thumb.is-loaded,
+.series-related-thumb.is-loaded,
+.reader-page-item.is-loaded {
+  opacity: 1 !important;
+}
+
+/* ==========================================================================
+   4. ERISILEBILIRLIK: HAREKET AZALTMA (PREFERS-REDUCED-MOTION)
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  #top-progress-bar {
+    transition: none !important;
+  }
+  #fullscreen-preloader {
+    transition: opacity 0.1s linear !important;
+  }
+  .preloader-ring-pulse::before {
+    animation: none !important;
+    border-color: var(--accent-primary) !important;
+  }
+  .preloader-status-text {
+    animation: none !important;
+  }
+  .card-cover-wrap.shimmer::before,
+  .reader-page-item.shimmer::before {
+    animation: none !important;
+    background: none !important;
+  }
+  .card-cover,
+  .card-cover-img,
+  .sidebar-rank-thumb,
+  .series-related-thumb {
+    transition: none !important;
+    opacity: 1 !important;
+  }
+}

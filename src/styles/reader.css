@@ -357,6 +357,18 @@
   border-radius: 4px;
 }
 
+.reader-page-item.reader-stitched-canvas:not(.stitched-ready) {
+  min-height: 180px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.07) 50%, rgba(255, 255, 255, 0.02) 75%);
+  background-size: 200% 100%;
+  animation: readerCanvasShimmer 1.4s infinite;
+}
+
+@keyframes readerCanvasShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 .reader-viewport.mode-double .double-page-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

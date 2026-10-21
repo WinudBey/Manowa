@@ -14,11 +14,13 @@
      * SliceMerger nesnesini baslatir.
      * @param {Object} [options={}] - Yapilandirma secenekleri.
      * @param {Object} [options.logger=null] - Loglama nesnesi.
+     * @param {number} [options.maxCacheSize=25] - Maksimum onbellek sayfa sayisi.
      */
     constructor(options = {}) {
       this.logger = options.logger || null;
       this.cache = new Map();
       this.inProgress = new Map();
+      this.maxCacheSize = Number(options.maxCacheSize) || 25;
     }
 
     /**
@@ -95,7 +97,108 @@
     }
 
     /**
-     * Tek bir gorseli yukler.
+     * Verilen dilim grubunun onbellekte olup olmadigini sorgular.
+     * @param {Array<string>} sliceUrls - Dilim URL dizisi.
+     * @returns {boolean} Onbellekte mevcutsa true.
+     */
+    isCached(sliceUrls) {
+      const key = this.getCacheKey(sliceUrls);
+      return Boolean(key && this.cache.has(key));
+    }
+
+    /**
+     * Tum bellek onbellegini ve surdurulen yuklemeleri sifirlar.
+     * @returns {void}
+     */
+    clearCache() {
+      this.cache.clear();
+      this.inProgress.clear();
+      this._log('debug', 'SliceMerger onbellegi temizlendi.');
+    }
+
+    /**
+     * LRU politikasiyla onbellege oge ekler.
+     * @private
+     * @param {string} cacheKey - Onbellek anahtari.
+     * @param {Object} entry - Onbellek kaydi.
+     * @returns {void}
+     */
+    _putCache(cacheKey, entry) {
+      if (!cacheKey) return;
+      if (this.cache.has(cacheKey)) {
+        this.cache.delete(cacheKey);
+      } else if (this.cache.size >= this.maxCacheSize) {
+        const oldestKey = this.cache.keys().next().value;
+        if (oldestKey) this.cache.delete(oldestKey);
+      }
+      this.cache.set(cacheKey, entry);
+    }
+
+    /**
+     * Arka plan canvas nesnesi uzerine dilimleri cizer.
+     * @private
+     * @param {Object} data - Yuklenen gorsel verileri.
+     * @returns {HTMLCanvasElement|null} Olusturulan bellek canvas'i.
+     */
+    _createOffscreenCanvas(data) {
+      if (typeof document === 'undefined' || typeof document.createElement !== 'function') {
+        return null;
+      }
+      try {
+        const offscreen = document.createElement('canvas');
+        offscreen.width = data.width;
+        offscreen.height = data.height;
+        const ctx = offscreen.getContext('2d');
+        if (!ctx) return null;
+        let currentY = 0;
+        for (const img of data.images) {
+          const imgW = img.naturalWidth || img.width || data.width;
+          const imgH = img.naturalHeight || img.height || 0;
+          const offsetX = Math.max(0, Math.round((data.width - imgW) / 2));
+          ctx.drawImage(img, offsetX, currentY, imgW, imgH);
+          currentY += imgH;
+        }
+        return offscreen;
+      } catch (_err) {
+        return null;
+      }
+    }
+
+    /**
+     * Onbellek kaydini hedef DOM canvas nesnesine aktarir.
+     * @private
+     * @param {HTMLCanvasElement} targetCanvas - Hedef canvas elemani.
+     * @param {Object} entry - Onbellek verisi.
+     * @returns {boolean} Basarili ise true.
+     */
+    _drawIntoCanvas(targetCanvas, entry) {
+      if (!targetCanvas || typeof targetCanvas.getContext !== 'function' || !entry) {
+        return false;
+      }
+      targetCanvas.width = entry.width;
+      targetCanvas.height = entry.height;
+      const ctx = targetCanvas.getContext('2d');
+      if (!ctx) return false;
+
+      if (entry.offscreen) {
+        ctx.drawImage(entry.offscreen, 0, 0);
+      } else if (Array.isArray(entry.images)) {
+        let currentY = 0;
+        for (const img of entry.images) {
+          const imgW = img.naturalWidth || img.width || entry.width;
+          const imgH = img.naturalHeight || img.height || 0;
+          const offsetX = Math.max(0, Math.round((entry.width - imgW) / 2));
+          ctx.drawImage(img, offsetX, currentY, imgW, imgH);
+          currentY += imgH;
+        }
+      }
+      targetCanvas.setAttribute('data-stitched', 'true');
+      targetCanvas.classList.add('stitched-ready');
+      return true;
+    }
+
+    /**
+     * Tek bir gorseli asenkron cozme (async decode) destegiyle yukler.
      * @param {string} url - Gorsel URL'si.
      * @returns {Promise<HTMLImageElement>} Yuklenen Image nesnesi.
      */
@@ -104,20 +207,36 @@
         if (typeof Image === 'undefined') {
           return reject(new Error('Image constructor bulunamadi (Node ortami)'));
         }
+        let settled = false;
+        const doResolve = (targetImg) => {
+          if (settled) return;
+          settled = true;
+          resolve(targetImg);
+        };
+        const doReject = (err) => {
+          if (settled) return;
+          settled = true;
+          reject(err);
+        };
+
         const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => resolve(img);
-        img.onerror = () => {
-          if (img.crossOrigin) {
-            const fallbackImg = new Image();
-            fallbackImg.onload = () => resolve(fallbackImg);
-            fallbackImg.onerror = () => reject(new Error(`Gorsel yuklenemedi: ${url}`));
-            fallbackImg.src = url;
+        if ('decoding' in img) {
+          img.decoding = 'async';
+        }
+        img.onload = () => {
+          if (typeof img.decode === 'function') {
+            img.decode().then(() => doResolve(img)).catch(() => doResolve(img));
           } else {
-            reject(new Error(`Gorsel yuklenemedi: ${url}`));
+            doResolve(img);
           }
         };
+        img.onerror = () => {
+          doReject(new Error(`Gorsel yuklenemedi: ${url}`));
+        };
         img.src = url;
+        if (img.complete && (img.naturalWidth || img.width)) {
+          doResolve(img);
+        }
       });
     }
 
@@ -146,7 +265,47 @@
     }
 
     /**
+     * Dilimleri arka planda onceden indirip hafizada birlestirir (Preload).
+     * @param {Array<string>} sliceUrls - Birlestirilecek dilim URL dizisi.
+     * @returns {Promise<Object|null>} Onbellek kaydi Promise nesnesi.
+     */
+    async preload(sliceUrls) {
+      if (typeof Image === 'undefined' || !Array.isArray(sliceUrls) || sliceUrls.length <= 1) return null;
+      const cacheKey = this.getCacheKey(sliceUrls);
+      if (this.cache.has(cacheKey)) {
+        return this.cache.get(cacheKey);
+      }
+      if (this.inProgress.has(cacheKey)) {
+        return this.inProgress.get(cacheKey);
+      }
+
+      const loadPromise = (async () => {
+        try {
+          const data = await this.loadAllSlices(sliceUrls);
+          const offscreen = this._createOffscreenCanvas(data);
+          const entry = {
+            width: data.width,
+            height: data.height,
+            images: data.images,
+            offscreen
+          };
+          this._putCache(cacheKey, entry);
+          return entry;
+        } catch (err) {
+          this._log('warn', 'Parca on yukleme basarisiz oldu', { error: err.message });
+          return null;
+        } finally {
+          this.inProgress.delete(cacheKey);
+        }
+      })();
+
+      this.inProgress.set(cacheKey, loadPromise);
+      return loadPromise;
+    }
+
+    /**
      * DOM uzerindeki canvas elemanina dilimleri cizer.
+     * Onbellekte varsa aninda 0ms gecikmeyle aktarir.
      * @param {HTMLCanvasElement} canvas - Hedef canvas elemani.
      * @param {Array<string>} sliceUrls - Birlestirilecek dilim URL dizisi.
      * @returns {Promise<boolean>} Basarili ise true.
@@ -160,6 +319,14 @@
       }
 
       const cacheKey = this.getCacheKey(sliceUrls);
+
+      // Hizli yol: Bellek onbelleginden aninda aktarim (0ms)
+      if (this.cache.has(cacheKey)) {
+        const cachedEntry = this.cache.get(cacheKey);
+        this._putCache(cacheKey, cachedEntry);
+        return this._drawIntoCanvas(canvas, cachedEntry);
+      }
+
       this._log('debug', 'Parca birlestirme baslatildi', {
         sliceCount: sliceUrls.length,
         cacheKey
@@ -168,36 +335,33 @@
       try {
         let loadPromise = this.inProgress.get(cacheKey);
         if (!loadPromise) {
-          loadPromise = this.loadAllSlices(sliceUrls);
+          loadPromise = (async () => {
+            const data = await this.loadAllSlices(sliceUrls);
+            const offscreen = this._createOffscreenCanvas(data);
+            const entry = {
+              width: data.width,
+              height: data.height,
+              images: data.images,
+              offscreen
+            };
+            this._putCache(cacheKey, entry);
+            return entry;
+          })();
           this.inProgress.set(cacheKey, loadPromise);
         }
 
-        const data = await loadPromise;
+        const entry = await loadPromise;
         this.inProgress.delete(cacheKey);
 
-        canvas.width = data.width;
-        canvas.height = data.height;
-
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return false;
-
-        let currentY = 0;
-        for (const img of data.images) {
-          const imgW = img.naturalWidth || img.width || data.width;
-          const imgH = img.naturalHeight || img.height || 0;
-          const offsetX = Math.max(0, Math.round((data.width - imgW) / 2));
-          ctx.drawImage(img, offsetX, currentY, imgW, imgH);
-          currentY += imgH;
+        const ok = this._drawIntoCanvas(canvas, entry);
+        if (ok) {
+          this._log('info', 'Parcalar basariyla birlestirildi', {
+            width: entry.width,
+            height: entry.height,
+            sliceCount: sliceUrls.length
+          });
         }
-
-        canvas.setAttribute('data-stitched', 'true');
-        canvas.classList.add('stitched-ready');
-        this._log('info', 'Parcalar basariyla birlestirildi', {
-          width: data.width,
-          height: data.height,
-          sliceCount: sliceUrls.length
-        });
-        return true;
+        return ok;
       } catch (err) {
         this.inProgress.delete(cacheKey);
         this._log('warn', 'Parca birlestirme basarisiz oldu, fallback devrede', {
@@ -214,3 +378,4 @@
     module.exports = { SliceMerger };
   }
 })(typeof window !== 'undefined' ? window : global);
+

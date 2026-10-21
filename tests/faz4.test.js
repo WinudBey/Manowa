@@ -468,6 +468,9 @@ test('SVG Ikon Sistemi ve SidebarController: Temada emoji kullanilmamali, SVG ik
   const topHtml = sidebar.renderTopSeriesHtml(catalog, (v, s) => `/${v}/${s}`);
   assert.equal(topHtml.includes('sidebar-rank-item'), true);
   assert.equal(topHtml.includes('<svg class="ui-icon'), true);
+  assert.equal(topHtml.includes('sidebar-rank-thumb'), true);
+  assert.equal(topHtml.includes("onload=\"this.classList.add('is-loaded');\""), true);
+  assert.equal(topHtml.includes("onerror=\"this.onerror=null;"), true);
 
   // CatalogController kategori filtreleme ve Sidebar kategori bulutu testi
   catalog.setGenreFilter('Aksiyon');
@@ -683,6 +686,9 @@ test('SeriesPageController: Seri bilgileri sayfasi meta veri izgarasi, bolum ara
     (v, s) => `/${v}/${s}`
   );
   assert.equal(relatedHtml.includes('class="series-related-card"'), true);
+  assert.equal(relatedHtml.includes('series-related-thumb'), true);
+  assert.equal(relatedHtml.includes("onload=\"this.classList.add('is-loaded');\""), true);
+  assert.equal(relatedHtml.includes("onerror=\"this.onerror=null;"), true);
 
   const builder = new ThemeBuilder();
   const { themeXmlPath } = builder.build();

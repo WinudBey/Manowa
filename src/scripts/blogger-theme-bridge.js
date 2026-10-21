@@ -438,24 +438,34 @@
       const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
       if (!targetDoc) return tabName;
 
+      const isDirectory = tabName === 'directory';
       const btnSeries = targetDoc.getElementById('btn-tab-gen-series');
       const btnChapter = targetDoc.getElementById('btn-tab-gen-chapter');
+      const btnDir = targetDoc.getElementById('btn-tab-gen-directory');
       const panelSeries = targetDoc.getElementById('panel-gen-series');
       const panelChapter = targetDoc.getElementById('panel-gen-chapter');
+      const panelDir = targetDoc.getElementById('panel-gen-directory');
 
       if (btnSeries) {
-        btnSeries.classList.toggle('active', isSeries);
-        btnSeries.setAttribute('aria-selected', isSeries ? 'true' : 'false');
+        btnSeries.classList.toggle('active', isSeries && !isDirectory);
+        btnSeries.setAttribute('aria-selected', (isSeries && !isDirectory) ? 'true' : 'false');
       }
       if (btnChapter) {
-        btnChapter.classList.toggle('active', !isSeries);
-        btnChapter.setAttribute('aria-selected', !isSeries ? 'true' : 'false');
+        btnChapter.classList.toggle('active', !isSeries && !isDirectory);
+        btnChapter.setAttribute('aria-selected', (!isSeries && !isDirectory) ? 'true' : 'false');
+      }
+      if (btnDir) {
+        btnDir.classList.toggle('active', isDirectory);
+        btnDir.setAttribute('aria-selected', isDirectory ? 'true' : 'false');
       }
       if (panelSeries) {
-        panelSeries.classList.toggle('hidden', !isSeries);
+        panelSeries.classList.toggle('hidden', !isSeries || isDirectory);
       }
       if (panelChapter) {
-        panelChapter.classList.toggle('hidden', isSeries);
+        panelChapter.classList.toggle('hidden', isSeries || isDirectory);
+      }
+      if (panelDir) {
+        panelDir.classList.toggle('hidden', !isDirectory);
       }
       return tabName;
     }
@@ -476,7 +486,11 @@
       };
 
       let res;
-      if (mode === 'series') {
+      if (mode === 'directory') {
+        res = typeof generator.generateDirectoryPageHtml === 'function'
+          ? generator.generateDirectoryPageHtml()
+          : { html: '<!-- MANOWA_SERIES_DIRECTORY_START -->\n<div id="manowa-series-directory"></div>', labels: 'Sayfa, Dizin' };
+      } else if (mode === 'series') {
         const title = getVal('gen-series-title', 'Yeni Seri');
         const altTitle = getVal('gen-series-alt-title', '');
         const sourceLang = getVal('gen-source-lang', 'KR');

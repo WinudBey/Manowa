@@ -201,6 +201,9 @@
      */
     loadChapter(chapterData = {}) {
       this.stopAutoScroll();
+      if (this.sliceMerger && typeof this.sliceMerger.clearCache === 'function') {
+        this.sliceMerger.clearCache();
+      }
       this.seriesId = chapterData.seriesId || '';
       this.chapterId = chapterData.chapterId || '';
       this.rawPages = Array.isArray(chapterData.pages) ? chapterData.pages.slice() : [];
@@ -409,6 +412,7 @@
       if (this.currentIndex > 0) {
         this.currentIndex = Math.max(0, this.currentIndex - step);
         this.saveProgress();
+        this.preloadAdjacentPages();
         this._log('debug', 'Onceki sayfaya donuldu.', { currentIndex: this.currentIndex });
         return true;
       }
@@ -449,15 +453,22 @@
     }
 
     /**
-     * Sonraki 2 mantiksal sayfanin tum gorsel dilimlerini onceden bellekleme (preload) yapar.
+     * Sonraki mantiksal sayfalarin tum gorsel dilimlerini onceden bellekleme (preload) yapar.
      * @returns {Array<string>} On yuklenen URL listesi.
      */
     preloadAdjacentPages() {
       const preloaded = [];
-      for (let i = 1; i <= 2; i++) {
+      const ahead = 3;
+      for (let i = 1; i <= ahead; i++) {
         const targetIdx = this.currentIndex + i;
         if (targetIdx < this.pages.length) {
           const slices = this.getPageSlices(targetIdx);
+          if (Array.isArray(slices) && slices.length > 1 && this.sliceMerger && typeof this.sliceMerger.preload === 'function') {
+            try {
+              const p = this.sliceMerger.preload(slices);
+              if (p && typeof p.catch === 'function') p.catch(() => {});
+            } catch (_err) {}
+          }
           slices.forEach((url) => {
             preloaded.push(url);
             if (typeof Image !== 'undefined') {

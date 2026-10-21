@@ -229,6 +229,25 @@
       });
       return { html, labels, chapterObject };
     }
+
+    /**
+     * Blogger Statik Sayfalar (Pages) icin Tum Seriler dizini HTML kodunu uretir.
+     * @returns {{ html: string, labels: string }} Uretilen HTML ve onerilen etiketler.
+     */
+    generateDirectoryPageHtml() {
+      const html = [
+        '<!-- MANOWA_SERIES_DIRECTORY_START -->',
+        '<div id="manowa-series-directory" class="manowa-directory-placeholder" data-auto-render="true">',
+        '  <div class="directory-static-seo-wrap">',
+        '    <h2>Manowa Çeviri Serileri Kataloğu ve Kategorik Dizin</h2>',
+        '    <p>Sitemizde yayınlanan tüm Manga, Manhwa, Manhua ve Web Romanı serileri aşağıda kategorilerine göre listelenmiştir. Dinamik filtreleme ve hızlı arama için tarayıcınızda JavaScript etkin olmalıdır.</p>',
+        '  </div>',
+        '</div>',
+        '<!-- MANOWA_SERIES_DIRECTORY_END -->'
+      ].join('\n');
+      const labels = 'Sayfa, Dizin, Tüm Seriler';
+      return { html, labels };
+    }
   }
 
   globalScope.PostGenerator = PostGenerator;

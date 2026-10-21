@@ -545,7 +545,7 @@
           const href = computeUrlFn('series', s.id);
           const chCount = (s.chapters || []).length;
           return `<a class="series-related-card" href="${href}" data-action="detail" data-series="${s.id}">
-            <img class="series-related-thumb" src="${s.cover}" alt="${s.title}" loading="lazy" />
+            <img class="series-related-thumb" src="${s.cover || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak'}" alt="${(s.title || 'Seri').replace(/"/g, '&quot;')}" loading="lazy" onload="this.classList.add('is-loaded');" onerror="this.onerror=null;this.src='https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak';this.classList.add('is-loaded');" />
             <div class="series-related-info">
               <span class="series-related-type">${s.type || 'Manhwa'} • ${s.sourceLang || 'KR'}</span>
               <strong class="series-related-title">${s.title}</strong>
@@ -602,6 +602,11 @@
       if (relatedSec && relatedGrid) {
         const relHtml = this.renderRelatedSeriesHtml(catalog, series, computeUrlFn);
         relatedGrid.innerHTML = relHtml;
+        relatedGrid.querySelectorAll('.series-related-thumb').forEach((img) => {
+          if (img.complete && img.naturalWidth > 0) {
+            img.classList.add('is-loaded');
+          }
+        });
         relatedSec.classList.toggle('hidden', !relHtml);
       }
     }

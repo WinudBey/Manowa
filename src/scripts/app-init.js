@@ -12,6 +12,8 @@
   const SeriesPageClass = globalScope.SeriesPageController || (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
   const ThemeBridgeClass = globalScope.BloggerThemeBridge || (typeof require === 'function' ? require('./blogger-theme-bridge').BloggerThemeBridge : null);
   const SearchControllerClass = globalScope.SearchController || (typeof require === 'function' ? require('./search-controller').SearchController : null);
+  const LoaderClass = globalScope.LoaderController || (typeof require === 'function' ? require('./loader-controller') : null);
+  const DirectoryClass = globalScope.DirectoryPageController || (typeof require === 'function' ? require('./directory-page').DirectoryPageController : null);
   const ReaderHudClass = globalScope.ReaderHudController || (typeof require === 'function' ? require('./reader-hud').ReaderHudController : null);
   const iconFn = (globalScope.ManowaIcons && globalScope.ManowaIcons.get) || (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
   /**
@@ -37,8 +39,12 @@
       this.seriesPage = deps.seriesPage || (ResolvedSeriesPage ? new ResolvedSeriesPage({ logger: this.logger }) : null);
       const ResolvedThemeBridge = globalScope.BloggerThemeBridge || ThemeBridgeClass;
       this.themeBridge = deps.themeBridge || (ResolvedThemeBridge ? new ResolvedThemeBridge({ logger: this.logger }) : null);
+      const ResolvedDirectory = globalScope.DirectoryPageController || DirectoryClass;
+      this.directory = deps.directory || (ResolvedDirectory ? new ResolvedDirectory({ catalog: this.catalog, logger: this.logger, library: this.library, computeUrlFn: (v, s, c) => this.computeTargetUrl(v, s, c), onSelectSeries: (id) => this.openSeriesDetail(id) }) : null);
       this.feedLoader = deps.feedLoader || (globalScope.BloggerFeedLoader ? new globalScope.BloggerFeedLoader({ logger: this.logger }) : null);
       this.router = deps.router || (RouterClass ? new RouterClass({ logger: this.logger, historyObj: deps.historyObj, locationObj: deps.locationObj }) : null);
+      const ResolvedLoader = globalScope.LoaderController || LoaderClass;
+      this.loader = deps.loader || (ResolvedLoader ? new ResolvedLoader({ logger: this.logger }) : null);
       this.siteBaseTitle = globalScope.MANOWA_SITE_TITLE || 'Manowa';
       this.currentView = 'catalog';
       this.commentsVisible = false;
@@ -86,18 +92,25 @@
         this.themeBridge.initThemeMode();
         this.themeBridge.integrateSidebarGadgets();
       }
+      if (this.loader) this.loader.init();
       this.integrateHeaderBar();
       if (this.searchController && typeof this.searchController._initElements === 'function') {
         this.searchController._initElements();
       }
       this.bindEvents();
       await this.loadDynamicData();
+      if (this.loader) {
+        this.loader.startProgress();
+        setTimeout(() => {
+          if (this.loader) {
+            this.loader.finishProgress();
+            this.loader.initLazyImages();
+          }
+        }, 200);
+      }
       this.renderDebugLogs();
     }
-    /**
-     * Ust kontrol cubugunu (#top-app-bar) Blogger site basliginin (#site-header-inner) icine tasir.
-     * @returns {void}
-     */
+    /** Ust kontrol cubugunu Blogger basligi icine tasir. */
     integrateHeaderBar() {
       if (this.themeBridge) {
         this.themeBridge.integrateHeaderBar();
@@ -248,6 +261,7 @@
       };
       if (resolved.matched) {
         if (resolved.view === 'reader') this.openReader(resolved.seriesId, resolved.chapterId, routeOpts);
+        else if (resolved.view === 'directory') this.openDirectory(routeOpts);
         else if (resolved.view === 'series') this.openSeriesDetail(resolved.seriesId, routeOpts);
         else if (resolved.view === 'bookmarks') this.openBookmarks(routeOpts);
         else if (resolved.view === 'history') this.openHistory(routeOpts);
@@ -259,11 +273,7 @@
       if (options.openCatalogOnRoot) this.openCatalog({ updateHistory: false });
       return false;
     }
-    /**
-     * Tarayici Geri / Ileri (popstate) olayini isler ve ilgili gorunume gecis yapar.
-     * @param {PopStateEvent|Object} [event] - PopState olayi.
-     * @returns {void}
-     */
+    /** Tarayici Geri / Ileri (popstate) olayini isler. */
     handlePopState(event) {
       const state = event && event.state ? event.state : null;
       if (this.logger) this.logger.info('Tarayici Geri/Ileri (popstate) olayi isleniyor.', { state });
@@ -273,6 +283,7 @@
           return this.openReader(state.seriesId, state.chapterId, noHist);
         }
         if (state.view === 'series' && state.seriesId) return this.openSeriesDetail(state.seriesId, noHist);
+        if (state.view === 'directory') return this.openDirectory(noHist);
         if (state.view === 'bookmarks') return this.openBookmarks(noHist);
         if (state.view === 'history') return this.openHistory(noHist);
         if (state.view === 'generator') return this.openGenerator(noHist);
@@ -298,6 +309,7 @@
       }
       const views = {
         catalog: document.getElementById('view-catalog'),
+        directory: document.getElementById('view-directory'),
         series: document.getElementById('view-series'),
         reader: document.getElementById('view-reader'),
         bookmarks: document.getElementById('view-bookmarks'),
@@ -312,6 +324,7 @@
       if (disqusSec) disqusSec.classList.toggle('hidden', !this.commentsVisible);
       const navMap = {
         catalog: document.getElementById('nav-catalog'),
+        directory: document.getElementById('nav-directory'),
         bookmarks: document.getElementById('nav-bookmarks'),
         history: document.getElementById('nav-history'),
         generator: document.getElementById('nav-generator')
@@ -353,6 +366,15 @@
      * @param {Object} [options={}] - Gecmis secenekleri.
      * @returns {void}
      */
+    openDirectory(options = {}) {
+      this.switchView('directory');
+      const container = typeof document !== 'undefined' ? document.getElementById('view-directory') : null;
+      if (container && this.directory) {
+        this.directory.render(container);
+      }
+      const targetUrl = this.computeTargetUrl('directory');
+      this.syncBrowserHistory({ view: 'directory', seriesId: '', chapterId: '' }, `Tüm Seriler & Kategorik Dizin - ${this.siteBaseTitle}`, targetUrl, options);
+    }
     openBookmarks(options = {}) {
       this.switchView('bookmarks');
       this.renderBookmarksView();
@@ -364,10 +386,7 @@
         options
       );
     }
-    /**
-     * Kitapligim izgarasini favori serilerle doldurur.
-     * @returns {void}
-     */
+    /** Kitapligim izgarasini favori serilerle doldurur. */
     renderBookmarksView() {
       if (typeof document === 'undefined' || !this.library || !this.catalog) return;
       const grid = document.getElementById('bookmarks-grid');
@@ -436,6 +455,10 @@
       if (typeof document !== 'undefined' && this.themeBridge) {
         const info = this.themeBridge.renderStaticPage(document);
         if (info && info.title) pageTitleText = info.title;
+        const rawEl = document.getElementById('blogger-static-page-raw');
+        if (rawEl && (rawEl.querySelector('#manowa-series-directory') || rawEl.innerHTML.includes('manowa-series-directory'))) {
+          return this.openDirectory({ updateHistory: false });
+        }
       }
       const pageTitle = `${pageTitleText} - ${this.siteBaseTitle}`;
       const targetUrl = this.computeTargetUrl('page');
@@ -784,6 +807,7 @@
       };
       on('btn-gen-close', 'click', () => this.openCatalog());
       on('btn-page-back', 'click', () => this.openCatalog());
+      on('nav-directory', 'click', () => this.openDirectory());
       on('nav-generator', 'click', () => this.openGenerator());
       on('nav-bookmarks', 'click', () => this.openBookmarks());
       on('nav-history', 'click', () => this.openHistory());
@@ -898,6 +922,11 @@
         if (this.themeBridge) this.themeBridge.switchGeneratorTab('series');
         this.triggerGenerator('series');
       });
+      on('btn-tab-gen-directory', 'click', () => {
+        if (this.themeBridge) this.themeBridge.switchGeneratorTab('directory');
+        this.triggerGenerator('directory');
+      });
+      on('btn-generate-directory', 'click', () => this.triggerGenerator('directory'));
       on('btn-tab-gen-chapter', 'click', () => {
         if (this.themeBridge) this.themeBridge.switchGeneratorTab('chapter');
         this.triggerGenerator('chapter');
@@ -915,10 +944,7 @@
       });
       on('btn-refresh-logs', 'click', () => this.renderDebugLogs());
     }
-    /**
-     * Arama sirasinda katalog gorunumunde degilse katalog gorunumune gecer.
-     * @returns {void}
-     */
+    /** Arama sirasinda katalog gorunumune gecisi saglar. */
     SwitchToCatalogIfNeeded() {
       if (this.currentView !== 'catalog') {
         this.openCatalog();
@@ -935,10 +961,7 @@
       this.renderDebugLogs();
       return res;
     }
-    /**
-     * Olusturucudaki ornek bolumu aninda okuyucuda test eder.
-     * @returns {void}
-     */
+    /** Olusturucudaki bolumu aninda okuyucuda test eder. */
     testGeneratedInReader() {
       const seriesRes = this.triggerGenerator('series');
       const chapterRes = this.triggerGenerator('chapter');

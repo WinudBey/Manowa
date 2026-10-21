@@ -61,6 +61,9 @@
       if (viewName === 'catalog') {
         return isPreview ? '#catalog' : '/';
       }
+      if (viewName === 'directory') {
+        return isPreview ? '#seriler' : '/?gorunum=seriler';
+      }
       if (viewName === 'bookmarks') {
         return isPreview ? '#kitaplik' : '/?gorunum=kitaplik';
       }
@@ -189,6 +192,8 @@
           if (sId) {
             return { matched: true, view: 'series', seriesId: sId, chapterId: '' };
           }
+        } else if (hashVal === 'seriler' || hashVal === 'tum-seriler' || hashVal === 'dizin') {
+          return { matched: true, view: 'directory', seriesId: '', chapterId: '' };
         } else if (hashVal === 'kitaplik') {
           return { matched: true, view: 'bookmarks', seriesId: '', chapterId: '' };
         } else if (hashVal === 'gecmis') {
@@ -208,6 +213,9 @@
         const qSeri = parsedUrl.searchParams.get('seri');
         const qBolum = parsedUrl.searchParams.get('bolum');
         const qGorunum = parsedUrl.searchParams.get('gorunum');
+        if (qGorunum === 'seriler' || qGorunum === 'tum-seriler' || qGorunum === 'dizin') {
+          return { matched: true, view: 'directory', seriesId: '', chapterId: '' };
+        }
         if (qGorunum === 'kitaplik') {
           return { matched: true, view: 'bookmarks', seriesId: '', chapterId: '' };
         }
@@ -235,6 +243,9 @@
       const targetPath = extractPathname(href);
       if (targetPath.endsWith('/preview.html') || targetPath === '/' || targetPath === '') {
         return empty;
+      }
+      if (targetPath.includes('/p/seriler') || targetPath.includes('/p/tum-seriler') || targetPath.includes('/p/dizin')) {
+        return { matched: true, view: 'directory', seriesId: '', chapterId: '' };
       }
       if (targetPath.includes('/p/')) {
         return { matched: true, view: 'page', seriesId: '', chapterId: '' };

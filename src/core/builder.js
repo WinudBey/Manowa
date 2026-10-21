@@ -136,7 +136,9 @@ class ThemeBuilder {
 
     const styleOrder = [
       'variables.css',
+      'loaders.css',
       'cards.css',
+      'directory.css',
       'series-page.css',
       'hero-slider.css',
       'sidebar.css',
@@ -154,8 +156,10 @@ class ThemeBuilder {
       'catalog-controller.js',
       'user-library.js',
       'series-page.js',
+      'directory-page.js',
       'hero-slider.js',
       'sidebar-controller.js',
+      'loader-controller.js',
       'novel-font-loader.js',
       'slice-merger.js',
       'reading-engine.js',
@@ -214,13 +218,13 @@ class ThemeBuilder {
       const readerStyles = this.bundleDirectory(
         'styles',
         '.css',
-        ['variables.css', 'reader.css', 'reader-next.css'],
+        ['variables.css', 'loaders.css', 'reader.css', 'reader-next.css'],
         ['cards.css', 'series-page.css', 'hero-slider.css', 'sidebar.css', 'generator.css', 'layout.css']
       );
       const readerScripts = this.bundleDirectory(
         'scripts',
         '.js',
-        ['client-logger.js', 'svg-icons.js', 'reading-engine.js', 'reader-next-controller.js'],
+        ['client-logger.js', 'svg-icons.js', 'loader-controller.js', 'reading-engine.js', 'reader-next-controller.js'],
         [
           'disqus-loader.js',
           'blogger-feed-loader.js',

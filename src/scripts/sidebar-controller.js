@@ -179,7 +179,7 @@
           const chCount = (series.chapters || []).length;
           return `<a class="sidebar-rank-item" href="${href}" data-action="detail" data-series="${series.id}">
             <span class="sidebar-rank-badge ${rankClass}">${rankNum}</span>
-            <img class="sidebar-rank-thumb" src="${series.cover}" alt="${series.title}" loading="lazy" />
+            <img class="sidebar-rank-thumb" src="${series.cover || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak'}" alt="${(series.title || 'Seri').replace(/"/g, '&quot;')}" loading="lazy" onload="this.classList.add('is-loaded');" onerror="this.onerror=null;this.src='https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak';this.classList.add('is-loaded');" />
             <div class="sidebar-rank-info">
               <strong class="sidebar-rank-title">${series.title}</strong>
               <div class="sidebar-rank-meta">
@@ -257,7 +257,7 @@
               .map((s) => {
                 const sHref = resolveUrl('series', s.id);
                 return `<a class="sidebar-fav-mini-item" href="${sHref}" data-action="detail" data-series="${s.id}">
-                  <img class="sidebar-fav-mini-thumb" src="${s.cover}" alt="${s.title}" loading="lazy" />
+                  <img class="sidebar-fav-mini-thumb" src="${s.cover || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak'}" alt="${(s.title || 'Seri').replace(/"/g, '&quot;')}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak';" />
                   <span class="sidebar-fav-mini-title">${s.title}</span>
                   <span class="sidebar-fav-mini-count">${(s.chapters || []).length} Böl.</span>
                 </a>`;
@@ -283,6 +283,11 @@
       const topListEl = document.getElementById('sidebar-top-list');
       if (topListEl) {
         topListEl.innerHTML = this.renderTopSeriesHtml(catalog, computeUrlFn);
+        topListEl.querySelectorAll('.sidebar-rank-thumb').forEach((img) => {
+          if (img.complete && img.naturalWidth > 0) {
+            img.classList.add('is-loaded');
+          }
+        });
       }
       const genresListEl = document.getElementById('sidebar-genres-list');
       if (genresListEl) {

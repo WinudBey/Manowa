@@ -322,9 +322,9 @@
               : `<a class="chapter-mini-btn" href="${seriesHref}" data-action="detail" data-series="${series.id}"><span>Seri Sayfası</span><span>Detay</span></a>`;
 
           return `<article class="series-card">
-            <div class="card-cover-wrap">
+            <div class="card-cover-wrap shimmer">
               <a href="${seriesHref}" data-action="detail" data-series="${series.id}" style="display:block;width:100%;height:100%;">
-                <img class="card-cover" src="${series.cover}" alt="${series.title}" loading="lazy" />
+                <img class="card-cover" src="${series.cover}" alt="${series.title}" loading="lazy" onload="this.classList.add('is-loaded');var w=this.closest('.card-cover-wrap');if(w)w.classList.remove('shimmer');" />
               </a>
               <span class="lang-badge lang-${series.sourceLang}">${series.sourceLang}</span>
               <span class="type-badge">${series.type}</span>

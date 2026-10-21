@@ -1,7 +1,21 @@
+<!-- UST ILERLEME CUBUGU (SPA GECISLERI) -->
+<div id="top-progress-bar" aria-hidden="true"></div>
+
+<!-- TAM EKRAN PRELOADER (ILK SAYFA ACILISI) -->
+<div id="fullscreen-preloader" aria-live="polite" role="status">
+  <div class="preloader-brand-box">
+    <div class="preloader-logo-title">
+      <span>MANO</span><span class="accent">WA</span>
+    </div>
+    <div class="preloader-ring-pulse"></div>
+    <div class="preloader-status-text">��erikler y�kleniyor...</div>
+  </div>
+</div>
 <!-- UST KONTROL VE NAVIGASYON CUBUGU -->
 <div class="filter-toolbar" id="top-app-bar">
   <div class="nav-links" id="mobile-nav-drawer">
     <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span>Katalog &amp; Vitrin</span></a>
+    <button class="nav-btn" id="nav-directory" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> <span>Tüm Seriler</span></button>
     <button class="nav-btn" id="nav-bookmarks" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Kitaplığım</span> <span id="bookmarks-count-badge"></span></button>
     <button class="nav-btn" id="nav-history" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span>Geçmiş</span></button>
     <button class="nav-btn" id="nav-random" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg> <span>Rastgele Seri</span></button>
@@ -130,6 +144,9 @@
     </aside>
   </div>
 </section>
+
+<!-- GORUNUM: TUM SERILER KATEGORIK DIZIN (STATIK SAYFA DESTEKLI) -->
+<section class="hidden" id="view-directory"></section>
 
 <!-- GORUNUM 2: SERI TANITIM VE BOLUM LISTESI SAYFASI -->
 <section class="hidden" id="view-series">
@@ -452,6 +469,10 @@
         <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         <span>2. Bölüm Okuma Gönderisi</span>
       </button>
+      <button class="generator-tab-btn" id="btn-tab-gen-directory" role="tab" aria-selected="false" type="button">
+        <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span>3. Tüm Seriler Sayfa HTML'i</span>
+      </button>
     </div>
 
     <!-- SEKME 1: SERİ TANITIM FORMU -->
@@ -582,6 +603,19 @@ https://placehold.co/800x1200/312e81/ffffff?text=Sayfa+2</textarea>
         <button class="icon-btn" id="btn-test-generated" type="button">
           <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           Üretilen Bölümü Şimdi Okuyucuda Test Et
+        </button>
+      </div>
+    </div>
+
+    <!-- SEKME 3: TUM SERILER STATIK SAYFA FORMU -->
+    <div class="generator-panel hidden" id="panel-gen-directory">
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+        Blogger yönetim panelinde <strong>Sayfalar &rarr; Yeni Sayfa</strong> oluşturup başlığına <strong>Tüm Seriler</strong> yazınız. Aşağıdaki HTML kodunu sayfanın HTML görünümüne yapıştırıp yayınlayınız. Temanız bu sayfayı otomatik olarak algılayıp zengin kategorik seriler dizinini burada açacaktır.
+      </p>
+      <div class="detail-actions">
+        <button class="primary-btn" id="btn-generate-directory" type="button">
+          <svg aria-hidden="true" class="ui-icon" fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Tüm Seriler Sayfa HTML'i Üret
         </button>
       </div>
     </div>

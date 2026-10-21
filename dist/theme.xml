@@ -122,6 +122,228 @@ body {
   overflow-x: clip;
 }
 
+/* === MODULE: styles/loaders.css === */
+/**
+ * @fileoverview Manowa Blogger Temasi - Hibrit Yukleme ve Lazy Loading Stilleri.
+ * Ust ilerleme cubugu (#top-progress-bar), tam ekran preloader (#fullscreen-preloader)
+ * ve gorsel iskelet pariltisi (shimmer wave) kurallarini icerir.
+ */
+
+/* ==========================================================================
+   1. UST ILERLEME CUBUGU (TOP PROGRESS BAR - SPA / ROTA GECISLERI)
+   ========================================================================== */
+
+#top-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, #ea580c 0%, var(--accent-primary) 50%, #facc15 100%);
+  box-shadow: 0 0 10px var(--accent-primary), 0 0 5px var(--accent-hover);
+  z-index: 100050;
+  opacity: 0;
+  pointer-events: none;
+  transition: width 0.22s ease, opacity 0.25s ease;
+  will-change: width, opacity;
+}
+
+#top-progress-bar.active {
+  opacity: 1;
+}
+
+#top-progress-bar.done {
+  width: 100% !important;
+  opacity: 0;
+  transition: width 0.16s ease, opacity 0.35s ease 0.12s;
+}
+
+/* ==========================================================================
+   2. TAM EKRAN PRELOADER (INITIAL FULLSCREEN COLD-LOAD PRELOADER)
+   ========================================================================== */
+
+#fullscreen-preloader {
+  position: fixed;
+  inset: 0;
+  background-color: var(--bg-primary);
+  z-index: 100040;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s ease;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#fullscreen-preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.preloader-brand-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  user-select: none;
+}
+
+.preloader-logo-title {
+  font-size: 2.25rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.preloader-logo-title .accent {
+  color: var(--accent-primary);
+  text-shadow: 0 0 24px var(--accent-glow);
+}
+
+.preloader-ring-pulse {
+  position: relative;
+  width: 52px;
+  height: 52px;
+}
+
+.preloader-ring-pulse::before,
+.preloader-ring-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid transparent;
+}
+
+.preloader-ring-pulse::before {
+  border-top-color: var(--accent-primary);
+  border-right-color: var(--accent-primary);
+  animation: preloaderSpin 0.85s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+}
+
+.preloader-ring-pulse::after {
+  border: 3px solid rgba(249, 115, 22, 0.18);
+}
+
+.preloader-status-text {
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  animation: preloaderTextPulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes preloaderSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes preloaderTextPulse {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 0.95;
+  }
+}
+
+/* ==========================================================================
+   3. ISKELET PARILTISI VE YUMUSAK GECIS (SHIMMER & FADE-IN)
+   ========================================================================== */
+
+.card-cover-wrap.shimmer,
+.directory-series-card .card-cover-wrap.shimmer,
+.sidebar-rank-thumb.shimmer,
+.series-related-thumb.shimmer,
+.reader-page-item.shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-card);
+}
+
+.card-cover-wrap.shimmer::before,
+.directory-series-card .card-cover-wrap.shimmer::before,
+.sidebar-rank-thumb.shimmer::before,
+.series-related-thumb.shimmer::before,
+.reader-page-item.shimmer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmerWave 1.4s infinite ease-in-out;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@keyframes shimmerWave {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Gorsel ilk yuklenirken gizlidir, yuklendiginde yumusakca acilir */
+.card-cover,
+.card-cover-img,
+.sidebar-rank-thumb,
+.series-related-thumb {
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  will-change: opacity;
+}
+
+.card-cover.is-loaded,
+.card-cover-img.is-loaded,
+.sidebar-rank-thumb.is-loaded,
+.series-related-thumb.is-loaded,
+.reader-page-item.is-loaded {
+  opacity: 1 !important;
+}
+
+/* ==========================================================================
+   4. ERISILEBILIRLIK: HAREKET AZALTMA (PREFERS-REDUCED-MOTION)
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  #top-progress-bar {
+    transition: none !important;
+  }
+  #fullscreen-preloader {
+    transition: opacity 0.1s linear !important;
+  }
+  .preloader-ring-pulse::before {
+    animation: none !important;
+    border-color: var(--accent-primary) !important;
+  }
+  .preloader-status-text {
+    animation: none !important;
+  }
+  .card-cover-wrap.shimmer::before,
+  .reader-page-item.shimmer::before {
+    animation: none !important;
+    background: none !important;
+  }
+  .card-cover,
+  .card-cover-img,
+  .sidebar-rank-thumb,
+  .series-related-thumb {
+    transition: none !important;
+    opacity: 1 !important;
+  }
+}
+
 /* === MODULE: styles/cards.css === */
 /**
  * @fileoverview Katalog izgara kartlari, seri detay sayfasi, bolum listesi ve Disqus stilleri.
@@ -722,6 +944,259 @@ body {
 
   .static-page-main-title {
     font-size: 1.4rem;
+  }
+}
+
+/* === MODULE: styles/directory.css === */
+/**
+ * @fileoverview Sadelestirilmis tum seriler kategorik dizin (directory) ve statik sayfa stilleri.
+ */
+
+/* === DIRECTORY CONTAINER & HEADER === */
+.directory-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.5rem 0 2.5rem 0;
+  box-sizing: border-box;
+}
+
+.directory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.directory-header-content {
+  flex: 1;
+  min-width: 260px;
+}
+
+.directory-title {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.35rem 0;
+}
+
+.directory-title .ui-icon {
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.directory-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.directory-stats-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.5rem 1.25rem;
+  flex-shrink: 0;
+}
+
+.directory-stats-badge .stats-number {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  line-height: 1;
+}
+
+.directory-stats-badge .stats-label {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 0.2rem;
+}
+
+/* === SADE KONTROL KARTI: KATEGORILER VE DURUMLAR === */
+.directory-controls-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.directory-control-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.directory-control-row + .directory-control-row {
+  padding-top: 0.85rem;
+  border-top: 1px dashed var(--border-color);
+}
+
+.dir-filter-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 95px;
+  flex-shrink: 0;
+}
+
+.directory-pills-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  flex: 1;
+}
+
+.dir-pill {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.dir-pill:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.dir-pill.active {
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.25);
+}
+
+.dir-pill .tag-count {
+  opacity: 0.8;
+  font-size: 0.75rem;
+}
+
+/* === ALT KISIM: SECILEN KATEGORIYE AIT SERILER IZGARASI === */
+.directory-content {
+  width: 100%;
+}
+
+.directory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* KAPAK GORSELI ORANTILAMA VE NETLESTIRME */
+.directory-series-card .card-cover-wrap {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--bg-card);
+}
+
+.directory-series-card .card-cover,
+.directory-series-card .card-cover-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.directory-series-card:hover .card-cover,
+.directory-series-card:hover .card-cover-wrap img {
+  transform: scale(1.05);
+}
+
+/* BOS DURUM (EMPTY STATE) */
+.directory-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  background-color: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: 12px;
+}
+
+.directory-empty-state .ui-icon {
+  color: var(--text-secondary);
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
+.directory-empty-state .empty-title {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.directory-empty-state .empty-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  max-width: 420px;
+  margin: 0 0 1.25rem 0;
+  line-height: 1.5;
+}
+
+/* === RESPONSIVE MOBIL DÜZENLEMELER === */
+@media (max-width: 768px) {
+  .directory-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .directory-stats-badge {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .directory-control-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .dir-filter-label {
+    min-width: unset;
+  }
+
+  .directory-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.85rem;
   }
 }
 
@@ -2828,9 +3303,9 @@ body[data-active-view="reader"] .disqus-container.reader-comments-visible {
   background: transparent;
   color: var(--text-secondary);
   border: 1px solid transparent;
-  padding: 0.45rem 0.85rem;
+  padding: 0.42rem 0.65rem;
   border-radius: var(--radius-md);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
@@ -2850,10 +3325,9 @@ body[data-active-view="reader"] .disqus-container.reader-comments-visible {
 .header-controls {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  flex: 1;
+  gap: 0.5rem;
+  flex-shrink: 0;
   justify-content: flex-end;
-  min-width: 240px;
 }
 
 .search-box {
@@ -2981,6 +3455,10 @@ select optgroup {
   padding: 0;
   margin-bottom: 0;
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
 }
 
 .lang-filters {
@@ -3643,6 +4121,18 @@ body[data-active-view="reader"] .scroll-top-btn {
   display: block;
   margin: auto;
   border-radius: 4px;
+}
+
+.reader-page-item.reader-stitched-canvas:not(.stitched-ready) {
+  min-height: 180px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.07) 50%, rgba(255, 255, 255, 0.02) 75%);
+  background-size: 200% 100%;
+  animation: readerCanvasShimmer 1.4s infinite;
+}
+
+@keyframes readerCanvasShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .reader-viewport.mode-double .double-page-grid {
@@ -4995,10 +5485,24 @@ body {
       </b:section>
 
       <b:if cond='!data:view.isLayoutMode'>
-        <!-- UST KONTROL VE NAVIGASYON CUBUGU -->
+        <!-- UST ILERLEME CUBUGU (SPA GECISLERI) -->
+<div id="top-progress-bar" aria-hidden="true"></div>
+
+<!-- TAM EKRAN PRELOADER (ILK SAYFA ACILISI) -->
+<div id="fullscreen-preloader" aria-live="polite" role="status">
+  <div class="preloader-brand-box">
+    <div class="preloader-logo-title">
+      <span>MANO</span><span class="accent">WA</span>
+    </div>
+    <div class="preloader-ring-pulse"></div>
+    <div class="preloader-status-text">��erikler y�kleniyor...</div>
+  </div>
+</div>
+<!-- UST KONTROL VE NAVIGASYON CUBUGU -->
 <div class="filter-toolbar" id="top-app-bar">
   <div class="nav-links" id="mobile-nav-drawer">
     <a class="nav-btn active" data-action="catalog" href="/" id="nav-catalog"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span>Katalog &amp; Vitrin</span></a>
+    <button class="nav-btn" id="nav-directory" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> <span>Tüm Seriler</span></button>
     <button class="nav-btn" id="nav-bookmarks" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Kitaplığım</span> <span id="bookmarks-count-badge"></span></button>
     <button class="nav-btn" id="nav-history" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span>Geçmiş</span></button>
     <button class="nav-btn" id="nav-random" type="button"><svg aria-hidden="true" class="ui-icon" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg> <span>Rastgele Seri</span></button>
@@ -5120,6 +5624,9 @@ body {
     </aside>
   </div>
 </section>
+
+<!-- GORUNUM: TUM SERILER KATEGORIK DIZIN (STATIK SAYFA DESTEKLI) -->
+<section class="hidden" id="view-directory"></section>
 
 <!-- GORUNUM 2: SERI TANITIM VE BOLUM LISTESI SAYFASI -->
 <section class="hidden" id="view-series">
@@ -7412,9 +7919,9 @@ body {
               : `<a class="chapter-mini-btn" href="${seriesHref}" data-action="detail" data-series="${series.id}"><span>Seri Sayfası</span><span>Detay</span></a>`;
 
           return `<article class="series-card">
-            <div class="card-cover-wrap">
+            <div class="card-cover-wrap shimmer">
               <a href="${seriesHref}" data-action="detail" data-series="${series.id}" style="display:block;width:100%;height:100%;">
-                <img class="card-cover" src="${series.cover}" alt="${series.title}" loading="lazy" />
+                <img class="card-cover" src="${series.cover}" alt="${series.title}" loading="lazy" onload="this.classList.add('is-loaded');var w=this.closest('.card-cover-wrap');if(w)w.classList.remove('shimmer');" />
               </a>
               <span class="lang-badge lang-${series.sourceLang}">${series.sourceLang}</span>
               <span class="type-badge">${series.type}</span>
@@ -8054,7 +8561,7 @@ body {
           const href = computeUrlFn('series', s.id);
           const chCount = (s.chapters || []).length;
           return `<a class="series-related-card" href="${href}" data-action="detail" data-series="${s.id}">
-            <img class="series-related-thumb" src="${s.cover}" alt="${s.title}" loading="lazy" />
+            <img class="series-related-thumb" src="${s.cover || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak'}" alt="${(s.title || 'Seri').replace(/"/g, '&quot;')}" loading="lazy" onload="this.classList.add('is-loaded');" onerror="this.onerror=null;this.src='https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak';this.classList.add('is-loaded');" />
             <div class="series-related-info">
               <span class="series-related-type">${s.type || 'Manhwa'} • ${s.sourceLang || 'KR'}</span>
               <strong class="series-related-title">${s.title}</strong>
@@ -8111,6 +8618,11 @@ body {
       if (relatedSec && relatedGrid) {
         const relHtml = this.renderRelatedSeriesHtml(catalog, series, computeUrlFn);
         relatedGrid.innerHTML = relHtml;
+        relatedGrid.querySelectorAll('.series-related-thumb').forEach((img) => {
+          if (img.complete && img.naturalWidth > 0) {
+            img.classList.add('is-loaded');
+          }
+        });
         relatedSec.classList.toggle('hidden', !relHtml);
       }
     }
@@ -8230,6 +8742,364 @@ body {
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = { SeriesPageController };
+  }
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/directory-page.js === */
+/**
+ * @fileoverview Tum serileri kategorilerine ve durumlarina gore sade sekilde filtreleyen,
+ * kapak gorsellerini standart tema karti formatinda sunan statik sayfa denetleyici modulu.
+ */
+
+(function (globalScope) {
+  'use strict';
+
+  /**
+   * Turkce karakterleri siralama ve filtreleme icin kucuk harfe donusturur.
+   * @param {string} str - Girdi metni.
+   * @returns {string} Normalize edilmis metin.
+   */
+  function normalizeText(str) {
+    if (!str) return '';
+    return String(str)
+      .trim()
+      .toLocaleLowerCase('tr-TR')
+      .replace(/i̇/g, 'i')
+      .replace(/ı/g, 'i');
+  }
+
+  /**
+   * HTML karakterlerini guvenlik amaciyla kacar.
+   * @param {string} str - Girdi metni.
+   * @returns {string} Guvenli HTML metni.
+   */
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  /**
+   * Kategorik seri dizini ve statik sayfa gorunumunu yoneten sinif.
+   */
+  class DirectoryPageController {
+    /**
+     * DirectoryPageController nesnesini baslatir.
+     * @param {Object} [options={}] - Yapilandirma secenekleri.
+     * @param {Object} [options.catalog] - CatalogController ornegi.
+     * @param {Object} [options.logger] - Logger nesnesi.
+     * @param {Object} [options.library] - UserLibrary ornegi.
+     * @param {Function} [options.computeUrlFn] - URL hesaplama fonksiyonu.
+     * @param {Function} [options.onSelectSeries] - Seri secildiginde cagrilacak geri cagirim.
+     */
+    constructor(options = {}) {
+      this.catalog = options.catalog || null;
+      this.logger = options.logger || globalScope.ManowaLogger || null;
+      this.library = options.library || null;
+      this.computeUrlFn = typeof options.computeUrlFn === 'function' ? options.computeUrlFn : null;
+      this.onSelectSeries = typeof options.onSelectSeries === 'function' ? options.onSelectSeries : null;
+
+      // Sade filtreleme durumlari: Yalnizca Kategori ve Durum
+      this.selectedGenre = 'ALL'; // 'ALL' | Ozel Kategori Adi (orn. 'Aksiyon')
+      this.selectedStatus = 'ALL'; // 'ALL' | 'Devam Ediyor' | 'Tamamlandı'
+      this.activeContainer = null;
+
+      this._log('debug', 'DirectoryPageController baslatildi.');
+    }
+
+    /**
+     * Ic log kaydi yazar.
+     * @param {'debug'|'info'|'warn'|'error'} level - Log seviyesi.
+     * @param {string} msg - Mesaj.
+     * @param {Object|null} [meta=null] - Ek veri.
+     * @returns {void}
+     */
+    _log(level, msg, meta = null) {
+      if (this.logger && typeof this.logger[level] === 'function') {
+        this.logger[level](msg, meta);
+      }
+    }
+
+    /**
+     * Katalog serilerini yalnizca secilen kategori ve duruma gore suzer.
+     * @returns {Array<Object>} Filtrelenmis seriler.
+     */
+    getFilteredSeries() {
+      if (!this.catalog || !Array.isArray(this.catalog.seriesList)) {
+        return [];
+      }
+
+      const list = this.catalog.seriesList.filter((series) => {
+        // Durum filtresi
+        if (this.selectedStatus !== 'ALL') {
+          if ((series.status || '').toLowerCase() !== this.selectedStatus.toLowerCase()) {
+            return false;
+          }
+        }
+
+        // Kategori / Tur filtresi
+        if (this.selectedGenre !== 'ALL') {
+          const targetGenre = normalizeText(this.selectedGenre);
+          const hasGenre = (series.genres || []).some(
+            (g) => normalizeText(g) === targetGenre
+          );
+          if (!hasGenre) return false;
+        }
+
+        return true;
+      });
+
+      // Isme gore alfabetik sirala
+      return list.sort((a, b) => String(a.title || '').localeCompare(String(b.title || ''), 'tr'));
+    }
+
+    /**
+     * Katalogda bulunan tum benzersiz kategorileri ve adetlerini dondurur.
+     * @returns {Array<{ name: string, count: number }>} Kategori listesi.
+     */
+    getAllAvailableGenres() {
+      if (!this.catalog || !Array.isArray(this.catalog.seriesList)) return [];
+      const counts = {};
+      this.catalog.seriesList.forEach((s) => {
+        (s.genres || []).forEach((g) => {
+          const name = String(g).trim();
+          if (name) {
+            counts[name] = (counts[name] || 0) + 1;
+          }
+        });
+      });
+      return Object.keys(counts)
+        .sort((a, b) => a.localeCompare(b, 'tr'))
+        .map((name) => ({ name, count: counts[name] }));
+    }
+
+    /**
+     * Geriye donuk test uyumlulugu icin gruplanmis veriyi dondurur.
+     * @returns {Array<{ key: string, title: string, count: number, series: Array<Object> }>} Gruplanmis veri.
+     */
+    getGroupedData() {
+      const filtered = this.getFilteredSeries();
+      return [
+        {
+          key: this.selectedGenre === 'ALL' ? 'all' : this.selectedGenre.toLowerCase(),
+          title: this.selectedGenre === 'ALL' ? 'Tüm Seriler' : this.selectedGenre,
+          count: filtered.length,
+          series: filtered
+        }
+      ];
+    }
+
+    /**
+     * Dizin arayuzunu DOM uzerine cizer.
+     * @param {HTMLElement} container - Cizimin yapilacagi kapsayici eleman.
+     * @returns {void}
+     */
+    render(container) {
+      if (!container) return;
+      this.activeContainer = container;
+
+      const filteredSeries = this.getFilteredSeries();
+      const allGenres = this.getAllAvailableGenres();
+      const totalSeriesCount = this.catalog && this.catalog.seriesList ? this.catalog.seriesList.length : 0;
+      const matchedSeriesCount = filteredSeries.length;
+
+      container.innerHTML = `
+        <div class="directory-container" id="directory-main-wrap">
+          <!-- UST BASLIK VE ISTATISTIK PANELI -->
+          <header class="directory-header">
+            <div class="directory-header-content">
+              <h1 class="directory-title">
+                <svg aria-hidden="true" class="ui-icon" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+                Tüm Seriler &amp; Kategorik Dizin
+              </h1>
+              <p class="directory-subtitle">
+                İstediğiniz kategoriyi ve yayın durumunu seçerek ilgili çeviri serilerine doğrudan ulaşabilirsiniz.
+              </p>
+            </div>
+            <div class="directory-stats-badge" aria-label="Görüntülenen Seri Sayısı">
+              <span class="stats-number" id="directory-stat-count">${matchedSeriesCount}</span>
+              <span class="stats-label">/ ${totalSeriesCount} Seri</span>
+            </div>
+          </header>
+
+          <!-- SADE KONTROL KARTI: SADECE KATEGORILER VE SERI DURUMLARI -->
+          <div class="directory-controls-card">
+            <!-- 1. SATIR: KATEGORILER FILTRE SERIDI -->
+            <div class="directory-control-row">
+              <span class="dir-filter-label">Kategoriler:</span>
+              <div class="directory-pills-wrap" id="dir-genre-pills">
+                <button type="button" class="dir-pill ${this.selectedGenre === 'ALL' ? 'active' : ''}" data-genre="ALL">
+                  Tüm Kategoriler
+                </button>
+                ${allGenres.map((g) => `
+                  <button type="button" class="dir-pill ${this.selectedGenre === g.name ? 'active' : ''}" data-genre="${escapeHtml(g.name)}">
+                    ${escapeHtml(g.name)} <span class="tag-count">(${g.count})</span>
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- 2. SATIR: SERI DURUMLARI FILTRE SERIDI -->
+            <div class="directory-control-row">
+              <span class="dir-filter-label">Seri Durumu:</span>
+              <div class="directory-pills-wrap" id="dir-status-pills">
+                <button type="button" class="dir-pill ${this.selectedStatus === 'ALL' ? 'active' : ''}" data-status="ALL">
+                  Tümü
+                </button>
+                <button type="button" class="dir-pill ${this.selectedStatus === 'Devam Ediyor' ? 'active' : ''}" data-status="Devam Ediyor">
+                  Devam Ediyor
+                </button>
+                <button type="button" class="dir-pill ${this.selectedStatus === 'Tamamlandı' ? 'active' : ''}" data-status="Tamamlandı">
+                  Tamamlandı
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ALT KISIM: SECILEN KATEGORIYE AIT SERILER (DOGRUDAN STANDART KART IZGARASI) -->
+          <div class="directory-content" id="directory-content-grid-wrap">
+            ${filteredSeries.length === 0 ? `
+              <div class="directory-empty-state">
+                <svg aria-hidden="true" class="ui-icon" fill="none" height="48" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <h3 class="empty-title">Bu Kategoride Seri Bulunamadı</h3>
+                <p class="empty-desc">Seçtiğiniz filtreye uygun seri bulunmuyor. Farklı bir kategori veya durum seçebilirsiniz.</p>
+                <button type="button" class="primary-btn" id="btn-dir-reset-filters">Filtreleri Sıfırla</button>
+              </div>
+            ` : `
+              <div class="catalog-grid directory-grid" id="directory-cards-grid">
+                ${filteredSeries.map((series) => this.renderSeriesCardHtml(series)).join('')}
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+
+      this.setupEventListeners(container);
+    }
+
+    /**
+     * Standart cards.css ile %100 uyumlu, kapak gorselini net gosteren seri karti HTML kodunu uretir.
+     * @param {Object} series - Seri nesnesi.
+     * @returns {string} Kart HTML ciktisi.
+     */
+    renderSeriesCardHtml(series) {
+      if (!series) return '';
+      const coverUrl = series.cover || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak';
+      const title = escapeHtml(series.title || 'Başlıksız');
+      const type = escapeHtml(series.type || 'Manhwa');
+      const lang = escapeHtml(String(series.sourceLang || 'KR').toUpperCase());
+      const status = escapeHtml(series.status || 'Devam Ediyor');
+      const chapters = Array.isArray(series.chapters) ? series.chapters : [];
+      const chCount = chapters.length > 0 ? `${chapters.length} Bölüm` : 'Bölüm Yok';
+      const seriesHref = typeof this.computeUrlFn === 'function'
+        ? this.computeUrlFn('series', series.id)
+        : `#seri/${encodeURIComponent(series.id)}`;
+
+      // Son 2 bolum butonu
+      const latestChapters = chapters.slice(0, 2);
+      const chaptersHtml = latestChapters.length > 0
+        ? latestChapters.map((ch) => {
+            const chHref = typeof this.computeUrlFn === 'function'
+              ? this.computeUrlFn('reader', series.id, ch.id)
+              : `#oku/${encodeURIComponent(series.id)}/${encodeURIComponent(ch.id)}`;
+            return `<a class="chapter-mini-btn" href="${chHref}" data-action="read" data-series="${escapeHtml(series.id)}" data-chapter="${escapeHtml(ch.id)}"><span>Bölüm ${ch.number}</span><span>${escapeHtml(ch.date || '')}</span></a>`;
+          }).join('')
+        : `<a class="chapter-mini-btn" href="${seriesHref}" data-action="detail" data-series="${escapeHtml(series.id)}"><span>Seri Sayfası</span><span>Detay</span></a>`;
+
+      return `
+        <article class="series-card directory-series-card" data-series-id="${escapeHtml(series.id)}">
+          <div class="card-cover-wrap shimmer">
+            <a href="${seriesHref}" data-action="detail" data-series="${escapeHtml(series.id)}" style="display:block;width:100%;height:100%;">
+              <img class="card-cover" src="${escapeHtml(coverUrl)}" alt="${title}" loading="lazy" onload="this.classList.add('is-loaded');var w=this.closest('.card-cover-wrap');if(w)w.classList.remove('shimmer');" onerror="this.onerror=null;this.src='https://placehold.co/600x800/1e1b4b/ffffff?text=${encodeURIComponent(title)}';" />
+            </a>
+            <span class="lang-badge lang-${lang}">${lang}</span>
+            <span class="type-badge">${type}</span>
+          </div>
+          <div class="card-body">
+            <a class="card-title" href="${seriesHref}" data-action="detail" data-series="${escapeHtml(series.id)}" title="${title}">${title}</a>
+            <div class="card-meta">
+              <span>${chCount}</span>
+              <span>${status}</span>
+            </div>
+            <div class="card-chapters">${chaptersHtml}</div>
+          </div>
+        </article>
+      `;
+    }
+
+    /**
+     * Dizin arayuzundeki buton ve filtreleme olaylarini dinler.
+     * @param {HTMLElement} container - Kapsayici eleman.
+     * @returns {void}
+     */
+    setupEventListeners(container) {
+      if (!container) return;
+
+      // Kategori haplarina tiklama
+      const genrePills = container.querySelectorAll('#dir-genre-pills .dir-pill');
+      genrePills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          const g = pill.getAttribute('data-genre') || 'ALL';
+          if (this.selectedGenre !== g) {
+            this.selectedGenre = g;
+            this.render(container);
+          }
+        });
+      });
+
+      // Seri durumu haplarina tiklama
+      const statusPills = container.querySelectorAll('#dir-status-pills .dir-pill');
+      statusPills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          const st = pill.getAttribute('data-status') || 'ALL';
+          if (this.selectedStatus !== st) {
+            this.selectedStatus = st;
+            this.render(container);
+          }
+        });
+      });
+
+      // Filtreleri sifirla butonu
+      const resetBtn = container.querySelector('#btn-dir-reset-filters');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          this.selectedGenre = 'ALL';
+          this.selectedStatus = 'ALL';
+          this.render(container);
+        });
+      }
+    }
+
+    /**
+     * Blogger Statik Sayfa editörüne (HTML modu) yapıştırılacak SEO ve arama motoru uyumlu HTML üretir.
+     * @returns {string} Blogger statik sayfa HTML icerigi.
+     */
+    generateStaticPageHtml() {
+      return `<!-- MANOWA_SERIES_DIRECTORY_START -->
+<div id="manowa-series-directory" class="manowa-directory-placeholder" data-auto-render="true">
+  <div class="directory-static-seo-wrap">
+    <h2>Manowa Çeviri Serileri Kataloğu ve Kategorik Dizin</h2>
+    <p>Sitemizde yayınlanan tüm Manga, Manhwa, Manhua ve Web Romanı serileri aşağıda kategorilerine göre listelenmiştir. Dinamik filtreleme ve hızlı arama için tarayıcınızda JavaScript'i etkinleştiriniz.</p>
+  </div>
+</div>
+<!-- MANOWA_SERIES_DIRECTORY_END -->`;
+    }
+  }
+
+  globalScope.DirectoryPageController = DirectoryPageController;
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { DirectoryPageController };
   }
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -8809,7 +9679,7 @@ body {
           const chCount = (series.chapters || []).length;
           return `<a class="sidebar-rank-item" href="${href}" data-action="detail" data-series="${series.id}">
             <span class="sidebar-rank-badge ${rankClass}">${rankNum}</span>
-            <img class="sidebar-rank-thumb" src="${series.cover}" alt="${series.title}" loading="lazy" />
+            <img class="sidebar-rank-thumb" src="${series.cover || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak'}" alt="${(series.title || 'Seri').replace(/"/g, '&quot;')}" loading="lazy" onload="this.classList.add('is-loaded');" onerror="this.onerror=null;this.src='https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak';this.classList.add('is-loaded');" />
             <div class="sidebar-rank-info">
               <strong class="sidebar-rank-title">${series.title}</strong>
               <div class="sidebar-rank-meta">
@@ -8887,7 +9757,7 @@ body {
               .map((s) => {
                 const sHref = resolveUrl('series', s.id);
                 return `<a class="sidebar-fav-mini-item" href="${sHref}" data-action="detail" data-series="${s.id}">
-                  <img class="sidebar-fav-mini-thumb" src="${s.cover}" alt="${s.title}" loading="lazy" />
+                  <img class="sidebar-fav-mini-thumb" src="${s.cover || 'https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak'}" alt="${(s.title || 'Seri').replace(/"/g, '&quot;')}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/600x800/1e1b4b/ffffff?text=Kapak';" />
                   <span class="sidebar-fav-mini-title">${s.title}</span>
                   <span class="sidebar-fav-mini-count">${(s.chapters || []).length} Böl.</span>
                 </a>`;
@@ -8913,6 +9783,11 @@ body {
       const topListEl = document.getElementById('sidebar-top-list');
       if (topListEl) {
         topListEl.innerHTML = this.renderTopSeriesHtml(catalog, computeUrlFn);
+        topListEl.querySelectorAll('.sidebar-rank-thumb').forEach((img) => {
+          if (img.complete && img.naturalWidth > 0) {
+            img.classList.add('is-loaded');
+          }
+        });
       }
       const genresListEl = document.getElementById('sidebar-genres-list');
       if (genresListEl) {
@@ -8969,6 +9844,270 @@ body {
     module.exports = { SidebarController };
   }
 })(typeof window !== 'undefined' ? window : globalThis);
+
+/* === MODULE: scripts/loader-controller.js === */
+/**
+ * @fileoverview Manowa Blogger Temasi - Hibrit Yukleme ve Lazy Loading Kontrolcusu.
+ * Sayfa ilk acilisinda tam ekran preloader, SPA rota gecislerinde ust ilerleme cubugu
+ * ve kart/okuyucu gorselleri icin iskelet shimmer efektlerini yonetir.
+ */
+
+class LoaderController {
+  /**
+   * @param {Object} [options={}]
+   * @param {string} [options.progressBarId='top-progress-bar']
+   * @param {string} [options.preloaderId='fullscreen-preloader']
+   * @param {string} [options.storageKey='manowa_preloader_seen']
+   * @param {number} [options.initialPreloaderMinDuration=600]
+   * @param {boolean} [options.enableSessionBypass=true]
+   */
+  constructor(options = {}) {
+    this.progressBarId = options.progressBarId || 'top-progress-bar';
+    this.preloaderId = options.preloaderId || 'fullscreen-preloader';
+    this.storageKey = options.storageKey || 'manowa_preloader_seen';
+    this.initialPreloaderMinDuration = options.initialPreloaderMinDuration !== undefined ? options.initialPreloaderMinDuration : 600;
+    this.enableSessionBypass = options.enableSessionBypass !== undefined ? options.enableSessionBypass : false;
+
+    this.progressBarEl = null;
+    this.preloaderEl = null;
+    this.progressTimer = null;
+    this.currentProgress = 0;
+    this.isProgressRunning = false;
+
+    this.log('LoaderController baslatilmaya hazir.');
+  }
+
+  /**
+   * Kontrolcuyu DOM uzerine baglar ve ilk acilis akisini tetikler.
+   */
+  init() {
+    if (typeof document !== 'undefined') {
+      this.progressBarEl = document.getElementById(this.progressBarId);
+      this.preloaderEl = document.getElementById(this.preloaderId);
+    }
+
+    this.handleInitialPreloader();
+    this.initLazyImages();
+
+    this.log('LoaderController DOM baglantilari tamamlandi.');
+  }
+
+  /**
+   * Ilk sayfa acilisindaki tam ekran preloader mantigini yonetir.
+   */
+  handleInitialPreloader() {
+    if (!this.preloaderEl) return;
+
+    const hasSeenInSession = this.enableSessionBypass && this.checkSessionSeen();
+
+    if (hasSeenInSession) {
+      // Bu oturumda daha once gorulduyse dogrudan kaldir
+      this.preloaderEl.classList.add('hidden');
+      this.preloaderEl.style.display = 'none';
+      return;
+    }
+
+    const startTime = Date.now();
+    const dismiss = () => {
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, this.initialPreloaderMinDuration - elapsed);
+      setTimeout(() => {
+        this.hidePreloader();
+      }, remaining);
+    };
+
+    if (typeof document !== 'undefined' && (document.readyState === 'complete' || document.readyState === 'interactive')) {
+      dismiss();
+    } else if (typeof window !== 'undefined') {
+      window.addEventListener('load', dismiss, { once: true });
+      // Guvenlik zaman asimi: Sayfa kaynaklari takilsa bile en gec 2s sonra preloader kapanir
+      setTimeout(dismiss, 2000);
+    } else {
+      dismiss();
+    }
+  }
+
+  /**
+   * Oturumda preloader gorulup gorulmedigini denetler.
+   * @returns {boolean}
+   */
+  checkSessionSeen() {
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        return window.sessionStorage.getItem(this.storageKey) === 'true';
+      }
+    } catch (e) {
+      // sessionStorage erisim engeli (gizli mod vb.)
+    }
+    return false;
+  }
+
+  /**
+   * Tam ekran preloader'i acar.
+   * @param {string} [statusText]
+   */
+  showPreloader(statusText) {
+    if (!this.preloaderEl) return;
+    if (statusText) {
+      const textEl = this.preloaderEl.querySelector('.preloader-status-text');
+      if (textEl) textEl.textContent = statusText;
+    }
+    this.preloaderEl.style.display = 'flex';
+    this.preloaderEl.classList.remove('hidden');
+  }
+
+  /**
+   * Tam ekran preloader'i yumusak sekilde kapatir.
+   */
+  hidePreloader() {
+    if (!this.preloaderEl) return;
+    this.preloaderEl.classList.add('hidden');
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        window.sessionStorage.setItem(this.storageKey, 'true');
+      }
+    } catch (e) {
+      // ignore
+    }
+    setTimeout(() => {
+      if (this.preloaderEl && this.preloaderEl.classList.contains('hidden')) {
+        this.preloaderEl.style.display = 'none';
+      }
+    }, 450);
+  }
+
+  /**
+   * Ust ilerleme cubugunu baslatir (SPA / rota gecisleri icin).
+   */
+  startProgress() {
+    if (!this.progressBarEl && typeof document !== 'undefined') {
+      this.progressBarEl = document.getElementById(this.progressBarId);
+    }
+    if (!this.progressBarEl) return;
+
+    if (this.progressTimer) {
+      clearInterval(this.progressTimer);
+      this.progressTimer = null;
+    }
+
+    this.isProgressRunning = true;
+    this.progressBarEl.classList.remove('done');
+    this.progressBarEl.classList.add('active');
+    this.currentProgress = 15;
+    this.progressBarEl.style.width = this.currentProgress + '%';
+
+    this.progressTimer = setInterval(() => {
+      if (this.currentProgress < 85) {
+        // Yumusak adimlarla rastgele ilerle
+        const step = Math.floor(Math.random() * 12) + 5;
+        this.currentProgress = Math.min(85, this.currentProgress + step);
+        if (this.progressBarEl) {
+          this.progressBarEl.style.width = this.currentProgress + '%';
+        }
+      } else {
+        clearInterval(this.progressTimer);
+        this.progressTimer = null;
+      }
+    }, 120);
+  }
+
+  /**
+   * Ilerleme cubugunu yuzde degerine ceker.
+   * @param {number} pct
+   */
+  setProgress(pct) {
+    if (!this.progressBarEl) return;
+    this.currentProgress = Math.min(100, Math.max(0, pct));
+    this.progressBarEl.style.width = this.currentProgress + '%';
+  }
+
+  /**
+   * Ust ilerleme cubugunu %100 yapip yumusakca kapatir.
+   */
+  finishProgress() {
+    if (!this.progressBarEl) return;
+    if (this.progressTimer) {
+      clearInterval(this.progressTimer);
+      this.progressTimer = null;
+    }
+
+    this.currentProgress = 100;
+    this.progressBarEl.classList.add('done');
+    this.progressBarEl.style.width = '100%';
+
+    setTimeout(() => {
+      if (this.progressBarEl) {
+        this.progressBarEl.classList.remove('active', 'done');
+        this.progressBarEl.style.width = '0%';
+        this.isProgressRunning = false;
+        this.currentProgress = 0;
+      }
+    }, 350);
+  }
+
+  /**
+   * Belirtilen DOM kokundeki gorseller icin lazy loading iskelet pariltisini yonetir.
+   * Gorsel yuklendiginde .is-loaded sinifini ekler ve kapsayicinin .shimmer sinifini kaldirir.
+   * @param {HTMLElement|Document} [root=null]
+   */
+  initLazyImages(root = null) {
+    const targetRoot = root || (typeof document !== 'undefined' ? document : null);
+    if (!targetRoot || typeof targetRoot.querySelectorAll !== 'function') return;
+
+    const cards = targetRoot.querySelectorAll('.card-cover-wrap, .directory-series-card .card-cover-wrap, .series-card-wrap');
+    if (!cards || !cards.length) return;
+
+    cards.forEach((wrap) => {
+      const img = wrap.querySelector ? wrap.querySelector('img') : null;
+      if (!img) return;
+
+      // Wrap elemanina shimmer yer tutucusu ata
+      wrap.classList.add('shimmer');
+
+      const onImageLoaded = () => {
+        if (img.classList && img.classList.add) img.classList.add('is-loaded');
+        if (wrap.classList && wrap.classList.remove) wrap.classList.remove('shimmer');
+      };
+
+      if (img.complete && img.naturalWidth > 0) {
+        // Gorsel zaten tarayici onbelleginden yuklenmis
+        onImageLoaded();
+      } else if (img.addEventListener) {
+        img.addEventListener('load', onImageLoaded, { once: true });
+        img.addEventListener(
+          'error',
+          () => {
+            // Hata durumunda da shimmer sonsuza kadar donmesin
+            if (wrap.classList && wrap.classList.remove) wrap.classList.remove('shimmer');
+            if (img.classList && img.classList.add) img.classList.add('is-loaded');
+          },
+          { once: true }
+        );
+      }
+    });
+  }
+
+  /**
+   * Iclerdeki hata ayiklama kayitlarini iletir.
+   * @param {string} msg
+   */
+  log(msg) {
+    if (typeof ClientLogger !== 'undefined' && ClientLogger.debug) {
+      ClientLogger.debug(`[LoaderController] ${msg}`);
+    }
+  }
+}
+
+// Global tarayici ve Node.js disari aktarimlari
+if (typeof window !== 'undefined') {
+  window.LoaderController = LoaderController;
+}
+if (typeof globalThis !== 'undefined') {
+  globalThis.LoaderController = LoaderController;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = LoaderController;
+}
 
 /* === MODULE: scripts/novel-font-loader.js === */
 /**
@@ -9258,11 +10397,13 @@ body {
      * SliceMerger nesnesini baslatir.
      * @param {Object} [options={}] - Yapilandirma secenekleri.
      * @param {Object} [options.logger=null] - Loglama nesnesi.
+     * @param {number} [options.maxCacheSize=25] - Maksimum onbellek sayfa sayisi.
      */
     constructor(options = {}) {
       this.logger = options.logger || null;
       this.cache = new Map();
       this.inProgress = new Map();
+      this.maxCacheSize = Number(options.maxCacheSize) || 25;
     }
 
     /**
@@ -9339,7 +10480,108 @@ body {
     }
 
     /**
-     * Tek bir gorseli yukler.
+     * Verilen dilim grubunun onbellekte olup olmadigini sorgular.
+     * @param {Array<string>} sliceUrls - Dilim URL dizisi.
+     * @returns {boolean} Onbellekte mevcutsa true.
+     */
+    isCached(sliceUrls) {
+      const key = this.getCacheKey(sliceUrls);
+      return Boolean(key && this.cache.has(key));
+    }
+
+    /**
+     * Tum bellek onbellegini ve surdurulen yuklemeleri sifirlar.
+     * @returns {void}
+     */
+    clearCache() {
+      this.cache.clear();
+      this.inProgress.clear();
+      this._log('debug', 'SliceMerger onbellegi temizlendi.');
+    }
+
+    /**
+     * LRU politikasiyla onbellege oge ekler.
+     * @private
+     * @param {string} cacheKey - Onbellek anahtari.
+     * @param {Object} entry - Onbellek kaydi.
+     * @returns {void}
+     */
+    _putCache(cacheKey, entry) {
+      if (!cacheKey) return;
+      if (this.cache.has(cacheKey)) {
+        this.cache.delete(cacheKey);
+      } else if (this.cache.size >= this.maxCacheSize) {
+        const oldestKey = this.cache.keys().next().value;
+        if (oldestKey) this.cache.delete(oldestKey);
+      }
+      this.cache.set(cacheKey, entry);
+    }
+
+    /**
+     * Arka plan canvas nesnesi uzerine dilimleri cizer.
+     * @private
+     * @param {Object} data - Yuklenen gorsel verileri.
+     * @returns {HTMLCanvasElement|null} Olusturulan bellek canvas'i.
+     */
+    _createOffscreenCanvas(data) {
+      if (typeof document === 'undefined' || typeof document.createElement !== 'function') {
+        return null;
+      }
+      try {
+        const offscreen = document.createElement('canvas');
+        offscreen.width = data.width;
+        offscreen.height = data.height;
+        const ctx = offscreen.getContext('2d');
+        if (!ctx) return null;
+        let currentY = 0;
+        for (const img of data.images) {
+          const imgW = img.naturalWidth || img.width || data.width;
+          const imgH = img.naturalHeight || img.height || 0;
+          const offsetX = Math.max(0, Math.round((data.width - imgW) / 2));
+          ctx.drawImage(img, offsetX, currentY, imgW, imgH);
+          currentY += imgH;
+        }
+        return offscreen;
+      } catch (_err) {
+        return null;
+      }
+    }
+
+    /**
+     * Onbellek kaydini hedef DOM canvas nesnesine aktarir.
+     * @private
+     * @param {HTMLCanvasElement} targetCanvas - Hedef canvas elemani.
+     * @param {Object} entry - Onbellek verisi.
+     * @returns {boolean} Basarili ise true.
+     */
+    _drawIntoCanvas(targetCanvas, entry) {
+      if (!targetCanvas || typeof targetCanvas.getContext !== 'function' || !entry) {
+        return false;
+      }
+      targetCanvas.width = entry.width;
+      targetCanvas.height = entry.height;
+      const ctx = targetCanvas.getContext('2d');
+      if (!ctx) return false;
+
+      if (entry.offscreen) {
+        ctx.drawImage(entry.offscreen, 0, 0);
+      } else if (Array.isArray(entry.images)) {
+        let currentY = 0;
+        for (const img of entry.images) {
+          const imgW = img.naturalWidth || img.width || entry.width;
+          const imgH = img.naturalHeight || img.height || 0;
+          const offsetX = Math.max(0, Math.round((entry.width - imgW) / 2));
+          ctx.drawImage(img, offsetX, currentY, imgW, imgH);
+          currentY += imgH;
+        }
+      }
+      targetCanvas.setAttribute('data-stitched', 'true');
+      targetCanvas.classList.add('stitched-ready');
+      return true;
+    }
+
+    /**
+     * Tek bir gorseli asenkron cozme (async decode) destegiyle yukler.
      * @param {string} url - Gorsel URL'si.
      * @returns {Promise<HTMLImageElement>} Yuklenen Image nesnesi.
      */
@@ -9348,20 +10590,36 @@ body {
         if (typeof Image === 'undefined') {
           return reject(new Error('Image constructor bulunamadi (Node ortami)'));
         }
+        let settled = false;
+        const doResolve = (targetImg) => {
+          if (settled) return;
+          settled = true;
+          resolve(targetImg);
+        };
+        const doReject = (err) => {
+          if (settled) return;
+          settled = true;
+          reject(err);
+        };
+
         const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => resolve(img);
-        img.onerror = () => {
-          if (img.crossOrigin) {
-            const fallbackImg = new Image();
-            fallbackImg.onload = () => resolve(fallbackImg);
-            fallbackImg.onerror = () => reject(new Error(`Gorsel yuklenemedi: ${url}`));
-            fallbackImg.src = url;
+        if ('decoding' in img) {
+          img.decoding = 'async';
+        }
+        img.onload = () => {
+          if (typeof img.decode === 'function') {
+            img.decode().then(() => doResolve(img)).catch(() => doResolve(img));
           } else {
-            reject(new Error(`Gorsel yuklenemedi: ${url}`));
+            doResolve(img);
           }
         };
+        img.onerror = () => {
+          doReject(new Error(`Gorsel yuklenemedi: ${url}`));
+        };
         img.src = url;
+        if (img.complete && (img.naturalWidth || img.width)) {
+          doResolve(img);
+        }
       });
     }
 
@@ -9390,7 +10648,47 @@ body {
     }
 
     /**
+     * Dilimleri arka planda onceden indirip hafizada birlestirir (Preload).
+     * @param {Array<string>} sliceUrls - Birlestirilecek dilim URL dizisi.
+     * @returns {Promise<Object|null>} Onbellek kaydi Promise nesnesi.
+     */
+    async preload(sliceUrls) {
+      if (typeof Image === 'undefined' || !Array.isArray(sliceUrls) || sliceUrls.length <= 1) return null;
+      const cacheKey = this.getCacheKey(sliceUrls);
+      if (this.cache.has(cacheKey)) {
+        return this.cache.get(cacheKey);
+      }
+      if (this.inProgress.has(cacheKey)) {
+        return this.inProgress.get(cacheKey);
+      }
+
+      const loadPromise = (async () => {
+        try {
+          const data = await this.loadAllSlices(sliceUrls);
+          const offscreen = this._createOffscreenCanvas(data);
+          const entry = {
+            width: data.width,
+            height: data.height,
+            images: data.images,
+            offscreen
+          };
+          this._putCache(cacheKey, entry);
+          return entry;
+        } catch (err) {
+          this._log('warn', 'Parca on yukleme basarisiz oldu', { error: err.message });
+          return null;
+        } finally {
+          this.inProgress.delete(cacheKey);
+        }
+      })();
+
+      this.inProgress.set(cacheKey, loadPromise);
+      return loadPromise;
+    }
+
+    /**
      * DOM uzerindeki canvas elemanina dilimleri cizer.
+     * Onbellekte varsa aninda 0ms gecikmeyle aktarir.
      * @param {HTMLCanvasElement} canvas - Hedef canvas elemani.
      * @param {Array<string>} sliceUrls - Birlestirilecek dilim URL dizisi.
      * @returns {Promise<boolean>} Basarili ise true.
@@ -9404,6 +10702,14 @@ body {
       }
 
       const cacheKey = this.getCacheKey(sliceUrls);
+
+      // Hizli yol: Bellek onbelleginden aninda aktarim (0ms)
+      if (this.cache.has(cacheKey)) {
+        const cachedEntry = this.cache.get(cacheKey);
+        this._putCache(cacheKey, cachedEntry);
+        return this._drawIntoCanvas(canvas, cachedEntry);
+      }
+
       this._log('debug', 'Parca birlestirme baslatildi', {
         sliceCount: sliceUrls.length,
         cacheKey
@@ -9412,36 +10718,33 @@ body {
       try {
         let loadPromise = this.inProgress.get(cacheKey);
         if (!loadPromise) {
-          loadPromise = this.loadAllSlices(sliceUrls);
+          loadPromise = (async () => {
+            const data = await this.loadAllSlices(sliceUrls);
+            const offscreen = this._createOffscreenCanvas(data);
+            const entry = {
+              width: data.width,
+              height: data.height,
+              images: data.images,
+              offscreen
+            };
+            this._putCache(cacheKey, entry);
+            return entry;
+          })();
           this.inProgress.set(cacheKey, loadPromise);
         }
 
-        const data = await loadPromise;
+        const entry = await loadPromise;
         this.inProgress.delete(cacheKey);
 
-        canvas.width = data.width;
-        canvas.height = data.height;
-
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return false;
-
-        let currentY = 0;
-        for (const img of data.images) {
-          const imgW = img.naturalWidth || img.width || data.width;
-          const imgH = img.naturalHeight || img.height || 0;
-          const offsetX = Math.max(0, Math.round((data.width - imgW) / 2));
-          ctx.drawImage(img, offsetX, currentY, imgW, imgH);
-          currentY += imgH;
+        const ok = this._drawIntoCanvas(canvas, entry);
+        if (ok) {
+          this._log('info', 'Parcalar basariyla birlestirildi', {
+            width: entry.width,
+            height: entry.height,
+            sliceCount: sliceUrls.length
+          });
         }
-
-        canvas.setAttribute('data-stitched', 'true');
-        canvas.classList.add('stitched-ready');
-        this._log('info', 'Parcalar basariyla birlestirildi', {
-          width: data.width,
-          height: data.height,
-          sliceCount: sliceUrls.length
-        });
-        return true;
+        return ok;
       } catch (err) {
         this.inProgress.delete(cacheKey);
         this._log('warn', 'Parca birlestirme basarisiz oldu, fallback devrede', {
@@ -9663,6 +10966,9 @@ body {
      */
     loadChapter(chapterData = {}) {
       this.stopAutoScroll();
+      if (this.sliceMerger && typeof this.sliceMerger.clearCache === 'function') {
+        this.sliceMerger.clearCache();
+      }
       this.seriesId = chapterData.seriesId || '';
       this.chapterId = chapterData.chapterId || '';
       this.rawPages = Array.isArray(chapterData.pages) ? chapterData.pages.slice() : [];
@@ -9871,6 +11177,7 @@ body {
       if (this.currentIndex > 0) {
         this.currentIndex = Math.max(0, this.currentIndex - step);
         this.saveProgress();
+        this.preloadAdjacentPages();
         this._log('debug', 'Onceki sayfaya donuldu.', { currentIndex: this.currentIndex });
         return true;
       }
@@ -9911,15 +11218,22 @@ body {
     }
 
     /**
-     * Sonraki 2 mantiksal sayfanin tum gorsel dilimlerini onceden bellekleme (preload) yapar.
+     * Sonraki mantiksal sayfalarin tum gorsel dilimlerini onceden bellekleme (preload) yapar.
      * @returns {Array<string>} On yuklenen URL listesi.
      */
     preloadAdjacentPages() {
       const preloaded = [];
-      for (let i = 1; i <= 2; i++) {
+      const ahead = 3;
+      for (let i = 1; i <= ahead; i++) {
         const targetIdx = this.currentIndex + i;
         if (targetIdx < this.pages.length) {
           const slices = this.getPageSlices(targetIdx);
+          if (Array.isArray(slices) && slices.length > 1 && this.sliceMerger && typeof this.sliceMerger.preload === 'function') {
+            try {
+              const p = this.sliceMerger.preload(slices);
+              if (p && typeof p.catch === 'function') p.catch(() => {});
+            } catch (_err) {}
+          }
           slices.forEach((url) => {
             preloaded.push(url);
             if (typeof Image !== 'undefined') {
@@ -11290,6 +12604,9 @@ body {
       if (viewName === 'catalog') {
         return isPreview ? '#catalog' : '/';
       }
+      if (viewName === 'directory') {
+        return isPreview ? '#seriler' : '/?gorunum=seriler';
+      }
       if (viewName === 'bookmarks') {
         return isPreview ? '#kitaplik' : '/?gorunum=kitaplik';
       }
@@ -11418,6 +12735,8 @@ body {
           if (sId) {
             return { matched: true, view: 'series', seriesId: sId, chapterId: '' };
           }
+        } else if (hashVal === 'seriler' || hashVal === 'tum-seriler' || hashVal === 'dizin') {
+          return { matched: true, view: 'directory', seriesId: '', chapterId: '' };
         } else if (hashVal === 'kitaplik') {
           return { matched: true, view: 'bookmarks', seriesId: '', chapterId: '' };
         } else if (hashVal === 'gecmis') {
@@ -11437,6 +12756,9 @@ body {
         const qSeri = parsedUrl.searchParams.get('seri');
         const qBolum = parsedUrl.searchParams.get('bolum');
         const qGorunum = parsedUrl.searchParams.get('gorunum');
+        if (qGorunum === 'seriler' || qGorunum === 'tum-seriler' || qGorunum === 'dizin') {
+          return { matched: true, view: 'directory', seriesId: '', chapterId: '' };
+        }
         if (qGorunum === 'kitaplik') {
           return { matched: true, view: 'bookmarks', seriesId: '', chapterId: '' };
         }
@@ -11464,6 +12786,9 @@ body {
       const targetPath = extractPathname(href);
       if (targetPath.endsWith('/preview.html') || targetPath === '/' || targetPath === '') {
         return empty;
+      }
+      if (targetPath.includes('/p/seriler') || targetPath.includes('/p/tum-seriler') || targetPath.includes('/p/dizin')) {
+        return { matched: true, view: 'directory', seriesId: '', chapterId: '' };
       }
       if (targetPath.includes('/p/')) {
         return { matched: true, view: 'page', seriesId: '', chapterId: '' };
@@ -11950,24 +13275,34 @@ body {
       const targetDoc = doc || (typeof document !== 'undefined' ? document : null);
       if (!targetDoc) return tabName;
 
+      const isDirectory = tabName === 'directory';
       const btnSeries = targetDoc.getElementById('btn-tab-gen-series');
       const btnChapter = targetDoc.getElementById('btn-tab-gen-chapter');
+      const btnDir = targetDoc.getElementById('btn-tab-gen-directory');
       const panelSeries = targetDoc.getElementById('panel-gen-series');
       const panelChapter = targetDoc.getElementById('panel-gen-chapter');
+      const panelDir = targetDoc.getElementById('panel-gen-directory');
 
       if (btnSeries) {
-        btnSeries.classList.toggle('active', isSeries);
-        btnSeries.setAttribute('aria-selected', isSeries ? 'true' : 'false');
+        btnSeries.classList.toggle('active', isSeries && !isDirectory);
+        btnSeries.setAttribute('aria-selected', (isSeries && !isDirectory) ? 'true' : 'false');
       }
       if (btnChapter) {
-        btnChapter.classList.toggle('active', !isSeries);
-        btnChapter.setAttribute('aria-selected', !isSeries ? 'true' : 'false');
+        btnChapter.classList.toggle('active', !isSeries && !isDirectory);
+        btnChapter.setAttribute('aria-selected', (!isSeries && !isDirectory) ? 'true' : 'false');
+      }
+      if (btnDir) {
+        btnDir.classList.toggle('active', isDirectory);
+        btnDir.setAttribute('aria-selected', isDirectory ? 'true' : 'false');
       }
       if (panelSeries) {
-        panelSeries.classList.toggle('hidden', !isSeries);
+        panelSeries.classList.toggle('hidden', !isSeries || isDirectory);
       }
       if (panelChapter) {
-        panelChapter.classList.toggle('hidden', isSeries);
+        panelChapter.classList.toggle('hidden', isSeries || isDirectory);
+      }
+      if (panelDir) {
+        panelDir.classList.toggle('hidden', !isDirectory);
       }
       return tabName;
     }
@@ -11988,7 +13323,11 @@ body {
       };
 
       let res;
-      if (mode === 'series') {
+      if (mode === 'directory') {
+        res = typeof generator.generateDirectoryPageHtml === 'function'
+          ? generator.generateDirectoryPageHtml()
+          : { html: '<!-- MANOWA_SERIES_DIRECTORY_START -->\n<div id="manowa-series-directory"></div>', labels: 'Sayfa, Dizin' };
+      } else if (mode === 'series') {
         const title = getVal('gen-series-title', 'Yeni Seri');
         const altTitle = getVal('gen-series-alt-title', '');
         const sourceLang = getVal('gen-source-lang', 'KR');
@@ -12875,6 +14214,8 @@ body {
   const SeriesPageClass = globalScope.SeriesPageController || (typeof require === 'function' ? require('./series-page').SeriesPageController : null);
   const ThemeBridgeClass = globalScope.BloggerThemeBridge || (typeof require === 'function' ? require('./blogger-theme-bridge').BloggerThemeBridge : null);
   const SearchControllerClass = globalScope.SearchController || (typeof require === 'function' ? require('./search-controller').SearchController : null);
+  const LoaderClass = globalScope.LoaderController || (typeof require === 'function' ? require('./loader-controller') : null);
+  const DirectoryClass = globalScope.DirectoryPageController || (typeof require === 'function' ? require('./directory-page').DirectoryPageController : null);
   const ReaderHudClass = globalScope.ReaderHudController || (typeof require === 'function' ? require('./reader-hud').ReaderHudController : null);
   const iconFn = (globalScope.ManowaIcons && globalScope.ManowaIcons.get) || (typeof require === 'function' ? require('./svg-icons').getSvgIcon : () => '');
   /**
@@ -12900,8 +14241,12 @@ body {
       this.seriesPage = deps.seriesPage || (ResolvedSeriesPage ? new ResolvedSeriesPage({ logger: this.logger }) : null);
       const ResolvedThemeBridge = globalScope.BloggerThemeBridge || ThemeBridgeClass;
       this.themeBridge = deps.themeBridge || (ResolvedThemeBridge ? new ResolvedThemeBridge({ logger: this.logger }) : null);
+      const ResolvedDirectory = globalScope.DirectoryPageController || DirectoryClass;
+      this.directory = deps.directory || (ResolvedDirectory ? new ResolvedDirectory({ catalog: this.catalog, logger: this.logger, library: this.library, computeUrlFn: (v, s, c) => this.computeTargetUrl(v, s, c), onSelectSeries: (id) => this.openSeriesDetail(id) }) : null);
       this.feedLoader = deps.feedLoader || (globalScope.BloggerFeedLoader ? new globalScope.BloggerFeedLoader({ logger: this.logger }) : null);
       this.router = deps.router || (RouterClass ? new RouterClass({ logger: this.logger, historyObj: deps.historyObj, locationObj: deps.locationObj }) : null);
+      const ResolvedLoader = globalScope.LoaderController || LoaderClass;
+      this.loader = deps.loader || (ResolvedLoader ? new ResolvedLoader({ logger: this.logger }) : null);
       this.siteBaseTitle = globalScope.MANOWA_SITE_TITLE || 'Manowa';
       this.currentView = 'catalog';
       this.commentsVisible = false;
@@ -12949,18 +14294,25 @@ body {
         this.themeBridge.initThemeMode();
         this.themeBridge.integrateSidebarGadgets();
       }
+      if (this.loader) this.loader.init();
       this.integrateHeaderBar();
       if (this.searchController && typeof this.searchController._initElements === 'function') {
         this.searchController._initElements();
       }
       this.bindEvents();
       await this.loadDynamicData();
+      if (this.loader) {
+        this.loader.startProgress();
+        setTimeout(() => {
+          if (this.loader) {
+            this.loader.finishProgress();
+            this.loader.initLazyImages();
+          }
+        }, 200);
+      }
       this.renderDebugLogs();
     }
-    /**
-     * Ust kontrol cubugunu (#top-app-bar) Blogger site basliginin (#site-header-inner) icine tasir.
-     * @returns {void}
-     */
+    /** Ust kontrol cubugunu Blogger basligi icine tasir. */
     integrateHeaderBar() {
       if (this.themeBridge) {
         this.themeBridge.integrateHeaderBar();
@@ -13111,6 +14463,7 @@ body {
       };
       if (resolved.matched) {
         if (resolved.view === 'reader') this.openReader(resolved.seriesId, resolved.chapterId, routeOpts);
+        else if (resolved.view === 'directory') this.openDirectory(routeOpts);
         else if (resolved.view === 'series') this.openSeriesDetail(resolved.seriesId, routeOpts);
         else if (resolved.view === 'bookmarks') this.openBookmarks(routeOpts);
         else if (resolved.view === 'history') this.openHistory(routeOpts);
@@ -13122,11 +14475,7 @@ body {
       if (options.openCatalogOnRoot) this.openCatalog({ updateHistory: false });
       return false;
     }
-    /**
-     * Tarayici Geri / Ileri (popstate) olayini isler ve ilgili gorunume gecis yapar.
-     * @param {PopStateEvent|Object} [event] - PopState olayi.
-     * @returns {void}
-     */
+    /** Tarayici Geri / Ileri (popstate) olayini isler. */
     handlePopState(event) {
       const state = event && event.state ? event.state : null;
       if (this.logger) this.logger.info('Tarayici Geri/Ileri (popstate) olayi isleniyor.', { state });
@@ -13136,6 +14485,7 @@ body {
           return this.openReader(state.seriesId, state.chapterId, noHist);
         }
         if (state.view === 'series' && state.seriesId) return this.openSeriesDetail(state.seriesId, noHist);
+        if (state.view === 'directory') return this.openDirectory(noHist);
         if (state.view === 'bookmarks') return this.openBookmarks(noHist);
         if (state.view === 'history') return this.openHistory(noHist);
         if (state.view === 'generator') return this.openGenerator(noHist);
@@ -13161,6 +14511,7 @@ body {
       }
       const views = {
         catalog: document.getElementById('view-catalog'),
+        directory: document.getElementById('view-directory'),
         series: document.getElementById('view-series'),
         reader: document.getElementById('view-reader'),
         bookmarks: document.getElementById('view-bookmarks'),
@@ -13175,6 +14526,7 @@ body {
       if (disqusSec) disqusSec.classList.toggle('hidden', !this.commentsVisible);
       const navMap = {
         catalog: document.getElementById('nav-catalog'),
+        directory: document.getElementById('nav-directory'),
         bookmarks: document.getElementById('nav-bookmarks'),
         history: document.getElementById('nav-history'),
         generator: document.getElementById('nav-generator')
@@ -13216,6 +14568,15 @@ body {
      * @param {Object} [options={}] - Gecmis secenekleri.
      * @returns {void}
      */
+    openDirectory(options = {}) {
+      this.switchView('directory');
+      const container = typeof document !== 'undefined' ? document.getElementById('view-directory') : null;
+      if (container && this.directory) {
+        this.directory.render(container);
+      }
+      const targetUrl = this.computeTargetUrl('directory');
+      this.syncBrowserHistory({ view: 'directory', seriesId: '', chapterId: '' }, `Tüm Seriler & Kategorik Dizin - ${this.siteBaseTitle}`, targetUrl, options);
+    }
     openBookmarks(options = {}) {
       this.switchView('bookmarks');
       this.renderBookmarksView();
@@ -13227,10 +14588,7 @@ body {
         options
       );
     }
-    /**
-     * Kitapligim izgarasini favori serilerle doldurur.
-     * @returns {void}
-     */
+    /** Kitapligim izgarasini favori serilerle doldurur. */
     renderBookmarksView() {
       if (typeof document === 'undefined' || !this.library || !this.catalog) return;
       const grid = document.getElementById('bookmarks-grid');
@@ -13299,6 +14657,10 @@ body {
       if (typeof document !== 'undefined' && this.themeBridge) {
         const info = this.themeBridge.renderStaticPage(document);
         if (info && info.title) pageTitleText = info.title;
+        const rawEl = document.getElementById('blogger-static-page-raw');
+        if (rawEl && (rawEl.querySelector('#manowa-series-directory') || rawEl.innerHTML.includes('manowa-series-directory'))) {
+          return this.openDirectory({ updateHistory: false });
+        }
       }
       const pageTitle = `${pageTitleText} - ${this.siteBaseTitle}`;
       const targetUrl = this.computeTargetUrl('page');
@@ -13647,6 +15009,7 @@ body {
       };
       on('btn-gen-close', 'click', () => this.openCatalog());
       on('btn-page-back', 'click', () => this.openCatalog());
+      on('nav-directory', 'click', () => this.openDirectory());
       on('nav-generator', 'click', () => this.openGenerator());
       on('nav-bookmarks', 'click', () => this.openBookmarks());
       on('nav-history', 'click', () => this.openHistory());
@@ -13761,6 +15124,11 @@ body {
         if (this.themeBridge) this.themeBridge.switchGeneratorTab('series');
         this.triggerGenerator('series');
       });
+      on('btn-tab-gen-directory', 'click', () => {
+        if (this.themeBridge) this.themeBridge.switchGeneratorTab('directory');
+        this.triggerGenerator('directory');
+      });
+      on('btn-generate-directory', 'click', () => this.triggerGenerator('directory'));
       on('btn-tab-gen-chapter', 'click', () => {
         if (this.themeBridge) this.themeBridge.switchGeneratorTab('chapter');
         this.triggerGenerator('chapter');
@@ -13778,10 +15146,7 @@ body {
       });
       on('btn-refresh-logs', 'click', () => this.renderDebugLogs());
     }
-    /**
-     * Arama sirasinda katalog gorunumunde degilse katalog gorunumune gecer.
-     * @returns {void}
-     */
+    /** Arama sirasinda katalog gorunumune gecisi saglar. */
     SwitchToCatalogIfNeeded() {
       if (this.currentView !== 'catalog') {
         this.openCatalog();
@@ -13798,10 +15163,7 @@ body {
       this.renderDebugLogs();
       return res;
     }
-    /**
-     * Olusturucudaki ornek bolumu aninda okuyucuda test eder.
-     * @returns {void}
-     */
+    /** Olusturucudaki bolumu aninda okuyucuda test eder. */
     testGeneratedInReader() {
       const seriesRes = this.triggerGenerator('series');
       const chapterRes = this.triggerGenerator('chapter');
